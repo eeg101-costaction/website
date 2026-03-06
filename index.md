@@ -22,6 +22,10 @@ By supporting training, inclusion, and cross-sector partnerships—especially th
 
 We welcome researchers and students interested in EEG to [join](/join) our network.
 
+## Diversity, Equity, and Inclusion
+
+EEG101 is fully committed to the [COST inclusiveness policy](https://www.cost.eu/about/strategy/excellence-and-inclusiveness/) centered around geographical spread, researchers from all career stages, and gender balance. Fostering fair and diverse scientific communities, EEG101 encourages its members to embrace the [ALBA declaration](https://www.alba.network/declaration) promoting equity and inclusivity on individual and workplace levels.
+
 ## News and Updates
 
 Stay tuned for the latest [news](/news), events, and publications.
