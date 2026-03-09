@@ -19,3 +19,6 @@
 - title: Contact
   url: /contact
   match: contact
+- title: Code of Conduct
+  url: /code-conduct
+  match: code-conduct
