@@ -2,7 +2,7 @@
 title: Grants
 ---
 
-# EEG101 Funding Calls Round 1
+## EEG101 Funding Calls Round 1
 
 We are pleased to announce the first funding round of the EEG101 COST Action. Dedicated funding will support collaboration, training, and dissemination activities that advance the Action's mission to promote open and rigorous EEG science.
 
@@ -38,14 +38,16 @@ We are pleased to announce the first funding round of the EEG101 COST Action. De
 
 ---
 
-## Short Term Scientific Missions
+### Short Term Scientific Missions
+
 *Encouraging institutional exchange visits*
 
 Short Term Scientific Missions (STSMs) are exchange visits aimed at supporting individual mobility, strengthening existing networks and fostering collaboration between COST Action Participants. STSMs should specifically contribute to the scientific objectives of the COST Action, whilst at the same time allowing the grantees to learn new techniques, gain access to specific data, instruments and/or methods not available in their own institutions/organizations.
 
 Participating in the COST Action STSM program is a great opportunity to develop collaborative work on research topics that are related to the strategic objectives of EEG101 Working Groups or to introduce new ideas that address these objectives. Detailed content and goals of each WG are indicated in the Action's Memorandum of Understanding or MoU ([EEG101 MoU](https://www.cost.eu/actions/CA24148/)).
 
-### STSMs must respect the following criteria:
+#### STSMs must respect the following criteria:
+
 - The STSM applicant and the Host institution are in different countries.
 - The minimum duration is 5 days, including travel.
 - STSMs must last at least five days (including travel) and must be completed within the current Grant Period (by 31 October 2026).
@@ -91,7 +93,8 @@ Participating in the COST Action STSM program is a great opportunity to develop 
 
 ---
 
-## Dissemination Grants
+### Dissemination Grants
+
 *Supporting international meetings participation and EEG101 dissemination*
 
 Three different types of grants are provided to support attendance at international scientific meetings that are not organized by EEG101:
@@ -149,7 +152,8 @@ Three different types of grants are provided to support attendance at internatio
 
 ---
 
-## Virtual Mobility Grants
+### Virtual Mobility Grants
+
 *Fostering knowledge exchange, strengthening networks, and supporting Action objectives.*
 
 Virtual Mobility consists of a collaboration in a virtual setting among researchers or innovators within the COST Action, to exchange knowledge, learn new techniques, and similar activities. Examples of activities that can be performed by the VM grantee include, but are not limited to:
@@ -200,12 +204,14 @@ Up to **1500 EUR** per VM Grant; should reflect the complexity of work that will
 
 ---
 
-# Useful resources
+## Useful resources
 
-## Grant Application Templates
+### Grant Application Templates
+
 To support your application process, COST provides standardized templates for each funding scheme. You MUST use the appropriate template for your application to ensure compliance with COST rules.
 
 **Download the templates for your funding scheme:**
+
 - [Short-Term Scientific Missions (STSM) Application Template](/assets/docs/cost-grant-applications-templates/STSM-application-template.docx)
 - [STSM Host Approval Template](/assets/docs/cost-grant-applications-templates/STSM-Host-approval-template.docx)
 - [Young Researchers International Collaboration Grant (YRICG) Application Template](/assets/docs/cost-grant-applications-templates/YRICG-application-template.docx)
