@@ -46,12 +46,15 @@ Short Term Scientific Missions (STSMs) are exchange visits aimed at supporting i
 
 Participating in the COST Action STSM program is a great opportunity to develop collaborative work on research topics that are related to the strategic objectives of EEG101 Working Groups or to introduce new ideas that address these objectives. Detailed content and goals of each WG are indicated in the Action's Memorandum of Understanding or MoU ([EEG101 MoU](https://www.cost.eu/actions/CA24148/)).
 
-#### STSMs must respect the following criteria:
+<details markdown="1">
+  <summary>Eligibility</summary>
+
+STSMs must respect the following criteria:
 
 - The STSM applicant and the Host institution are in different countries.
-- The minimum duration is 5 days, including travel.
 - STSMs must last at least five days (including travel) and must be completed within the current Grant Period (by 31 October 2026).
 - There is a maximum financial support of **€4000** per STSM.
+</details>
 
 <details markdown="1">
   <summary>STSM Application Procedure</summary>
@@ -93,11 +96,11 @@ Participating in the COST Action STSM program is a great opportunity to develop 
 
 ---
 
-### Dissemination Grants
+### Conference Grants
 
 *Supporting international meetings participation and EEG101 dissemination*
 
-Three different types of grants are provided to support attendance at international scientific meetings that are not organized by EEG101:
+Three different types of grants are provided to support attendance at international scientific meetings that are NOT organized by EEG101:
 
 - Inclusiveness Target Countries (ITC) Conference Grants, limited to researchers and innovators with a primary affiliation to a legal entity located in a COST ITC and Near Neighbour Countries (NNC).
 - Young Researchers and Innovators (YRI) Conference Grants, limited to young researchers and innovators (under the age of 40).
@@ -112,9 +115,9 @@ Three different types of grants are provided to support attendance at internatio
 
   - Applicants must have an invitation for an oral presentation at a high-level conference (*for YRI poster presentations are accepted as well) fully organized by a third party and NOT organized by the COST Action. The grantee receives support for attending and presenting their work to establish new contacts for future collaborations.
   - ITC and YRI Conference Grants are aimed to contribute to the overall travel, accommodation, registration fees, and meal expenses to attend science and technology events related to EEG101.
-  - Dissemination Grants support the visibility and impact of the COST Action by funding conference presentations. They aim to promote research findings, facilitate knowledge exchange, and enhance the outreach of EEG101.
-  - The maximum financial support per conference is **€2500** (in person event).
-  - Please note, EEG101 selection policy promotes gender balance, geographical inclusiveness, and the participation of new members and Young Researchers and Innovators (under the age of 40).
+  - Conference Grants support the visibility and impact of the COST Action by funding conference presentations. They aim to promote research findings, facilitate knowledge exchange, and enhance the outreach of EEG101.
+  -The maximum financial support per conference is **€2500** (in person event) and **500** for an online conference presentation. Note that for online conferences only presentations will be eligible and not posters or flash talks. 
+  -Please note the EEG101 selection policy promotes gender balance, geographical inclusiveness, and the participation of new members and Young Researchers and Innovators (under the age of 40).
   - Conferences cannot overlap between grant periods (October 31st - November 1st). The report must be submitted no later than 30 days following the end date of travel, or 15 days before the end of the Grant Period (October 31st 2026), whichever comes first.
 </details>
 
@@ -123,16 +126,15 @@ Three different types of grants are provided to support attendance at internatio
 
   An applicant must have a profile on the [e-COST](https://e-services.cost.eu/user/login) platform to prepare and submit the application. The EEG101 ITC, YRI & Dissemination Grant application form will be available for download after you have registered your application in the [e-COST](https://e-services.cost.eu/user/login) platform.
 
-  You should read the Grant Awarding User Guide you will find also [here](#) prior to your submission.
-
   Please note, when preparing your application, there must be a clear relationship between our action objectives and your activities mentioned in the application form.
 
-  In your application form you must provide:
+  Please include all of the following information and supporting documents:
 
-  1. A description of the relevance of the conference topic to the Action and description of the applicant's motivation to participate in the conference and potential impact on the applicant's career.
-  2. A brief explanation and justification for how the budget will be spent (i.e. budget for (i) travel, (ii) accommodation, (iii) registration, (iv) other costs; do not include daily allowances). For Dissemination Grants only: Description on how the conference presentation contributes to the Action's Objectives, and description of the expected impact to increase the Action's visibility in the research community.
+  1. Application form, which describes the relevance of the conference topic to the Action and description of the applicant’s motivation to participate in the conference and potential impact on the applicant’s career. Please include a brief explanation and justification for how the budget will be spent (i.e. budget for (i) travel, (ii) accommodation, (iii) registration, (iv) other costs; do not include daily allowances). For Dissemination Grants only: Description on how the conference presentation contributes to the Action Science Communication Plan, and description of the expected impact to increase the Action’s visibility in the research community.
+  2. Acceptance letter from the conference organizers
   3. Copy of the abstract of the accepted oral (or poster, for YRI only) presentation.
-  4. A document indicating acceptance, or invitation, for the submitted oral (or poster, for YRI only) presentation from the conference organizers.
+  4. Letter of approval of the submitted oral (or poster, for YRI only) presentation from the conference organizers.
+
 </details>
 
 <details markdown="1">
