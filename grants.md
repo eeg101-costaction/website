@@ -31,7 +31,7 @@ We are pleased to announce the first funding round of the EEG101 COST Action. De
 <details markdown="1">
   <summary>Need guidance before applying?</summary>
 
-  Submit an [Expression of Interest (EoI)](https://forms.gle/PiT1473fcutvPJ5M6) to receive feedback that can help align your proposal with EEG101 objectives. This step is NOT mandatory, but is available if you are unsure about the fit and feel that you could benefit from advice.
+  Submit an [Expression of Interest (EoI)](https://leedspsychology.eu.qualtrics.com/jfe/form/SV_bBGBcL2HBm0Oko6) to receive feedback that can help align your proposal with EEG101 objectives. This step is NOT mandatory, but is available if you are unsure about the fit and feel that you could benefit from advice.
 
   Note that this feedback will not in any way impact on the final outcome from a full proposal and to avoid conflicts of interest it is reviewed by a different team to the Grants Awarding Committee. Please allow 7 days for a response to your submission and factor this timeframe in for your application.
 </details>
