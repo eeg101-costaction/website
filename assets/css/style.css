@@ -95,8 +95,8 @@ body {
 
 .page-content a {
   color: #3498db;
-  text-decoration: none;
-  border-bottom: 1px solid #3498db;
+  text-decoration: underline;
+  /* border-bottom: 1px solid #3498db; */
   transition: border-color 0.3s ease;
 }
 

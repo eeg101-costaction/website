@@ -16,7 +16,22 @@ By supporting training, inclusion, and cross-sector partnerships—especially th
 
 ## About COST Action
 
-[COST](https://www.cost.eu/) (European Cooperation in Science and Technology) is a funding agency for research and innovation networks. COST Actions help connect research initiatives across Europe and enable scientists to grow their ideas by sharing them with their peers. This boosts their research, career and innovation.
+<!-- this section is required by COST -->
+
+<table>
+<tr>
+<td style="padding-left: 0px; vertical-align: middle; text-align: left;">
+COST (European Cooperation in Science and Technology) is a funding agency for research and innovation networks. COST Actions help connect research initiatives across Europe and enable scientists to grow their ideas by sharing them with their peers. This boosts their research, career and innovation.
+</td>
+<td style="padding-left: 50px; vertical-align: middle; text-align: center;">
+<a href="https://www.cost.eu" style="text-decoration:none"><img src="assets/images/logo/COST_LOGO_darkgrey_transparentbackground.png" height=50px><br></a>
+<a href="https://www.cost.eu">www.cost.eu</a>
+</td>
+<td style="padding-left: 50px; vertical-align: middle; text-align: center;">
+<a href="https://commission.europa.eu"><img src="assets/images/logo/EN-Funded by the EU-POS.png" height=50px></a>
+</td>
+</tr>
+</table>
 
 ## Join Our Network
 
