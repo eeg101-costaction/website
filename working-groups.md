@@ -24,8 +24,8 @@ The action is structured into several working groups, each focusing on specific 
 </div>
 
 <div class="wide-card">
-  <h3>WG3: Manifesto for EEG Science</h3>
-  <p>This work package creates and promotes a community-driven Manifesto that defines ethical, open, and sustainable principles for EEG research. It aims for cultural change by engaging researchers, institutions, journals, and funders to endorse and implement best practices in open and responsible EEG science.</p>
+  <h3>WG3: The EEG Community Framework (formerly EEG Manifesto for EEG Science)</h3>
+  <p>This work package creates and promotes a <a href="https://sign-cf.eeg101.eu/">Community Framework</a> that defines ethical, open, and sustainable principles for EEG research. It aims for cultural change by engaging researchers, institutions, journals, and funders to endorse and implement best practices in open and responsible EEG science (resources and links available at <a href="https://linktr.ee/eegcf/">https://linktr.ee/eegcf/</a>).</p>
   <table style="width: 80%; text-align: left; vertical-align: top;">
     <td><h4>Leader:</h4>{% include person id="maximilien" %}</td>
     <td><h4>Co-leader:</h4>{% include person id="alexandra" %}</td>

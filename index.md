@@ -10,7 +10,7 @@ By supporting training, inclusion, and cross-sector partnerships—especially th
 
 - **Standardise EEG methodologies and reporting** Develop and promote standardized reporting tools, pre-registration templates, and analysis workflows to improve consistency, transparency, and reproducibility across EEG studies.
 - **Integrate and harmonise EEG data and tools** Create a centralized online platform that curates FAIR-compliant EEG datasets, harmonises data across devices and laboratories, and provides interoperable open-source analysis pipelines.
-- **Advance open and rigorous EEG science** Accelerate adoption of open research practices through shared resources, ethical guidelines (the EEG Manifesto), and coordinated international collaboration with major global EEG initiatives.
+- **Advance open and rigorous EEG science** Accelerate adoption of open research practices through shared resources, ethical guidelines (the EEG Community Framework), and coordinated international collaboration with major global EEG initiatives.
 - **Build research capacity and skills across Europe** Deliver open-access training materials, workshops, and Summer Schools, with a strong focus on early-career researchers and Inclusiveness Target Countries, to reduce inequalities in access to expertise and resources.
 - **Strengthen networking, innovation, and interdisciplinary collaboration** Foster collaboration through Short-Term Scientific Missions (STSMs), Virtual Mobility Grants (VMGs), conferences, and industry partnerships to address shared methodological challenges and stimulate innovation.
 
