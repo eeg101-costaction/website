@@ -271,3 +271,16 @@
     Head of the Neuroimaging Group at Cajal Neuroscience Center (CNC-CSIC). She investigates human neurophysiology to characterize brain dynamics. EEG101 MC representative of Spain.
   tags: [MC, WG1, WG2, WG3]
   order: 20
+
+- id: mikkel
+  name: "Mikkel C. Vinding"
+  role: "Management Committee Member"
+  institution: "University of Copenhagen"
+  country: "Denmark"
+  email: "mvi@psy.ku"
+  website: "https://psychology.ku.dk/staff/academic_staff/?pure=en/persons/805933"
+  orcid: "0000-0002-7954-2886"
+  image: "/assets/images/people/mikkel.jpg"
+  bio: ""
+  tags: [MC, WG1, WG2, WG3]
+  order: 21
