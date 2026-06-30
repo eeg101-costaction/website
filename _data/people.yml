@@ -254,7 +254,8 @@
   website: "https://profile.ulbsibiu.ro/ro/cadru-didactic/gabriela-mariana-marcu/"
   orcid: "0000-0003-2508-3749"
   image: "/assets/images/people/gabriela.jpg"
-  bio: ""
+  bio: >
+    Associate Professor and Scientific Researcher in Human Decision-Making, Psychophysiology (EEG, QEEG, ERPs) and Clinical Neuroscience at Lucian Blaga University of Sibiu. Gabriela's research focuses on neurophysiological markers of cognitive control and behavioral interventions. She serves as a Management Committee member for Romania and is active across all EEG101 Working Groups.
   tags: [MC, WG1, WG2, WG3]
   order: 19
 
