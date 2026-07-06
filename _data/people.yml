@@ -285,3 +285,17 @@
   bio: ""
   tags: [MC, WG1, WG2, WG3]
   order: 21
+
+- id: heinrich
+  name: "Heinrich R. Liesefeld"
+  role: "Management Committee Member"
+  institution: "University of Bremen"
+  country: "Germany"
+  email: "Heinrich.Liesefeld@uni-bremen.de"
+  website: "https://www.uni-bremen.de/en/research-methods-and-cognitive-psychology/team/heinrich-liesefeld"
+  orcid: "https://orcid.org/0000-0003-4551-8607"
+  image: "/assets/images/people/heinrich.jpg"
+  bio: >
+    Senior Researcher at the University of Bremen. Heinrich conducts basic research on the human visual system, with a particular interest in visual search, visual working memory, and cognitive modeling using EEG. He is a Consulting Editor for Cortex and a lead investigator for the #EEGManyLabs project, promoting replicability and open science in electrophysiology. He serves as an EEG101 Management Committee member for Germany.
+  tags: [MC, WG1, WG2, WG3]
+  order: 22
