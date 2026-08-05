@@ -1342,7 +1342,7 @@ strong { font-weight: 600; }
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex: 1;
 }
 .video-series {
@@ -1352,7 +1352,7 @@ strong { font-weight: 600; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-gold-dark);
-  margin: 0;
+  margin: 0 0 0.1rem;
 }
 .video-title {
   font-family: var(--font-heading);
@@ -1429,7 +1429,7 @@ strong { font-weight: 600; }
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex: 1;
 }
 .paper-theme {
@@ -1439,7 +1439,7 @@ strong { font-weight: 600; }
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-gold-dark);
-  margin: 0;
+  margin: 0 0 0.1rem;
 }
 .paper-title {
   font-family: var(--font-heading);

@@ -4,7 +4,7 @@
 
 - id: mushtaq-2024-nhb
   title: "One hundred years of EEG for brain and behaviour research"
-  authors: "Mushtaq F, Welke D, Ković V, Liesefeld HR, ... Ibanez A"
+  authors: "Mushtaq F, Welke D, Gallagher A, Pavlov YG, Kouara L, Bosch-Bayard J, Arvaneh M, Bland AR, Chaumon M, ... Liesefeld HR, ... Evans AC, Valdes-Sosa P"
   journal: "Nature Human Behaviour"
   year: 2024
   doi: "https://doi.org/10.1038/s41562-024-01941-5"
@@ -15,7 +15,7 @@
 
 - id: soskic-2025-psychophysiology
   title: "ARTEM-IS: A reporting standard for EEG methodology in science"
-  authors: "Šoškić A, Ković V, Mushtaq F, ... Pajić D"
+  authors: "Šoškić A, Ković V, Algermissen J, Fischer NL, Ganis G, Gau R, Mushtaq F, Niso G, Oostenveld R, Pajić D, Pavlov YG, ... Styles SJ"
   journal: "Psychophysiology"
   year: 2025
   doi: "https://doi.org/10.1111/psyp.70187"
@@ -26,7 +26,7 @@
 
 - id: babiloni-2025-clin-neurophysiology
   title: "Harmonised multinational qEEG norms: the OPES initiative"
-  authors: "Babiloni C, Barry RJ, Başar E, ... Mushtaq F, ... Zucca R"
+  authors: "Babiloni C, Arakaki X, Baez S, Barry RJ, Benussi A, ... Mushtaq F, ... Triggiani AI, ... Zucca R"
   journal: "Clinical Neurophysiology"
   year: 2025
   doi: "https://doi.org/10.1016/j.clinph.2025.02.256"
@@ -37,7 +37,7 @@
 
 - id: mushtaq-ibanez-2025-ejn
   title: "EEG as a tool for inclusive global neuroscience"
-  authors: "Mushtaq F, Ibanez A"
+  authors: "Mushtaq F, Ibáñez A"
   journal: "European Journal of Neuroscience"
   year: 2025
   doi: "https://doi.org/10.1111/ejn.70078"
@@ -48,7 +48,7 @@
 
 - id: pavlov-2021-cortex
   title: "#EEGManyLabs: Investigating the replicability of influential EEG experiments"
-  authors: "Pavlov YG, Adamian N, Appelhoff S, Arvaneh M, Bland AR, ... Mushtaq F"
+  authors: "Pavlov YG, Adamian N, Appelhoff S, Arvaneh M, Bland AR, Bradford DE, ... Liesefeld HR, ... Niso G, Oostenveld R, ... Mushtaq F"
   journal: "Cortex"
   year: 2021
   doi: "https://doi.org/10.1016/j.cortex.2021.03.013"
