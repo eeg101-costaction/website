@@ -1,35 +1,39 @@
-- id: bU7rCFd63sk
-  title: "EEG101-WG2: 7 Flash Talks"
-  duration: "23:34"
-  tags: [WG2, Flash Talks, EEG]
-  series: "Mini-Symposium"
-
-- id: GZCZzVKyx3Y
-  title: "EEG101-WG2: Harmonizing Multicenter EEG Data in Dementia Research - Pavel Prado"
-  duration: "10:16"
-  tags: [WG2, Dementia, Harmonization, BrainLat]
-  series: "Mini-Symposium"
-
-- id: zvKHBjpucVs
-  title: "EEG101-WG2: OPES: A Global Initiative for Harmonized Quantitative EEG Analysis - Claudio Babiloni"
-  duration: "12:17"
-  tags: [WG2, OPES, qEEG, Harmonization]
-  series: "Mini-Symposium"
-
-- id: o-YbGtXEpHQ
-  title: "EEG101-WG2: EEGManyLabs and its Resting State Project - Daniel Brady"
-  duration: "10:29"
-  tags: [WG2, EEGManyLabs, Resting State]
-  series: "Mini-Symposium"
-
-- id: uO0AbnqExFc
-  title: "EEG101-WG2: The Global Brain Consortium - Bosch Bayard"
-  duration: "10:46"
-  tags: [WG2, GBC, Global Health]
-  series: "Mini-Symposium"
+# EEG101 Video Library
+# All videos from https://www.youtube.com/@eeg101costaction
+# Series options: WG2 Mini-Symposium
 
 - id: lnmmVACiuWc
-  title: "EEG101-WG2: Mini-Symposium Introduction"
+  title: "WG2 mini-symposium introduction"
   duration: "3:07"
-  tags: [WG2, Introduction]
-  series: "Mini-Symposium"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, Introduction, Open Science]
+
+- id: uO0AbnqExFc
+  title: "The Global Brain Consortium — Bosch Bayard"
+  duration: "10:46"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, Global Brain Consortium, Data Harmonisation]
+
+- id: o-YbGtXEpHQ
+  title: "EEGManyLabs and its resting state project — Daniel Brady"
+  duration: "10:29"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, EEGManyLabs, Resting State, Replication]
+
+- id: zvKHBjpucVs
+  title: "OPES: A global initiative for harmonised quantitative EEG analysis — Claudio Babiloni"
+  duration: "12:17"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, OPES, qEEG, Harmonisation]
+
+- id: GZCZzVKyx3Y
+  title: "Harmonising multicenter EEG data in dementia research: the BrainLat approach — Pavel Prado"
+  duration: "10:16"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, Dementia, BrainLat, Harmonisation, Data Curation]
+
+- id: bU7rCFd63sk
+  title: "WG2 mini-symposium: seven flash talks"
+  duration: "23:34"
+  series: "WG2 Mini-Symposium"
+  tags: [WG2, Flash Talks, Open Science]
