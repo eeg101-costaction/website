@@ -16,7 +16,12 @@ permalink: /library/
       <input type="text" id="library-search" class="library-search" placeholder="Search by title, speaker, or topic...">
       <div class="library-filters" id="library-filters">
         <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="WG2 Mini-Symposium">WG2 mini-symposium</button>
+        <button class="filter-btn" data-filter="WG2">WG2</button>
+        <button class="filter-btn" data-filter="data harmonisation">Data harmonisation</button>
+        <button class="filter-btn" data-filter="eegmanylabs">EEGManyLabs</button>
+        <button class="filter-btn" data-filter="open science">Open science</button>
+        <button class="filter-btn" data-filter="invited talk">Invited talk</button>
+        <button class="filter-btn" data-filter="flash talks">Flash talks</button>
       </div>
     </div>
 
@@ -69,17 +74,17 @@ permalink: /library/
   var cards       = document.querySelectorAll('.video-card');
   var countEl     = document.getElementById('library-count');
   var emptyEl     = document.getElementById('library-empty');
-  var activeSeries = 'all';
+  var activeFilter = 'all';
   var searchTerm   = '';
 
   function update() {
     var visible = 0;
     cards.forEach(function(card) {
-      var seriesMatch = activeSeries === 'all' || card.dataset.series === activeSeries;
+      var tagMatch = activeFilter === 'all' || card.dataset.tags.includes(activeFilter);
       var searchMatch = searchTerm === '' ||
         card.dataset.title.includes(searchTerm) ||
         card.dataset.tags.includes(searchTerm);
-      if (seriesMatch && searchMatch) {
+      if (tagMatch && searchMatch) {
         card.style.display = '';
         visible++;
       } else {
@@ -94,7 +99,7 @@ permalink: /library/
     btn.addEventListener('click', function() {
       filterBtns.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      activeSeries = btn.dataset.filter;
+      activeFilter = btn.dataset.filter;
       update();
     });
   });

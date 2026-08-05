@@ -1382,8 +1382,8 @@ strong { font-weight: 600; }
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: #dbeafe;
+  color: #1e40af;
   border-radius: 100px;
   padding: 0.1rem 0.45rem;
 }
@@ -1483,8 +1483,8 @@ strong { font-weight: 600; }
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  background: #dbeafe;
+  color: #1e40af;
   border-radius: 100px;
   padding: 0.1rem 0.45rem;
 }

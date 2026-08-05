@@ -1,42 +1,39 @@
 # EEG101 Knowledge Hub — Open-access papers
-# Theme options: EEG History & Centenary, Reporting Standards, Data Harmonisation,
-#                Open Science & Replication, Global Neuroscience
+# Theme options: EEG history & centenary, Reporting standards, Data harmonisation,
+#                Open science & replication, Global neuroscience
 
 - id: mushtaq-2024-nhb
   title: "One hundred years of EEG for brain and behaviour research"
   authors: "Mushtaq F, Welke D, Ković V, Liesefeld HR, ... Ibanez A"
   journal: "Nature Human Behaviour"
   year: 2024
-  doi: "https://doi.org/10.1038/s41562-024-01908-6"
-  pdf: ""
+  doi: "https://doi.org/10.1038/s41562-024-01941-5"
   open_access: true
   theme: "EEG history & centenary"
   image: "/assets/images/hub/mushtaq-2024-nhb.jpg"
-  tags: [EEG, Centenary, Open Science, Global Neuroscience]
+  tags: [EEG, Centenary, Open science, Global neuroscience]
 
 - id: soskic-2025-psychophysiology
   title: "ARTEM-IS: A reporting standard for EEG methodology in science"
   authors: "Šoškić A, Ković V, Mushtaq F, ... Pajić D"
   journal: "Psychophysiology"
   year: 2025
-  doi: "https://doi.org/10.1111/psyp.14758"
-  pdf: ""
+  doi: "https://doi.org/10.1111/psyp.70187"
   open_access: true
   theme: "Reporting standards"
   image: "/assets/images/hub/soskic-2025-psychophysiology.jpg"
-  tags: [Reporting Standards, ARTEM-IS, Methodology, Open Science]
+  tags: [Reporting standards, ARTEM-IS, Methodology, Open science]
 
 - id: babiloni-2025-clin-neurophysiology
   title: "Harmonised multinational qEEG norms: the OPES initiative"
   authors: "Babiloni C, Barry RJ, Başar E, ... Mushtaq F, ... Zucca R"
   journal: "Clinical Neurophysiology"
   year: 2025
-  doi: "https://doi.org/10.1016/j.clinph.2024.11.001"
-  pdf: ""
+  doi: "https://doi.org/10.1016/j.clinph.2025.02.256"
   open_access: true
   theme: "Data harmonisation"
   image: "/assets/images/hub/babiloni-2025-clin-neurophysiology.jpg"
-  tags: [qEEG, Harmonisation, OPES, Clinical Neurophysiology, Norms]
+  tags: [qEEG, Harmonisation, OPES, Data harmonisation]
 
 - id: mushtaq-ibanez-2025-ejn
   title: "EEG as a tool for inclusive global neuroscience"
@@ -44,11 +41,10 @@
   journal: "European Journal of Neuroscience"
   year: 2025
   doi: "https://doi.org/10.1111/ejn.70078"
-  pdf: ""
   open_access: true
   theme: "Global neuroscience"
   image: "/assets/images/hub/mushtaq-ibanez-2025-ejn.jpg"
-  tags: [Global Neuroscience, WEIRD, Inclusivity, EEG, Open Science]
+  tags: [Global neuroscience, Inclusivity, EEG, Open science]
 
 - id: pavlov-2021-cortex
   title: "#EEGManyLabs: Investigating the replicability of influential EEG experiments"
@@ -56,8 +52,7 @@
   journal: "Cortex"
   year: 2021
   doi: "https://doi.org/10.1016/j.cortex.2021.03.013"
-  pdf: ""
   open_access: true
   theme: "Open science & replication"
   image: "/assets/images/hub/pavlov-2021-cortex.jpg"
-  tags: [EEGManyLabs, Replication, Open Science, EEG, Large-scale Collaboration]
+  tags: [EEGManyLabs, Replication, Open science, Large-scale collaboration]
