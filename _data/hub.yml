@@ -56,3 +56,58 @@
   theme: "Open science & replication"
   image: "/assets/images/hub/pavlov-2021-cortex.jpg"
   tags: [EEGManyLabs, Replication, Open science, Large-scale collaboration]
+
+- id: corneyllie-2025-plos-sustainability
+  title: "Doing conferences differently: A decentralised multi-hub approach for ecological and social sustainability"
+  authors: "Corneyllie A, Walters T, Dubarry A-S, He X, Hinault T, Ković V, Medani T, Pascarella A, Pinet S, Ruzzoli M, Schaworonkow N, Šoškić A, Stekić K, Tsilimparis K, Ulloa JL, Wang R, Chaumon M"
+  journal: "PLOS Sustainability and Transformation"
+  year: 2025
+  doi: "https://doi.org/10.1371/journal.pstr.0000177"
+  open_access: true
+  theme: "Open science & replication"
+  image: "/assets/images/hub/corneyllie-2025-plos-sustainability.jpg"
+  tags: [Open science, Sustainability, Inclusivity, Conferences]
+
+- id: chaumon-2024-cuttinggardens
+  title: "CuttingGardens experience: Sharing globally to build locally"
+  authors: "Chaumon M, Corneyllie A"
+  journal: "HAL Open Science (Conference presentation)"
+  year: 2024
+  doi: "https://hal.science/hal-04613978"
+  open_access: true
+  theme: "Open science & replication"
+  image: "/assets/images/hub/chaumon-2024-cuttinggardens.jpg"
+  tags: [Open science, Sustainability, Conferences, CuttingEEG]
+
+- id: pernet-2019-scientific-data
+  title: "EEG-BIDS, an extension to the brain imaging data structure for electroencephalography"
+  authors: "Pernet CR, Appelhoff S, Gorgolewski KJ, Flandin G, Phillips C, Delorme A, Oostenveld R"
+  journal: "Scientific Data"
+  year: 2019
+  doi: "https://doi.org/10.1038/s41597-019-0104-8"
+  open_access: true
+  theme: "Data harmonisation"
+  image: "/assets/images/hub/pernet-2019-scientific-data.jpg"
+  tags: [BIDS, Data harmonisation, Open science, EEG]
+
+- id: pernet-2020-nature-neuroscience
+  title: "Issues and recommendations from the OHBM COBIDAS MEEG committee for reproducible EEG and MEG research"
+  authors: "Pernet C, Garrido MI, Gramfort A, Maurits N, Michel CM, Pang E, Salmelin R, Schoffelen JM, Valdes-Sosa PA, Puce A"
+  journal: "Nature Neuroscience"
+  year: 2020
+  doi: "https://doi.org/10.1038/s41593-020-00709-0"
+  open_access: false
+  theme: "Reporting standards"
+  image: "/assets/images/hub/pernet-2020-nature-neuroscience.jpg"
+  tags: [Reporting standards, Reproducibility, EEG, MEG]
+
+- id: oostenveld-2011-fieldtrip
+  title: "FieldTrip: Open Source Software for Advanced Analysis of MEG, EEG, and Invasive Electrophysiological Data"
+  authors: "Oostenveld R, Fries P, Maris E, Schoffelen J-M"
+  journal: "Computational Intelligence and Neuroscience"
+  year: 2011
+  doi: "https://doi.org/10.1155/2011/156869"
+  open_access: true
+  theme: "Data harmonisation"
+  image: "/assets/images/hub/oostenveld-2011-fieldtrip.jpg"
+  tags: [FieldTrip, Open source, EEG, MEG, Analysis tools]
