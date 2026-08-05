@@ -1244,11 +1244,12 @@ strong { font-weight: 600; }
 }
 .filter-btn {
   font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
   padding: 0.35rem 0.9rem;
   border-radius: 999px;
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--color-border);
   background: #fff;
   color: var(--color-text-muted);
   cursor: pointer;
@@ -1257,6 +1258,7 @@ strong { font-weight: 600; }
 .filter-btn:hover {
   border-color: var(--color-primary);
   color: var(--color-primary);
+  background: var(--color-primary-light);
 }
 .filter-btn.active {
   background: var(--color-primary);
@@ -1376,12 +1378,14 @@ strong { font-weight: 600; }
 }
 .video-tag {
   font-family: var(--font-ui);
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   background: var(--color-primary-light);
   color: var(--color-primary);
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
+  border-radius: 100px;
+  padding: 0.1rem 0.45rem;
 }
 
 /* ============================================================
@@ -1475,12 +1479,14 @@ strong { font-weight: 600; }
 }
 .paper-tag {
   font-family: var(--font-ui);
-  font-size: 0.7rem;
-  font-weight: 500;
-  background: var(--color-gold-light);
-  color: var(--color-gold-dark);
-  border-radius: 999px;
-  padding: 0.15rem 0.55rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: 100px;
+  padding: 0.1rem 0.45rem;
 }
 .paper-links {
   display: flex;
