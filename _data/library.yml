@@ -1,13 +1,13 @@
 # EEG101 Video Library
 # All videos from https://www.youtube.com/@eeg101costaction
 # Tag taxonomy: working group (WG2), content type (Introduction, Invited talk, Flash talks),
-#               topic (Data harmonisation, EEGManyLabs, Open science)
+#               topic (Data harmonisation, #EEGManyLabs, Open Science)
 
 - id: lnmmVACiuWc
   title: "WG2 mini-symposium introduction"
   duration: "3:07"
   series: "WG2 Mini-Symposium"
-  tags: [WG2, Introduction, Open science]
+  tags: [WG2, Introduction, Open Science]
 
 - id: uO0AbnqExFc
   title: "The Global Brain Consortium — Bosch Bayard"
@@ -19,7 +19,7 @@
   title: "EEGManyLabs and its resting state project — Daniel Brady"
   duration: "10:29"
   series: "WG2 Mini-Symposium"
-  tags: [WG2, Invited talk, EEGManyLabs]
+  tags: [WG2, Invited talk, "#EEGManyLabs"]
 
 - id: zvKHBjpucVs
   title: "OPES: A global initiative for harmonised quantitative EEG analysis — Claudio Babiloni"
@@ -37,4 +37,4 @@
   title: "WG2 mini-symposium: seven flash talks"
   duration: "23:34"
   series: "WG2 Mini-Symposium"
-  tags: [WG2, Flash talks, Open science]
+  tags: [WG2, Flash talks, Open Science]

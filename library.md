@@ -18,8 +18,8 @@ permalink: /library/
         <button class="filter-btn active" data-filter="all">All</button>
         <button class="filter-btn" data-filter="WG2">WG2</button>
         <button class="filter-btn" data-filter="data harmonisation">Data harmonisation</button>
-        <button class="filter-btn" data-filter="eegmanylabs">EEGManyLabs</button>
-        <button class="filter-btn" data-filter="open science">Open science</button>
+        <button class="filter-btn" data-filter="#EEGManyLabs">#EEGManyLabs</button>
+        <button class="filter-btn" data-filter="Open Science">Open Science</button>
         <button class="filter-btn" data-filter="invited talk">Invited talk</button>
         <button class="filter-btn" data-filter="flash talks">Flash talks</button>
       </div>
@@ -80,7 +80,8 @@ permalink: /library/
   function update() {
     var visible = 0;
     cards.forEach(function(card) {
-      var tagMatch = activeFilter === 'all' || card.dataset.tags.includes(activeFilter);
+      var tagMatch = activeFilter === 'all' || 
+                     card.dataset.tags.includes(activeFilter.toLowerCase());
       var searchMatch = searchTerm === '' ||
         card.dataset.title.includes(searchTerm) ||
         card.dataset.tags.includes(searchTerm);
