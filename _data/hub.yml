@@ -1,6 +1,6 @@
 # EEG101 Knowledge Hub — Open-access papers
-# Theme options: EEG history & centenary, Reporting standards, Data harmonisation,
-#                Open science & replication, Global neuroscience
+# Theme options: History, Reporting standards, Data harmonisation, 
+#                Global neuroscience, #EEGManyLabs, Community, Software
 
 - id: mushtaq-2024-nhb
   title: "One hundred years of EEG for brain and behaviour research"
@@ -9,9 +9,9 @@
   year: 2024
   doi: "https://doi.org/10.1038/s41562-024-01941-5"
   open_access: true
-  theme: "EEG history & centenary"
+  theme: "History"
   image: "/assets/images/hub/mushtaq-2024-nhb.jpg"
-  tags: [EEG, Centenary, Open science, Global neuroscience]
+  tags: [EEG, History, Open Science, Global Neuroscience]
 
 - id: soskic-2025-psychophysiology
   title: "ARTEM-IS: A reporting standard for EEG methodology in science"
@@ -22,7 +22,7 @@
   open_access: true
   theme: "Reporting standards"
   image: "/assets/images/hub/soskic-2025-psychophysiology.jpg"
-  tags: [Reporting standards, ARTEM-IS, Methodology, Open science]
+  tags: [Reporting standards, ARTEM-IS, Methodology, Open Science]
 
 - id: babiloni-2025-clin-neurophysiology
   title: "Harmonised multinational qEEG norms: the OPES initiative"
@@ -44,7 +44,7 @@
   open_access: true
   theme: "Global neuroscience"
   image: "/assets/images/hub/mushtaq-ibanez-2025-ejn.jpg"
-  tags: [Global neuroscience, Inclusivity, EEG, Open science]
+  tags: [Global neuroscience, Inclusivity, EEG, Open Science]
 
 - id: pavlov-2021-cortex
   title: "#EEGManyLabs: Investigating the replicability of influential EEG experiments"
@@ -53,9 +53,9 @@
   year: 2021
   doi: "https://doi.org/10.1016/j.cortex.2021.03.013"
   open_access: true
-  theme: "Open science & replication"
+  theme: "#EEGManyLabs"
   image: "/assets/images/hub/pavlov-2021-cortex.jpg"
-  tags: [EEGManyLabs, Replication, Open science, Large-scale collaboration]
+  tags: ["#EEGManyLabs", Replication, Open Science, Large-scale collaboration]
 
 - id: corneyllie-2025-plos-sustainability
   title: "Doing conferences differently: A decentralised multi-hub approach for ecological and social sustainability"
@@ -64,9 +64,9 @@
   year: 2025
   doi: "https://doi.org/10.1371/journal.pstr.0000177"
   open_access: true
-  theme: "Open science & replication"
+  theme: "Community"
   image: "/assets/images/hub/corneyllie-2025-plos-sustainability.jpg"
-  tags: [Open science, Sustainability, Inclusivity, Conferences]
+  tags: [Community, Sustainability, Inclusivity, Conferences, Open Science]
 
 - id: chaumon-2024-cuttinggardens
   title: "CuttingGardens experience: Sharing globally to build locally"
@@ -75,9 +75,9 @@
   year: 2024
   doi: "https://hal.science/hal-04613978"
   open_access: true
-  theme: "Open science & replication"
+  theme: "Community"
   image: "/assets/images/hub/chaumon-2024-cuttinggardens.jpg"
-  tags: [Open science, Sustainability, Conferences, CuttingEEG]
+  tags: [Community, Sustainability, Conferences, CuttingEEG, Open Science]
 
 - id: pernet-2019-scientific-data
   title: "EEG-BIDS, an extension to the brain imaging data structure for electroencephalography"
@@ -88,7 +88,7 @@
   open_access: true
   theme: "Data harmonisation"
   image: "/assets/images/hub/pernet-2019-scientific-data.jpg"
-  tags: [BIDS, Data harmonisation, Open science, EEG]
+  tags: [BIDS, Data harmonisation, Open Science, EEG]
 
 - id: pernet-2020-nature-neuroscience
   title: "Issues and recommendations from the OHBM COBIDAS MEEG committee for reproducible EEG and MEG research"
@@ -108,6 +108,6 @@
   year: 2011
   doi: "https://doi.org/10.1155/2011/156869"
   open_access: true
-  theme: "Data harmonisation"
+  theme: "Software"
   image: "/assets/images/hub/oostenveld-2011-fieldtrip.jpg"
-  tags: [FieldTrip, Open source, EEG, MEG, Analysis tools]
+  tags: [Software, FieldTrip, Open source, EEG, MEG, Analysis tools]

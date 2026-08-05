@@ -16,11 +16,14 @@ permalink: /hub/
       <input type="text" id="hub-search" class="library-search" placeholder="Search by title, author, or keyword...">
       <div class="library-filters" id="hub-filters">
         <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="EEG history &amp; centenary">EEG history &amp; centenary</button>
+        <button class="filter-btn" data-filter="History">History</button>
         <button class="filter-btn" data-filter="Reporting standards">Reporting standards</button>
         <button class="filter-btn" data-filter="Data harmonisation">Data harmonisation</button>
         <button class="filter-btn" data-filter="Global neuroscience">Global neuroscience</button>
-        <button class="filter-btn" data-filter="Open science &amp; replication">Open science &amp; replication</button>
+        <button class="filter-btn" data-filter="#EEGManyLabs">#EEGManyLabs</button>
+        <button class="filter-btn" data-filter="Community">Community</button>
+        <button class="filter-btn" data-filter="Software">Software</button>
+        <button class="filter-btn" data-filter="Open Science">Open Science</button>
       </div>
     </div>
 
@@ -78,18 +81,20 @@ permalink: /hub/
   var cards       = document.querySelectorAll('.paper-card');
   var countEl     = document.getElementById('hub-count');
   var emptyEl     = document.getElementById('hub-empty');
-  var activeTheme = 'all';
+  var activeFilter = 'all';
   var searchTerm  = '';
 
   function update() {
     var visible = 0;
     cards.forEach(function(card) {
-      var themeMatch = activeTheme === 'all' || card.dataset.theme === activeTheme;
+      var tagMatch = activeFilter === 'all' || 
+                     card.dataset.theme === activeFilter ||
+                     card.dataset.tags.includes(activeFilter.toLowerCase());
       var searchMatch = searchTerm === '' ||
         card.dataset.title.includes(searchTerm) ||
         card.dataset.authors.includes(searchTerm) ||
         card.dataset.tags.includes(searchTerm);
-      if (themeMatch && searchMatch) {
+      if (tagMatch && searchMatch) {
         card.style.display = '';
         visible++;
       } else {
@@ -104,7 +109,7 @@ permalink: /hub/
     btn.addEventListener('click', function() {
       filterBtns.forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      activeTheme = btn.dataset.filter;
+      activeFilter = btn.dataset.filter;
       update();
     });
   });
