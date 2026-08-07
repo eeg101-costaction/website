@@ -3,7 +3,7 @@ main:
     url: "/"
   - title: "About"
     url: "/about/"
-  - title: "Coordination Team"
+  - title: "Team"
     url: "/coordination/"
   - title: "Our Work"
     url: "/working-groups/"
@@ -23,7 +23,7 @@ main:
 footer:
   - title: "About"
     url: "/about/"
-  - title: "Coordination Team"
+  - title: "Team"
     url: "/coordination/"
   - title: "Our Work"
     url: "/working-groups/"
