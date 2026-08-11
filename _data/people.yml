@@ -299,3 +299,16 @@
     Senior Researcher at the University of Bremen. Heinrich conducts basic research on the human visual system, with a particular interest in visual search, visual working memory, and cognitive modeling using EEG. He is a Consulting Editor for Cortex and a lead investigator for the #EEGManyLabs project, promoting replicability and open science in electrophysiology. He serves as an EEG101 Management Committee member for Germany.
   tags: [MC, WG1, WG2, WG3]
   order: 22
+
+- id: fangzhou
+  name: "Fangzhou Hu"
+  role: "Research Support"
+  institution: "University of Leeds"
+  country: "United Kingdom"
+  email: ""
+  website: ""
+  orcid: ""
+  image: "/assets/images/people/fangzhou.jpg"
+  bio: ""
+  tags: [WG2]
+  order: 23
