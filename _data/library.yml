@@ -1,40 +1,152 @@
-# EEG101 Video Library
-# All videos from https://www.youtube.com/@eeg101costaction
-# Tag taxonomy: working group (WG2), content type (Introduction, Invited talk, Flash talks),
-#               topic (Data harmonisation, #EEGManyLabs, Open Science)
+# EEG101 Hub — verified sources and openly accessible full texts
+# Each record provides a canonical journal or repository source and a separately verified open-access full-text link.
 
-- id: lnmmVACiuWc
-  title: "WG2 mini-symposium introduction"
-  duration: "3:07"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Introduction, Open Science]
+- id: mushtaq-2024-nhb
+  title: "One hundred years of EEG for brain and behaviour research"
+  authors: "Mushtaq F, Welke D, Gallagher A, et al."
+  journal: "Nature Human Behaviour"
+  year: 2024
+  source_url: "https://doi.org/10.1038/s41562-024-01941-5"
+  source_label: "Journal source"
+  open_access_url: "https://eprints.whiterose.ac.uk/id/eprint/216490/1/Mushtaq_et_al_EEG100_Author_Accepted_Manuscript.pdf"
+  open_access_label: "Open manuscript"
+  access_version: "Author-accepted manuscript"
+  open_access: true
+  theme: "History"
+  image: "/assets/images/hub/mushtaq-2024-nhb.jpg"
+  tags: [EEG, History, Open Science, Global Neuroscience]
 
-- id: uO0AbnqExFc
-  title: "The Global Brain Consortium — Bosch Bayard"
-  duration: "10:46"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Invited talk, Data harmonisation]
+- id: soskic-2025-psychophysiology
+  title: "ARTEM-IS for ERP: Agreed Reporting Template for EEG Methodology—International Standard for Event-Related Potential Experiments"
+  authors: "Šoškić A, Ković V, Algermissen J, Fischer NL, Ganis G, Gau R, Mushtaq F, Niso G, Oostenveld R, Pajić D, Pavlov YG, Stekić K, Yang Y-F, Styles SJ"
+  journal: "Psychophysiology"
+  year: 2025
+  source_url: "https://doi.org/10.1111/psyp.70187"
+  source_label: "Journal source"
+  open_access_url: "https://onlinelibrary.wiley.com/doi/full/10.1111/psyp.70187"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "Reporting standards"
+  image: "/assets/images/hub/soskic-2025-psychophysiology.jpg"
+  tags: [Reporting standards, ARTEM-IS, Methodology, Open Science]
 
-- id: o-YbGtXEpHQ
-  title: "EEGManyLabs and its resting state project — Daniel Brady"
-  duration: "10:29"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Invited talk, "#EEGManyLabs"]
+- id: babiloni-2025-clin-neurophysiology
+  title: "Alpha rhythm and Alzheimer’s disease: Has Hans Berger’s dream come true?"
+  authors: "Babiloni C, Arakaki X, Baez S, Barry RJ, Benussi A, et al."
+  journal: "Clinical Neurophysiology"
+  year: 2025
+  source_url: "https://doi.org/10.1016/j.clinph.2025.02.256"
+  source_label: "Journal source"
+  open_access_url: "https://www.sciencedirect.com/science/article/pii/S1388245725002913"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "History"
+  image: "/assets/images/hub/babiloni-2025-clin-neurophysiology.jpg"
+  tags: [EEG, History, Alzheimer’s disease, Open Science]
 
-- id: zvKHBjpucVs
-  title: "OPES: A global initiative for harmonised quantitative EEG analysis — Claudio Babiloni"
-  duration: "12:17"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Invited talk, Data harmonisation]
+- id: mushtaq-ibanez-2025-ejn
+  title: "Electroencephalography (EEG) and the Quest for an Inclusive and Global Neuroscience"
+  authors: "Mushtaq F, Ibáñez A"
+  journal: "European Journal of Neuroscience"
+  year: 2025
+  source_url: "https://doi.org/10.1111/ejn.70078"
+  source_label: "Journal source"
+  open_access_url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11920675/"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "Global neuroscience"
+  image: "/assets/images/hub/mushtaq-ibanez-2025-ejn.jpg"
+  tags: [Global neuroscience, Inclusivity, EEG, Open Science]
 
-- id: GZCZzVKyx3Y
-  title: "Harmonising multicenter EEG data in dementia research: the BrainLat approach — Pavel Prado"
-  duration: "10:16"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Invited talk, Data harmonisation]
+- id: pavlov-2021-cortex
+  title: "#EEGManyLabs: Investigating the replicability of influential EEG experiments"
+  authors: "Pavlov YG, Adamian N, Appelhoff S, Arvaneh M, Benwell CSY, et al."
+  journal: "Cortex"
+  year: 2021
+  source_url: "https://doi.org/10.1016/j.cortex.2021.03.013"
+  source_label: "Journal source"
+  open_access_url: "https://www.sciencedirect.com/science/article/pii/S0010945221001106"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "#EEGManyLabs"
+  image: "/assets/images/hub/pavlov-2021-cortex.jpg"
+  tags: ["#EEGManyLabs", Replication, Open Science, Large-scale collaboration]
 
-- id: bU7rCFd63sk
-  title: "WG2 mini-symposium: seven flash talks"
-  duration: "23:34"
-  series: "WG2 Mini-Symposium"
-  tags: [WG2, Flash talks, Open Science]
+- id: corneyllie-2025-plos-sustainability
+  title: "Doing conferences differently: A decentralised multi-hub approach for ecological and social sustainability"
+  authors: "Corneyllie A, Walters T, Dubarry A-S, He X, Hinault T, et al."
+  journal: "PLOS Sustainability and Transformation"
+  year: 2025
+  source_url: "https://doi.org/10.1371/journal.pstr.0000177"
+  source_label: "Journal source"
+  open_access_url: "https://journals.plos.org/sustainabilitytransformation/article?id=10.1371/journal.pstr.0000177"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "Community"
+  image: "/assets/images/hub/corneyllie-2025-plos-sustainability.jpg"
+  tags: [Community, Sustainability, Inclusivity, Conferences, Open Science]
+
+- id: chaumon-2024-cuttinggardens
+  title: "CuttingGardens experience"
+  authors: "Chaumon M, Corneyllie A"
+  journal: "HAL Open Science"
+  year: 2024
+  source_url: "https://hal.science/hal-04613978"
+  source_label: "Repository record"
+  open_access_url: "https://hal.science/hal-04613978v1/document"
+  open_access_label: "Download presentation"
+  access_version: "Repository presentation"
+  open_access: true
+  theme: "Community"
+  image: "/assets/images/hub/chaumon-2024-cuttinggardens.jpg"
+  tags: [Community, Sustainability, Conferences, CuttingEEG, Open Science]
+
+- id: pernet-2019-scientific-data
+  title: "EEG-BIDS, an extension to the brain imaging data structure for electroencephalography"
+  authors: "Pernet CR, Appelhoff S, Gorgolewski KJ, Flandin G, Phillips C, Delorme A, Oostenveld R"
+  journal: "Scientific Data"
+  year: 2019
+  source_url: "https://doi.org/10.1038/s41597-019-0104-8"
+  source_label: "Journal source"
+  open_access_url: "https://www.nature.com/articles/s41597-019-0104-8"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "Data harmonisation"
+  image: "/assets/images/hub/pernet-2019-scientific-data.jpg"
+  tags: [BIDS, Data harmonisation, Open Science, EEG]
+
+- id: pernet-2020-nature-neuroscience
+  title: "Issues and recommendations from the OHBM COBIDAS MEEG committee for reproducible EEG and MEG research"
+  authors: "Pernet C, Garrido MI, Gramfort A, Maurits N, Michel CM, Pang E, Salmelin R, Schoffelen JM, Valdes-Sosa PA, Puce A"
+  journal: "Nature Neuroscience"
+  year: 2020
+  source_url: "https://doi.org/10.1038/s41593-020-00709-0"
+  source_label: "Journal source"
+  open_access_url: "https://repository.ubn.ru.nl/bitstream/handle/2066/224765/224765.pdf?sequence=1&isAllowed=y"
+  open_access_label: "Open publisher version"
+  access_version: "Repository-hosted publisher version"
+  open_access: true
+  theme: "Reporting standards"
+  image: "/assets/images/hub/pernet-2020-nature-neuroscience.jpg"
+  tags: [Reporting standards, Reproducibility, EEG, MEG, Open Science]
+
+- id: oostenveld-2011-fieldtrip
+  title: "FieldTrip: Open Source Software for Advanced Analysis of MEG, EEG, and Invasive Electrophysiological Data"
+  authors: "Oostenveld R, Fries P, Maris E, Schoffelen J-M"
+  journal: "Computational Intelligence and Neuroscience"
+  year: 2011
+  source_url: "https://doi.org/10.1155/2011/156869"
+  source_label: "Journal source"
+  open_access_url: "https://onlinelibrary.wiley.com/doi/full/10.1155/2011/156869"
+  open_access_label: "Read open access"
+  access_version: "Publisher open access"
+  open_access: true
+  theme: "Software"
+  image: "/assets/images/hub/oostenveld-2011-fieldtrip.jpg"
+  tags: [Software, FieldTrip, Open source, EEG, MEG, Analysis tools]

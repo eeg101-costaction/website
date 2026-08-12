@@ -118,7 +118,7 @@ videos_preview:
   intro: >
     Talks, tutorials, and podcast episodes from the EEG101 community.
   cta:
-    label: "Full video library"
+    label: "Full Video Hub"
     url: "/videos/"
 
 join_cta:
