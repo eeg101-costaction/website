@@ -46,20 +46,18 @@
       <div class="col-6 col-md-2">
         <h3 class="footer-nav__heading">Network</h3>
         <ul class="footer-nav__list">
-          <li><a href="{{ '/about/' | relative_url }}">About</a></li>
-          <li><a href="{{ '/coordination/' | relative_url }}">Coordination</a></li>
-          <li><a href="{{ '/working-groups/' | relative_url }}">Our Work</a></li>
-          <li><a href="{{ '/partners/' | relative_url }}">Partners</a></li>
-          <li><a href="{{ '/contact/' | relative_url }}">Contact</a></li>
+          {% for item in site.data.navigation.footer_network %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+          {% endfor %}
         </ul>
       </div>
 
       <div class="col-6 col-md-2">
         <h3 class="footer-nav__heading">Resources</h3>
         <ul class="footer-nav__list">
-          <li><a href="{{ '/grants/' | relative_url }}">Grants</a></li>
-          <li><a href="{{ '/resources/' | relative_url }}">Resources</a></li>
-          <li><a href="{{ '/news/' | relative_url }}">News</a></li>
+          {% for item in site.data.navigation.footer_resources %}
+          <li><a href="{{ item.url | relative_url }}">{{ item.title }}</a></li>
+          {% endfor %}
         </ul>
       </div>
 

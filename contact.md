@@ -61,7 +61,6 @@ University of Leeds
 Leeds, LS2 9JT
 United Kingdom
 f dot mushtaq at leeds dot ac uk
----
 
 **COST Action CA24148**
 [www.eeg101.eu](https://www.eeg101.eu)

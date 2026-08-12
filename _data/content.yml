@@ -111,7 +111,7 @@ events_preview:
   heading: "Upcoming events"
   cta:
     label: "All events"
-    url: "/events/"
+    url: "/news/"
 
 videos_preview:
   heading: "Watch EEG101"
@@ -119,7 +119,7 @@ videos_preview:
     Talks, tutorials, and podcast episodes from the EEG101 community.
   cta:
     label: "Full Video Hub"
-    url: "/videos/"
+    url: "/video-hub/"
 
 join_cta:
   heading: "Join the EEG101 network"
