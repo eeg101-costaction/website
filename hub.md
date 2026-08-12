@@ -37,13 +37,13 @@ permalink: /hub/
            data-title="{{ paper.title | downcase }}"
            data-authors="{{ paper.authors | downcase }}"
            data-tags="{{ paper.tags | join: ' ' | downcase }}">
-        <a href="{{ paper.doi }}" target="_blank" rel="noopener" class="paper-cover">
+        <a href="{{ paper.source_url }}" target="_blank" rel="noopener" class="paper-cover">
           <img src="{{ paper.image }}" alt="{{ paper.title }}" loading="lazy">
         </a>
         <div class="paper-info">
           <p class="paper-theme">{{ paper.theme }}</p>
           <h3 class="paper-title">
-            <a href="{{ paper.doi }}" target="_blank" rel="noopener">{{ paper.title }}</a>
+            <a href="{{ paper.source_url }}" target="_blank" rel="noopener">{{ paper.title }}</a>
           </h3>
           <p class="paper-authors">{{ paper.authors }}</p>
           <p class="paper-journal"><em>{{ paper.journal }}</em>, {{ paper.year }}</p>
@@ -52,17 +52,16 @@ permalink: /hub/
               <span class="paper-tag">{{ tag }}</span>
             {% endfor %}
           </div>
+          <p class="paper-access-version">{{ paper.access_version }}</p>
           <div class="paper-links">
-            <a href="{{ paper.doi }}" target="_blank" rel="noopener" class="paper-link paper-link--oa">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-              View paper
+            <a href="{{ paper.open_access_url }}" target="_blank" rel="noopener" class="paper-link paper-link--oa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9M14 3v7h7M14 3l7 7M8 16h8M8 12h3"/></svg>
+              {{ paper.open_access_label }}
             </a>
-            {% if paper.open_access %}
-            <span class="paper-link" style="color: var(--color-gold-dark); font-size: 0.72rem;">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM9 8V6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9z"/></svg>
-              Open access
-            </span>
-            {% endif %}
+            <a href="{{ paper.source_url }}" target="_blank" rel="noopener" class="paper-link paper-link--source">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              {{ paper.source_label }}
+            </a>
           </div>
         </div>
       </div>
