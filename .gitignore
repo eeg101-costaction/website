@@ -8,3 +8,5 @@ Gemfile.lock
 .bundle/
 node_modules/
 .tmp/
+__pycache__/
+*.py[cod]
