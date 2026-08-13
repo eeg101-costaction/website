@@ -1,0 +1,47 @@
+---
+layout: page
+title: "EEG101 Network Map"
+description: "Explore the institutions and members contributing to EEG101 across the global network."
+leaflet_map: true
+---
+
+<div class="network-map-page" data-map-url="{{ '/assets/data/network-map.json' | relative_url }}">
+  <section class="network-map__intro" aria-labelledby="network-map-heading">
+    <p id="network-map-heading">Explore the institutions that make up EEG101. Select a marker to view local members, their working-group participation, public expertise, and obfuscated contact details.</p>
+    <p class="network-map__privacy-note">Markers show institution or city locations only. Public email addresses are displayed in an obfuscated format and are not direct mail links.</p>
+  </section>
+
+  <div class="network-map__summary" id="network-map-summary" aria-live="polite">Loading the EEG101 network map.</div>
+
+  <div class="network-map__controls" aria-label="Network Map controls">
+    <label class="network-map__search" for="network-map-search">
+      <span>Find an institution, country, or member</span>
+      <input id="network-map-search" type="search" placeholder="Search the network" autocomplete="off">
+    </label>
+    <label class="network-map__country" for="network-map-country">
+      <span>Filter by country</span>
+      <select id="network-map-country">
+        <option value="">All countries</option>
+      </select>
+    </label>
+    <button id="network-map-reset" class="btn btn-outline-primary" type="button">Reset map</button>
+  </div>
+
+  <div class="network-map__shell">
+    <div id="network-map" class="network-map__canvas" role="application" aria-label="Interactive map of EEG101 member institutions"></div>
+    <aside id="network-map-panel" class="network-map__panel" aria-live="polite" aria-label="Institution details">
+      <div class="network-map__panel-empty">
+        <span class="network-map__panel-kicker">Explore the network</span>
+        <h2>Select a marker</h2>
+        <p>Choose an institution marker or use the search and country controls to find members across EEG101.</p>
+      </div>
+    </aside>
+  </div>
+
+  <noscript>
+    <div class="network-map__noscript">
+      <h2>Interactive map unavailable</h2>
+      <p>Please enable JavaScript to browse the institution-level Network Map. You can still visit the <a href="{{ '/coordination/' | relative_url }}">Team page</a> to explore EEG101 profiles.</p>
+    </div>
+  </noscript>
+</div>
