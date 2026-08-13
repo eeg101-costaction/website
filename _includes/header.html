@@ -1,5 +1,5 @@
 <header class="site-header" role="banner">
-  <nav class="navbar navbar-expand-lg" aria-label="Main navigation">
+  <nav class="navbar navbar-expand-xl" aria-label="Main navigation">
     <div class="container">
 
       <!-- Logo -->
@@ -30,14 +30,14 @@
 
       <!-- Nav links -->
       <div class="collapse navbar-collapse" id="main-nav">
-        <ul class="navbar-nav ms-auto align-items-lg-center">
+        <ul class="navbar-nav ms-auto align-items-xl-center">
           {% for item in site.data.navigation.main %}
           <li class="nav-item">
             <a class="nav-link{% if page.url == item.url %} active" aria-current="page{% endif %}"
                href="{{ item.url | relative_url }}">{{ item.title }}</a>
           </li>
           {% endfor %}
-          <li class="nav-item ms-lg-3">
+          <li class="nav-item ms-xl-3">
             <a class="btn btn-primary btn-sm nav-cta" href="{{ '/join/' | relative_url }}">Join</a>
           </li>
         </ul>
