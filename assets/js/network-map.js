@@ -16,10 +16,15 @@
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
   }[character]));
 
-  const safeExternalLink = (url, label) => {
-    if (!/^https?:\/\//i.test(url || '')) return '';
-    return `<a class="network-map__external-link" href="${escapeHTML(url)}" target="_blank" rel="noopener">${escapeHTML(label)}</a>`;
-  };
+  const safeExternalLinks = (value, label) => String(value || '')
+    .split(/\s*;\s*/)
+    .map((url) => url.trim())
+    .filter((url) => /^https?:\/\//i.test(url))
+    .map((url, index, urls) => {
+      const linkLabel = urls.length > 1 ? `${label} ${index + 1}` : label;
+      return `<a class="network-map__external-link" href="${escapeHTML(url)}" target="_blank" rel="noopener">${escapeHTML(linkLabel)}</a>`;
+    })
+    .join('');
 
   const map = L.map(mapElement, {
     scrollWheelZoom: false,
@@ -85,8 +90,8 @@
         ? `<span class="network-map__email">${escapeHTML(member.email)}</span>`
         : '';
       const links = [
-        safeExternalLink(member.homepage, 'Profile'),
-        safeExternalLink(member.orcid, 'ORCID')
+        safeExternalLinks(member.homepage, 'Profile'),
+        safeExternalLinks(member.orcid, 'ORCID')
       ].filter(Boolean).join('');
       const linkBlock = links ? `<div class="network-map__member-links">${links}</div>` : '';
       return `
