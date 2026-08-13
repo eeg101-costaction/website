@@ -1,0 +1,101 @@
+name: Sync eCOST membership to Network Map
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 05 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: ecost-network-map-sync
+  cancel-in-progress: false
+
+jobs:
+  sync-network-map:
+    name: Export eCOST membership and stage map update
+    runs-on: ubuntu-latest
+    env:
+      ECOST_EMAIL: ${{ secrets.ECOST_EMAIL }}
+      ECOST_PASSWORD: ${{ secrets.ECOST_PASSWORD }}
+      GH_TOKEN: ${{ github.token }}
+      ACTION_ID: CA24148
+      UPDATE_BRANCH: automation/ecost-network-map-sync
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install export dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r scripts/requirements-ecost-sync.txt
+          python -m playwright install --with-deps chromium
+
+      - name: Download the detailed eCOST member export
+        run: |
+          mkdir -p .tmp/ecost-sync
+          python scripts/ecost_export.py \
+            --action-id "$ACTION_ID" \
+            --output ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx"
+
+      - name: Validate and build a staged map update
+        id: map_sync
+        run: |
+          python scripts/sync_network_map.py \
+            --input ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx" \
+            --existing assets/data/network-map.json \
+            --output assets/data/network-map.json \
+            --report .tmp/ecost-sync/report.json
+          if git diff --quiet -- assets/data/network-map.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload the validation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecost-network-map-report
+          path: .tmp/ecost-sync/report.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+      - name: Create or update the review pull request
+        if: steps.map_sync.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          git config user.name "EEG101 eCOST synchronisation"
+          git config user.email "eeg101costaction@gmail.com"
+          git checkout -B "$UPDATE_BRANCH"
+          git add assets/data/network-map.json
+          git commit -m "Synchronise Network Map from eCOST export"
+          git push --force origin "$UPDATE_BRANCH"
+
+          pr_number="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$UPDATE_BRANCH" --state open --json number --jq '.[0].number')"
+          if [ -n "$pr_number" ]; then
+            gh pr edit "$pr_number" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "Update Network Map from eCOST membership export" \
+              --body "Automated staged update from the latest authenticated CA24148 eCOST Working Group export. Review the map data and merge when satisfied."
+          else
+            gh pr create \
+              --repo "$GITHUB_REPOSITORY" \
+              --base main \
+              --head "$UPDATE_BRANCH" \
+              --title "Update Network Map from eCOST membership export" \
+              --body "Automated staged update from the latest authenticated CA24148 eCOST Working Group export. Review the map data and merge when satisfied."
+          fi
+
+      - name: Record no-change outcome
+        if: steps.map_sync.outputs.changed == 'false'
+        run: echo "The latest eCOST export produced no Network Map data changes."
