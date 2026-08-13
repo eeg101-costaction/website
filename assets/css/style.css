@@ -490,7 +490,7 @@ strong { font-weight: 600; }
   box-shadow: var(--shadow-sm);
 }
 .obj-card:hover { border-color: var(--color-primary-light); }
-.obj-card__thumb { margin: -1.75rem -1.75rem 0.5rem; border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
+.obj-card__thumb { aspect-ratio: auto; margin: -1.75rem -1.75rem 1rem; border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
 .obj-card__thumb img { width: 100%; height: 160px; object-fit: cover; display: block; }
 .obj-card__icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
 .obj-card__title {
@@ -522,7 +522,7 @@ strong { font-weight: 600; }
   color: var(--color-gold-dark);
   margin-bottom: 0.5rem;
 }
-.wg-card__thumb { margin: -1.75rem -1.75rem 0.5rem; border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
+.wg-card__thumb { aspect-ratio: auto; margin: -1.75rem -1.75rem 1rem; border-radius: var(--radius) var(--radius) 0 0; overflow: hidden; }
 .wg-card__thumb img { width: 100%; height: 160px; object-fit: cover; display: block; }
 .wg-card__icon { font-size: 1.75rem; margin-bottom: 0.75rem; display: block; }
 .wg-card__title {
@@ -741,7 +741,7 @@ strong { font-weight: 600; }
   padding: 0.3rem 0.75rem;
   border-radius: 100px;
 }
-.wg-section__thumb { border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem; }
+.wg-section__thumb { border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem; }
 .wg-section__thumb img { width: 100%; height: 240px; object-fit: cover; display: block; }
 .wg-section__icon { font-size: 1.75rem; }
 .wg-section__title { font-family: var(--font-heading); font-size: var(--step-2); font-weight: 700; margin: 0; color: var(--color-primary); }
