@@ -83,9 +83,6 @@
       const memberTags = member.working_groups.length
         ? `<div class="network-map__member-tags">${member.working_groups.map((group) => `<span>${escapeHTML(group)}</span>`).join('')}</div>`
         : '';
-      const expertise = member.expertise
-        ? `<p class="network-map__member-expertise">${escapeHTML(member.expertise)}</p>`
-        : '';
       const contact = member.email
         ? `<span class="network-map__email">${escapeHTML(member.email)}</span>`
         : '';
@@ -99,7 +96,6 @@
           <h3>${escapeHTML(member.name)}</h3>
           ${member.affiliation && member.affiliation !== site.institution ? `<p class="network-map__member-affiliation">${escapeHTML(member.affiliation)}</p>` : ''}
           ${memberTags}
-          ${expertise}
           ${contact}${linkBlock}
         </article>`;
     }).join('');
