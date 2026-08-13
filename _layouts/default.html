@@ -62,7 +62,7 @@
   <!-- Leaflet and marker clustering for the Network Map -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-  <script src="{{ '/assets/js/network-map.js' | relative_url }}"></script>
+  <script src="{{ '/assets/js/network-map.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   {% endif %}
 
   <!-- Google Analytics GA4 -->
