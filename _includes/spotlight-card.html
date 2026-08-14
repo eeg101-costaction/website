@@ -1,0 +1,19 @@
+<article class="spotlight-card{% if include.featured %} spotlight-card--featured{% endif %}">
+  <a class="spotlight-card__image-link" href="{{ include.item.url | relative_url }}" aria-label="Read Spotlight: {{ include.item.title }}">
+    <img class="spotlight-card__image" src="{{ include.item.image | relative_url }}" alt="{{ include.item.image_alt }}" loading="lazy">
+  </a>
+  <div class="spotlight-card__body">
+    <div class="spotlight-card__meta">
+      <span class="spotlight-card__type">{{ include.item.type }}</span>
+      <span class="spotlight-card__status">{{ include.item.status }}</span>
+    </div>
+    <p class="spotlight-card__date">{{ include.item.date_range }}</p>
+    <h3 class="spotlight-card__title"><a href="{{ include.item.url | relative_url }}">{{ include.item.title }}</a></h3>
+    <p class="spotlight-card__summary">{{ include.item.summary }}</p>
+    <div class="spotlight-card__tags" aria-label="Related topics">
+      {% for tag in include.item.working_groups %}<span class="spotlight-card__tag">{{ tag }}</span>{% endfor %}
+      {% for tag in include.item.tags %}<span class="spotlight-card__tag">{{ tag }}</span>{% endfor %}
+    </div>
+    <a class="spotlight-card__link" href="{{ include.item.url | relative_url }}">Read the Spotlight <span aria-hidden="true">→</span></a>
+  </div>
+</article>

@@ -1,0 +1,74 @@
+---
+layout: page
+title: "Coordination and data harmonisation through an EEG101 STSM"
+subtitle: "Anne-Sophie Dubarry’s Short-Term Scientific Mission at the University of Leeds"
+category: "Mobility and exchange · WG2"
+permalink: /spotlights/anne-sophie-dubarry-stsm/
+---
+
+{% assign spotlight = site.data.spotlights | where: "slug", "anne-sophie-dubarry-stsm-leeds-2026" | first %}
+
+<article class="spotlight-detail">
+  <a class="spotlight-detail__back" href="{{ '/spotlight/' | relative_url }}"><span aria-hidden="true">←</span> All Spotlights</a>
+
+  <figure class="spotlight-detail__figure">
+    <img src="{{ spotlight.image | relative_url }}" alt="{{ spotlight.image_alt }}">
+    <figcaption>Collaborative discussions during the STSM visit to the University of Leeds.</figcaption>
+  </figure>
+
+  <div class="spotlight-detail__overview">
+    <div>
+      <p class="spotlight-detail__eyebrow">{{ spotlight.type }}</p>
+      <h2>{{ spotlight.title }}</h2>
+      <p class="spotlight-detail__lead">{{ spotlight.summary }}</p>
+    </div>
+    <dl class="spotlight-detail__facts">
+      <div><dt>When</dt><dd>{{ spotlight.date_range }}</dd></div>
+      <div><dt>Where</dt><dd>{{ spotlight.location }}</dd></div>
+      <div><dt>Host</dt><dd>{{ spotlight.host_institution }}</dd></div>
+      <div><dt>Working Group</dt><dd>{% for wg in spotlight.working_groups %}{{ wg }}{% unless forloop.last %}, {% endunless %}{% endfor %}</dd></div>
+    </dl>
+  </div>
+
+  <section class="spotlight-detail__section">
+    <p class="spotlight-detail__section-label">Why this mattered</p>
+    <h2>Aligning coordination with technical collaboration</h2>
+    <p>The mission brought together the EEG101 Chair and Vice-Chair to align Grant Period 1 priorities, prepare the framework for Grant Period 2, and strengthen coordination across the Action. It also supported Working Group 2 activity by connecting discussions of EEG data curation and harmonisation with Research Software Engineering perspectives on scientific software, interoperability, and data standardisation.</p>
+  </section>
+
+  <section class="spotlight-detail__section spotlight-detail__section--alt">
+    <p class="spotlight-detail__section-label">What it enabled</p>
+    <div class="spotlight-detail__columns">
+      <div>
+        <h2>Key outcomes</h2>
+        <ul>
+          {% for outcome in spotlight.outcomes %}<li>{{ outcome }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div>
+        <h2>People and places</h2>
+        <ul>
+          {% for collaborator in spotlight.collaborators %}<li>{{ collaborator }}</li>{% endfor %}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="spotlight-detail__section">
+    <p class="spotlight-detail__section-label">What comes next</p>
+    <h2>Extending the collaboration</h2>
+    <p>The visit established a basis for continued work on open and interoperable EEG research practices. The planned follow-up links scientific, coordination, and software-development work across the network.</p>
+    <ul class="spotlight-detail__follow-up">
+      {% for item in spotlight.follow_up %}<li>{{ item }}</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="spotlight-detail__links" aria-label="Related EEG101 resources">
+    <p class="spotlight-detail__section-label">Explore further</p>
+    <div class="spotlight-detail__link-list">
+      {% for link in spotlight.links %}<a class="btn btn-outline-primary" href="{{ link.url | relative_url }}">{{ link.label }} <span aria-hidden="true">→</span></a>{% endfor %}
+    </div>
+  </section>
+
+  <p class="spotlight-detail__acknowledgement">This activity was supported through an EEG101 Short-Term Scientific Mission under COST Action CA24148.</p>
+</article>

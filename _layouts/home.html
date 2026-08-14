@@ -30,6 +30,27 @@ layout: default
   </div>
 </section>
 
+{% assign featured_spotlight = site.data.spotlights | where: "featured", true | first %}
+{% if featured_spotlight %}
+<!-- Featured Spotlight -->
+<section class="section" id="spotlight">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="section-label">EEG101 in action</span>
+        <h2 class="section-heading mb-0">Spotlight</h2>
+        <p class="section-lead mt-2 mb-0">Funded activity, collaboration, and open resources advancing rigorous EEG science.</p>
+      </div>
+      <a href="{{ '/spotlight/' | relative_url }}" class="btn btn-outline-primary d-none d-md-inline-flex">All Spotlights</a>
+    </div>
+    {% include spotlight-card.html item=featured_spotlight featured=true %}
+    <div class="text-center mt-4 d-md-none">
+      <a href="{{ '/spotlight/' | relative_url }}" class="btn btn-outline-primary">All Spotlights</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- Objectives Section -->
 <section class="section" id="objectives">
   <div class="container">

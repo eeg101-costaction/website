@@ -1,0 +1,43 @@
+- slug: anne-sophie-dubarry-stsm-leeds-2026
+  featured: true
+  title: "Strengthening coordination and data harmonisation through an EEG101 STSM"
+  short_title: "Coordination and data harmonisation STSM"
+  type: "Mobility and exchange"
+  status: "Completed"
+  date_range: "12–18 April 2026"
+  year: 2026
+  working_groups:
+    - "WG2"
+  tags:
+    - "Data harmonisation"
+    - "Open Science"
+    - "Community"
+  lead: "Anne-Sophie Dubarry"
+  lead_role: "EEG101 Vice-Chair"
+  host_institution: "University of Leeds"
+  location: "Leeds, United Kingdom"
+  image: "/assets/images/spotlights/dubarry-stsm-leeds-2026.jpg"
+  image_alt: "Anne-Sophie Dubarry presenting during a collaborative visit to the University of Leeds"
+  summary: "Anne-Sophie Dubarry completed a Short-Term Scientific Mission at the University of Leeds, bringing the EEG101 Chair and Vice-Chair together to align strategic priorities and advance Working Group 2 activity on data curation and harmonisation."
+  impact: "The mission strengthened Action coordination, connected scientific and Research Software Engineering perspectives on interoperability, and created a durable dissemination resource through the EEG101 YouTube channel and its first WG2 symposium playlist."
+  collaborators:
+    - "Anne-Sophie Dubarry, EEG101 Vice-Chair"
+    - "Faisal Mushtaq, EEG101 Action Chair"
+    - "University of Leeds"
+    - "Research Software Engineering collaborators"
+  outcomes:
+    - "Strategic alignment on Grant Period 1 priorities and preparation for Grant Period 2"
+    - "Engagement with Research Software Engineering teams on scientific software, interoperability, and data standardisation"
+    - "Creation of the EEG101 YouTube channel and curation of the first WG2 Virtual Symposium playlist"
+    - "Initial drafting of a position paper on standardisation, ethical frameworks, and open science"
+  follow_up:
+    - "Further development of the position paper with the EEG101 Core Group, Management Committee, and wider stakeholders"
+    - "Continued collaboration with Research Software Engineering teams"
+    - "Planned work to connect EEGManyLabs retrospective harmonisation workflows with prospective BIDS-conversion frameworks"
+    - "Expansion of the EEG101 YouTube channel with further scientific and training materials"
+  links:
+    - label: "Explore the Video Hub"
+      url: "/video-hub/"
+    - label: "Working Group 2"
+      url: "/working-groups/#wg2"
+  url: "/spotlights/anne-sophie-dubarry-stsm/"
