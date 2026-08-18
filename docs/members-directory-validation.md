@@ -13,3 +13,5 @@ The GitHub Pages deployment for the Members directory completed successfully. A 
 The revised local directory now renders all 376 members by default, with the summary stating “Showing 376 members” and no progressive-result control until a directory filter is applied.
 
 Applying the Working Group 2 filter reduced the directory to 309 matching members and correctly restored progressive paging, with the summary stating “Showing the first 60 of 309 matching members”.
+
+The published Members page was checked after the GitHub Pages deployment for this refinement. It loads the complete unfiltered directory with the summary “Showing 376 members”, while the tested Working Group filter retains the 60-result progressive behaviour.
