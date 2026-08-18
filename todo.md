@@ -8,4 +8,4 @@
 - [x] Run automated regression tests for booking validation and publish the unified workflow
 - [x] Remove the separate Event Hub landing-page route and related cross-links
 - [x] Remove legacy links to the retired standalone Event Hub route
-- [ ] Test and publish the unified News & Events booking workflow on main
+- [x] Test and publish the unified News & Events booking workflow on main

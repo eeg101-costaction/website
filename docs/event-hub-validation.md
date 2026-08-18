@@ -10,6 +10,10 @@ The shared booking modal was exercised locally with an in-memory bookable event,
 
 The calendar page was also verified locally. It includes the same shared booking controller and registration modal as News & Events, allowing an event marked bookable in `_data/events.yml` to expose the identical booking flow from its calendar popover.
 
+The final main-branch deployment completed successfully. The live News & Events page was checked with a cache-bypassed request and no longer contains a link to the retired standalone event route. Booking remains available only where a single event record explicitly enables it.
+
+The former `/events/` address was also checked after deployment and correctly resolves to the EEG101 404 page, confirming that the separate public event destination has been removed.
+
 ## Registration activation requirements
 
 An organiser must add `booking_enabled: true`, `booking_status: open`, and the event-specific capacity, time and timezone fields to the relevant entry in `_data/events.yml`. The public Apps Script web-app URL must then be added to `_data/site.yml` as `event_booking_endpoint`.
