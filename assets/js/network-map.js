@@ -11,6 +11,12 @@
   const countrySelect = document.getElementById('network-map-country');
   const resetButton = document.getElementById('network-map-reset');
   const dataUrl = page.dataset.mapUrl;
+  const directorySearchInput = document.getElementById('member-directory-search');
+  const directoryWGSelect = document.getElementById('member-directory-wg');
+  const directoryCountrySelect = document.getElementById('member-directory-country');
+  const directoryResetButton = document.getElementById('member-directory-reset');
+  const directoryResults = document.getElementById('member-directory-results');
+  const directorySummary = document.getElementById('member-directory-summary');
 
   const escapeHTML = (value) => String(value || '').replace(/[&<>'"]/g, (character) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
@@ -63,6 +69,8 @@
   });
 
   let allSites = [];
+  let allMembers = [];
+  let directoryLimit = 60;
   let markers = new Map();
 
   const renderEmptyPanel = (message = 'Choose an institution marker or use the search and country controls to find members across EEG101.') => {
@@ -147,6 +155,79 @@
     renderEmptyPanel();
   };
 
+  const memberMatches = (member, query, workingGroup, country) => {
+    const haystack = [
+      member.name, member.affiliation, member.institution, member.city, member.country,
+      member.working_groups.join(' '), member.homepage, member.orcid
+    ].join(' ').toLowerCase();
+    return (!query || haystack.includes(query))
+      && (!workingGroup || member.working_groups.includes(workingGroup))
+      && (!country || member.country === country);
+  };
+
+  const viewSiteOnMap = (siteId) => {
+    const site = allSites.find((candidate) => candidate.id === siteId);
+    if (!site) return;
+    map.setView([site.latitude, site.longitude], 9, { animate: true });
+    renderSite(site);
+    document.getElementById('network-map').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+
+  const renderDirectory = () => {
+    if (!directoryResults) return;
+    const query = directorySearchInput.value.trim().toLowerCase();
+    const workingGroup = directoryWGSelect.value;
+    const country = directoryCountrySelect.value;
+    const matchingMembers = allMembers.filter((member) => memberMatches(member, query, workingGroup, country));
+    const shownMembers = matchingMembers.slice(0, directoryLimit);
+
+    const matchingLabel = matchingMembers.length === allMembers.length
+      ? `${matchingMembers.length} members`
+      : `${matchingMembers.length} matching ${matchingMembers.length === 1 ? 'member' : 'members'}`;
+    directorySummary.textContent = matchingMembers.length > directoryLimit
+      ? `Showing the first ${directoryLimit} of ${matchingLabel}.`
+      : `Showing ${matchingLabel}.`;
+
+    if (!matchingMembers.length) {
+      directoryResults.innerHTML = '<p class="member-directory__empty">No members match the current search and filters. Try clearing a filter or using a broader search term.</p>';
+      return;
+    }
+
+    directoryResults.innerHTML = `
+      <div class="member-directory__grid">
+        ${shownMembers.map((member) => {
+          const tags = member.working_groups.length
+            ? member.working_groups.map((group) => `<span class="member-directory__tag">${escapeHTML(group)}</span>`).join('')
+            : '<span class="member-directory__tag member-directory__tag--muted">No WG listed</span>';
+          const links = [safeExternalLinks(member.homepage, 'Profile'), safeExternalLinks(member.orcid, 'ORCID')].filter(Boolean).join('');
+          return `<article class="member-directory__card">
+            <h3>${escapeHTML(member.name)}</h3>
+            <p class="member-directory__affiliation">${escapeHTML(member.affiliation || member.institution)}</p>
+            <p class="member-directory__location">${escapeHTML(member.country)}${member.city ? ` · ${escapeHTML(member.city)}` : ''}</p>
+            <div class="member-directory__tags">${tags}</div>
+            ${member.email ? `<span class="member-directory__email">${escapeHTML(member.email)}</span>` : ''}
+            ${links ? `<div class="member-directory__links">${links}</div>` : ''}
+            <button type="button" class="member-directory__map-link" data-directory-site="${escapeHTML(member.site_id)}">View institution on map</button>
+          </article>`;
+        }).join('')}
+      </div>
+      ${matchingMembers.length > directoryLimit ? `<div class="member-directory__more"><button type="button" class="btn btn-outline-primary" id="member-directory-more">Show more members</button></div>` : ''}`;
+
+    directoryResults.querySelectorAll('[data-directory-site]').forEach((button) => {
+      button.addEventListener('click', () => viewSiteOnMap(button.dataset.directorySite));
+    });
+    const moreButton = document.getElementById('member-directory-more');
+    if (moreButton) moreButton.addEventListener('click', () => { directoryLimit += 60; renderDirectory(); });
+  };
+
+  const resetDirectory = () => {
+    directorySearchInput.value = '';
+    directoryWGSelect.value = '';
+    directoryCountrySelect.value = '';
+    directoryLimit = 60;
+    renderDirectory();
+  };
+
   fetch(dataUrl)
     .then((response) => {
       if (!response.ok) throw new Error('Network map data could not be loaded.');
@@ -154,11 +235,30 @@
     })
     .then((data) => {
       allSites = data.sites || [];
+      allMembers = allSites.flatMap((site) => site.members.map((member) => ({
+        ...member,
+        site_id: site.id,
+        institution: site.institution,
+        city: site.city,
+        country: site.country
+      }))).sort((a, b) => a.name.localeCompare(b.name));
       data.countries.forEach((country) => {
         const option = document.createElement('option');
         option.value = country.name;
         option.textContent = `${country.name} (${country.member_count})`;
         countrySelect.appendChild(option);
+      });
+      [...new Set(allMembers.flatMap((member) => member.working_groups))].sort().forEach((workingGroup) => {
+        const option = document.createElement('option');
+        option.value = workingGroup;
+        option.textContent = workingGroup;
+        directoryWGSelect.appendChild(option);
+      });
+      data.countries.forEach((country) => {
+        const option = document.createElement('option');
+        option.value = country.name;
+        option.textContent = `${country.name} (${country.member_count})`;
+        directoryCountrySelect.appendChild(option);
       });
 
       allSites.forEach((site) => {
@@ -173,6 +273,7 @@
       const bounds = L.latLngBounds(allSites.map((site) => [site.latitude, site.longitude]));
       map.fitBounds(bounds, { padding: [32, 32], maxZoom: 5 });
       window.setTimeout(() => map.invalidateSize(), 100);
+      renderDirectory();
     })
     .catch((error) => {
       summary.textContent = 'The map data is temporarily unavailable.';
@@ -183,4 +284,8 @@
   searchInput.addEventListener('input', updateVisibleSites);
   countrySelect.addEventListener('change', updateVisibleSites);
   resetButton.addEventListener('click', resetMap);
+  directorySearchInput.addEventListener('input', () => { directoryLimit = 60; renderDirectory(); });
+  directoryWGSelect.addEventListener('change', () => { directoryLimit = 60; renderDirectory(); });
+  directoryCountrySelect.addEventListener('change', () => { directoryLimit = 60; renderDirectory(); });
+  directoryResetButton.addEventListener('click', resetDirectory);
 })();

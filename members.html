@@ -1,0 +1,81 @@
+---
+layout: page
+title: "Members"
+description: "Explore EEG101 members, their institutions, Working Group participation, and opportunities for collaboration."
+leaflet_map: true
+permalink: /members/
+---
+
+<div class="network-map-page" data-map-url="{{ '/assets/data/network-map.json' | relative_url }}">
+  <section class="network-map__intro" aria-labelledby="network-map-heading">
+    <p id="network-map-heading">Explore the EEG101 community, discover expertise, and identify opportunities for collaboration. Select a marker to view members at each institution, their Working Group participation, public profile links, and obfuscated contact details.</p>
+    <p class="network-map__privacy-note">Markers show institution or city locations only. Public email addresses are displayed in an obfuscated format and are not direct mail links.</p>
+  </section>
+
+  <div class="network-map__summary" id="network-map-summary" aria-live="polite">Loading EEG101 members and institutions.</div>
+
+  <div class="network-map__controls" aria-label="Members map controls">
+    <label class="network-map__search" for="network-map-search">
+      <span>Find an institution, country, or member</span>
+      <input id="network-map-search" type="search" placeholder="Search members and institutions" autocomplete="off">
+    </label>
+    <label class="network-map__country" for="network-map-country">
+      <span>Filter by country</span>
+      <select id="network-map-country">
+        <option value="">All countries</option>
+      </select>
+    </label>
+    <button id="network-map-reset" class="btn btn-outline-primary" type="button">Reset map</button>
+  </div>
+
+  <div class="network-map__shell">
+    <div id="network-map" class="network-map__canvas" role="application" aria-label="Interactive map of EEG101 member institutions"></div>
+    <aside id="network-map-panel" class="network-map__panel" aria-live="polite" aria-label="Institution details">
+      <div class="network-map__panel-empty">
+        <span class="network-map__panel-kicker">Explore Members</span>
+        <h2>Select a marker</h2>
+        <p>Choose an institution marker or use the search and country controls to find members across EEG101.</p>
+      </div>
+    </aside>
+  </div>
+
+  <section class="member-directory" aria-labelledby="member-directory-heading">
+    <div class="member-directory__header">
+      <div>
+        <span class="section-label">Directory</span>
+        <h2 id="member-directory-heading">Find EEG101 members</h2>
+        <p>Search by name, institution, country, or public profile information. Refine the results by Working Group or country.</p>
+      </div>
+      <div class="member-directory__summary" id="member-directory-summary" aria-live="polite">Loading members.</div>
+    </div>
+
+    <div class="member-directory__controls" aria-label="Member directory controls">
+      <label for="member-directory-search">
+        <span>Search members</span>
+        <input id="member-directory-search" type="search" placeholder="Name, institution, or country" autocomplete="off">
+      </label>
+      <label for="member-directory-wg">
+        <span>Working Group</span>
+        <select id="member-directory-wg">
+          <option value="">All Working Groups</option>
+        </select>
+      </label>
+      <label for="member-directory-country">
+        <span>Country</span>
+        <select id="member-directory-country">
+          <option value="">All countries</option>
+        </select>
+      </label>
+      <button id="member-directory-reset" class="btn btn-outline-primary" type="button">Clear filters</button>
+    </div>
+
+    <div class="member-directory__results" id="member-directory-results" aria-live="polite"></div>
+  </section>
+
+  <noscript>
+    <div class="network-map__noscript">
+      <h2>Interactive map unavailable</h2>
+      <p>Please enable JavaScript to browse the member map and directory. You can still visit the <a href="{{ '/coordination/' | relative_url }}">Team page</a> to explore EEG101 profiles.</p>
+    </div>
+  </noscript>
+</div>
