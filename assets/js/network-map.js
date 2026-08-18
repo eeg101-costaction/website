@@ -179,13 +179,18 @@
     const workingGroup = directoryWGSelect.value;
     const country = directoryCountrySelect.value;
     const hasActiveDirectoryFilter = Boolean(query || workingGroup || country);
+    if (!hasActiveDirectoryFilter) {
+      directorySummary.textContent = 'Search or choose a Working Group or country to find members.';
+      directoryResults.innerHTML = '<p class="member-directory__empty">Start with a name, institution, country, or Working Group to explore the EEG101 network.</p>';
+      return;
+    }
     const matchingMembers = allMembers.filter((member) => memberMatches(member, query, workingGroup, country));
-    const shownMembers = hasActiveDirectoryFilter ? matchingMembers.slice(0, directoryLimit) : matchingMembers;
+    const shownMembers = matchingMembers.slice(0, directoryLimit);
 
     const matchingLabel = matchingMembers.length === allMembers.length
       ? `${matchingMembers.length} members`
       : `${matchingMembers.length} matching ${matchingMembers.length === 1 ? 'member' : 'members'}`;
-    directorySummary.textContent = hasActiveDirectoryFilter && matchingMembers.length > directoryLimit
+    directorySummary.textContent = matchingMembers.length > directoryLimit
       ? `Showing the first ${directoryLimit} of ${matchingLabel}.`
       : `Showing ${matchingLabel}.`;
 
@@ -212,7 +217,7 @@
           </article>`;
         }).join('')}
       </div>
-      ${hasActiveDirectoryFilter && matchingMembers.length > directoryLimit ? `<div class="member-directory__more"><button type="button" class="btn btn-outline-primary" id="member-directory-more">Show more members</button></div>` : ''}`;
+      ${matchingMembers.length > directoryLimit ? `<div class="member-directory__more"><button type="button" class="btn btn-outline-primary" id="member-directory-more">Show more members</button></div>` : ''}`;
 
     directoryResults.querySelectorAll('[data-directory-site]').forEach((button) => {
       button.addEventListener('click', () => viewSiteOnMap(button.dataset.directorySite));

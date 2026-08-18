@@ -15,3 +15,5 @@ The revised local directory now renders all 376 members by default, with the sum
 Applying the Working Group 2 filter reduced the directory to 309 matching members and correctly restored progressive paging, with the summary stating “Showing the first 60 of 309 matching members”.
 
 The published Members page was checked after the GitHub Pages deployment for this refinement. It loads the complete unfiltered directory with the summary “Showing 376 members”, while the tested Working Group filter retains the 60-result progressive behaviour.
+
+The subsequent refinement was tested locally. With no directory filter, the member cards are absent and the page prompts visitors to search or choose a Working Group or country. Applying Working Group 2 then rendered the first 60 of 309 matching members, as intended.
