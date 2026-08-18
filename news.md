@@ -8,6 +8,14 @@ permalink: /news/
 
 {::nomarkdown}
 
+<div class="event-hub-news-callout mb-5">
+  <div>
+    <span>EEG101 INTERNAL EVENTS</span>
+    <strong>Register for meetings, training and Working Group activity through the Event Hub.</strong>
+  </div>
+  <a class="btn btn-primary btn-sm" href="{{ "/events/" | relative_url }}">Open Event Hub</a>
+</div>
+
 {% assign now_epoch = "now" | date: "%s" | plus: 0 %}
 {% assign thirty_days_ago_epoch = now_epoch | minus: 2592000 %}
 

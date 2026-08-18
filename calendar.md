@@ -145,7 +145,7 @@ permalink: /calendar/
       "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
-      "<a href=\"{{ \"/news/\" | relative_url }}\" class=\"btn btn-primary btn-sm mt-2\">View all events &rarr;</a>";
+      "<a href="{{ "/events/" | relative_url }}" class="btn btn-primary btn-sm mt-2">Open Event Hub &rarr;</a>";
 
     popover.hidden = false;
     popover.querySelector(".cal-popover__close").addEventListener("click", function () {
