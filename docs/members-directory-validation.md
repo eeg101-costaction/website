@@ -7,3 +7,5 @@ The Working Group 2 filter reduced the directory to 309 matching members. A comb
 Selecting the member’s map control centred the map on Aix-Marseille Université and displayed its two affiliated EEG101 members in the map detail panel. The unfiltered directory renders an initial page of 60 results and accurately reports, “Showing the first 60 of 376 members”, with a progressive control for further results.
 
 After restarting the local preview to refresh the cache-busted member-directory script, the page displayed the expected initial summary and the **Show more members** control was present after the first group of results.
+
+The GitHub Pages deployment for the Members directory completed successfully. A live, cache-bypassed visit confirmed that the public page uses the **Members** label in navigation, loads the map for 249 institutions and 376 members, and populates the searchable directory with Working Group and country filters beneath the map.
