@@ -8,6 +8,10 @@ The browser console was also clear after the Event Hub page and its registration
 
 Immediately after the main-branch push, the public `/events/` address still served the preceding GitHub Pages version and returned the branded 404 page. This is expected while the GitHub Pages build is queued or in progress. The local production build remained successful.
 
+The first live page response after deployment used a cached stylesheet and therefore omitted the new Event Hub layout rules. The shared Jekyll layout now appends a build-time version query to the site stylesheet reference, ensuring that an updated page receives its matching stylesheet after each GitHub Pages deployment.
+
+After the cache-control deployment completed, a cache-bypassed public request confirmed that `/events/` renders the intended navy Event Hub hero, privacy panel, registration-empty state, and EEG101 typography correctly on the live website.
+
 ## Registration activation requirements
 
 An organiser must add `registration_enabled: true`, `registration_status: open`, and the event-specific capacity, time and timezone fields to the relevant entry in `_data/events.yml`. The public Apps Script web-app URL must then be added to `_data/site.yml` as `event_hub_endpoint`.
