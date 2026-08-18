@@ -1,0 +1,55 @@
+<div class="event-booking-dialog" id="eventBookingDialog" hidden aria-hidden="true">
+  <div class="event-booking-dialog__backdrop" data-event-booking-close></div>
+  <section class="event-booking-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="eventBookingDialogTitle">
+    <button class="event-booking-dialog__close" type="button" aria-label="Close registration form" data-event-booking-close>&times;</button>
+    <p class="event-booking__eyebrow">EEG101 EVENT REGISTRATION</p>
+    <h2 id="eventBookingDialogTitle">Register for an EEG101 event</h2>
+    <p class="event-booking-dialog__details" id="eventBookingDialogDetails"></p>
+    <p class="event-booking-form__notice">No participant account is required. The secure registration form below sends a confirmation or waiting-list email with a calendar invitation.</p>
+    <p class="event-booking-form__message" id="eventBookingFormMessage" aria-live="polite"></p>
+    <iframe class="event-booking-registration-frame" id="eventBookingRegistrationFrame" title="EEG101 event registration" hidden></iframe>
+  </section>
+</div>
+
+<script>
+(function () {
+  var events = {{ site.data.events | jsonify }};
+  var endpoint = {{ site.data.site.event_booking_endpoint | default: "" | jsonify }};
+  var dialog = document.getElementById('eventBookingDialog');
+  var message = document.getElementById('eventBookingFormMessage');
+  var title = document.getElementById('eventBookingDialogTitle');
+  var details = document.getElementById('eventBookingDialogDetails');
+  var registrationFrame = document.getElementById('eventBookingRegistrationFrame');
+  function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
+  function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open'; }
+  function open(event) {
+    if (!canBook(event)) return;
+    message.textContent = '';
+    title.textContent = 'Register for ' + event.title;
+    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    if (!endpoint) {
+      message.textContent = 'Registration is being prepared. Please check back shortly or contact eeg101costaction@gmail.com.';
+      message.className = 'event-booking-form__message event-booking-form__message--error';
+      registrationFrame.hidden = true;
+    } else {
+      var query = new URLSearchParams({ event_id: event.id, title: event.title, start_date: event.start_date, end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', location: event.location || '', capacity: String(event.capacity || 0), summary: event.summary || '', privacy_url: '{{ "/privacy/" | absolute_url }}' });
+      registrationFrame.src = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') + query.toString();
+      registrationFrame.hidden = false;
+    }
+    dialog.hidden = false;
+    dialog.setAttribute('aria-hidden', 'false');
+  }
+  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; }
+  window.EEG101EventBooking = { open: open, canBook: canBook };
+  document.querySelectorAll('[data-event-booking]').forEach(function (button) { button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); }); });
+  document.querySelectorAll('[data-event-booking-close]').forEach(function (button) { button.addEventListener('click', close); });
+  document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && !dialog.hidden) close(); });
+  window.addEventListener('message', function (messageEvent) {
+    var data = messageEvent.data || {};
+    if (messageEvent.source !== registrationFrame.contentWindow || data.type !== 'eeg101-event-registration') return;
+    message.textContent = data.message || '';
+    message.className = 'event-booking-form__message ' + (data.ok ? 'event-booking-form__message--success' : 'event-booking-form__message--error');
+    if (data.ok) registrationFrame.style.minHeight = '180px';
+  });
+}());
+</script>

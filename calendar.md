@@ -139,15 +139,21 @@ permalink: /calendar/
     if (ev.time)     dateLine += " &middot; " + esc(ev.time);
     if (ev.location) dateLine += "<br>" + esc(ev.location);
 
+    var bookingAction = ev.booking_enabled === true && ev.booking_status === "open"
+      ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">Register</button>"
+      : "";
     popover.innerHTML =
       "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
       "<span class=\"event-card__format event-card__format--" + fmt + "\">" + esc(fmtLabel) + "</span>" +
       "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
-      "<a href="{{ "/events/" | relative_url }}" class="btn btn-primary btn-sm mt-2">Open Event Hub &rarr;</a>";
+      bookingAction +
+      "<a href=\"{{ '/news/' | relative_url }}\" class=\"btn btn-outline-primary btn-sm mt-2\">News &amp; Events &rarr;</a>";
 
     popover.hidden = false;
+    var bookingButton = popover.querySelector("#calendar-booking-action");
+    if (bookingButton && window.EEG101EventBooking) bookingButton.addEventListener("click", function () { popover.hidden = true; window.EEG101EventBooking.open(ev); });
     popover.querySelector(".cal-popover__close").addEventListener("click", function () {
       popover.hidden = true;
     });
@@ -174,4 +180,6 @@ permalink: /calendar/
   render();
 }());
 </script>
+
+{% include event-booking-modal.html %}
 {:/nomarkdown}

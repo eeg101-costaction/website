@@ -4,8 +4,9 @@
 # Everything else → Past
 # format options: in-person | online | hybrid
 # category options: Announcement | Events | Grants
-# Optional Event Hub fields: registration_enabled, registration_status (open|closed),
-# capacity, timezone and end_time. Registration is handled privately by Google Apps Script.
+# Optional booking fields: booking_enabled, booking_status (open|closed), capacity,
+# timezone and end_time. An event's News & Events card and calendar popover both
+# read these fields directly, so booking can never be created as a separate list.
 
 - id: ohbm-brainhack-2026
   title: "EEG101 at OHBM Brainhack 2026"

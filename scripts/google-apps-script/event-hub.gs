@@ -1,11 +1,11 @@
 /*
- * EEG101 Event Hub Google Apps Script
+ * EEG101 Event Booking Google Apps Script
  *
  * Deploy this script as a web app that executes as the deploying account.
  * The spreadsheet must be shared with that account as an Editor. The script
  * keeps attendee information in the private Registration ledger tab only.
  */
-const EEG101_EVENT_HUB = {
+const EEG101_EVENT_BOOKING = {
   ledgerSheet: 'Registration ledger',
   replyTo: 'eeg101costaction@gmail.com',
   retentionDays: 365
@@ -47,7 +47,7 @@ function doPost(e) {
 }
 
 function onOpen() {
-  SpreadsheetApp.getUi().createMenu('EEG101 Event Hub')
+  SpreadsheetApp.getUi().createMenu('EEG101 Event Booking')
     .addItem('Promote the next waiting-list attendee', 'promptPromotion')
     .addItem('Delete records older than 12 months', 'promptRetentionDeletion')
     .addToUi();
@@ -85,7 +85,7 @@ function promptRetentionDeletion() {
 
 function purgeExpiredRegistrations() {
   const sheet = ledger();
-  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - EEG101_EVENT_HUB.retentionDays);
+  const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - EEG101_EVENT_BOOKING.retentionDays);
   const values = sheet.getDataRange().getValues();
   let deleted = 0;
   for (let index = values.length - 1; index >= 1; index--) {
@@ -97,9 +97,9 @@ function purgeExpiredRegistrations() {
 }
 
 function ledger() {
-  const spreadsheetId = PropertiesService.getScriptProperties().getProperty('EEG101_EVENT_HUB_SHEET_ID');
-  if (!spreadsheetId) throw new Error('The EEG101 Event Hub spreadsheet ID has not been set in the Apps Script project properties.');
-  const sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(EEG101_EVENT_HUB.ledgerSheet);
+  const spreadsheetId = PropertiesService.getScriptProperties().getProperty('EEG101_EVENT_BOOKING_SHEET_ID');
+  if (!spreadsheetId) throw new Error('The EEG101 Event Booking spreadsheet ID has not been set in the Apps Script project properties.');
+  const sheet = SpreadsheetApp.openById(spreadsheetId).getSheetByName(EEG101_EVENT_BOOKING.ledgerSheet);
   if (!sheet) throw new Error('Registration ledger sheet not found.');
   return sheet;
 }
@@ -127,12 +127,12 @@ function sendRegistrationEmail(payload, status) {
   const subject = waitlisted ? `Waiting list: ${event.title}` : `Registration confirmed: ${event.title}`;
   const lead = waitlisted ? 'You have been added to the waiting list. We will contact you if a place becomes available.' : 'Your registration is confirmed.';
   const body = [`Hello ${payload.full_name},`, '', lead, '', `Event: ${event.title}`, `When: ${event.start_date}${event.time ? ', ' + event.time : ''}`, `Where: ${event.location || 'EEG101 event details to follow'}`, '', 'An EEG101 calendar invitation is attached.', '', 'EEG101 COST Action CA24148'].join('\n');
-  MailApp.sendEmail({ to: payload.email, subject: subject, body: body, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_HUB.replyTo, name: 'EEG101 Event Hub' });
+  MailApp.sendEmail({ to: payload.email, subject: subject, body: body, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
 }
 
 function sendPromotionEmail(record) {
   const body = [`Hello ${record.full_name},`, '', 'A place has become available and your registration is now confirmed.', '', `Event: ${record.event.title}`, `When: ${record.event.start_date}`, '', 'EEG101 COST Action CA24148'].join('\n');
-  MailApp.sendEmail({ to: record.email, subject: `A place is available: ${record.event.title}`, body: body, replyTo: EEG101_EVENT_HUB.replyTo, name: 'EEG101 Event Hub' });
+  MailApp.sendEmail({ to: record.email, subject: `A place is available: ${record.event.title}`, body: body, replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
 }
 
 function makeCalendar(event) {

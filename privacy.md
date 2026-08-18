@@ -18,13 +18,13 @@ You can opt out of Google Analytics tracking across all websites by installing t
 
 When you contact EEG101 by email, your email address and message are used solely to respond to your enquiry. We do not share contact data with third parties.
 
-## Event Hub registration
+## Event registration
 
-When you register for an EEG101 meeting, training session, workshop, or Working Group activity through the Event Hub, we collect your name, email address, institution, country, and, where you choose to provide it, Working Group affiliation. This information is used to administer the relevant event, manage capacity and waiting lists, send registration updates and calendar invitations, and maintain an attendance record.
+When you register for an EEG101 meeting, training session, workshop, or Working Group activity through a booking action on the News & Events page or calendar, we collect your name, email address, institution, country, and, where you choose to provide it, Working Group affiliation. This information is used to administer the relevant event, manage capacity and waiting lists, send registration updates and calendar invitations, and maintain an attendance record.
 
 Registration information is held in a private EEG101 registration spreadsheet and can be accessed only by authorised members of the organising team. The public website does not display attendee information. The registration form records your consent to this use of your information. Records are ordinarily deleted within 12 months of the event's completion, subject to any documented administrative, financial, or legal retention requirement.
 
-The Event Hub uses a private Google Apps Script to transfer form submissions to the registration spreadsheet and send confirmation messages. You can contact [eeg101costaction@gmail.com](mailto:eeg101costaction@gmail.com) to ask about your registration information or request its correction or deletion, subject to the limits described above.
+The event-booking service uses a private Google Apps Script to transfer form submissions to the registration spreadsheet and send confirmation messages. You can contact [eeg101costaction@gmail.com](mailto:eeg101costaction@gmail.com) to ask about your registration information or request its correction or deletion, subject to the limits described above.
 
 ## COST platform (e-COST)
 
