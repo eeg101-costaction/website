@@ -6,6 +6,8 @@ The Jekyll production build completed successfully on 18 August 2026 after the E
 
 The browser console was also clear after the Event Hub page and its registration JavaScript loaded. A live registration test remains dependent on the manual Apps Script deployment and a genuine forthcoming event being marked as open in `_data/events.yml`.
 
+Immediately after the main-branch push, the public `/events/` address still served the preceding GitHub Pages version and returned the branded 404 page. This is expected while the GitHub Pages build is queued or in progress. The local production build remained successful.
+
 ## Registration activation requirements
 
 An organiser must add `registration_enabled: true`, `registration_status: open`, and the event-specific capacity, time and timezone fields to the relevant entry in `_data/events.yml`. The public Apps Script web-app URL must then be added to `_data/site.yml` as `event_hub_endpoint`.

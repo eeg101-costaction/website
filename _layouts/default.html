@@ -36,7 +36,7 @@
   {% endif %}
 
   <!-- Site stylesheet -->
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 
   <!-- Favicon -->
   <link rel="icon" href="{{ '/assets/images/logo/favicon.png' | relative_url }}" type="image/png">
