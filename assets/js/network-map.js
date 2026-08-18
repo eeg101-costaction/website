@@ -178,13 +178,14 @@
     const query = directorySearchInput.value.trim().toLowerCase();
     const workingGroup = directoryWGSelect.value;
     const country = directoryCountrySelect.value;
+    const hasActiveDirectoryFilter = Boolean(query || workingGroup || country);
     const matchingMembers = allMembers.filter((member) => memberMatches(member, query, workingGroup, country));
-    const shownMembers = matchingMembers.slice(0, directoryLimit);
+    const shownMembers = hasActiveDirectoryFilter ? matchingMembers.slice(0, directoryLimit) : matchingMembers;
 
     const matchingLabel = matchingMembers.length === allMembers.length
       ? `${matchingMembers.length} members`
       : `${matchingMembers.length} matching ${matchingMembers.length === 1 ? 'member' : 'members'}`;
-    directorySummary.textContent = matchingMembers.length > directoryLimit
+    directorySummary.textContent = hasActiveDirectoryFilter && matchingMembers.length > directoryLimit
       ? `Showing the first ${directoryLimit} of ${matchingLabel}.`
       : `Showing ${matchingLabel}.`;
 
@@ -211,7 +212,7 @@
           </article>`;
         }).join('')}
       </div>
-      ${matchingMembers.length > directoryLimit ? `<div class="member-directory__more"><button type="button" class="btn btn-outline-primary" id="member-directory-more">Show more members</button></div>` : ''}`;
+      ${hasActiveDirectoryFilter && matchingMembers.length > directoryLimit ? `<div class="member-directory__more"><button type="button" class="btn btn-outline-primary" id="member-directory-more">Show more members</button></div>` : ''}`;
 
     directoryResults.querySelectorAll('[data-directory-site]').forEach((button) => {
       button.addEventListener('click', () => viewSiteOnMap(button.dataset.directorySite));

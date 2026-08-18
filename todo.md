@@ -10,3 +10,4 @@
 - [x] Remove legacy links to the retired standalone Event Hub route
 - [x] Test and publish the unified News & Events booking workflow on main
 - [x] Test the new Members directory search, Working Group filters, country filters, and responsive layout
+- [x] Show all Members by default and limit results to 60 only while directory filters are active
