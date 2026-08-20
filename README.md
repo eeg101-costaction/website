@@ -396,6 +396,34 @@ The easiest approach is to copy an existing Spotlight detail page (e.g. `spotlig
 
 The detail page pulls all structured data (outcomes, collaborators, follow-up, links) from the YAML entry automatically. You only need to write the narrative paragraphs.
 
+### Step 4 (optional): Add a workflow diagram or infographic
+
+If the grantee provides a workflow diagram, poster panel, or other supplementary image, you can embed it in the detail page.
+
+1. Save the image to `assets/images/spotlights/` with a descriptive name, e.g. `lastname-vm-2027-workflow.png`
+2. Open the detail page you created in Step 3
+3. Find the section where you want the image to appear (typically after the "Key outcomes" list)
+4. Insert this HTML block:
+
+```html
+<figure class="spotlight-detail__figure spotlight-detail__figure--wide">
+  <img src="{{ '/assets/images/spotlights/lastname-vm-2027-workflow.png' | relative_url }}" alt="Describe what the diagram shows in plain language.">
+  <figcaption>A short caption explaining the diagram.</figcaption>
+</figure>
+```
+
+**Tips for the image:**
+
+| Guideline | Detail |
+|-----------|--------|
+| Format | PNG or JPEG. PNG is better for diagrams with text; JPEG for photographs |
+| Size | Any width works. The page will scale it to fit. Keep file size under 2MB |
+| Alt text | Write a genuine description of the diagram content for accessibility. Do not leave it empty |
+| Caption | A single sentence explaining what the reader is looking at |
+| Placement | Insert the `<figure>` block between two existing `<section>` blocks, or inside a section before its closing `</section>` tag |
+
+You can add multiple images to the same Spotlight page by repeating the `<figure>` block in different positions.
+
 ---
 
 ## Update grants and calls
