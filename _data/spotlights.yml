@@ -5,6 +5,7 @@
   type: "Mobility and exchange"
   status: "Completed"
   date_range: "12–18 April 2026"
+  sort_date: "2026-04-18"
   year: 2026
   working_groups:
     - "WG2"
@@ -48,7 +49,8 @@
   short_title: "Neonatal EEG preprocessing Virtual Mobility"
   type: "Virtual Mobility"
   status: "Completed"
-  date_range: "2026"
+  date_range: "May–August 2026"
+  sort_date: "2026-08-31"
   year: 2026
   working_groups:
     - "WG1"

@@ -13,7 +13,8 @@ permalink: /spotlight/
 </section>
 
 <div class="spotlight-grid">
-{% for item in site.data.spotlights %}
+{% assign spotlights_newest_first = site.data.spotlights | sort: "sort_date" | reverse %}
+{% for item in spotlights_newest_first %}
   {% include spotlight-card.html item=item %}
 {% endfor %}
 </div>

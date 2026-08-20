@@ -17,3 +17,4 @@
 - [ ] Add a country-aware location reference so new eCOST countries remain represented without routine manual map maintenance
 - [ ] Verify the raw-export workbook seed and publication scripts before organiser handover
 - [x] Test and publish the 2026 Virtual Mobility Spotlight story from the submitted neonatal EEG report and portrait
+- [x] Test and publish Jovana Kljajic’s corrected Virtual Mobility date range and newest-to-oldest Spotlight ordering
