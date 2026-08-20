@@ -12,3 +12,7 @@
 - [x] Test the new Members directory search, Working Group filters, country filters, and responsive layout
 - [x] Show all Members by default and limit results to 60 only while directory filters are active
 - [x] Keep the Members directory empty until a search, Working Group filter, or country filter is applied
+- [ ] Establish a maintainable raw eCOST-export paste workflow for Members data and synchronisation to the public map and directory
+- [ ] Build a controlled conversion and publishing action that accepts the unchanged eCOST export structure
+- [ ] Add a country-aware location reference so new eCOST countries remain represented without routine manual map maintenance
+- [ ] Verify the raw-export workbook seed and publication scripts before organiser handover
