@@ -16,3 +16,4 @@
 - [ ] Build a controlled conversion and publishing action that accepts the unchanged eCOST export structure
 - [ ] Add a country-aware location reference so new eCOST countries remain represented without routine manual map maintenance
 - [ ] Verify the raw-export workbook seed and publication scripts before organiser handover
+- [x] Test and publish the 2026 Virtual Mobility Spotlight story from the submitted neonatal EEG report and portrait

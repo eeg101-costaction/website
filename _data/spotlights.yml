@@ -41,3 +41,50 @@
     - label: "Working Group 2"
       url: "/working-groups/#wg2"
   url: "/spotlights/stsm-2026-anne-sophie-dubarry/"
+
+- slug: virtual-mobility-2026-jovana-kljajic
+  featured: true
+  title: "Towards harmonised neonatal EEG preprocessing across clinical settings"
+  short_title: "Neonatal EEG preprocessing Virtual Mobility"
+  type: "Virtual Mobility"
+  status: "Completed"
+  date_range: "2026"
+  year: 2026
+  working_groups:
+    - "WG1"
+    - "WG2"
+  tags:
+    - "Neonatal EEG"
+    - "Preprocessing"
+    - "Data harmonisation"
+    - "Reproducibility"
+  lead: "Jovana Kljajic"
+  lead_role: "EEG101 Virtual Mobility grantee"
+  host_institution: "INFANT Research Centre/CergenX, University College Cork"
+  location: "Online collaboration between Novi Sad, Serbia and Cork, Ireland"
+  image: "/assets/images/spotlights/kljajic-virtual-mobility-2026.jpg"
+  image_alt: "Portrait of Jovana Kljajic"
+  summary: "Jovana Kljajic’s EEG101 Virtual Mobility brought researchers in Novi Sad and Cork together to compare neonatal EEG acquisition and preprocessing practices and develop an initial harmonised framework for heterogeneous clinical settings."
+  impact: "The activity established and tested an initial cross-compatible preprocessing framework across local single-channel aEEG and an open-access multichannel neonatal EEG dataset, identifying signal quality variability and artefact handling as priorities for further validation."
+  collaborators:
+    - "Jovana Kljajic, Faculty of Technical Sciences, University of Novi Sad"
+    - "Prof. Tamara Škorić, Faculty of Technical Sciences, University of Novi Sad"
+    - "Dr. John O’Toole, INFANT Research Centre/CergenX, University College Cork"
+    - "Dr. Robert Hogan, INFANT Research Centre/CergenX, University College Cork"
+    - "Institute for Child and Youth Health Care of Vojvodina, Neonatal Intensive Care Unit"
+  outcomes:
+    - "A comparative review of neonatal EEG acquisition hardware, channel configurations, sampling frequencies, filtering, and signal-quality assessment across participating settings"
+    - "An initial harmonised preprocessing framework applicable to both single-channel and multichannel neonatal EEG recordings"
+    - "Initial testing across a local aEEG dataset and the open-access Cork neonatal EEG dataset"
+    - "Identification of clinically relevant artefacts, including movement, electrode displacement, and interference from clinical equipment"
+    - "Methodological input to EEG101 Deliverables D1.1, D1.2, D2.1, and D2.2"
+  follow_up:
+    - "Continue regular online collaboration and refine the framework with additional neonatal EEG datasets"
+    - "Assess the effect of harmonised preprocessing on AI-based seizure-detection and outcome-prediction analyses"
+    - "Prepare joint scientific publications arising from the collaboration"
+  links:
+    - label: "Working Group 2"
+      url: "/working-groups/#wg2"
+    - label: "Cork neonatal EEG dataset"
+      url: "https://zenodo.org/records/7477575"
+  url: "/spotlights/virtual-mobility-2026-jovana-kljajic/"
