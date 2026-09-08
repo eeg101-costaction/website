@@ -21,15 +21,15 @@ schemes:
     yri_track: true
     itc_track: true
     industry_track: true
-    status: "open"
-    deadline: "Until funds are exhausted or 30th September 2026, whichever comes sooner."
+    status: "closed"
+    deadline: "All Year 1 funding has been allocated."
     round_label: "Round 2"
-    application_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
+    application_url: ""
     guidance_url: "https://www.cost.eu/funding/stsm/"
     contact: "eeg101costaction@gmail.com"
     notes: >
-      Priority given to YRIs, ITC-based applicants, and projects addressing
-      Working Group community challenges.
+      All Year 1 STSM funding has been allocated. Visit our Spotlight page to follow
+      the funded projects. Check back from November onwards for Year 2 funding calls.
 
   - id: vmg
     title: "Virtual Mobility Grant"
@@ -48,15 +48,15 @@ schemes:
     yri_track: true
     itc_track: true
     industry_track: true
-    status: "open"
-    deadline: "Until funds are exhausted or 30th September 2026, whichever comes sooner."
+    status: "closed"
+    deadline: "All Year 1 funding has been allocated."
     round_label: "Round 2"
-    application_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
+    application_url: ""
     guidance_url: "https://www.cost.eu/funding/vmg/"
     contact: "eeg101costaction@gmail.com"
     notes: >
-      VMGs enable remote access to laboratories, software, and expertise across the
-      network. Particularly encouraged for ITC applicants and YRIs.
+      All Year 1 VMG funding has been allocated. Visit our Spotlight page to follow
+      the funded projects. Check back from November onwards for Year 2 funding calls.
 
   - id: conference-inperson
     title: "Conference Grant (In-Person)"
@@ -73,14 +73,15 @@ schemes:
     yri_track: true
     itc_track: true
     industry_track: false
-    status: "open"
-    deadline: "Until funds are exhausted or 30th September 2026, whichever comes sooner."
+    status: "closed"
+    deadline: "All Year 1 funding has been allocated."
     round_label: "Round 2"
-    application_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
+    application_url: ""
     guidance_url: "https://www.cost.eu/funding/dissemination-conference-grants/"
     contact: "eeg101costaction@gmail.com"
     notes: >
-      Applications must be submitted at least 30 days before the conference start date.
+      All Year 1 Conference Grant funding has been allocated. Visit our Spotlight page
+      to follow the funded projects. Check back from November onwards for Year 2 funding calls.
 
   - id: conference-online
     title: "Conference Grant (Online)"
@@ -97,13 +98,15 @@ schemes:
     yri_track: true
     itc_track: true
     industry_track: false
-    status: "open"
-    deadline: "Until funds are exhausted or 30th September 2026, whichever comes sooner."
+    status: "closed"
+    deadline: "All Year 1 funding has been allocated."
     round_label: "Round 2"
-    application_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
+    application_url: ""
     guidance_url: "https://www.cost.eu/funding/dissemination-conference-grants/"
     contact: "eeg101costaction@gmail.com"
-    notes: ""
+    notes: >
+      All Year 1 Online Conference Grant funding has been allocated. Visit our Spotlight page
+      to follow the funded projects. Check back from November onwards for Year 2 funding calls.
 
 # Application process steps (shown on Grants page)
 application_process:
