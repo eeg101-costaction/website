@@ -324,7 +324,7 @@
   image: "/assets/images/people/annalisa.jpg"
   bio: >
     Annalisa Pascarella is a researcher at the Institute of Applied Mathematics M. Picone, part of Italy's National Research Council (CNR). She contributes to EEG101 as part of the Community Support team.
-  tags: []
+  tags: [community]
   order: 24
 
 - id: theodora
@@ -338,7 +338,7 @@
   image: "/assets/images/people/avatar.jpg"
   bio: >
     Theodora Gazea is affiliated with the Aristotle University of Thessaloniki. She contributes to EEG101 as part of the Community Support team.
-  tags: []
+  tags: [community]
   order: 25
 
 - id: fatih
@@ -352,7 +352,7 @@
   image: "/assets/images/people/fatih.jpg"
   bio: >
     Fatih Onay is affiliated with Bursa Technical University. He contributes to EEG101 as part of the Community Support team.
-  tags: []
+  tags: [community]
   order: 26
 
 - id: francia
@@ -366,5 +366,5 @@
   image: "/assets/images/people/avatar.jpg"
   bio: >
     Francia Arriagada Mödinger is affiliated with the Universidad Católica del Maule in Chile. She contributes to EEG101 as part of the Community Support team.
-  tags: []
+  tags: [community]
   order: 27
