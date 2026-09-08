@@ -68,7 +68,7 @@
   orcid: ""
   image: "/assets/images/people/marie-constance.jpg"
   bio: ""
-  tags: [CG]
+  tags: [CG, community]
   order: 5
 
 - id: robert
