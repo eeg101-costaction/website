@@ -246,7 +246,8 @@ def build_dataset(export_path: Path, existing_path: Path, output_path: Path, rep
     # Auto-geocode any institutions not yet in the location index.
     if unresolved and geocode_missing:
         seen: dict[tuple[str, str], bool] = {}
-        geocoded_stubs: list[dict[str, Any]] = []
+        geocoded_count = 0
+        failed_geocode: list[dict[str, str]] = []
         for member in unresolved:
             key = (member["affiliation"], member["country"])
             if key in seen:
@@ -255,35 +256,31 @@ def build_dataset(export_path: Path, existing_path: Path, output_path: Path, rep
             affiliation, country = key
             print(f"Geocoding new institution: {affiliation!r} ({country})", flush=True)
             coords = geocode_institution(affiliation, country)
-            lat, lon = coords if coords else (0.0, 0.0)
-            confidence = "geocoded" if coords else "unresolved"
-            stub: dict[str, Any] = {
-                "institution": affiliation,
-                "city": "",
-                "country": country,
-                "latitude": lat,
-                "longitude": lon,
-                "location_confidence": confidence,
-                "members": [],
-                "member_count": 0,
-                "working_groups": [],
-            }
-            geocoded_stubs.append(stub)
-            # Add to the in-memory location index so map_members can resolve them.
-            locations[(ascii_key(affiliation), ascii_key(country))] = {
-                "institution": affiliation,
-                "city": "",
-                "country": country,
-                "latitude": lat,
-                "longitude": lon,
-                "location_confidence": confidence,
-            }
+            if coords is None:
+                # Geocoding failed — do NOT place at 0,0. Leave member unresolved.
+                print(f"  Could not geocode {affiliation!r} — skipping (will remain unresolved).", file=sys.stderr)
+                failed_geocode.append({"affiliation": affiliation, "country": country})
+            else:
+                lat, lon = coords
+                # Only add successfully geocoded institutions to the location index.
+                locations[(ascii_key(affiliation), ascii_key(country))] = {
+                    "institution": affiliation,
+                    "city": "",
+                    "country": country,
+                    "latitude": lat,
+                    "longitude": lon,
+                    "location_confidence": "geocoded",
+                }
+                geocoded_count += 1
             time.sleep(1.1)  # Nominatim rate limit: ≤1 req/s
 
-        if geocoded_stubs:
-            print(f"Auto-geocoded {len(geocoded_stubs)} new institution(s).", flush=True)
+        if geocoded_count:
+            print(f"Auto-geocoded {geocoded_count} new institution(s).", flush=True)
+        if failed_geocode:
+            print(f"Could not geocode {len(failed_geocode)} institution(s) — they will be excluded from this update.", file=sys.stderr)
 
-        # Re-run with expanded location index.
+        # Re-run with expanded location index. Members whose institutions could not be
+        # geocoded remain in unresolved; they are excluded from the map (not placed at 0,0).
         sites, unresolved = map_members(rows, locations)
 
     report = {
@@ -298,10 +295,20 @@ def build_dataset(export_path: Path, existing_path: Path, output_path: Path, rep
     report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
     if unresolved:
-        raise RuntimeError(
-            f"{len(unresolved)} members have institutions without reviewed map locations. "
-            f"See {report_path}; the public map was not changed."
-        )
+        if geocode_missing:
+            # When geocoding is enabled, members at institutions that Nominatim could not
+            # resolve are excluded from this update rather than blocking it entirely.
+            # They are recorded in the report for manual review.
+            print(
+                f"Warning: {len(unresolved)} member(s) excluded because their institution "
+                f"could not be geocoded. See {report_path}.",
+                file=sys.stderr,
+            )
+        else:
+            raise RuntimeError(
+                f"{len(unresolved)} members have institutions without reviewed map locations. "
+                f"See {report_path}; the public map was not changed."
+            )
 
     countries: dict[str, dict[str, Any]] = {}
     for site in sites:
