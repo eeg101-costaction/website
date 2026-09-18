@@ -47,6 +47,15 @@ jobs:
             --action-id "$ACTION_ID" \
             --output ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx"
 
+      - name: Write raw export to Members Google Sheet
+        env:
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          MEMBERS_SHEET_ID: ${{ secrets.MEMBERS_SHEET_ID }}
+        run: |
+          python scripts/write_to_sheet.py \
+            --input ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx" \
+            --sheet-id "$MEMBERS_SHEET_ID"
+
       - name: Validate and build a staged map update
         id: map_sync
         run: |
