@@ -80,33 +80,15 @@ jobs:
           if-no-files-found: ignore
           retention-days: 30
 
-      - name: Create or update the review pull request
+      - name: Push map update to main
         if: steps.map_sync.outputs.changed == 'true'
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
           git config user.name "EEG101 eCOST synchronisation"
           git config user.email "eeg101costaction@gmail.com"
-          git checkout -B "$UPDATE_BRANCH"
           git add assets/data/network-map.json
           git commit -m "Synchronise Network Map from eCOST export"
-          git push --force origin "$UPDATE_BRANCH"
-
-          pr_number="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$UPDATE_BRANCH" --state open --json number --jq '.[0].number')"
-          if [ -n "$pr_number" ]; then
-            gh pr edit "$pr_number" \
-              --repo "$GITHUB_REPOSITORY" \
-              --title "Update Network Map from eCOST membership export" \
-              --body "Automated staged update from the latest authenticated CA24148 eCOST Working Group export. Review the map data and merge when satisfied."
-          else
-            gh pr create \
-              --repo "$GITHUB_REPOSITORY" \
-              --base main \
-              --head "$UPDATE_BRANCH" \
-              --title "Update Network Map from eCOST membership export" \
-              --body "Automated staged update from the latest authenticated CA24148 eCOST Working Group export. Review the map data and merge when satisfied."
-          fi
+          git push origin main
 
       - name: Record no-change outcome
         if: steps.map_sync.outputs.changed == 'false'
