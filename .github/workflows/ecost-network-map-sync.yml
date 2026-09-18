@@ -3,7 +3,7 @@ name: Sync eCOST membership to Network Map
 on:
   workflow_dispatch:
   schedule:
-    - cron: "17 05 * * 1"
+    - cron: "17 05 * * *"
 
 permissions:
   contents: write
