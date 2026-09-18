@@ -45,9 +45,56 @@ def download_export(action_id: str, output: Path, headed: bool) -> None:
 
         try:
             page.goto(LOGIN_URL, wait_until="domcontentloaded")
+
+            # Dismiss cookie consent banner if present (common on EU sites).
+            for consent_selector in [
+                "button:has-text('Accept all')",
+                "button:has-text('Accept All')",
+                "button:has-text('Accept cookies')",
+                "button:has-text('I agree')",
+                "button:has-text('Agree')",
+                "[id*='cookie'] button",
+                "[class*='cookie'] button",
+                "[id*='consent'] button",
+                "#onetrust-accept-btn-handler",
+                ".cc-btn.cc-allow",
+            ]:
+                try:
+                    btn = page.locator(consent_selector).first
+                    if btn.is_visible(timeout=2_000):
+                        btn.click()
+                        print(f"Dismissed cookie consent via: {consent_selector}")
+                        page.wait_for_timeout(500)
+                        break
+                except Exception:
+                    pass
+
+            # Wait for the email field to be ready before filling.
+            page.locator("#login__email").wait_for(state="visible", timeout=15_000)
             page.locator("#login__email").fill(email)
             page.locator("#login__password").fill(password)
-            page.get_by_role("button", name="Login to your account").click()
+
+            # Try the labelled button first; fall back to a CSS submit button.
+            login_btn_candidates = [
+                page.get_by_role("button", name="Login to your account"),
+                page.get_by_role("button", name="Login"),
+                page.get_by_role("button", name="Log in"),
+                page.get_by_role("button", name="Sign in"),
+                page.locator("button[type='submit']"),
+                page.locator("input[type='submit']"),
+            ]
+            clicked = False
+            for btn in login_btn_candidates:
+                try:
+                    if btn.count() > 0 and btn.first.is_visible(timeout=2_000):
+                        btn.first.click()
+                        clicked = True
+                        break
+                except Exception:
+                    pass
+            if not clicked:
+                raise RuntimeError("Could not find a login/submit button on the eCOST login page.")
+
             page.wait_for_url(lambda url: "/user/login" not in url, timeout=30_000)
 
             page.goto(ACTION_URL.format(action_id=action_id), wait_until="networkidle")
