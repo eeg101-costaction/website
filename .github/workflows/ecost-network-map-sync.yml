@@ -86,7 +86,7 @@ jobs:
           set -euo pipefail
           git config user.name "EEG101 eCOST synchronisation"
           git config user.email "eeg101costaction@gmail.com"
-          git add assets/data/network-map.json
+          git add assets/data/
           git commit -m "Synchronise Network Map from eCOST export"
           git push origin main
 
