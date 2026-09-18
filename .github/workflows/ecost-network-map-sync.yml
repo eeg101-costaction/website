@@ -82,6 +82,8 @@ jobs:
 
       - name: Create or update the review pull request
         if: steps.map_sync.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT }}
         run: |
           set -euo pipefail
           git config user.name "EEG101 eCOST synchronisation"
