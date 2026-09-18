@@ -257,6 +257,52 @@
     renderDirectory();
   };
 
+  // Stats charts
+  const statsUrl = page.dataset.statsUrl;
+  const statsGrid = document.getElementById('member-stats-grid');
+
+  const renderStats = (data) => {
+    if (!statsGrid || !data || !data.charts || !data.charts.length) return;
+    const total = data.member_count || 1;
+    statsGrid.innerHTML = data.charts.map((chart) => {
+      const chartTotal = chart.bars.reduce((s, b) => s + b.count, 0) || 1;
+      const bars = chart.bars.map((bar, i) => {
+        const pct = Math.round((bar.count / chartTotal) * 100);
+        const fillClass = i === 0 ? 'member-stats__bar-fill member-stats__bar-fill--gold' : 'member-stats__bar-fill';
+        return `<div class="member-stats__bar-row">
+          <div class="member-stats__bar-label">
+            <span class="member-stats__bar-name">${escapeHTML(bar.label)}</span>
+            <span class="member-stats__bar-value">${bar.count.toLocaleString()} · ${pct}%</span>
+          </div>
+          <div class="member-stats__bar-track" role="img" aria-label="${escapeHTML(bar.label)}: ${pct}%">
+            <div class="${fillClass}" data-pct="${pct}"></div>
+          </div>
+        </div>`;
+      }).join('');
+      return `<div class="member-stats__chart">
+        <h3 class="member-stats__chart-title">${escapeHTML(chart.title)}</h3>
+        <p class="member-stats__chart-note">${escapeHTML(chart.note)}</p>
+        <div class="member-stats__bars">${bars}</div>
+      </div>`;
+    }).join('');
+
+    // Animate bars in after a short delay so the transition is visible.
+    window.requestAnimationFrame(() => {
+      window.setTimeout(() => {
+        statsGrid.querySelectorAll('.member-stats__bar-fill[data-pct]').forEach((el) => {
+          el.style.width = `${el.dataset.pct}%`;
+        });
+      }, 120);
+    });
+  };
+
+  if (statsUrl && statsGrid) {
+    fetch(statsUrl)
+      .then((r) => r.ok ? r.json() : null)
+      .then(renderStats)
+      .catch(() => { if (statsGrid) statsGrid.innerHTML = ''; });
+  }
+
   // Load both data files in parallel.
   const mapFetch = fetch(dataUrl).then((r) => { if (!r.ok) throw new Error('Map data unavailable.'); return r.json(); });
   const pendingFetch = pendingUrl

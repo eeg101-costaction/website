@@ -1,0 +1,60 @@
+{
+  "generated_at": "2026-09-18T21:45:45+00:00",
+  "member_count": 459,
+  "columns_used": {
+    "gender": "gender",
+    "itc": "itc",
+    "yri": "young researcher"
+  },
+  "charts": [
+    {
+      "id": "gender",
+      "title": "Gender split",
+      "note": "Based on self-reported gender in the eCOST member profile.",
+      "bars": [
+        {
+          "label": "Male",
+          "count": 230
+        },
+        {
+          "label": "Female",
+          "count": 226
+        },
+        {
+          "label": "Prefer not to say",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": "itc",
+      "title": "Inclusiveness Target Countries (ITC)",
+      "note": "ITC members are from countries designated by COST to widen participation across Europe.",
+      "bars": [
+        {
+          "label": "ITC member",
+          "count": 206
+        },
+        {
+          "label": "Non-ITC member",
+          "count": 253
+        }
+      ]
+    },
+    {
+      "id": "yri",
+      "title": "Young Researcher and Innovator (YRI)",
+      "note": "YRI members are early-career researchers as defined by the COST Action rules.",
+      "bars": [
+        {
+          "label": "Young Researcher / Innovator",
+          "count": 292
+        },
+        {
+          "label": "Standard member",
+          "count": 167
+        }
+      ]
+    }
+  ]
+}
