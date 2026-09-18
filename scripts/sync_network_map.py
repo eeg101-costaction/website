@@ -15,7 +15,10 @@ import datetime as dt
 import json
 import re
 import sys
+import time
 import unicodedata
+import urllib.parse
+import urllib.request
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -105,6 +108,30 @@ def extract_groups(row: dict[str, str]) -> list[str]:
         if clean(value).lower() in {"y", "yes", "true", "1"}:
             groups.add(f"WG{number}")
     return sorted(groups, key=lambda group: int(group[-1]))
+
+
+def geocode_institution(name: str, country: str) -> tuple[float, float] | None:
+    """Look up institution coordinates via Nominatim (OpenStreetMap).
+
+    Returns (latitude, longitude) or None if the lookup fails.
+    Nominatim requires a unique User-Agent and asks for ≤1 req/s.
+    """
+    query = f"{name}, {country}"
+    url = "https://nominatim.openstreetmap.org/search?" + urllib.parse.urlencode({
+        "q": query,
+        "format": "json",
+        "limit": "1",
+        "addressdetails": "0",
+    })
+    req = urllib.request.Request(url, headers={"User-Agent": "EEG101-NetworkMap/1.0 (eeg101.eu)"})
+    try:
+        with urllib.request.urlopen(req, timeout=15) as response:
+            results = json.loads(response.read())
+        if results:
+            return float(results[0]["lat"]), float(results[0]["lon"])
+    except Exception as exc:
+        print(f"  Geocoding failed for {name!r}: {exc}", file=sys.stderr)
+    return None
 
 
 def build_location_index(current: dict[str, Any]) -> dict[tuple[str, str], dict[str, Any]]:
@@ -202,7 +229,7 @@ def map_members(rows: Iterable[dict[str, str]], locations: dict[tuple[str, str],
     return sites, unresolved
 
 
-def build_dataset(export_path: Path, existing_path: Path, output_path: Path, report_path: Path) -> None:
+def build_dataset(export_path: Path, existing_path: Path, output_path: Path, report_path: Path, geocode_missing: bool = False) -> None:
     rows = load_rows(export_path)
     validate_headers(rows)
     current = json.loads(existing_path.read_text(encoding="utf-8"))
@@ -215,6 +242,50 @@ def build_dataset(export_path: Path, existing_path: Path, output_path: Path, rep
 
     locations = build_location_index(current)
     sites, unresolved = map_members(rows, locations)
+
+    # Auto-geocode any institutions not yet in the location index.
+    if unresolved and geocode_missing:
+        seen: dict[tuple[str, str], bool] = {}
+        geocoded_stubs: list[dict[str, Any]] = []
+        for member in unresolved:
+            key = (member["affiliation"], member["country"])
+            if key in seen:
+                continue
+            seen[key] = True
+            affiliation, country = key
+            print(f"Geocoding new institution: {affiliation!r} ({country})", flush=True)
+            coords = geocode_institution(affiliation, country)
+            lat, lon = coords if coords else (0.0, 0.0)
+            confidence = "geocoded" if coords else "unresolved"
+            stub: dict[str, Any] = {
+                "institution": affiliation,
+                "city": "",
+                "country": country,
+                "latitude": lat,
+                "longitude": lon,
+                "location_confidence": confidence,
+                "members": [],
+                "member_count": 0,
+                "working_groups": [],
+            }
+            geocoded_stubs.append(stub)
+            # Add to the in-memory location index so map_members can resolve them.
+            locations[(ascii_key(affiliation), ascii_key(country))] = {
+                "institution": affiliation,
+                "city": "",
+                "country": country,
+                "latitude": lat,
+                "longitude": lon,
+                "location_confidence": confidence,
+            }
+            time.sleep(1.1)  # Nominatim rate limit: ≤1 req/s
+
+        if geocoded_stubs:
+            print(f"Auto-geocoded {len(geocoded_stubs)} new institution(s).", flush=True)
+
+        # Re-run with expanded location index.
+        sites, unresolved = map_members(rows, locations)
+
     report = {
         "export": export_path.name,
         "export_member_count": len(rows),
@@ -257,10 +328,16 @@ def main() -> int:
     parser.add_argument("--existing", type=Path, default=Path("assets/data/network-map.json"))
     parser.add_argument("--output", type=Path, default=Path("assets/data/network-map.json"))
     parser.add_argument("--report", type=Path, default=Path(".tmp/ecost-sync/report.json"))
+    parser.add_argument(
+        "--geocode-missing",
+        action="store_true",
+        help="Auto-geocode institutions not yet in the map using Nominatim (OpenStreetMap). "
+             "Geocoded sites are marked location_confidence=geocoded for human review.",
+    )
     args = parser.parse_args()
 
     try:
-        build_dataset(args.input, args.existing, args.output, args.report)
+        build_dataset(args.input, args.existing, args.output, args.report, geocode_missing=args.geocode_missing)
     except Exception as exc:
         print(f"Network Map sync failed: {exc}", file=sys.stderr)
         return 1
