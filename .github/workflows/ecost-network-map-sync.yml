@@ -63,7 +63,8 @@ jobs:
             --input ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx" \
             --existing assets/data/network-map.json \
             --output assets/data/network-map.json \
-            --report .tmp/ecost-sync/report.json
+            --report .tmp/ecost-sync/report.json \
+            --geocode-missing
           if git diff --quiet -- assets/data/network-map.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
