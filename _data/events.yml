@@ -8,6 +8,32 @@
 # timezone and end_time. An event's News & Events card and calendar popover both
 # read these fields directly, so booking can never be created as a separate list.
 
+- id: cuttinggardens-2026
+  title: "CuttingGardens 2026 — EEG and MEG Methods Multi-Hub Meeting"
+  start_date: 2026-09-21
+  end_date: 2026-09-25
+  location: "Global programme online and local Gardens worldwide"
+  format: "hybrid"
+  category: "Events"
+  summary: >
+    CuttingGardens is a distributed international conference on cutting-edge EEG
+    and MEG data-analysis methods. A shared global programme is broadcast to
+    participating Gardens, alongside locally organised talks, tutorials, poster
+    sessions, and community activities across multiple continents.
+  image: ""
+  alt: "CuttingGardens 2026 distributed EEG and MEG methods meeting"
+  registration_url: "https://cuttingeeg.org/cuttinggardens2026/gardens/"
+  programme_url: "https://cuttingeeg.org/cuttinggardens2026/"
+  recording_url: ""
+  slides_url: ""
+  related_wg: ""
+  tags:
+    - CuttingEEG
+    - M/EEG
+    - hybrid
+    - methods
+    - community
+
 - id: ohbm-brainhack-2026
   title: "EEG101 at OHBM Brainhack 2026"
   start_date: 2026-06-12
