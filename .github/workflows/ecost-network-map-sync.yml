@@ -47,6 +47,12 @@ jobs:
             --action-id "$ACTION_ID" \
             --output ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx"
 
+      - name: Generate member statistics
+        run: |
+          python scripts/generate_member_stats.py \
+            --input ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx" \
+            --output assets/data/member-stats.json
+
       - name: Write raw export to Members Google Sheet
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
@@ -65,7 +71,7 @@ jobs:
             --output assets/data/network-map.json \
             --report .tmp/ecost-sync/report.json \
             --geocode-missing
-          if git diff --quiet -- assets/data/network-map.json; then
+          if git diff --quiet -- assets/data/; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
