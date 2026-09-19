@@ -34,6 +34,29 @@
     - methods
     - community
 
+- id: wg2-artifact-rejection-symposium-2026
+  title: "Second WG2 Virtual Symposium — EEG Artifact Rejection, Cleaning and Reproducible Preprocessing"
+  start_date: 2026-09-03
+  end_date: 2026-09-03
+  location: "Online (Virtual Symposium)"
+  format: "online"
+  category: "Events"
+  summary: >
+    The second EEG101 WG2 Virtual Symposium on EEG artifact rejection, cleaning, and reproducible preprocessing was successfully held on 3 September 2026, bringing together more than 120 attendees. Thank you to the speakers, chairs, panellists, and everyone who joined and contributed to the discussions. Recordings are being edited and will be published in the EEG101 Library shortly.
+  image: ""
+  alt: "EEG101 WG2 virtual symposium on EEG artifact rejection and reproducible preprocessing"
+  registration_url: ""
+  programme_url: ""
+  recording_url: ""
+  slides_url: ""
+  related_wg: "wg2"
+  tags:
+    - working-groups
+    - WG2
+    - online
+    - reproducible-preprocessing
+    - artifacts
+
 - id: ohbm-brainhack-2026
   title: "EEG101 at OHBM Brainhack 2026"
   start_date: 2026-06-12
