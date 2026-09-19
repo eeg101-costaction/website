@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 459,
+  "member_count": 461,
   "site_count": 276,
   "country_count": 55,
   "countries": [
@@ -97,7 +97,7 @@
     {
       "name": "Germany",
       "site_count": 23,
-      "member_count": 30
+      "member_count": 31
     },
     {
       "name": "Greece",
@@ -182,7 +182,7 @@
     {
       "name": "Netherlands",
       "site_count": 8,
-      "member_count": 13
+      "member_count": 14
     },
     {
       "name": "New Zealand",
@@ -2468,11 +2468,23 @@
           "email": "gianluigi.giannini [at] fu-berlin [dot] de",
           "homepage": "https://www.ewi-psy.fu-berlin.de/psychologie/arbeitsbereiche/neurocom_neuroimag/team/Staff/g_giannini/index.html",
           "orcid": "0009-0007-8029-7121"
+        },
+        {
+          "name": "Rotem Krispil",
+          "affiliation": "Freie Universitaet Berlin",
+          "working_groups": [
+            "WG1",
+            "WG3"
+          ],
+          "email": "rotem.krispil [at] mail [dot] huji [dot] ac [dot] il",
+          "homepage": "https://www.ewi-psy.fu-berlin.de/en/psychologie/arbeitsbereiche/neural_dyn_of_vis_cog/team_v2/pre_docs/Rotem-Krispil/index.html",
+          "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
-        "WG1"
+        "WG1",
+        "WG3"
       ]
     },
     {
@@ -7664,9 +7676,19 @@
           "email": "olaf [at] dimigen [dot] de",
           "homepage": "https://olaf.dimigen.de; https://www.rug.nl/staff/olaf.dimigen/?lang=en",
           "orcid": "0000-0002-2507-2823"
+        },
+        {
+          "name": "Yining Chen",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "y.n.chen [at] rug [dot] nl",
+          "homepage": "",
+          "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG3"
