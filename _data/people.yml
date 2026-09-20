@@ -258,7 +258,7 @@
     Associate Professor and Scientific Researcher in Human Decision-Making, Psychophysiology (EEG, QEEG, ERPs) and Clinical Neuroscience at Lucian Blaga University of Sibiu. Gabriela's research focuses on neurophysiological markers of cognitive control and behavioral interventions. She serves as a Management Committee member for Romania and is active across all EEG101 Working Groups.
   tags: [MC, WG1, WG2, WG3]
   order: 19
-
+  
 - id: guiomar
   name: "Guiomar Niso"
   role: "Management Committee Member"
@@ -368,3 +368,17 @@
     Francia Arriagada Mödinger is affiliated with the Universidad Católica del Maule in Chile. She contributes to EEG101 as part of the Community Support team.
   tags: [community]
   order: 27
+
+- id: fernando
+  name: "Fernando Ferreira Santos"
+  role: "Training School Lead"
+  institution: "University of Porto"
+  country: "Portugal"
+  email: frsantos@fpce.up.pt
+  website: http://ferreira-santos.eu
+  orcid: ""
+  image: "/assets/images/people/fernando.jpg"
+  bio: >
+    Professor at the Faculty of Psychology and Education Sciences of the University of Porto and Executive Coordinator of the Laboratory of Neuropsychophysiology.
+  tags: [WG1, WG2, MC, CG]
+  order: 28
