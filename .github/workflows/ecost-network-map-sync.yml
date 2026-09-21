@@ -46,13 +46,13 @@ jobs:
           python scripts/ecost_export.py \
             --action-id "$ACTION_ID" \
             --output ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx"
-
+   
       - name: Generate member statistics
         run: |
           python scripts/generate_member_stats.py \
             --input ".tmp/ecost-sync/${ACTION_ID}-WG-members.xlsx" \
             --output assets/data/member-stats.json
-
+            
       - name: Write raw export to Members Google Sheet
         env:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
