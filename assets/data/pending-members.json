@@ -1,8 +1,21 @@
 {
-  "generated_at": "2026-09-20T09:50:26+00:00",
+  "generated_at": "2026-09-21T10:45:37+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 15,
+  "pending_count": 18,
   "members": [
+    {
+      "name": "Francesca Pesciarelli",
+      "affiliation": "University of Modena and Reggio Emilia",
+      "country": "Italy",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "francesca.pesciarelli [at] unimore [dot] it",
+      "homepage": "https://www.researchgate.net/profile/Francesca-Pesciarelli?ev=hdr_xprf",
+      "orcid": "0000-0003-3007-4775"
+    },
     {
       "name": "Davide Bottari",
       "affiliation": "IMT School for Advanced Studies Lucca",
@@ -25,6 +38,19 @@
       "email": "mmandaric [at] kg [dot] ac [dot] rs",
       "homepage": "https://hit-vb.kg.ac.rs/index.php/nastavno-osoblje/redovni-profesori/41-dr-marija-mandaric; https://www.researchgate.net/profile/Marija-Mandaric",
       "orcid": "0000-0002-8504-3944"
+    },
+    {
+      "name": "Stephen Applebaum",
+      "affiliation": "CuttingEEG",
+      "country": "France",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "sia [at] emneuroimaging [dot] com",
+      "homepage": "www.linkedin.com/in/siapplebaum; www.emneuroimaging.com",
+      "orcid": "0009-0000-1265-2370"
     },
     {
       "name": "Riccardo Venturini",
@@ -171,6 +197,19 @@
       "email": "federica.biondi [at] iusspavia [dot] it",
       "homepage": "",
       "orcid": "0009-0008-9313-824X"
+    },
+    {
+      "name": "Xintian Wang",
+      "affiliation": "Washington University in St. Louis School Of Medicine",
+      "country": "United States",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "w.xintian [at] wustl [dot] edu",
+      "homepage": "https://www.researchgate.net/profile/Xintian-Wang-14",
+      "orcid": ""
     }
   ]
 }
