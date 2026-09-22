@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-21T10:45:37+00:00",
+  "generated_at": "2026-09-22T09:59:30+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 18,
+  "pending_count": 19,
   "members": [
     {
       "name": "Francesca Pesciarelli",
@@ -209,6 +209,17 @@
       ],
       "email": "w.xintian [at] wustl [dot] edu",
       "homepage": "https://www.researchgate.net/profile/Xintian-Wang-14",
+      "orcid": ""
+    },
+    {
+      "name": "Chenyan Lu",
+      "affiliation": "Washington University in St. Louis School Of Medicine",
+      "country": "United States",
+      "working_groups": [
+        "WG1"
+      ],
+      "email": "chenyan.l [at] wustl [dot] edu",
+      "homepage": "",
       "orcid": ""
     }
   ]
