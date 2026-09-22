@@ -58,6 +58,8 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
             errors.append(f"{label}: booking_status must be 'open' or 'closed'.")
         if event.get("category") != "Events":
             errors.append(f"{label}: bookable entries must use category 'Events'.")
+        if len(str(event.get("short_name") or "")) > 60:
+            errors.append(f"{label}: short_name must be 60 characters or fewer.")
         if event.get("registration_url"):
             errors.append(f"{label}: registration_url must be empty because booking is handled directly from the event entry.")
         try:

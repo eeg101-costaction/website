@@ -5,10 +5,13 @@
 # format options: in-person | online | hybrid
 # category options: Announcement | Events | Grants
 # Optional booking fields: booking_enabled, booking_status (open|closed), capacity,
-# timezone and end_time. An event's News & Events card and calendar popover both
+# timezone, timezone_label, end_time and short_name (names the event's tab in the
+# private registration workbook, e.g. "Diversity in EEG populations (2026-11-20)").
+# Times are shown on cards as time–end_time plus timezone_label. An event's News & Events card and calendar popover both
 # read these fields directly, so booking can never be created as a separate list.
 
 - id: diversity-eeg-populations-2026-11
+  short_name: "Diversity in EEG populations"
   title: "Strategies and barriers to increase diversity of studied populations in EEG research"
   start_date: 2026-11-20
   end_date: 2026-11-20
