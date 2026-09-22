@@ -631,7 +631,8 @@ strong { font-weight: 600; }
 .event-booking-form__message { font-size: 0.9rem; font-weight: 600; margin: 0.8rem 0; }
 .event-booking-form__message--success { color: #166534; }
 .event-booking-form__message--error { color: #991b1b; }
-.event-booking-registration-frame { border: 0; display: block; min-height: 520px; width: 100%; }
+.event-booking-registration-frame { border: 0; display: block; min-height: 760px; width: 100%; }
+@media (max-width: 540px) { .event-booking-registration-frame { min-height: 1000px; } }
 
 /* --- Members directory --- */
 .member-directory { border-top: 1px solid var(--color-border); margin-top: 4rem; padding-top: 3.5rem; }
