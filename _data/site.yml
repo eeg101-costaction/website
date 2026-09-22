@@ -35,7 +35,7 @@ ga_measurement_id: "G-CNKHMEVHS4"
 
 # The public web-app URL is added after the private Google Apps Script has been deployed.
 # It contains no credential. Registration details are written only to the private Sheet.
-event_booking_endpoint: ""
+event_booking_endpoint: "https://script.google.com/macros/s/AKfycby8dCtwmx30rgM17SZRDUZ9yyUpZNDJ9NEurxcfcBzJSVO_2pXXv1kLfxTM-vgMMfo/exec"
 
 footer_text: >
   EEG101 (CA24148) is supported by COST (European Cooperation in Science and
