@@ -20,7 +20,7 @@ When you contact EEG101 by email, your email address and message are used solely
 
 ## Event registration
 
-When you register for an EEG101 meeting, training session, workshop, or Working Group activity through a booking action on the News & Events page or calendar, we collect your name, email address, institution, country, and, where you choose to provide it, Working Group affiliation. This information is used to administer the relevant event, manage capacity and waiting lists, send registration updates and calendar invitations, and maintain an attendance record.
+When you register for an EEG101 meeting, training session, workshop, or Working Group activity through a booking action on the News & Events page or calendar, we collect your first and last name, email address, institution, country, whether you are under 40 (Young Researcher and Innovator status), and your gender, for which "Prefer not to say" is always an option. This information is used to administer the relevant event, manage capacity and waiting lists, send registration updates and calendar invitations, maintain an attendance record, and report anonymised participation figures, such as gender balance and Young Researcher and Innovator participation, as part of COST Action reporting.
 
 Registration information is held in a private EEG101 registration spreadsheet and can be accessed only by authorised members of the organising team. The public website does not display attendee information. The registration form records your consent to this use of your information. Records are ordinarily deleted within 12 months of the event's completion, subject to any documented administrative, financial, or legal retention requirement.
 

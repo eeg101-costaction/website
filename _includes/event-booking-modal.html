@@ -5,7 +5,7 @@
     <p class="event-booking__eyebrow">EEG101 EVENT REGISTRATION</p>
     <h2 id="eventBookingDialogTitle">Register for an EEG101 event</h2>
     <p class="event-booking-dialog__details" id="eventBookingDialogDetails"></p>
-    <p class="event-booking-form__notice">No participant account is required. The secure registration form below sends a confirmation or waiting-list email with a calendar invitation.</p>
+    <p class="event-booking-form__notice" id="eventBookingFormNotice">No participant account is required. Once you register, your booking is confirmed on screen and you can add the event to your calendar straight away.</p>
     <p class="event-booking-form__message" id="eventBookingFormMessage" aria-live="polite"></p>
     <iframe class="event-booking-registration-frame" id="eventBookingRegistrationFrame" title="EEG101 event registration" hidden></iframe>
   </section>
@@ -19,12 +19,15 @@
   var message = document.getElementById('eventBookingFormMessage');
   var title = document.getElementById('eventBookingDialogTitle');
   var details = document.getElementById('eventBookingDialogDetails');
+  var notice = document.getElementById('eventBookingFormNotice');
   var registrationFrame = document.getElementById('eventBookingRegistrationFrame');
   function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
   function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open'; }
   function open(event) {
     if (!canBook(event)) return;
     message.textContent = '';
+    notice.hidden = false;
+    registrationFrame.style.minHeight = '';
     title.textContent = 'Register for ' + event.title;
     details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
     if (!endpoint) {
@@ -44,12 +47,28 @@
   document.querySelectorAll('[data-event-booking]').forEach(function (button) { button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); }); });
   document.querySelectorAll('[data-event-booking-close]').forEach(function (button) { button.addEventListener('click', close); });
   document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && !dialog.hidden) close(); });
+  // The Apps Script form runs inside Google's wrapper frames, so accept messages from any frame nested in ours.
+  function fromRegistrationFrame(source) {
+    for (var win = source, depth = 0; win && depth < 5; depth++) {
+      if (win === registrationFrame.contentWindow) return true;
+      if (win === win.parent) return false;
+      win = win.parent;
+    }
+    return false;
+  }
   window.addEventListener('message', function (messageEvent) {
     var data = messageEvent.data || {};
-    if (messageEvent.source !== registrationFrame.contentWindow || data.type !== 'eeg101-event-registration') return;
-    message.textContent = data.message || '';
-    message.className = 'event-booking-form__message ' + (data.ok ? 'event-booking-form__message--success' : 'event-booking-form__message--error');
-    if (data.ok) registrationFrame.style.minHeight = '180px';
+    if (data.type !== 'eeg101-event-registration' || !fromRegistrationFrame(messageEvent.source)) return;
+    if (data.ok) {
+      // The confirmation and calendar download are shown inside the form itself.
+      notice.hidden = true;
+      message.textContent = '';
+      message.className = 'event-booking-form__message';
+      registrationFrame.style.minHeight = '300px';
+    } else {
+      message.textContent = data.message || '';
+      message.className = 'event-booking-form__message event-booking-form__message--error';
+    }
   });
 }());
 </script>
