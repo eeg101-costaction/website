@@ -1,0 +1,23 @@
+{
+  "_comment": "Manual location overrides for institutions that cannot be auto-geocoded (e.g. private companies, research centres with no OSM/Wikidata entry). Each affiliation_key must be the ascii_key() of the affiliation string exactly as it appears in the eCOST export. City-level coordinates are used when a precise building location is unavailable.",
+  "overrides": [
+    {
+      "_note": "Bitsphi Diagnosis — private neurotech company, no OSM/Wikidata entry. City-level: Zaragoza, Spain.",
+      "affiliation_key": "bitsphi diagnosis",
+      "institution": "Bitsphi Diagnosis",
+      "city": "Zaragoza",
+      "country": "Spain",
+      "latitude": 41.6488,
+      "longitude": -0.8891
+    },
+    {
+      "_note": "Moscow State University of Psychology and Education (МГППУ) — typo variant 'Pychology' in eCOST export. Coordinates: main campus, Sretenka, Moscow.",
+      "affiliation_key": "moscow state university of pychology and education",
+      "institution": "Moscow State University of Psychology and Education",
+      "city": "Moscow",
+      "country": "Russian Federation",
+      "latitude": 55.7666,
+      "longitude": 37.6247
+    }
+  ]
+}

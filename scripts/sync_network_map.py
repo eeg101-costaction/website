@@ -71,6 +71,53 @@ NON_GEOGRAPHIC_COUNTRIES = {
 
 FUZZY_MATCH_THRESHOLD = 0.82   # SequenceMatcher ratio for Option C carry-forward
 
+# ---------------------------------------------------------------------------
+# Homoglyph normalisation — Cyrillic / Greek look-alikes mapped to Latin
+# These appear in some eCOST affiliation strings (e.g. Cyrillic с in an
+# otherwise Latin institution name) and silently break geocoding queries.
+# ---------------------------------------------------------------------------
+
+HOMOGLYPH_TABLE = str.maketrans({
+    # Cyrillic → Latin
+    "а": "a",   # а → a
+    "е": "e",   # е → e
+    "і": "i",   # і → i
+    "о": "o",   # о → o
+    "р": "r",   # р → r
+    "с": "c",   # с → c  (the common Psyсhology case)
+    "х": "x",   # х → x
+    "р": "p",   # р (Cyrillic r looks like Latin p)
+    # Greek → Latin
+    "α": "a",   # α → a
+    "β": "b",   # β → b
+    "ρ": "p",   # ρ → p
+    "ο": "o",   # ο → o
+    "ν": "v",   # ν → v
+    # Smart quotes / dashes → ASCII equivalents (help query parsing)
+    "’": "'",   # right single quotation mark
+    "‘": "'",   # left single quotation mark
+    "“": '"',   # left double quotation mark
+    "”": '"',   # right double quotation mark
+    "–": "-",   # en dash
+    "—": "-",   # em dash
+})
+
+# Sub-unit suffixes to strip progressively when Nominatim fails on the full name.
+# Each pattern is tried in order and applied to the current (possibly already
+# simplified) name, yielding progressively shorter geocoding candidates.
+SUB_UNIT_STRIP_PATTERNS: list[re.Pattern[str]] = [
+    # Comma-delimited department/faculty/school/hospital: "University X, Faculty of Y"
+    re.compile(r",\s*(?:faculty|school|department|dept|institute|center|centre|hospital|clinic|"
+               r"division|lab|laboratory|unit|section|college|campus)\b.*", re.IGNORECASE),
+    # Trailing "School/Faculty/Department/Hospital of Z" without comma
+    re.compile(r"\s+(?:faculty|school|department|dept|college|hospital|clinic)\s+of\b.*", re.IGNORECASE),
+    # Trailing "School of Medicine / Science / …" pattern (common in US medical school names)
+    re.compile(r"\s+(?:school|college)\s+(?:of\s+)?(?:medicine|science|arts?|engineering|law|"
+               r"education|business|nursing|pharmacy|public\s+health)\b.*", re.IGNORECASE),
+    # Trailing "Medical Center" / "Medical School" / "University Hospital" at end of name
+    re.compile(r",?\s+(?:medical\s+(?:center|centre|school)|university\s+hospital)\s*$", re.IGNORECASE),
+]
+
 
 # ---------------------------------------------------------------------------
 # Basic helpers
@@ -102,6 +149,11 @@ def obfuscate_email(value: str) -> str:
     return f"{local} [at] {domain.replace('.', ' [dot] ')}"
 
 
+def fix_homoglyphs(text: str) -> str:
+    """Replace Cyrillic/Greek look-alike characters with their Latin equivalents."""
+    return text.translate(HOMOGLYPH_TABLE)
+
+
 def simplify_institution_name(name: str) -> str:
     """Strip parenthesised acronyms and legal-entity suffixes for a retry geocode."""
     # Remove anything in parentheses or brackets: "(CONICET)", "( I.u.s.s.)"
@@ -111,6 +163,26 @@ def simplify_institution_name(name: str) -> str:
     # Collapse extra whitespace, trailing commas/hyphens
     simplified = re.sub(r"\s{2,}", " ", simplified).strip().rstrip(",-").strip()
     return simplified
+
+
+def progressive_simplifications(name: str) -> list[str]:
+    """Return up to len(SUB_UNIT_STRIP_PATTERNS) progressively shorter geocode
+    candidates by applying sub-unit stripping rules one at a time.
+
+    Each returned string is distinct from the previous and from the original.
+    The list may be empty if no patterns match.
+    """
+    variants: list[str] = []
+    current = name
+    seen = {ascii_key(name)}
+    for pattern in SUB_UNIT_STRIP_PATTERNS:
+        simplified = pattern.sub("", current).strip().rstrip(",-").strip()
+        simplified = re.sub(r"\s{2,}", " ", simplified)
+        if simplified and ascii_key(simplified) not in seen:
+            variants.append(simplified)
+            seen.add(ascii_key(simplified))
+            current = simplified  # each rule builds on the previous result
+    return variants
 
 
 # ---------------------------------------------------------------------------
@@ -197,29 +269,115 @@ def _nominatim_lookup(query: str) -> tuple[float, float] | None:
     return None
 
 
-def geocode_institution(name: str, country: str) -> tuple[float, float] | None:
-    """Try up to three Nominatim queries, each with ≥1 s spacing (rate limit).
+def _wikidata_lookup(name: str) -> tuple[float, float] | None:
+    """Search Wikidata by institution name and return P625 coordinates.
 
-    Attempt 1 — full name + country (or name alone for non-geographic countries).
-    Attempt 2 — simplified name (strip acronyms, legal suffixes) + country.
+    Uses the wbsearchentities API to find candidate items, then fetches
+    the coordinate-location claim (P625) from the top result.  No country
+    filtering is applied here — the caller already tried Nominatim with
+    the country constraint, so we accept the top Wikidata hit.
+    """
+    search_url = "https://www.wikidata.org/w/api.php?" + urllib.parse.urlencode({
+        "action": "wbsearchentities",
+        "search": name,
+        "language": "en",
+        "type": "item",
+        "limit": "3",
+        "format": "json",
+    })
+    try:
+        req = urllib.request.Request(
+            search_url,
+            headers={"User-Agent": "EEG101-NetworkMap/1.0 (eeg101.eu)"},
+        )
+        with urllib.request.urlopen(req, timeout=15) as response:
+            search_data = json.loads(response.read())
+        candidates = search_data.get("search", [])
+        if not candidates:
+            return None
+
+        # Try each candidate in order until we find one with P625.
+        for candidate in candidates:
+            qid = candidate.get("id", "")
+            if not qid:
+                continue
+            entity_url = "https://www.wikidata.org/w/api.php?" + urllib.parse.urlencode({
+                "action": "wbgetentities",
+                "ids": qid,
+                "props": "claims",
+                "format": "json",
+            })
+            time.sleep(0.5)  # be polite to Wikidata
+            req2 = urllib.request.Request(
+                entity_url,
+                headers={"User-Agent": "EEG101-NetworkMap/1.0 (eeg101.eu)"},
+            )
+            with urllib.request.urlopen(req2, timeout=15) as response2:
+                entity_data = json.loads(response2.read())
+            claims = entity_data.get("entities", {}).get(qid, {}).get("claims", {})
+            p625 = claims.get("P625", [])
+            if p625:
+                try:
+                    value = p625[0]["mainsnak"]["datavalue"]["value"]
+                    lat = float(value["latitude"])
+                    lon = float(value["longitude"])
+                    label = candidate.get("label", qid)
+                    print(f"  Wikidata hit: {label!r} ({qid})", flush=True)
+                    return lat, lon
+                except (KeyError, TypeError, ValueError):
+                    continue
+    except Exception as exc:
+        print(f"  Wikidata request failed: {exc}", file=sys.stderr)
+    return None
+
+
+def geocode_institution(name: str, country: str) -> tuple[float, float] | None:
+    """Try multiple strategies to geocode an institution, each rate-limited.
+
+    The pipeline (stops at first success):
+      1. Full name + country via Nominatim (with homoglyph fix applied).
+      2. Simplified name (strip acronyms, legal suffixes) + country via Nominatim.
+      3. Progressive sub-unit stripping (up to 4 shorter variants) via Nominatim.
+      4. Wikidata entity search on the best simplified form.
+
+    All queries normalise Cyrillic/Greek homoglyphs to Latin before sending.
     """
     is_non_geographic = ascii_key(country) in NON_GEOGRAPHIC_COUNTRIES
 
+    def nominatim_with_country(q: str) -> tuple[float, float] | None:
+        query = fix_homoglyphs(q) if is_non_geographic else f"{fix_homoglyphs(q)}, {country}"
+        return _nominatim_lookup(query)
+
     # Attempt 1: full name
-    query1 = name if is_non_geographic else f"{name}, {country}"
-    result = _nominatim_lookup(query1)
+    result = nominatim_with_country(name)
     if result:
         return result
 
-    # Attempt 2: simplified name
+    # Attempt 2: simplified name (strip acronyms + legal suffixes)
     simplified = simplify_institution_name(name)
     if simplified and ascii_key(simplified) != ascii_key(name):
         time.sleep(1.1)
-        query2 = simplified if is_non_geographic else f"{simplified}, {country}"
-        result = _nominatim_lookup(query2)
+        result = nominatim_with_country(simplified)
         if result:
             print(f"  Resolved via simplified name: {simplified!r}", flush=True)
             return result
+    else:
+        simplified = name  # use original as base for further stripping
+
+    # Attempts 3+: progressively strip sub-units (faculty, school, hospital…)
+    for variant in progressive_simplifications(simplified):
+        time.sleep(1.1)
+        result = nominatim_with_country(variant)
+        if result:
+            print(f"  Resolved via sub-unit strip: {variant!r}", flush=True)
+            return result
+
+    # Final attempt: Wikidata (different data source, good for universities)
+    time.sleep(1.1)
+    wikidata_query = simplify_institution_name(name) or name
+    result = _wikidata_lookup(fix_homoglyphs(wikidata_query))
+    if result:
+        return result
 
     return None
 
@@ -381,6 +539,41 @@ def map_members(
 # Main dataset builder
 # ---------------------------------------------------------------------------
 
+def load_location_overrides(path: Path) -> dict[str, dict[str, Any]]:
+    """Load a manual location-overrides file and return a dict keyed by ascii_key(affiliation).
+
+    The file format is:
+      { "overrides": [ { "affiliation_key": "...", "institution": "...",
+                          "city": "...", "country": "...",
+                          "latitude": 0.0, "longitude": 0.0 }, ... ] }
+
+    affiliation_key is the ascii_key() of the institution name as it appears in
+    the eCOST export.  Multiple aliases can point to the same location by listing
+    multiple entries with different affiliation_keys.
+    """
+    if not path.exists():
+        return {}
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        result: dict[str, dict[str, Any]] = {}
+        for entry in data.get("overrides", []):
+            key = entry.get("affiliation_key", "").strip()
+            if key:
+                result[key] = {
+                    "institution": entry.get("institution", ""),
+                    "city": entry.get("city", ""),
+                    "country": entry.get("country", ""),
+                    "latitude": float(entry["latitude"]),
+                    "longitude": float(entry["longitude"]),
+                    "location_confidence": "override",
+                }
+        print(f"Loaded {len(result)} location override(s) from {path.name}.", flush=True)
+        return result
+    except Exception as exc:
+        print(f"Warning: could not load location overrides from {path}: {exc}", file=sys.stderr)
+        return {}
+
+
 def build_dataset(
     export_path: Path,
     existing_path: Path,
@@ -388,6 +581,7 @@ def build_dataset(
     report_path: Path,
     pending_path: Path,
     geocode_missing: bool = False,
+    overrides_path: Path | None = None,
 ) -> None:
     rows = load_rows(export_path)
     validate_headers(rows)
@@ -399,7 +593,18 @@ def build_dataset(
             f"Export contains {len(rows)} members, below the safety threshold of {minimum_count}."
         )
 
+    # Load manual overrides (highest priority — checked before everything else).
+    overrides = load_location_overrides(overrides_path) if overrides_path else {}
+
     locations = build_location_index(current)
+
+    # Inject overrides into the location index so map_members picks them up.
+    if overrides:
+        for aff_key, loc in overrides.items():
+            if aff_key not in locations:
+                locations[(aff_key, ascii_key(loc["country"]))] = loc
+        print(f"Injected {len(overrides)} override location(s) into the location index.", flush=True)
+
     sites, unresolved = map_members(rows, locations)
 
     if unresolved:
@@ -557,10 +762,17 @@ def main() -> int:
     parser.add_argument(
         "--geocode-missing",
         action="store_true",
-        help="Auto-geocode institutions not yet in the map using Nominatim (OpenStreetMap). "
-             "Geocoded sites are marked location_confidence=geocoded for human review. "
-             "Institutions that cannot be geocoded are written to --pending rather than "
-             "placed at 0°/0°.",
+        help="Auto-geocode institutions not yet in the map using Nominatim (OpenStreetMap) "
+             "and Wikidata. Geocoded sites are marked location_confidence=geocoded for human "
+             "review. Institutions that cannot be geocoded are written to --pending rather "
+             "than placed at 0°/0°.",
+    )
+    parser.add_argument(
+        "--overrides",
+        type=Path,
+        default=Path("scripts/location-overrides.json"),
+        help="Path to a JSON file of manual lat/lon overrides for institutions that cannot "
+             "be auto-geocoded (e.g. private companies). Default: scripts/location-overrides.json.",
     )
     args = parser.parse_args()
 
@@ -572,6 +784,7 @@ def main() -> int:
             args.report,
             args.pending,
             geocode_missing=args.geocode_missing,
+            overrides_path=args.overrides,
         )
     except Exception as exc:
         print(f"Network Map sync failed: {exc}", file=sys.stderr)
