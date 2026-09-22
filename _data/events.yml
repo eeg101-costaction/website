@@ -8,6 +8,38 @@
 # timezone and end_time. An event's News & Events card and calendar popover both
 # read these fields directly, so booking can never be created as a separate list.
 
+- id: diversity-eeg-populations-2026-11
+  title: "Strategies and barriers to increase diversity of studied populations in EEG research"
+  start_date: 2026-11-20
+  end_date: 2026-11-20
+  time: "12:00"
+  end_time: "14:30"
+  timezone: "Europe/Brussels"
+  timezone_label: "CET"
+  location: "Online"
+  format: "online"
+  category: "Events"
+  summary: >
+    Bringing together EEG researchers to present findings, share expertise, and
+    discuss open questions on how to better include diverse and representative
+    study populations. An initiative of the WP3 and WP2 planning group.
+  image: ""
+  alt: "EEG101 online meeting on increasing the diversity of studied populations in EEG research"
+  registration_url: ""
+  programme_url: ""
+  recording_url: ""
+  slides_url: ""
+  related_wg: ""
+  booking_enabled: true
+  booking_status: "open"
+  capacity: 0
+  tags:
+    - WP2
+    - WP3
+    - online
+    - diversity
+    - inclusion
+
 - id: cuttinggardens-2026
   title: "CuttingGardens 2026 — EEG and MEG Methods Multi-Hub Meeting"
   start_date: 2026-09-21
