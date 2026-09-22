@@ -1,6 +1,48 @@
 {
-  "_comment": "Manual location overrides for institutions that cannot be auto-geocoded (e.g. private companies, research centres with no OSM/Wikidata entry). Each affiliation_key must be the ascii_key() of the affiliation string exactly as it appears in the eCOST export. City-level coordinates are used when a precise building location is unavailable.",
+  "_comment": "Manual location overrides for institutions that cannot be auto-geocoded. Each affiliation_key must equal the ascii_key() of the affiliation string exactly as it appears in the eCOST export. Add new entries here when an institution remains on the pending list after a sync run. City-level coordinates are used when a precise campus location is unavailable.",
+
   "overrides": [
+
+    {
+      "_note": "IMT School for Advanced Studies Lucca — small graduate school, may have thin OSM coverage. Via S. Micheletto 3, 55100 Lucca, Italy.",
+      "affiliation_key": "imt school for advanced studies lucca",
+      "institution": "IMT School for Advanced Studies Lucca",
+      "city": "Lucca",
+      "country": "Italy",
+      "latitude": 43.8452,
+      "longitude": 10.5031
+    },
+
+    {
+      "_note": "University of Kragujevac — sub-unit suffix 'Faculty of Hotel Management and Tourism' prevents Nominatim from resolving the full affiliation string. Main university campus, Kragujevac, Serbia.",
+      "affiliation_key": "university of kragujevac faculty of hotel management and tourism",
+      "institution": "University of Kragujevac",
+      "city": "Kragujevac",
+      "country": "Serbia",
+      "latitude": 43.9270,
+      "longitude": 20.9247
+    },
+
+    {
+      "_note": "IUSS Pavia — parenthetical acronym '( I.u.s.s.)' in the eCOST string confuses geocoders. Piazza della Vittoria 15, 27100 Pavia, Italy.",
+      "affiliation_key": "istituto universitario di studi superiori i u s s di pavia",
+      "institution": "Istituto Universitario di Studi Superiori (IUSS)",
+      "city": "Pavia",
+      "country": "Italy",
+      "latitude": 45.1859,
+      "longitude": 9.1594
+    },
+
+    {
+      "_note": "IUSS Pavia — alternate eCOST string without the parenthetical. Same institution and coordinates as above.",
+      "affiliation_key": "istituto universitario di studi superiori iuss",
+      "institution": "Istituto Universitario di Studi Superiori (IUSS)",
+      "city": "Pavia",
+      "country": "Italy",
+      "latitude": 45.1859,
+      "longitude": 9.1594
+    },
+
     {
       "_note": "Bitsphi Diagnosis — private neurotech company, no OSM/Wikidata entry. City-level: Zaragoza, Spain.",
       "affiliation_key": "bitsphi diagnosis",
@@ -10,14 +52,86 @@
       "latitude": 41.6488,
       "longitude": -0.8891
     },
+
     {
-      "_note": "Moscow State University of Psychology and Education (МГППУ) — typo variant 'Pychology' in eCOST export. Coordinates: main campus, Sretenka, Moscow.",
+      "_note": "Moscow State University of Psychology and Education (МГППУ) — Cyrillic homoglyph 'с' (U+0441) in 'Psyсhology' drops out of ascii_key, yielding 'psyhology'. 29 Sretenka St, Moscow.",
+      "affiliation_key": "moscow state university of psyhology and education",
+      "institution": "Moscow State University of Psychology and Education",
+      "city": "Moscow",
+      "country": "Russian Federation",
+      "latitude": 55.7676,
+      "longitude": 37.6247
+    },
+
+    {
+      "_note": "Moscow State University of Psychology and Education (МГППУ) — typo variant 'Pychology' (missing 's') in the eCOST export. Same institution and coordinates as the Cyrillic homoglyph entry above.",
       "affiliation_key": "moscow state university of pychology and education",
       "institution": "Moscow State University of Psychology and Education",
       "city": "Moscow",
       "country": "Russian Federation",
-      "latitude": 55.7666,
+      "latitude": 55.7676,
       "longitude": 37.6247
+    },
+
+    {
+      "_note": "National Institute of Technology Raipur — should be resolvable via Nominatim/Wikidata; override provided as safety net. G.E. Road, Raipur, Chhattisgarh, India.",
+      "affiliation_key": "national institute of technology raipur",
+      "institution": "National Institute of Technology Raipur",
+      "city": "Raipur",
+      "country": "India",
+      "latitude": 21.2514,
+      "longitude": 81.6296
+    },
+
+    {
+      "_note": "Shree Guru Gobind Singh Tricentenary University — thin OSM coverage; should resolve via Wikidata. NH-48, Chandu Budhera, Gurugram, Haryana, India.",
+      "affiliation_key": "shree guru gobind singh tricentenary university",
+      "institution": "Shree Guru Gobind Singh Tricentenary University",
+      "city": "Gurugram",
+      "country": "India",
+      "latitude": 28.4595,
+      "longitude": 76.9779
+    },
+
+    {
+      "_note": "Universitätsklinikum Hamburg-Eppendorf (UKE) — English name 'University Medical Center' may not be in OSM; German name resolves fine. Martinistraße 52, 20246 Hamburg.",
+      "affiliation_key": "university medical center hamburg eppendorf",
+      "institution": "Universitätsklinikum Hamburg-Eppendorf",
+      "city": "Hamburg",
+      "country": "Germany",
+      "latitude": 53.5896,
+      "longitude": 9.9752
+    },
+
+    {
+      "_note": "University of North Carolina at Chapel Hill — should resolve; 'The' prefix and US country name formatting may have tripped Nominatim on the last run. Main campus, Chapel Hill, NC.",
+      "affiliation_key": "the university of north carolina at chapel hill",
+      "institution": "The University of North Carolina at Chapel Hill",
+      "city": "Chapel Hill",
+      "country": "United States",
+      "latitude": 35.9049,
+      "longitude": -79.0469
+    },
+
+    {
+      "_note": "Universitätsklinikum Würzburg — umlaut in 'Würzburg' becomes 'wurzburg' in ascii_key. Josef-Schneider-Straße 2, 97080 Würzburg.",
+      "affiliation_key": "university hospital wurzburg",
+      "institution": "University Hospital Würzburg",
+      "city": "Würzburg",
+      "country": "Germany",
+      "latitude": 49.7979,
+      "longitude": 9.9409
+    },
+
+    {
+      "_note": "Università degli Studi Gabriele D'Annunzio di Chieti-Pescara — Italian university; apostrophe and hyphen in ascii_key become spaces. Via dei Vestini, 66100 Chieti, Italy.",
+      "affiliation_key": "universita degli studi gabriele d annunzio di chieti pescara",
+      "institution": "Università degli Studi Gabriele D'Annunzio di Chieti-Pescara",
+      "city": "Chieti",
+      "country": "Italy",
+      "latitude": 42.3607,
+      "longitude": 14.1715
     }
+
   ]
 }
