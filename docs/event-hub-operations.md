@@ -21,6 +21,7 @@ Add the event once to `_data/events.yml` using the established event fields and 
 ```yaml
 - id: wg2-training-october-2026
   short_name: "WG2 training"
+  audience: "open"
   title: "EEG101 WG2 Training Session"
   start_date: 2026-10-15
   end_date: 2026-10-15
@@ -46,13 +47,19 @@ Set `booking_status` to `closed` when registrations should stop. Omit the bookin
 
 Each event has its own tab in the registration workbook, named from its `short_name` and date, for example **WG2 training (2026-10-15)**. The tab is created automatically when the first person registers. If `short_name` is omitted, the title is used instead. Tabs can be renamed or reordered freely because the script tracks them by their internal ID.
 
-The registration form asks for first name, last name, institution, country, email address, whether the attendee is under 40 (Young Researcher and Innovator status) and gender (Male, Female or Prefer not to say). Attendees must tick a recording consent (being recorded and the recording being published online) and the privacy consent before they can book. Each registration is written to the ledger before any email is attempted, and the attendee immediately sees an on-screen confirmation with an **Add to calendar (.ics)** download. Waiting-list registrants see a waiting-list confirmation without a calendar file.
+The registration form asks for first name, last name, institution, country, email address, whether the attendee is under 40 (Young Researcher and Innovator status) and gender (Male, Female or Prefer not to say), and whether they are a member of the EEG101 COST Action. Membership never prevents booking; for events with `audience: "open"` (the default) the form states that membership is not required. Attendees must tick a recording consent (being recorded and the recording being published online) and the privacy consent before they can book. Each registration is written to the ledger before any email is attempted, and the attendee immediately sees an on-screen confirmation with an **Add to calendar (.ics)** download. Waiting-list registrants see a waiting-list confirmation without a calendar file.
 
 Google limits a personal Gmail account to 100 email recipients a day. When that limit is reached, bookings continue normally and the **Email status** column records **Email pending**. The hourly trigger sends queued emails in registration order once quota is available again, and the menu item **Send pending emails now** does the same on demand. Attendees are never shown the queued state.
 
 The script adds an **EEG101 Event Booking** menu to the private Sheet. Use **Promote the next waiting-list attendee** after a confirmed attendee cancels. The script changes the earliest waiting-list entry for that event to confirmed and sends a promotion email.
 
 The same menu provides **Delete records older than 12 months**. This action includes a confirmation step and permanently removes qualifying records. Before using it, check whether University of Leeds or COST Action procedures require any longer retention period for a particular event.
+
+## Online joining links
+
+Joining links are kept private on the **Joining links** tab of the registration workbook, never in the public website files (the site validation rejects them). A row is added automatically for each event. Paste the link into the **Joining link** column, starting with `https://`.
+
+When a link is present, it appears on the attendee's confirmation screen, in the confirmation email and in the calendar file. When no link has been added yet, attendees of online and hybrid events are told that the joining link will be emailed nearer the time. Once the link is added, open the event's tab and choose **EEG101 Event Booking → Email the joining link to everyone booked**. This sends the link and an updated calendar invitation to every confirmed attendee who has not yet received it, records the time in the **Joining link emailed** column, and continues automatically through the hourly trigger if the daily email quota runs out.
 
 ## Pre-publication checks
 

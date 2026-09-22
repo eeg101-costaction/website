@@ -35,7 +35,7 @@
       message.className = 'event-booking-form__message event-booking-form__message--error';
       registrationFrame.hidden = true;
     } else {
-      var query = new URLSearchParams({ event_id: event.id, title: event.title, short_name: event.short_name || '', start_date: event.start_date, end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', timezone_label: event.timezone_label || '', location: event.location || '', capacity: String(event.capacity || 0), summary: event.summary || '', privacy_url: '{{ "/privacy/" | absolute_url }}' });
+      var query = new URLSearchParams({ event_id: event.id, title: event.title, short_name: event.short_name || '', format: event.format || '', audience: event.audience || 'open', start_date: event.start_date, end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', timezone_label: event.timezone_label || '', location: event.location || '', capacity: String(event.capacity || 0), summary: event.summary || '', privacy_url: '{{ "/privacy/" | absolute_url }}' });
       registrationFrame.src = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') + query.toString();
       registrationFrame.hidden = false;
     }

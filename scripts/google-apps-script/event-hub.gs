@@ -10,6 +10,10 @@
  * attendee sees their confirmation and a calendar download immediately. If the
  * daily email quota is used up, the email is queued in the ledger and sent
  * automatically by an hourly trigger once quota is available again.
+ *
+ * Online joining links are kept privately on the "Joining links" tab, never on
+ * the public website. When a link is present it is included in confirmation
+ * emails and calendar files; otherwise attendees are told it will follow.
  */
 const EEG101_EVENT_BOOKING = {
   replyTo: 'eeg101costaction@gmail.com',
@@ -17,12 +21,18 @@ const EEG101_EVENT_BOOKING = {
   privacyVersion: '2026-09',
   emailSent: 'Email sent',
   emailPending: 'Email pending',
-  promotionPending: 'Promotion email pending'
+  promotionPending: 'Promotion email pending',
+  linksSheet: 'Joining links'
 };
 
-const LEDGER_HEADERS = ['Event ID', 'Event title', 'Event date', 'First name', 'Last name', 'Email', 'Institution', 'Country', 'YRI (under 40)', 'Gender', 'Status', 'Registered at', 'Consent', 'Privacy notice version', 'Email status', 'Notes', 'Metadata', 'Recording consent'];
+const LEDGER_HEADERS = ['Event ID', 'Event title', 'Event date', 'First name', 'Last name', 'Email', 'Institution', 'Country', 'YRI (under 40)', 'Gender', 'Status', 'Registered at', 'Consent', 'Privacy notice version', 'Email status', 'Notes', 'Metadata', 'Recording consent', 'EEG101 member', 'Joining link emailed'];
 // Columns (1-based) of every event tab, matching LEDGER_HEADERS.
-const COL = { eventId: 1, title: 2, date: 3, firstName: 4, lastName: 5, email: 6, status: 11, emailStatus: 15, meta: 17, recordingConsent: 18 };
+const COL = { eventId: 1, title: 2, date: 3, firstName: 4, lastName: 5, email: 6, status: 11, emailStatus: 15, meta: 17, recordingConsent: 18, member: 19, linkEmailed: 20 };
+const LINK_HEADERS = ['Event ID', 'Event tab', 'Joining link', 'Link emailed to attendees'];
+const MEMBER_OPTIONS = ['Yes', 'No'];
+const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
+// Country and territory names in British English, alphabetical.
+const COUNTRIES = ["Afghanistan", "Åland Islands", "Albania", "Algeria", "American Samoa", "Andorra", "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina", "Armenia", "Aruba", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bermuda", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Bouvet Island", "Brazil", "British Indian Ocean Territory", "British Virgin Islands", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Caribbean Netherlands", "Cayman Islands", "Central African Republic", "Chad", "Chile", "China", "Christmas Island", "Cocos (Keeling) Islands", "Colombia", "Comoros", "Congo", "Cook Islands", "Costa Rica", "Côte d’Ivoire", "Croatia", "Cuba", "Curaçao", "Cyprus", "Czechia", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Falkland Islands", "Faroe Islands", "Fiji", "Finland", "France", "French Guiana", "French Polynesia", "French Southern Territories", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Gibraltar", "Greece", "Greenland", "Grenada", "Guadeloupe", "Guam", "Guatemala", "Guernsey", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Heard and McDonald Islands", "Honduras", "Hong Kong", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Isle of Man", "Israel", "Italy", "Jamaica", "Japan", "Jersey", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Macao", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Martinique", "Mauritania", "Mauritius", "Mayotte", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Montserrat", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Caledonia", "New Zealand", "Nicaragua", "Niger", "Nigeria", "Niue", "Norfolk Island", "North Korea", "North Macedonia", "Northern Mariana Islands", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Pitcairn Islands", "Poland", "Portugal", "Puerto Rico", "Qatar", "Réunion", "Romania", "Russia", "Rwanda", "Saint Barthélemy", "Saint Helena", "Saint Kitts and Nevis", "Saint Lucia", "Saint Martin", "Saint Pierre and Miquelon", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "São Tomé and Príncipe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Sint Maarten", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Georgia and South Sandwich Islands", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Svalbard and Jan Mayen", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tokelau", "Tonga", "Trinidad and Tobago", "Tunisia", "Türkiye", "Turkmenistan", "Turks and Caicos Islands", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "United States Minor Outlying Islands", "Uruguay", "US Virgin Islands", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Wallis and Futuna", "Western Sahara", "Yemen", "Zambia", "Zimbabwe"];
 const YRI_OPTIONS = ['Yes', 'No'];
 const GENDER_OPTIONS = ['Male', 'Female', 'Prefer not to say'];
 
@@ -31,7 +41,7 @@ function doGet(e) {
     id: String(e.parameter.event_id || ''), title: String(e.parameter.title || ''), start_date: String(e.parameter.start_date || ''),
     end_date: String(e.parameter.end_date || e.parameter.start_date || ''), time: String(e.parameter.time || ''), end_time: String(e.parameter.end_time || ''),
     timezone: String(e.parameter.timezone || 'Europe/London'), timezone_label: String(e.parameter.timezone_label || ''), location: String(e.parameter.location || ''), capacity: Number(e.parameter.capacity || 0),
-    short_name: String(e.parameter.short_name || ''), summary: String(e.parameter.summary || ''), privacy_url: String(e.parameter.privacy_url || 'https://www.eeg101.eu/privacy/')
+    short_name: String(e.parameter.short_name || ''), format: String(e.parameter.format || ''), audience: String(e.parameter.audience || 'open'), summary: String(e.parameter.summary || ''), privacy_url: String(e.parameter.privacy_url || 'https://www.eeg101.eu/privacy/')
   };
   if (!event.id || !event.title || !event.start_date) return HtmlService.createHtmlOutput('<p>Event details are missing. Please return to the EEG101 Event Hub.</p>');
   return HtmlService.createHtmlOutput(registrationFormHtml(event)).setTitle('EEG101 event registration').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
@@ -55,19 +65,23 @@ function submitRegistration(payload) {
     lock.releaseLock();
   }
   // The booking is saved. Email delivery is attempted but never blocks the confirmation.
-  const sent = trySend(() => sendRegistrationEmail(payload.event, payload.first_name, payload.email, status));
-  sheet.getRange(rowNumber, COL.emailStatus).setValue(sent ? EEG101_EVENT_BOOKING.emailSent : EEG101_EVENT_BOOKING.emailPending);
+  const event = withJoiningLink(payload.event);
   const waitlisted = status === 'waitlisted';
+  const sent = trySend(() => sendRegistrationEmail(event, payload.first_name, payload.email, status));
+  sheet.getRange(rowNumber, COL.emailStatus).setValue(sent ? EEG101_EVENT_BOOKING.emailSent : EEG101_EVENT_BOOKING.emailPending);
+  if (sent && event.joining_link && !waitlisted) sheet.getRange(rowNumber, COL.linkEmailed).setValue(new Date());
   return {
     ok: true,
     status: status,
     title: payload.event.title,
     when: describeWhen(payload.event),
-    location: payload.event.location || '',
+    location: event.location || '',
+    joining_link: waitlisted ? '' : event.joining_link || '',
+    link_note: !waitlisted && isOnline(event) && !event.joining_link ? 'The joining link will be emailed to you nearer the time.' : '',
     message: waitlisted
       ? 'We will email you if a place becomes available.'
       : 'Your place is confirmed. You can add the event to your calendar below.',
-    ics: waitlisted ? '' : makeCalendar(payload.event)
+    ics: waitlisted ? '' : makeCalendar(event)
   };
 }
 
@@ -79,18 +93,21 @@ function doPost(e) {
 function onOpen() {
   SpreadsheetApp.getUi().createMenu('EEG101 Event Booking')
     .addItem('Promote the next waiting-list attendee', 'promptPromotion')
+    .addItem('Email the joining link to everyone booked', 'promptSendJoiningLink')
     .addItem('Send pending emails now', 'promptSendPending')
     .addItem('Delete records older than 12 months', 'promptRetentionDeletion')
     .addToUi();
 }
 
 // Run from the Apps Script editor after adding columns to LEDGER_HEADERS: appends any new
-// header cells to every event tab. Refuses if a tab's existing headers differ.
+// header cells to every event tab (refusing if a tab's existing headers differ) and makes
+// sure every event has a row on the "Joining links" tab.
 function updateLedgerHeaders() {
   bookingSheets().forEach(sheet => {
     const current = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].filter(String);
     if (current.some((header, i) => header !== LEDGER_HEADERS[i])) throw new Error('The headers on tab "' + sheet.getName() + '" differ from the script. Update them manually.');
     writeHeaders(sheet);
+    if (sheet.getLastRow() > 1) ensureLinkRow({ id: String(sheet.getRange(2, COL.eventId).getValue()) }, sheet.getName());
   });
 }
 
@@ -130,15 +147,16 @@ function sendPendingEmails() {
     let sent = 0;
     for (const item of queue) {
       const row = item.row;
-      const event = eventFromRow(row);
+      const event = withJoiningLink(eventFromRow(row));
       const ok = item.state === EEG101_EVENT_BOOKING.promotionPending
         ? trySend(() => sendPromotionEmail(event, row[COL.firstName - 1], row[COL.email - 1]))
         : trySend(() => sendRegistrationEmail(event, row[COL.firstName - 1], row[COL.email - 1], String(row[COL.status - 1])));
-      if (!ok) break;
+      if (!ok) return sent;
       item.sheet.getRange(item.rowNumber, COL.emailStatus).setValue(EEG101_EVENT_BOOKING.emailSent);
+      if (event.joining_link && String(row[COL.status - 1]) === 'confirmed') item.sheet.getRange(item.rowNumber, COL.linkEmailed).setValue(new Date());
       sent++;
     }
-    return sent;
+    return sent + sendQueuedJoiningLinks();
   } finally {
     lock.releaseLock();
   }
@@ -174,11 +192,104 @@ function promoteNextWaitlisted(eventId) {
   const rowNumber = nextRowIndex + 1;
   const row = values[nextRowIndex];
   sheet.getRange(rowNumber, COL.status).setValue('confirmed');
-  const sent = trySend(() => sendPromotionEmail(eventFromRow(row), row[COL.firstName - 1], row[COL.email - 1]));
+  const event = withJoiningLink(eventFromRow(row));
+  const sent = trySend(() => sendPromotionEmail(event, row[COL.firstName - 1], row[COL.email - 1]));
   sheet.getRange(rowNumber, COL.emailStatus).setValue(sent ? EEG101_EVENT_BOOKING.emailSent : EEG101_EVENT_BOOKING.promotionPending);
+  if (sent && event.joining_link) sheet.getRange(rowNumber, COL.linkEmailed).setValue(new Date());
   SpreadsheetApp.getUi().alert(sent
     ? 'The next waiting-list attendee has been promoted and notified.'
     : 'The next waiting-list attendee has been promoted. The daily email quota is used up, so their email is queued and will be sent automatically.');
+}
+
+// ---- Joining links (private "Joining links" tab) ----
+
+function linksSheet() {
+  const book = workbook();
+  let sheet = book.getSheetByName(EEG101_EVENT_BOOKING.linksSheet);
+  if (!sheet) {
+    sheet = book.insertSheet(EEG101_EVENT_BOOKING.linksSheet, 0);
+    sheet.getRange(1, 1, 1, LINK_HEADERS.length).setValues([LINK_HEADERS]).setFontWeight('bold');
+    sheet.setFrozenRows(1);
+    sheet.setColumnWidth(1, 260); sheet.setColumnWidth(2, 300); sheet.setColumnWidth(3, 380); sheet.setColumnWidth(4, 200);
+    sheet.getRange(1, 3).setNote('Paste the online joining link for the event here. It is added to confirmation emails and calendar files. Use the menu EEG101 Event Booking > Email the joining link to everyone booked to send it to people who registered before the link was added.');
+  }
+  return sheet;
+}
+
+// Adds a row for the event on the "Joining links" tab if it is not already there.
+function ensureLinkRow(event, tabName) {
+  const sheet = linksSheet();
+  const ids = sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues().map(r => String(r[0])) : [];
+  if (ids.indexOf(String(event.id)) < 0) sheet.appendRow([event.id, tabName, '', '']);
+}
+
+function linkRowFor(eventId) {
+  const sheet = linksSheet();
+  const values = sheet.getDataRange().getValues();
+  const index = values.findIndex((row, i) => i > 0 && String(row[0]) === String(eventId));
+  return index < 0 ? null : { sheet: sheet, rowNumber: index + 1, link: String(values[index][2] || '').trim(), emailed: values[index][3] };
+}
+
+function withJoiningLink(event) {
+  const row = linkRowFor(event.id);
+  const link = row && /^https?:\/\//i.test(row.link) ? row.link : '';
+  return Object.assign({}, event, { joining_link: link });
+}
+
+function isOnline(event) {
+  return /online|hybrid/i.test(String(event.format || '') + ' ' + String(event.location || ''));
+}
+
+function promptSendJoiningLink() {
+  const ui = SpreadsheetApp.getUi();
+  const active = SpreadsheetApp.getActiveSheet();
+  let eventId = '';
+  if (isBookingSheet(active) && active.getLastRow() > 1) eventId = String(active.getRange(2, COL.eventId).getValue());
+  else if (active.getName() === EEG101_EVENT_BOOKING.linksSheet && active.getActiveRange().getRow() > 1) eventId = String(active.getRange(active.getActiveRange().getRow(), 1).getValue());
+  if (!eventId) {
+    const response = ui.prompt('Email the joining link', 'Open the event\'s tab first, or enter its Event ID.', ui.ButtonSet.OK_CANCEL);
+    if (response.getSelectedButton() !== ui.Button.OK) return;
+    eventId = response.getResponseText().trim();
+  }
+  const row = linkRowFor(eventId);
+  if (!row || !/^https?:\/\//i.test(row.link)) { ui.alert('No joining link has been entered for this event. Add it on the "Joining links" tab first (it must start with https://).'); return; }
+  const sheet = ledgerFor({ id: eventId }, false);
+  const waiting = sheet ? sheet.getDataRange().getValues().filter((r, i) => i > 0 && r[COL.status - 1] === 'confirmed' && !r[COL.linkEmailed - 1]).length : 0;
+  if (!waiting) { ui.alert('Everyone booked on this event has already been sent the joining link.'); return; }
+  if (ui.alert('Email the joining link', 'Send the joining link to ' + waiting + ' confirmed attendee(s) who have not yet received it?', ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
+  row.sheet.getRange(row.rowNumber, 4).setValue(new Date());
+  const sent = sendJoiningLinks(eventId);
+  const left = waiting - sent;
+  ui.alert(sent + ' joining link email(s) sent.' + (left > 0 ? ' The daily email quota is used up, so the remaining ' + left + ' will be sent automatically once quota is available.' : ''));
+}
+
+// Sends the joining link to confirmed attendees of one event who have not received it yet.
+function sendJoiningLinks(eventId) {
+  const sheet = ledgerFor({ id: eventId }, false);
+  if (!sheet) return 0;
+  const values = sheet.getDataRange().getValues();
+  let sent = 0;
+  for (let index = 1; index < values.length; index++) {
+    const row = values[index];
+    if (row[COL.status - 1] !== 'confirmed' || row[COL.linkEmailed - 1]) continue;
+    const event = withJoiningLink(eventFromRow(row));
+    if (!event.joining_link) return sent;
+    if (!trySend(() => sendJoiningLinkEmail(event, row[COL.firstName - 1], row[COL.email - 1]))) return sent;
+    sheet.getRange(index + 1, COL.linkEmailed).setValue(new Date());
+    sent++;
+  }
+  return sent;
+}
+
+// Continues any joining-link mailing that an organiser started but the quota interrupted.
+function sendQueuedJoiningLinks() {
+  const values = linksSheet().getDataRange().getValues();
+  let sent = 0;
+  for (let i = 1; i < values.length; i++) {
+    if (values[i][2] && values[i][3]) sent += sendJoiningLinks(String(values[i][0]));
+    if (MailApp.getRemainingDailyQuota() < 1) break;
+  }
+  return sent;
 }
 
 function promptRetentionDeletion() {
@@ -234,6 +345,7 @@ function ledgerFor(event, create) {
     sheet = book.insertSheet(name, book.getSheets().length);
     writeHeaders(sheet);
   }
+  if (sheet && create) ensureLinkRow(event, sheet.getName());
   if (sheet) {
     properties.setProperty(key, String(sheet.getSheetId()));
     // Tabs from the original single-ledger layout are given their event name.
@@ -244,8 +356,11 @@ function ledgerFor(event, create) {
 
 function validateRegistration(payload) {
   ['first_name', 'last_name', 'institution', 'country', 'email'].forEach(key => { if (!String(payload[key] || '').trim()) throw new Error('Please complete all required fields.'); });
+  if (!EMAIL_PATTERN.test(String(payload.email).trim())) throw new Error('Please enter a valid email address.');
+  if (COUNTRIES.indexOf(String(payload.country || '')) < 0) throw new Error('Please select your country from the list.');
   if (YRI_OPTIONS.indexOf(String(payload.yri || '')) < 0) throw new Error('Please tell us whether you are under 40.');
   if (GENDER_OPTIONS.indexOf(String(payload.gender || '')) < 0) throw new Error('Please select a gender option.');
+  if (MEMBER_OPTIONS.indexOf(String(payload.member || '')) < 0) throw new Error('Please tell us whether you are a member of the EEG101 COST Action.');
   if (!payload.recording_consent) throw new Error('Please agree to the recording consent to complete your booking.');
   if (!payload.privacy_consent || !payload.event || !payload.event.id || !payload.event.title || !payload.event.start_date) throw new Error('Registration consent or event details are missing.');
 }
@@ -259,13 +374,13 @@ function registrationStatus(eventId, capacity, values) {
 function appendRegistration(sheet, payload, status) {
   const event = payload.event;
   const clean = value => String(value || '').trim();
-  sheet.appendRow([event.id, event.title, event.start_date, clean(payload.first_name), clean(payload.last_name), clean(payload.email).toLowerCase(), clean(payload.institution), clean(payload.country), clean(payload.yri), clean(payload.gender), status, new Date(), 'Yes', EEG101_EVENT_BOOKING.privacyVersion, EEG101_EVENT_BOOKING.emailPending, '', writeMeta(event), 'Yes']);
+  sheet.appendRow([event.id, event.title, event.start_date, clean(payload.first_name), clean(payload.last_name), clean(payload.email).toLowerCase(), clean(payload.institution), clean(payload.country), clean(payload.yri), clean(payload.gender), status, new Date(), 'Yes', EEG101_EVENT_BOOKING.privacyVersion, EEG101_EVENT_BOOKING.emailPending, '', writeMeta(event), 'Yes', clean(payload.member), '']);
   return sheet.getLastRow();
 }
 
 // Metadata column: "Submitted through www.eeg101.eu; key=value; ..." with URI-encoded values.
 function writeMeta(event) {
-  const fields = { capacity: Number(event.capacity || 0), end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', timezone_label: event.timezone_label || '', location: event.location || '' };
+  const fields = { capacity: Number(event.capacity || 0), end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', timezone_label: event.timezone_label || '', location: event.location || '', format: event.format || '' };
   return ['Submitted through www.eeg101.eu'].concat(Object.keys(fields).map(key => key + '=' + encodeURIComponent(fields[key]))).join('; ');
 }
 
@@ -282,7 +397,7 @@ function eventFromRow(row) {
   const meta = readMeta(row[COL.meta - 1]);
   const rawDate = row[COL.date - 1];
   const startDate = rawDate instanceof Date ? Utilities.formatDate(rawDate, 'Europe/London', 'yyyy-MM-dd') : String(rawDate);
-  return { id: String(row[COL.eventId - 1]), title: String(row[COL.title - 1]), start_date: startDate, end_date: meta.end_date || startDate, time: meta.time || '', end_time: meta.end_time || '', timezone: meta.timezone || 'Europe/London', timezone_label: meta.timezone_label || '', location: meta.location || '' };
+  return { id: String(row[COL.eventId - 1]), title: String(row[COL.title - 1]), start_date: startDate, end_date: meta.end_date || startDate, time: meta.time || '', end_time: meta.end_time || '', timezone: meta.timezone || 'Europe/London', timezone_label: meta.timezone_label || '', location: meta.location || '', format: meta.format || '' };
 }
 
 // "Friday 20 November 2026, 12:00–14:30 CET"
@@ -310,8 +425,9 @@ function escapeHtml(value) {
 }
 
 // Builds a branded HTML email plus a plain-text alternative from the same content.
-function buildEmail(firstName, heading, paragraphs, event, closing) {
+function buildEmail(firstName, heading, paragraphs, event, closing, showLink) {
   const details = [['Event', event.title], ['Date and time', describeWhen(event)], ['Location', event.location || 'Details to follow']];
+  if (event.joining_link && showLink) details.push(['Join online', event.joining_link, event.joining_link]);
   const text = [`Dear ${firstName},`, '']
     .concat(paragraphs.map(p => p + '\n'))
     .concat(details.map(d => `${d[0]}: ${d[1]}`), '', closing.map(p => p + '\n'))
@@ -320,7 +436,7 @@ function buildEmail(firstName, heading, paragraphs, event, closing) {
   const font = "Georgia,'Times New Roman',serif";
   const ui = "Lato,Helvetica,Arial,sans-serif";
   const para = p => `<p style="margin:0 0 16px;font-family:${font};font-size:16px;line-height:1.6;color:#1a1a2e;">${escapeHtml(p)}</p>`;
-  const rows = details.map(d => `<tr><td style="padding:10px 16px 10px 0;font-family:${ui};font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5a5a7a;vertical-align:top;white-space:nowrap;">${escapeHtml(d[0])}</td><td style="padding:10px 0;font-family:${font};font-size:16px;line-height:1.5;color:#1a1a2e;">${escapeHtml(d[1])}</td></tr>`).join('');
+  const rows = details.map(d => `<tr><td style="padding:10px 16px 10px 0;font-family:${ui};font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#5a5a7a;vertical-align:top;white-space:nowrap;">${escapeHtml(d[0])}</td><td style="padding:10px 0;font-family:${font};font-size:16px;line-height:1.5;color:#1a1a2e;">${d[2] ? `<a href="${escapeHtml(d[2])}" style="color:#000099;font-weight:700;word-break:break-all;">${escapeHtml(d[1])}</a>` : escapeHtml(d[1])}</td></tr>`).join('');
   const html = `<!doctype html><html><body style="margin:0;padding:0;background:#f0ede8;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0ede8;"><tr><td align="center" style="padding:28px 12px;">
 <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#faf8f5;border:1px solid #e0dbd4;border-radius:12px;overflow:hidden;">
@@ -342,15 +458,21 @@ Contact: <a href="mailto:${EMAIL_BRAND.contact}" style="color:#000099;">${EMAIL_
   return { text: text, html: html };
 }
 
+// Closing sentences about the joining link and calendar invitation for confirmed attendees.
+function linkSentence(event) {
+  if (event.joining_link) return ['A calendar invitation, including the joining link, is attached so you can add the event to your calendar.'];
+  return (isOnline(event) ? ['The joining link will be emailed to you nearer the time.'] : []).concat(['A calendar invitation is attached so you can add the event to your calendar.']);
+}
+
 function sendRegistrationEmail(event, firstName, email, status) {
   const waitlisted = status === 'waitlisted';
   const message = waitlisted
     ? buildEmail(firstName, 'You are on the waiting list',
         ['Thank you for your interest in this EEG101 event. It is currently fully booked, so we have added you to the waiting list.', 'If a place becomes available we will email you straight away to confirm it.'],
-        event, ['If you no longer wish to attend, simply reply to this email and we will remove you from the waiting list.'])
+        event, ['If you no longer wish to attend, simply reply to this email and we will remove you from the waiting list.'], false)
     : buildEmail(firstName, 'Your registration is confirmed',
         ['Thank you for registering. We are delighted to confirm your place at the following EEG101 event.'],
-        event, ['A calendar invitation is attached so you can add the event to your calendar.', 'If you have any questions, or can no longer attend, simply reply to this email so that we can offer your place to someone else.']);
+        event, linkSentence(event).concat(['If you have any questions, or can no longer attend, simply reply to this email so that we can offer your place to someone else.']), true);
   const options = { to: email, subject: (waitlisted ? 'Waiting list: ' : 'Registration confirmed: ') + event.title, body: message.text, htmlBody: message.html, replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' };
   if (!waitlisted) options.attachments = [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')];
   MailApp.sendEmail(options);
@@ -359,8 +481,15 @@ function sendRegistrationEmail(event, firstName, email, status) {
 function sendPromotionEmail(event, firstName, email) {
   const message = buildEmail(firstName, 'A place is now available',
     ['Good news: a place has become available at the following EEG101 event, and your registration is now confirmed.'],
-    event, ['A calendar invitation is attached so you can add the event to your calendar.', 'If you can no longer attend, simply reply to this email so that we can offer your place to someone else.']);
+    event, linkSentence(event).concat(['If you can no longer attend, simply reply to this email so that we can offer your place to someone else.']), true);
   MailApp.sendEmail({ to: email, subject: 'A place is available: ' + event.title, body: message.text, htmlBody: message.html, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
+}
+
+function sendJoiningLinkEmail(event, firstName, email) {
+  const message = buildEmail(firstName, 'Your joining link',
+    ['Thank you for registering for the following EEG101 event. Here is your link to join online.'],
+    event, ['An updated calendar invitation with the joining link is attached. Adding it will update the event already in your calendar.', 'Please do not share this link. If you can no longer attend, simply reply to this email so that we can offer your place to someone else.'], true);
+  MailApp.sendEmail({ to: email, subject: 'Joining link: ' + event.title, body: message.text, htmlBody: message.html, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
 }
 
 function icsText(value) {
@@ -393,10 +522,11 @@ function makeCalendar(event) {
     end = 'DTEND;VALUE=DATE:' + Utilities.formatDate(new Date(lastDay.getTime() + 24 * 60 * 60 * 1000), 'UTC', 'yyyyMMdd');
   }
   return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//EEG101//Event Hub//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
-    `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), start, end,
-    icsFold('SUMMARY:' + icsText(event.title)), icsFold('LOCATION:' + icsText(event.location || 'EEG101')),
-    icsFold('DESCRIPTION:' + icsText('EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/news/')),
-    'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+    `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), 'SEQUENCE:' + (event.joining_link ? 1 : 0), start, end,
+    icsFold('SUMMARY:' + icsText(event.title)), icsFold('LOCATION:' + icsText(event.joining_link || event.location || 'EEG101'))]
+    .concat(event.joining_link ? [icsFold('URL:' + event.joining_link)] : [])
+    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/news/')),
+    'END:VEVENT', 'END:VCALENDAR']).join('\r\n');
 }
 
 function jsonResponse(payload) { return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON); }
@@ -404,5 +534,5 @@ function jsonResponse(payload) { return ContentService.createTextOutput(JSON.str
 function registrationFormHtml(event) {
   const serialisedEvent = JSON.stringify(event).replace(/</g, '\\u003c');
   const radios = (name, options, labels) => options.map((value, i) => `<label class="choice"><input type="radio" name="${name}" value="${value}" required> ${labels[i]}</label>`).join('');
-  return `<!doctype html><html><head><base target="_top"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:wght@400;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><style>:root{--primary:#000099;--primary-dark:#00007a;--primary-light:#e8e8ff;--gold:#FFCC00;--gold-dark:#d4a800;--gold-light:#fff8d6;--text:#1a1a2e;--muted:#5a5a7a;--bg:#faf8f5;--bg-alt:#f0ede8;--border:#e0dbd4;--heading:'Playfair Display',Georgia,'Times New Roman',serif;--body:'Lora',Georgia,'Times New Roman',serif;--ui:'Lato',system-ui,-apple-system,BlinkMacSystemFont,sans-serif}body{background:var(--bg);color:var(--text);font:16px/1.6 var(--body);margin:0;padding:2px}label{display:block;font:700 14px var(--ui);margin:0 0 14px}input,select{background:#fff;border:1px solid var(--border);border-radius:6px;box-sizing:border-box;color:var(--text);font:400 15px var(--ui);margin-top:6px;padding:10px 12px;width:100%}input:focus{border-color:var(--primary);outline:2px solid var(--primary-light)}.grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}fieldset{border:0;margin:0 0 14px;padding:0}legend{font:700 14px var(--ui);margin-bottom:6px;padding:0}.choices{display:flex;flex-wrap:wrap;gap:8px 18px}.choice{align-items:center;display:flex;font:400 15px var(--ui);gap:6px;margin:0}.choice input,.consent input{accent-color:var(--primary);margin:0;width:auto}.consent{align-items:flex-start;background:var(--bg-alt);border-radius:6px;display:flex;gap:10px;font-weight:400;line-height:1.55;margin-bottom:10px;padding:12px}.consent input{margin-top:4px}.consent span{font:400 13px/1.55 var(--ui)}.trap{display:none}.notice{color:var(--muted);font:400 13px/1.55 var(--ui)}.button{background:var(--primary);border:2px solid var(--primary);border-radius:6px;color:#fff;cursor:pointer;display:inline-flex;font:600 14.4px var(--ui);letter-spacing:.01em;padding:.6rem 1.4rem;text-decoration:none}.button:hover{background:var(--primary-dark);border-color:var(--primary-dark)}.button[disabled]{opacity:.55}.message{font:700 14px/1.5 var(--ui)}.error{color:#991b1b}.done{background:#fff;border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,100,.08);padding:20px 22px}.done.wait{border-left-color:var(--gold-dark)}.done h3{color:var(--primary);font:700 24px/1.2 var(--heading);margin:0 0 10px}.done p{margin:0 0 10px}.done .meta{font-weight:600}.done .when{color:var(--muted);font:400 14px var(--ui)}@media(max-width:540px){.grid{grid-template-columns:1fr}}</style></head><body><form id="registrationForm"><div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="grid"><label>First name<input name="first_name" required autocomplete="given-name"></label><label>Last name<input name="last_name" required autocomplete="family-name"></label><label>Institution<input name="institution" required autocomplete="organization"></label><label>Country<input name="country" required autocomplete="country-name"></label></div><label>Email address<input name="email" type="email" required autocomplete="email"></label><fieldset><legend>Young Researcher and Innovator (YRI): are you under 40?</legend><div class="choices">${radios('yri', YRI_OPTIONS, ['Yes, I am under 40', 'No'])}</div></fieldset><fieldset><legend>Gender</legend><div class="choices">${radios('gender', GENDER_OPTIONS, GENDER_OPTIONS)}</div></fieldset><label class="consent"><input name="recording_consent" type="checkbox" required><span>I understand that this event may be recorded. I consent to being recorded and to EEG101 publishing the recording online, for example in the EEG101 Library and on the EEG101 YouTube channel.</span></label><label class="consent"><input name="privacy_consent" type="checkbox" required><span>I consent to EEG101 using these details to manage this event, communicate registration updates, and retain the record for up to 12 months after the event. I understand the <a id="privacyLink" target="_blank" rel="noopener">privacy notice</a>.</span></label><p class="notice">No participant account is required. After registering you can add the event straight to your calendar.</p><p class="message" id="message" aria-live="polite"></p><button class="button" id="submit" type="submit">Submit registration</button></form><div id="confirmation" class="done" hidden aria-live="polite"><h3 id="doneTitle"></h3><p class="meta" id="doneEvent"></p><p class="when" id="doneWhen"></p><p id="doneText"></p><p><a class="button" id="calendarLink" hidden>Add to calendar (.ics)</a></p></div><script>const EEG101_EVENT=${serialisedEvent};const form=document.getElementById('registrationForm'),message=document.getElementById('message'),submit=document.getElementById('submit');document.getElementById('privacyLink').href=EEG101_EVENT.privacy_url;function tellParent(result){try{window.top.postMessage({type:'eeg101-event-registration',ok:!!result.ok,status:result.status||'',message:result.message||result.error||''},'*')}catch(e){}}function showConfirmation(result){const waitlisted=result.status==='waitlisted';const box=document.getElementById('confirmation');box.className='done'+(waitlisted?' wait':'');document.getElementById('doneTitle').textContent=waitlisted?'You are on the waiting list':'You are booked';document.getElementById('doneEvent').textContent=result.title||EEG101_EVENT.title;document.getElementById('doneWhen').textContent=[result.when,result.location].filter(Boolean).join(' · ');document.getElementById('doneText').textContent=result.message||'';const link=document.getElementById('calendarLink');if(result.ics){link.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(result.ics);link.download='eeg101-'+String(EEG101_EVENT.id).replace(/[^a-z0-9-]+/gi,'-')+'.ics';link.target='_self';link.hidden=false}form.hidden=true;box.hidden=false}form.addEventListener('submit',function(e){e.preventDefault();if(!form.reportValidity())return;const payload=Object.fromEntries(new FormData(form).entries());payload.event=EEG101_EVENT;submit.disabled=true;submit.textContent='Submitting…';message.textContent='';google.script.run.withSuccessHandler(function(result){result=result||{ok:true};showConfirmation(result);tellParent(result)}).withFailureHandler(function(error){const text=error&&error.message?error.message:'We could not submit the registration. Please try again.';message.textContent=text;message.className='message error';submit.disabled=false;submit.textContent='Submit registration';tellParent({ok:false,message:text})}).submitRegistration(payload)})</script></body></html>`;
+  return `<!doctype html><html><head><base target="_top"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:wght@400;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet"><style>:root{--primary:#000099;--primary-dark:#00007a;--primary-light:#e8e8ff;--gold:#FFCC00;--gold-dark:#d4a800;--gold-light:#fff8d6;--text:#1a1a2e;--muted:#5a5a7a;--bg:#faf8f5;--bg-alt:#f0ede8;--border:#e0dbd4;--heading:'Playfair Display',Georgia,'Times New Roman',serif;--body:'Lora',Georgia,'Times New Roman',serif;--ui:'Lato',system-ui,-apple-system,BlinkMacSystemFont,sans-serif}body{background:var(--bg);color:var(--text);font:16px/1.6 var(--body);margin:0;padding:2px}label{display:block;font:700 14px var(--ui);margin:0 0 14px}input,select{background:#fff;border:1px solid var(--border);border-radius:6px;box-sizing:border-box;color:var(--text);font:400 15px var(--ui);margin-top:6px;padding:10px 12px;width:100%}select{appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235a5a7a' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 12px center;padding-right:34px}input:focus,select:focus{border-color:var(--primary);outline:2px solid var(--primary-light)}form.tried input:invalid,form.tried select:invalid{border-color:#991b1b;background-color:#fef2f2}form.tried fieldset:has(input:invalid) legend,form.tried .consent:has(input:invalid){color:#991b1b}form.tried .consent:has(input:invalid){outline:1px solid #991b1b}.grid{display:grid;gap:12px;grid-template-columns:1fr 1fr}fieldset{border:0;margin:0 0 14px;padding:0}legend{font:700 14px var(--ui);margin-bottom:6px;padding:0}.choices{display:flex;flex-wrap:wrap;gap:8px 18px}.choice{align-items:center;display:flex;font:400 15px var(--ui);gap:6px;margin:0}.choice input,.consent input{accent-color:var(--primary);margin:0;width:auto}.consent{align-items:flex-start;background:var(--bg-alt);border-radius:6px;display:flex;gap:10px;font-weight:400;line-height:1.55;margin-bottom:10px;padding:12px}.consent input{margin-top:4px}.consent span{font:400 13px/1.55 var(--ui)}.trap{display:none}.notice{color:var(--muted);font:400 13px/1.55 var(--ui)}.button{background:var(--primary);border:2px solid var(--primary);border-radius:6px;color:#fff;cursor:pointer;display:inline-flex;font:600 14.4px var(--ui);letter-spacing:.01em;padding:.6rem 1.4rem;text-decoration:none}.button:hover{background:var(--primary-dark);border-color:var(--primary-dark)}.button[disabled]{opacity:.55}.message{font:700 14px/1.5 var(--ui)}.error{color:#991b1b}.done{background:#fff;border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,100,.08);padding:20px 22px}.done.wait{border-left-color:var(--gold-dark)}.done h3{color:var(--primary);font:700 24px/1.2 var(--heading);margin:0 0 10px}.done p{margin:0 0 10px}.done .meta{font-weight:600}.hint{color:var(--muted);font:400 13px var(--ui);margin:6px 0 0}.done .join a{color:var(--primary);font-weight:700;word-break:break-all}.done .when{color:var(--muted);font:400 14px var(--ui)}@media(max-width:540px){.grid{grid-template-columns:1fr}}</style></head><body><form id="registrationForm" novalidate><div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div><div class="grid"><label>First name<input name="first_name" required autocomplete="given-name"></label><label>Last name<input name="last_name" required autocomplete="family-name"></label><label>Institution<input name="institution" required autocomplete="organization"></label><label>Country<select name="country" required autocomplete="country-name"><option value="">Select your country</option>${COUNTRIES.map(c => `<option>${c}</option>`).join('')}</select></label></div><label>Email address<input name="email" type="email" required autocomplete="email" pattern="[^@\\s]+@[^@\\s]+\\.[^@\\s]{2,}" title="Please enter a valid email address, for example name@university.eu"></label><fieldset><legend>Young Researcher and Innovator (YRI): are you under 40?</legend><div class="choices">${radios('yri', YRI_OPTIONS, ['Yes, I am under 40', 'No'])}</div></fieldset><fieldset><legend>Are you a member of the EEG101 COST Action?</legend><div class="choices">${radios('member', MEMBER_OPTIONS, MEMBER_OPTIONS)}</div>${event.audience === 'members' ? '' : '<p class="hint">Membership is not required. This event is open to everyone.</p>'}</fieldset><fieldset><legend>Gender</legend><div class="choices">${radios('gender', GENDER_OPTIONS, GENDER_OPTIONS)}</div></fieldset><label class="consent"><input name="recording_consent" type="checkbox" required><span>I understand that this event may be recorded. I consent to being recorded and to EEG101 publishing the recording online, for example in the EEG101 Library and on the EEG101 YouTube channel.</span></label><label class="consent"><input name="privacy_consent" type="checkbox" required><span>I consent to EEG101 using these details to manage this event, communicate registration updates, and retain the record for up to 12 months after the event. I understand the <a id="privacyLink" target="_blank" rel="noopener">privacy notice</a>.</span></label><p class="notice">No participant account is required. After registering you can add the event straight to your calendar.</p><p class="message" id="message" aria-live="polite"></p><button class="button" id="submit" type="submit">Submit registration</button></form><div id="confirmation" class="done" hidden aria-live="polite"><h3 id="doneTitle"></h3><p class="meta" id="doneEvent"></p><p class="when" id="doneWhen"></p><p id="doneText"></p><p class="join" id="doneJoin" hidden></p><p><a class="button" id="calendarLink" hidden>Add to calendar (.ics)</a></p></div><script>const EEG101_EVENT=${serialisedEvent};const form=document.getElementById('registrationForm'),message=document.getElementById('message'),submit=document.getElementById('submit');document.getElementById('privacyLink').href=EEG101_EVENT.privacy_url;function tellParent(result){try{window.top.postMessage({type:'eeg101-event-registration',ok:!!result.ok,status:result.status||'',message:result.message||result.error||''},'*')}catch(e){}}function showConfirmation(result){const waitlisted=result.status==='waitlisted';const box=document.getElementById('confirmation');box.className='done'+(waitlisted?' wait':'');document.getElementById('doneTitle').textContent=waitlisted?'You are on the waiting list':'You are booked';document.getElementById('doneEvent').textContent=result.title||EEG101_EVENT.title;document.getElementById('doneWhen').textContent=[result.when,result.location].filter(Boolean).join(' · ');document.getElementById('doneText').textContent=result.message||'';const join=document.getElementById('doneJoin');if(result.joining_link){join.textContent='Join online: ';const a=document.createElement('a');a.href=result.joining_link;a.textContent=result.joining_link;a.target='_blank';a.rel='noopener';join.appendChild(a);join.hidden=false}else if(result.link_note){join.textContent=result.link_note;join.hidden=false}const link=document.getElementById('calendarLink');if(result.ics){link.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(result.ics);link.download='eeg101-'+String(EEG101_EVENT.id).replace(/[^a-z0-9-]+/gi,'-')+'.ics';link.target='_self';link.hidden=false}form.hidden=true;box.hidden=false}form.addEventListener('submit',function(e){e.preventDefault();form.classList.add('tried');if(!form.checkValidity()){message.textContent='Please complete every field, and tick both consent boxes, before registering.';message.className='message error';form.reportValidity();return}const payload=Object.fromEntries(new FormData(form).entries());payload.event=EEG101_EVENT;submit.disabled=true;submit.textContent='Submitting…';message.textContent='';google.script.run.withSuccessHandler(function(result){result=result||{ok:true};showConfirmation(result);tellParent(result)}).withFailureHandler(function(error){const text=error&&error.message?error.message:'We could not submit the registration. Please try again.';message.textContent=text;message.className='message error';submit.disabled=false;submit.textContent='Submit registration';tellParent({ok:false,message:text})}).submitRegistration(payload)})</script></body></html>`;
 }
