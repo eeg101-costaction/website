@@ -8,6 +8,7 @@
 const EEG101_EVENT_BOOKING = {
   ledgerSheet: 'Registration ledger',
   replyTo: 'eeg101costaction@gmail.com',
+  bcc: ['eeg101costaction@gmail.com', 'f.mushtaq@leeds.ac.uk', 'anne-sophie.dubarry@univ-amu.fr', 'marie-constance.corsi@inria.fr', 'annalisa.pascarella@cnr.it'],
   retentionDays: 365
 };
 
@@ -127,12 +128,12 @@ function sendRegistrationEmail(payload, status) {
   const subject = waitlisted ? `Waiting list: ${event.title}` : `Registration confirmed: ${event.title}`;
   const lead = waitlisted ? 'You have been added to the waiting list. We will contact you if a place becomes available.' : 'Your registration is confirmed.';
   const body = [`Hello ${payload.full_name},`, '', lead, '', `Event: ${event.title}`, `When: ${event.start_date}${event.time ? ', ' + event.time : ''}`, `Where: ${event.location || 'EEG101 event details to follow'}`, '', 'An EEG101 calendar invitation is attached.', '', 'EEG101 COST Action CA24148'].join('\n');
-  MailApp.sendEmail({ to: payload.email, subject: subject, body: body, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
+  MailApp.sendEmail({ to: payload.email, subject: subject, body: body, attachments: [Utilities.newBlob(makeCalendar(event), 'text/calendar', 'eeg101-event.ics')], replyTo: EEG101_EVENT_BOOKING.replyTo, bcc: EEG101_EVENT_BOOKING.bcc.join(','), name: 'EEG101 Event Booking' });
 }
 
 function sendPromotionEmail(record) {
   const body = [`Hello ${record.full_name},`, '', 'A place has become available and your registration is now confirmed.', '', `Event: ${record.event.title}`, `When: ${record.event.start_date}`, '', 'EEG101 COST Action CA24148'].join('\n');
-  MailApp.sendEmail({ to: record.email, subject: `A place is available: ${record.event.title}`, body: body, replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 Event Booking' });
+  MailApp.sendEmail({ to: record.email, subject: `A place is available: ${record.event.title}`, body: body, replyTo: EEG101_EVENT_BOOKING.replyTo, bcc: EEG101_EVENT_BOOKING.bcc.join(','), name: 'EEG101 Event Booking' });
 }
 
 function makeCalendar(event) {
