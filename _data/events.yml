@@ -82,8 +82,8 @@
   category: "Events"
   summary: >
     The second EEG101 WG2 Virtual Symposium on EEG artifact rejection, cleaning, and reproducible preprocessing was successfully held on 3 September 2026, bringing together more than 120 attendees. Thank you to the speakers, chairs, panellists, and everyone who joined and contributed to the discussions. Recordings are being edited and will be published in the EEG101 Library shortly.
-  image: ""
-  alt: "EEG101 WG2 virtual symposium on EEG artifact rejection and reproducible preprocessing"
+  image: "/assets/images/events/wg2-artifact-rejection-symposium-2026.jpg"
+  alt: "A noisy EEG trace passing through a filter and emerging clean"
   registration_url: ""
   programme_url: ""
   recording_url: ""
@@ -131,8 +131,8 @@
   category: "Announcement"
   summary: >
     Funding Round 2 will open shortly. Make sure you are signed up to EEG101 via e-COST and eligible to apply for our range of grant schemes.
-  image: ""
-  alt: "Funding Round 2 Announcement"
+  image: "/assets/images/events/funding-round-2-announcement.jpg"
+  alt: "A door standing ajar with light spilling out"
   registration_url: "/join/"
   programme_url: "/grants/"
   recording_url: ""
@@ -153,8 +153,8 @@
   category: "Events"
   summary: >
     This first EEG101 WG2 virtual meeting brings together researchers and practitioners working on EEG data curation, preprocessing, harmonization, and open data infrastructures. The symposium aims to foster discussion, share ongoing work, and build alignment around best practices within the EEG101 COST Action.
-  image: ""
-  alt: "Virtual meeting icon — EEG101 WG2 online meeting"
+  image: "/assets/images/events/wg2-virtual-apr2026.jpg"
+  alt: "A laptop showing a grid of video-call participants wearing EEG caps"
   registration_url: ""
   programme_url: ""
   recording_url: ""
@@ -175,8 +175,8 @@
   category: "Announcement"
   summary: >
     The application window for Funding Round 1 has now closed. The coordination team is currently reviewing applications for STSMs, VMGs, and Conference Grants.
-  image: ""
-  alt: "Grants deadline icon"
+  image: "/assets/images/events/funding-round-1-closed.jpg"
+  alt: "A stack of applications under a magnifying glass"
   registration_url: ""
   programme_url: ""
   recording_url: ""
@@ -195,8 +195,8 @@
   category: "Announcement"
   summary: >
     Funding Round 1 for EEG101 grants (STSMs, VMGs, and ITC Conference Grants) opened for applications.
-  image: ""
-  alt: "Grants opening icon"
+  image: "/assets/images/events/funding-round-1-opened.jpg"
+  alt: "An open envelope with a letter rising out of it"
   registration_url: ""
   programme_url: ""
   recording_url: ""
