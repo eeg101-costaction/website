@@ -2165,3 +2165,8 @@ strong { font-weight: 600; }
 .join-step--highlight .join-step__number { background: var(--color-primary); color: #fff; }
 .join-guide__relation { font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--color-primary); }
 #how-to-join, #after-you-submit { scroll-margin-top: 90px; }
+
+/* Join page: Community Framework step, to be completed before applying */
+.join-step--first .join-step__body { background: var(--color-gold-light); border: 1px solid var(--color-gold); border-left: 6px solid var(--color-gold); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: -0.25rem; }
+.join-step--first .join-step__number { background: var(--color-gold); color: var(--color-primary); }
+.join-step__flag { display: inline-block; font-family: var(--font-ui); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 0.25rem; }

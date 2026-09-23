@@ -21,7 +21,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 
 ## How to join {#how-to-join}
 
-<p class="join-overview-lead">An overview of the journey from first interest to taking part. Steps 2 and 3 take place on the e-COST platform, and the <a href="#detailed-guide">detailed guide</a> below takes you through both, screen by screen.</p>
+<p class="join-overview-lead">An overview of the journey from first interest to taking part. Please sign the EEG101 Community Framework (step 2) before you apply. Steps 3 and 4 then take place on the e-COST platform, and the <a href="#detailed-guide">detailed guide</a> below takes you through both, screen by screen.</p>
 
 {::nomarkdown}
 <div class="join-steps">
@@ -32,8 +32,17 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <p>Read about the <a href="{{ '/#objectives' | relative_url }}">EEG101 aims and objectives</a> and the <a href="{{ '/working-groups/' | relative_url }}">Working Groups</a>, and decide which group or groups you would like to join. You will select them in your application.</p>
 </div>
 </div>
-<div class="join-step join-step--highlight">
+<div class="join-step join-step--first" id="sign-community-framework">
 <div class="join-step__number">2</div>
+<div class="join-step__body">
+<span class="join-step__flag">Do this first</span>
+<h3>Sign the EEG101 Community Framework</h3>
+<p>Before you apply through e-COST, read and sign the <a href="https://sign-cf.eeg101.eu/" target="_blank" rel="noopener">EEG101 Community Framework ↗</a>. The Framework sets out the shared commitments behind EEG101: scientific integrity and reproducible practice, diversity and inclusion, and societal and environmental responsibility. You can sign all of it or the parts you support, and signing is how you show you share the values of the community you are joining.</p>
+<p class="join-step__guide-link"><a href="https://sign-cf.eeg101.eu/#sign-the-pledge" target="_blank" rel="noopener">Go straight to Sign the Pledge ↗</a></p>
+</div>
+</div>
+<div class="join-step join-step--highlight">
+<div class="join-step__number">3</div>
 <div class="join-step__body">
 <h3>Create an e-COST account</h3>
 <p>Membership is managed through COST&rsquo;s e-COST platform. Go to the <a href="https://e-services.cost.eu/user/login" target="_blank" rel="noopener">e-COST platform ↗</a>, select <strong>Create an account</strong>, and activate the account from the email e-COST sends you. If you already have an e-COST account, sign in and go straight to step 3.</p>
@@ -41,29 +50,29 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 </div>
 </div>
 <div class="join-step join-step--highlight">
-<div class="join-step__number">3</div>
+<div class="join-step__number">4</div>
 <div class="join-step__body">
 <h3>Come back to this page and apply to EEG101</h3>
-<p>Once your account is active, return here and use this link to apply to EEG101 (COST Action CA24148): <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">apply to EEG101 on e-COST ↗</a>. Select your Working Groups and submit the application.</p>
+<p>Once your account is active and you have signed the Community Framework, return here and use this link to apply to EEG101 (COST Action CA24148): <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">apply to EEG101 on e-COST ↗</a>. Select your Working Groups and submit the application.</p>
 <p class="join-step__guide-link"><a href="#guide-stage-2">Illustrated guide to the application &darr;</a></p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">4</div>
+<div class="join-step__number">5</div>
 <div class="join-step__body">
 <h3>Wait for your application to be approved</h3>
 <p>Every application is reviewed, so approval is not automatic. EEG101 normally responds within a couple of days, within COST&rsquo;s formal timeframe of up to three months. <a href="#after-you-submit">What happens after you submit</a>.</p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">5</div>
+<div class="join-step__number">6</div>
 <div class="join-step__body">
 <h3>Connect with the community</h3>
 <p>Once you are approved, you will receive an invitation to the EEG101 Discord community, where Working Group channels and meeting announcements are hosted. Introduce yourself, join Working Group activities, and come along to webinars and <a href="{{ '/events/' | relative_url }}">events</a>.</p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">6</div>
+<div class="join-step__number">7</div>
 <div class="join-step__body">
 <h3>Apply for grants</h3>
 <p>As part of the Action, you can apply for <a href="{{ '/grants/' | relative_url }}">EEG101 grant schemes</a>. The Grants page sets out open calls, deadlines and who is eligible for each.</p>
@@ -76,7 +85,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <section class="join-guide" id="detailed-guide" aria-labelledby="detailed-guide-heading">
 <h2 id="detailed-guide-heading">Detailed guide: create your e-COST account and apply to EEG101 Working Groups</h2>
 <p class="join-guide__intro">There are two key steps to joining an EEG101 Working Group: first, create and activate an e-COST account; second, complete the profile prerequisite and submit the EEG101 Working Group application. The annotated screenshots below show the process from the live e-COST interface. Personal information has been redacted.</p>
-<p class="join-guide__relation">This guide expands steps 2 and 3 of <a href="#how-to-join">How to join</a> above.</p>
+<p class="join-guide__relation">This guide expands steps 3 and 4 of <a href="#how-to-join">How to join</a> above. If you have not yet done so, please <a href="#sign-community-framework">sign the EEG101 Community Framework</a> (step 2) before you begin.</p>
 
 <div class="join-guide__summary">
 <a class="join-guide__summary-card" href="#guide-stage-1">
@@ -248,6 +257,8 @@ Researchers from non-member countries may participate as observers and collabora
 
 {::nomarkdown}
 <div class="text-center mt-5">
-  <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Join via e-COST ↗</a>
+  <p>Please sign the Community Framework first, then apply through e-COST.</p>
+  <a href="https://sign-cf.eeg101.eu/#sign-the-pledge" class="btn btn-outline-primary btn-lg" target="_blank" rel="noopener">1. Sign the Community Framework ↗</a>
+  <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" class="btn btn-primary btn-lg" target="_blank" rel="noopener">2. Join via e-COST ↗</a>
 </div>
 {:/nomarkdown}
