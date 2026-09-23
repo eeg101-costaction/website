@@ -19,44 +19,46 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 
 ---
 
-## How to join
+## How to join {#how-to-join}
+
+<p class="join-overview-lead">An overview of the journey from first interest to taking part. Step 2 is the only formal application; the <a href="#detailed-guide">detailed guide</a> below takes you through it screen by screen.</p>
 
 {::nomarkdown}
 <div class="join-steps">
 <div class="join-step">
 <div class="join-step__number">1</div>
 <div class="join-step__body">
-<h3>Read about EEG101</h3>
-<p>Familiarise yourself with the <a href="{{ '/#objectives' | relative_url }}">EEG101 aims and objectives</a> and the <a href="{{ '/working-groups/' | relative_url }}">Working Group activities</a> to find where you can contribute.</p>
+<h3>Explore EEG101 and choose your Working Groups</h3>
+<p>Read about the <a href="{{ '/#objectives' | relative_url }}">EEG101 aims and objectives</a> and the <a href="{{ '/working-groups/' | relative_url }}">Working Groups</a>, and decide which group or groups you would like to join. You will select them in your application.</p>
 </div>
 </div>
-<div class="join-step">
+<div class="join-step join-step--highlight">
 <div class="join-step__number">2</div>
 <div class="join-step__body">
-<h3>Register on e-COST</h3>
-<p>Official COST membership is managed through the <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">e-COST platform ↗</a>. Search for Action <strong>CA24148</strong> and submit a membership application. This gives you access to grant applications and official COST activities.</p>
-<p class="join-step__guide-link"><a href="#detailed-guide">Follow the detailed, illustrated guide below &darr;</a></p>
+<h3>Apply through e-COST</h3>
+<p>Membership is managed through the <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">e-COST platform ↗</a>. You create and activate an e-COST account, then submit one application to your chosen EEG101 Working Groups.</p>
+<p class="join-step__guide-link"><a href="#detailed-guide">Follow the detailed, illustrated guide &darr;</a></p>
 </div>
 </div>
 <div class="join-step">
 <div class="join-step__number">3</div>
 <div class="join-step__body">
-<h3>Connect with the community</h3>
-<p>Once registered, introduce yourself to the network. Join Working Group activities, attend webinars and events, and connect with researchers across Europe who share your interests.</p>
+<h3>Wait for your application to be approved</h3>
+<p>Every application is reviewed, so approval is not automatic. EEG101 normally responds within a couple of days, within COST&rsquo;s formal timeframe of up to three months. <a href="#after-you-submit">What happens after you submit</a>.</p>
 </div>
 </div>
 <div class="join-step">
 <div class="join-step__number">4</div>
 <div class="join-step__body">
-<h3>Get involved in a Working Group</h3>
-<p>Browse the <a href="{{ '/working-groups/' | relative_url }}">Working Groups page</a> and choose the group that matches your interests. Once your e-COST membership is approved, you will receive an invitation to the EEG101 Discord community where Working Group channels and meeting announcements are hosted.</p>
+<h3>Connect with the community</h3>
+<p>Once you are approved, you will receive an invitation to the EEG101 Discord community, where Working Group channels and meeting announcements are hosted. Introduce yourself, join Working Group activities, and come along to webinars and <a href="{{ '/events/' | relative_url }}">events</a>.</p>
 </div>
 </div>
 <div class="join-step">
 <div class="join-step__number">5</div>
 <div class="join-step__body">
 <h3>Apply for grants</h3>
-<p>Once you are a registered e-COST member, you are eligible to apply for <a href="{{ '/grants/' | relative_url }}">EEG101 grant schemes</a>. Check the Grants page for open calls and deadlines.</p>
+<p>As part of the Action, you can apply for <a href="{{ '/grants/' | relative_url }}">EEG101 grant schemes</a>. The Grants page sets out open calls, deadlines and who is eligible for each.</p>
 </div>
 </div>
 </div>
@@ -66,6 +68,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <section class="join-guide" id="detailed-guide" aria-labelledby="detailed-guide-heading">
 <h2 id="detailed-guide-heading">Detailed guide: create your e-COST account and apply to EEG101 Working Groups</h2>
 <p class="join-guide__intro">There are two key steps to joining an EEG101 Working Group: first, create and activate an e-COST account; second, complete the profile prerequisite and submit the EEG101 Working Group application. The annotated screenshots below show the process from the live e-COST interface. Personal information has been redacted.</p>
+<p class="join-guide__relation">This guide expands step 2 of <a href="#how-to-join">How to join</a> above.</p>
 
 <div class="join-guide__summary">
 <a class="join-guide__summary-card" href="#guide-stage-1">
@@ -210,7 +213,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 </div>
 </div>
 
-<div class="join-guide__notice" role="note">
+<div class="join-guide__notice" id="after-you-submit" role="note">
 <h3>After you submit</h3>
 <p>You must now wait for your application to be reviewed; approval is <strong>not automatic</strong>. COST advises allowing up to <strong>three months</strong> for a decision, and that remains the formal timeframe. EEG101 aims to review applications much more quickly, so you should normally allow <strong>a couple of days at most</strong>. This is EEG101&rsquo;s usual turnaround rather than a guarantee from COST.</p>
 <p class="join-guide__notice-links"><a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" class="btn btn-primary" target="_blank" rel="noopener">Open the EEG101 application on e-COST ↗</a> <a href="#detailed-guide" class="btn btn-outline-primary">Back to the start of the guide</a></p>

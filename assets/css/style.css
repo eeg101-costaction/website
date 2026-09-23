@@ -2159,3 +2159,9 @@ strong { font-weight: 600; }
 @media (max-width: 767.98px) {
   .join-guide__step { grid-template-columns: 1fr; gap: 1rem; }
 }
+
+.join-overview-lead { color: var(--color-text-muted); max-width: 720px; }
+.join-step--highlight .join-step__body { background: var(--color-primary-light); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: -0.25rem; }
+.join-step--highlight .join-step__number { background: var(--color-primary); color: #fff; }
+.join-guide__relation { font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--color-primary); }
+#how-to-join, #after-you-submit { scroll-margin-top: 90px; }
