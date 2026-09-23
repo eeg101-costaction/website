@@ -139,7 +139,10 @@ permalink: /calendar/
     if (ev.time)     dateLine += " &middot; " + esc(ev.time);
     if (ev.location) dateLine += "<br>" + esc(ev.location);
 
-    var bookingAction = ev.booking_enabled === true && ev.booking_status === "open"
+    var membersOnly = ev.audience === "members";
+    var bookingAction = membersOnly
+      ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">How to attend</button>"
+      : ev.booking_enabled === true && ev.booking_status === "open"
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">Register</button>"
       : "";
     popover.innerHTML =
@@ -153,7 +156,7 @@ permalink: /calendar/
 
     popover.hidden = false;
     var bookingButton = popover.querySelector("#calendar-booking-action");
-    if (bookingButton && window.EEG101EventBooking) bookingButton.addEventListener("click", function () { popover.hidden = true; window.EEG101EventBooking.open(ev); });
+    if (bookingButton && window.EEG101EventBooking) bookingButton.addEventListener("click", function () { popover.hidden = true; membersOnly ? window.EEG101EventBooking.openMembers(ev) : window.EEG101EventBooking.open(ev); });
     popover.querySelector(".cal-popover__close").addEventListener("click", function () {
       popover.hidden = true;
     });

@@ -8,8 +8,11 @@
 # timezone, timezone_label, end_time and short_name (names the event's tab in the
 # private registration workbook, e.g. "Diversity in EEG populations (2026-11-20)").
 # Times are shown on cards as time–end_time plus timezone_label.
-# audience: open (default; the form notes that EEG101 membership is not required)
-# or members.
+# audience: open (default; public booking, and the form notes that EEG101
+# membership is not required) or members (COST members only: no booking on the
+# site; the card shows "How to attend", explaining that invitations are sent
+# through e-COST, and directs non-members to the Join page. Leave the booking
+# fields and joining_link out for members-only events).
 # joining_link (optional): the online meeting link. Once pushed, it is emailed
 # automatically, within the hour, to everyone already booked, and included in all
 # later confirmations. This file is public, so for a link that must stay private

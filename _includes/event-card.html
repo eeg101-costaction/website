@@ -14,6 +14,9 @@
         <span class="event-card__category">{{ event.category }}</span>
       {% endif %}
       <span class="event-card__format event-card__format--{{ event.format }}">{% if event.format == "online" %}Online{% elsif event.format == "hybrid" %}Hybrid{% else %}In-person{% endif %}</span>
+      {% if event.audience == "members" %}
+        <span class="event-card__members-badge">COST members only</span>
+      {% endif %}
       {% if status == "past" %}
         <span class="event-card__past-badge">Past event</span>
       {% elsif status == "recent" %}
@@ -30,7 +33,9 @@
     {% endif %}
     <p class="event-card__summary">{{ event.summary }}</p>
     <div class="event-card__links">
-      {% if event.booking_enabled == true and event.booking_status == "open" and status == "upcoming" %}
+      {% if event.audience == "members" and status == "upcoming" %}
+      <button type="button" class="btn btn-primary btn-sm" data-event-members="{{ event.id }}">How to attend</button>
+      {% elsif event.booking_enabled == true and event.booking_status == "open" and status == "upcoming" %}
       <button type="button" class="btn btn-primary btn-sm" data-event-booking="{{ event.id }}">Register</button>
       {% elsif event.registration_url and event.registration_url != "" and status == "upcoming" %}
       <a href="{{ event.registration_url }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Register ↗</a>

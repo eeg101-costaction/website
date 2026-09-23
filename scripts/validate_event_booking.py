@@ -41,9 +41,17 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
         else:
             seen_ids.add(event_id)
 
+        if event.get("audience") not in (None, "", "open", "members"):
+            errors.append(f"{label}: audience must be 'open' or 'members'.")
+        if event.get("audience") == "members":
+            if event.get("booking_enabled") is True:
+                errors.append(f"{label}: members-only events are booked through e-COST invitations, so booking_enabled must not be true.")
+            if str(event.get("joining_link") or "").strip():
+                errors.append(f"{label}: members-only events must not have a public joining_link; details are shared through e-COST.")
         booking_enabled = event.get("booking_enabled") is True
         booking_status = event.get("booking_status")
-        booking_fields_present = any(key in event for key in ("booking_enabled", "booking_status", "capacity", "end_time", "timezone"))
+        booking_keys = ("booking_enabled", "booking_status", "capacity") if event.get("audience") == "members" else ("booking_enabled", "booking_status", "capacity", "end_time", "timezone")
+        booking_fields_present = any(key in event for key in booking_keys)
 
         if booking_fields_present and not booking_enabled:
             errors.append(f"{label}: booking fields are present but booking_enabled is not true. Remove them or enable booking explicitly.")
@@ -58,8 +66,6 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
             errors.append(f"{label}: booking_status must be 'open' or 'closed'.")
         if event.get("category") != "Events":
             errors.append(f"{label}: bookable entries must use category 'Events'.")
-        if event.get("audience") not in (None, "", "open", "members"):
-            errors.append(f"{label}: audience must be 'open' or 'members'.")
         link = str(event.get("joining_link") or "").strip()
         if link and not (link.startswith("https://") and " " not in link):
             errors.append(f"{label}: joining_link must be a single web address starting with https://.")

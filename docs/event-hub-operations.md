@@ -55,6 +55,28 @@ The script adds an **EEG101 Event Booking** menu to the private Sheet. Use **Pro
 
 The same menu provides **Delete records older than 12 months**. This action includes a confirmation step and permanently removes qualifying records. Before using it, check whether University of Leeds or COST Action procedures require any longer retention period for a particular event.
 
+## Public and members-only events
+
+Set `audience` on each event. `audience: "open"` (the default) is a public event booked through the website form described above.
+
+`audience: "members"` is for EEG101 COST members only. These events are not booked on the website: invitations are sent formally through the e-COST platform, and members accept them there. Leave `booking_enabled`, `booking_status`, `capacity` and `joining_link` out; the site validation rejects them on members-only events so that no joining link is ever published. The event card and calendar popover show a **COST members only** badge and a **How to attend** button. This asks visitors whether they are members of the EEG101 COST Action. Members are told to look out for their e-COST invitation and accept it there. Non-members are told that event details are shared with approved members and are directed to the Join page. No personal information is collected.
+
+```yaml
+- id: mc2-2026
+  title: "EEG101 Management Committee Meeting"
+  start_date: 2026-12-01
+  end_date: 2026-12-01
+  time: "10:00"
+  end_time: "12:00"
+  timezone: "Europe/Brussels"
+  timezone_label: "CET"
+  location: "Online"
+  format: "online"
+  category: "Events"
+  audience: "members"
+  summary: "Management Committee meeting for EEG101 members."
+```
+
 ## Online joining links
 
 A joining link can be added in either of two places.

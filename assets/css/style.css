@@ -633,6 +633,14 @@ strong { font-weight: 600; }
 .event-booking-form__message { font-size: 0.9rem; font-weight: 600; margin: 0.8rem 0; }
 .event-booking-form__message--success { color: #166534; }
 .event-booking-form__message--error { color: #991b1b; }
+.event-members { margin-top: 0.5rem; }
+.event-members__question { font-family: var(--font-heading); font-size: var(--step-1); color: var(--color-text); margin-bottom: 1rem; }
+.event-members__choices { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+.event-members__answer { background: #fff; border: 1px solid var(--color-border); border-left: 4px solid var(--color-primary); border-radius: var(--radius); padding: 1.25rem 1.4rem; }
+.event-members__answer h3 { color: var(--color-primary); font-size: var(--step-2); margin: 0 0 0.6rem; }
+.event-members__small { font-size: 0.85rem; color: var(--color-text-muted); }
+.event-card__members-badge { background: var(--color-primary-light); color: var(--color-primary); border-radius: 999px; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.15rem 0.6rem; }
+.event-booking-registration-frame[hidden], .event-members[hidden], .event-members__answer[hidden], .event-members__choices[hidden], .event-members__question[hidden] { display: none; }
 .event-booking-registration-frame { border: 0; display: block; min-height: 860px; width: 100%; }
 @media (max-width: 540px) { .event-booking-registration-frame { min-height: 1150px; } }
 

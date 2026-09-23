@@ -2,11 +2,28 @@
   <div class="event-booking-dialog__backdrop" data-event-booking-close></div>
   <section class="event-booking-dialog__panel" role="dialog" aria-modal="true" aria-labelledby="eventBookingDialogTitle">
     <button class="event-booking-dialog__close" type="button" aria-label="Close registration form" data-event-booking-close>&times;</button>
-    <p class="event-booking__eyebrow">EEG101 EVENT REGISTRATION</p>
+    <p class="event-booking__eyebrow" id="eventBookingEyebrow">EEG101 EVENT REGISTRATION</p>
     <h2 id="eventBookingDialogTitle">Register for an EEG101 event</h2>
     <p class="event-booking-dialog__details" id="eventBookingDialogDetails"></p>
     <p class="event-booking-form__notice" id="eventBookingFormNotice">No participant account is required. Once you register, your booking is confirmed on screen and you can add the event to your calendar straight away.</p>
     <p class="event-booking-form__message" id="eventBookingFormMessage" aria-live="polite"></p>
+    <div class="event-members" id="eventMembersPanel" hidden>
+      <p class="event-members__question" id="eventMembersQuestion">This event is for members of the EEG101 COST Action. Are you a member?</p>
+      <div class="event-members__choices" id="eventMembersChoices">
+        <button type="button" class="btn btn-primary" data-members-answer="yes">Yes, I am a member</button>
+        <button type="button" class="btn btn-outline-primary" data-members-answer="no">No, not yet</button>
+      </div>
+      <div class="event-members__answer" id="eventMembersYes" hidden>
+        <h3>Your invitation will come through e-COST</h3>
+        <p>Invitations to this event are sent formally through the <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST platform</a>. Please look out for the invitation in your e-COST account and accept it there to confirm your place. The event details will follow once you have accepted.</p>
+        <p class="event-members__small">If you are a member and have not received an invitation, please contact <a href="mailto:eeg101costaction@gmail.com">eeg101costaction@gmail.com</a>.</p>
+      </div>
+      <div class="event-members__answer" id="eventMembersNo" hidden>
+        <h3>This event is for EEG101 members</h3>
+        <p>Event details and invitations are shared with approved members of the EEG101 COST Action. Membership is open to researchers and practitioners across career stages, and joining takes a few minutes through e-COST.</p>
+        <a class="btn btn-primary" id="eventMembersJoin" href="{{ '/join/' | relative_url }}">Find out how to join EEG101</a>
+      </div>
+    </div>
     <iframe class="event-booking-registration-frame" id="eventBookingRegistrationFrame" title="EEG101 event registration" hidden></iframe>
   </section>
 </div>
@@ -22,10 +39,46 @@
   var notice = document.getElementById('eventBookingFormNotice');
   var registrationFrame = document.getElementById('eventBookingRegistrationFrame');
   function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
-  function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open'; }
+  function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open' && event.audience !== 'members'; }
+  var membersPanel = document.getElementById('eventMembersPanel');
+  var membersChoices = document.getElementById('eventMembersChoices');
+  var membersQuestion = document.getElementById('eventMembersQuestion');
+  var membersYes = document.getElementById('eventMembersYes');
+  var membersNo = document.getElementById('eventMembersNo');
+  var bookingNotice = document.getElementById('eventBookingFormNotice');
+  var eyebrow = document.getElementById('eventBookingEyebrow');
+  // Members-only events: invitations are sent through e-COST, so no registration data is collected here.
+  function openMembers(event) {
+    if (!event) return;
+    message.textContent = '';
+    title.textContent = event.title;
+    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    registrationFrame.hidden = true;
+    registrationFrame.src = 'about:blank';
+    bookingNotice.hidden = true;
+    eyebrow.textContent = "EEG101 MEMBERS' EVENT";
+    membersPanel.hidden = false;
+    membersQuestion.hidden = false;
+    membersChoices.hidden = false;
+    membersYes.hidden = true;
+    membersNo.hidden = true;
+    dialog.hidden = false;
+    dialog.setAttribute('aria-hidden', 'false');
+  }
+  document.querySelectorAll('[data-members-answer]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var yes = button.dataset.membersAnswer === 'yes';
+      membersQuestion.hidden = true;
+      membersChoices.hidden = true;
+      membersYes.hidden = !yes;
+      membersNo.hidden = yes;
+    });
+  });
   function open(event) {
     if (!canBook(event)) return;
     message.textContent = '';
+    membersPanel.hidden = true;
+    eyebrow.textContent = 'EEG101 EVENT REGISTRATION';
     notice.hidden = false;
     registrationFrame.style.minHeight = '';
     title.textContent = 'Register for ' + event.title;
@@ -43,8 +96,9 @@
     dialog.setAttribute('aria-hidden', 'false');
   }
   function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; }
-  window.EEG101EventBooking = { open: open, canBook: canBook };
+  window.EEG101EventBooking = { open: open, openMembers: openMembers, canBook: canBook };
   document.querySelectorAll('[data-event-booking]').forEach(function (button) { button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); }); });
+  document.querySelectorAll('[data-event-members]').forEach(function (button) { button.addEventListener('click', function () { openMembers(findEvent(button.dataset.eventMembers)); }); });
   document.querySelectorAll('[data-event-booking-close]').forEach(function (button) { button.addEventListener('click', close); });
   document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && !dialog.hidden) close(); });
   // The Apps Script form runs inside Google's wrapper frames, so accept messages from any frame nested in ours.
