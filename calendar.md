@@ -149,7 +149,7 @@ permalink: /calendar/
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
       bookingAction +
-      "<a href=\"{{ '/news/' | relative_url }}\" class=\"btn btn-outline-primary btn-sm mt-2\">News &amp; Events &rarr;</a>";
+      "<a href=\"{{ '/events/' | relative_url }}\" class=\"btn btn-outline-primary btn-sm mt-2\">Events &rarr;</a>";
 
     popover.hidden = false;
     var bookingButton = popover.querySelector("#calendar-booking-action");

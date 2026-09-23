@@ -19,11 +19,13 @@ layout: default
         <a href="{{ c.about.cta.url | relative_url }}" class="btn btn-primary mt-3">{{ c.about.cta.label }}</a>
       </div>
       <div class="col-12 col-lg-6">
-        <div class="cost-badge">
-          <p class="cost-badge__text">{{ c.about.cost_explainer }}</p>
-        </div>
-        <div class="cost-badge mt-3">
+        <div class="cost-badge" id="inclusion">
+          <h3 class="cost-badge__heading">{{ c.about.inclusion_heading }}</h3>
           <p class="cost-badge__text">{{ c.about.inclusion }}</p>
+        </div>
+        <div class="cost-badge mt-3" id="cost-action">
+          <h3 class="cost-badge__heading">{{ c.about.cost_heading }}</h3>
+          <p class="cost-badge__text">{{ c.about.cost_explainer }}</p>
         </div>
       </div>
     </div>

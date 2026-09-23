@@ -452,7 +452,9 @@ strong { font-weight: 600; }
   background: var(--color-gold-light);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-.cost-badge__text { font-size: 0.85rem; color: var(--color-text-muted); margin: 0; }
+.cost-badge__heading { font-size: var(--step-1); margin: 0 0 0.5rem; }
+.cost-badge__text { font-size: 0.9rem; color: var(--color-text-muted); margin: 0; }
+.cost-badge__text a { color: var(--color-primary); }
 
 /* --- Shared card hover lift (edit here to change all card hover animations) --- */
 .obj-card:hover,
@@ -618,7 +620,7 @@ strong { font-weight: 600; }
 .event-card__summary { font-size: 0.88rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.6; }
 .event-card__links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
-/* --- Event booking modal, used directly by News & Events and Calendar --- */
+/* --- Event booking modal, used directly by Events and Calendar --- */
 .event-booking-dialog[hidden] { display: none; }
 .event-booking-dialog { align-items: center; display: flex; inset: 0; justify-content: center; padding: 1rem; position: fixed; z-index: 10000; }
 .event-booking-dialog__backdrop { background: rgba(9, 10, 44, 0.62); inset: 0; position: absolute; }

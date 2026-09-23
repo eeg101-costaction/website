@@ -10,7 +10,7 @@
 # Times are shown on cards as time–end_time plus timezone_label.
 # audience: open (default; the form notes that EEG101 membership is not required)
 # or members. Online joining links are never stored here: add them privately on
-# the "Joining links" tab of the registration workbook. An event's News & Events card and calendar popover both
+# the "Joining links" tab of the registration workbook. An event's Events card and calendar popover both
 # read these fields directly, so booking can never be created as a separate list.
 
 - id: diversity-eeg-populations-2026-11

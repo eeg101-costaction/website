@@ -4,13 +4,13 @@
 
 The Jekyll production build and the booking-data validator run together before the GitHub Pages site is published. The validation script treats `_data/events.yml` as the single source of truth. A bookable event must contain a complete schedule, event details, capacity, `booking_enabled: true`, and a booking state of `open` or `closed`. It also rejects duplicate event IDs, an external registration URL on a bookable event, a past event marked open, and a missing private booking endpoint.
 
-The public News & Events card and calendar popover each use the same event ID and booking fields. A **Register** control appears only where `booking_enabled: true` and `booking_status: open` are present in that one record. No separate event page or secondary list needs updating.
+The public Events card and calendar popover each use the same event ID and booking fields. A **Register** control appears only where `booking_enabled: true` and `booking_status: open` are present in that one record. No separate event page or secondary list needs updating.
 
-The shared booking modal was exercised locally with an in-memory bookable event, rather than by adding fabricated programme content. It opened from the News & Events page, identified the selected event correctly, and exposed the expected pre-activation message while the private Apps Script endpoint remains intentionally unset.
+The shared booking modal was exercised locally with an in-memory bookable event, rather than by adding fabricated programme content. It opened from the Events page, identified the selected event correctly, and exposed the expected pre-activation message while the private Apps Script endpoint remains intentionally unset.
 
-The calendar page was also verified locally. It includes the same shared booking controller and registration modal as News & Events, allowing an event marked bookable in `_data/events.yml` to expose the identical booking flow from its calendar popover.
+The calendar page was also verified locally. It includes the same shared booking controller and registration modal as Events, allowing an event marked bookable in `_data/events.yml` to expose the identical booking flow from its calendar popover.
 
-The final main-branch deployment completed successfully. The live News & Events page was checked with a cache-bypassed request and no longer contains a link to the retired standalone event route. Booking remains available only where a single event record explicitly enables it.
+The final main-branch deployment completed successfully. The live Events page was checked with a cache-bypassed request and no longer contains a link to the retired standalone event route. Booking remains available only where a single event record explicitly enables it.
 
 The former `/events/` address was also checked after deployment and correctly resolves to the EEG101 404 page, confirming that the separate public event destination has been removed.
 

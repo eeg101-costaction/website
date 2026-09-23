@@ -58,7 +58,7 @@ function submitRegistration(payload) {
     const existing = sheet.getDataRange().getValues();
     const email = String(payload.email).trim().toLowerCase();
     const duplicate = existing.some((row, index) => index > 0 && String(row[COL.eventId - 1]) === String(payload.event.id) && String(row[COL.email - 1]).trim().toLowerCase() === email);
-    if (duplicate) throw new Error('This email address is already registered for this event.');
+    if (duplicate) throw new Error('You are already booked for this event with this email address, so there is no need to register again. Your confirmation email was sent when you first registered.');
     status = registrationStatus(payload.event.id, Number(payload.event.capacity || 0), existing);
     rowNumber = appendRegistration(sheet, payload, status);
   } finally {
@@ -525,7 +525,7 @@ function makeCalendar(event) {
     `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), 'SEQUENCE:' + (event.joining_link ? 1 : 0), start, end,
     icsFold('SUMMARY:' + icsText(event.title)), icsFold('LOCATION:' + icsText(event.joining_link || event.location || 'EEG101'))]
     .concat(event.joining_link ? [icsFold('URL:' + event.joining_link)] : [])
-    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/news/')),
+    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/events/')),
     'END:VEVENT', 'END:VCALENDAR']).join('\r\n');
 }
 

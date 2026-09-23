@@ -27,7 +27,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <div class="join-step__number">1</div>
 <div class="join-step__body">
 <h3>Read about EEG101</h3>
-<p>Familiarise yourself with the <a href="{{ '/about/' | relative_url }}">EEG101 aims and objectives</a> and the <a href="{{ '/working-groups/' | relative_url }}">Working Group activities</a> to find where you can contribute.</p>
+<p>Familiarise yourself with the <a href="{{ '/#objectives' | relative_url }}">EEG101 aims and objectives</a> and the <a href="{{ '/working-groups/' | relative_url }}">Working Group activities</a> to find where you can contribute.</p>
 </div>
 </div>
 <div class="join-step">

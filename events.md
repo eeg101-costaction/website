@@ -1,9 +1,9 @@
 ---
 layout: page
-title: "News & Events"
+title: "Events"
 subtitle: "Stay updated with EEG101 activities"
 description: "A combined feed of EEG101 announcements, grants, working group meetings, and community events."
-permalink: /news/
+permalink: /events/
 ---
 
 {::nomarkdown}

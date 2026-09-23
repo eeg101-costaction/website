@@ -114,7 +114,7 @@ Each person is one block in the file. To add someone new, copy an existing block
 
 **Image folder:** `assets/images/news/`
 
-News items appear on the [News & Events](https://www.eeg101.eu/news/) page. Add a new entry at the **top** of the file so the newest item is first.
+News items appear on the [Events](https://www.eeg101.eu/events/) page. Add a new entry at the **top** of the file so the newest item is first.
 
 ```yaml
 - title: "Your headline here"
@@ -154,7 +154,7 @@ News items appear on the [News & Events](https://www.eeg101.eu/news/) page. Add 
 
 **Image folder:** `assets/images/events/`
 
-Events appear on both the [News & Events](https://www.eeg101.eu/news/) page and the [Calendar](https://www.eeg101.eu/calendar/) page. The website automatically sorts events into **Upcoming**, **Recent** (last 30 days), and **Past** based on the date. You do not need to set a status field.
+Events appear on both the [Events](https://www.eeg101.eu/events/) page and the [Calendar](https://www.eeg101.eu/calendar/) page. The website automatically sorts events into **Upcoming**, **Recent** (last 30 days), and **Past** based on the date. You do not need to set a status field.
 
 ```yaml
 - id: your-event-id
@@ -514,12 +514,11 @@ Each page on the site corresponds to a Markdown (`.md`) or HTML (`.html`) file i
 | Page | File | Notes |
 |------|------|-------|
 | Homepage | `index.md` | Uses the `home` layout. Hero text comes from `_data/content.yml` |
-| About | `about.md` | Plain Markdown |
 | Team | `coordination.md` | Pulls from `_data/people.yml` |
 | Members | `members.html` | Map and directory. Data from `assets/data/network-map.json` |
 | Working Groups | `working-groups.md` | Pulls from `_data/working_groups.yml` |
 | Grants | `grants.md` | Pulls from `_data/grants.yml` |
-| News & Events | `news.md` | Merges `_data/events.yml` and `_data/news.yml` |
+| Events | `events.md` | Merges `_data/events.yml` and `_data/news.yml` |
 | Calendar | `calendar.md` | Pulls from `_data/events.yml` |
 | Spotlight | `spotlight.html` | Pulls from `_data/spotlights.yml` |
 | Resources | `resources.md` | Plain Markdown with resource cards |

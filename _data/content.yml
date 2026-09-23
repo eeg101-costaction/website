@@ -30,15 +30,19 @@ about:
     Our mission is to establish a coordinated, open, and collaborative network that
     harmonises methodologies, improves data accessibility, and provides equitable
     training opportunities — establishing Europe as a global leader in open EEG science.
-  cost_explainer: >
-    COST (European Cooperation in Science and Technology) is a funding agency for
-    research and innovation networks. EEG101 (Action CA24148) is funded through
-    Horizon Europe.
+  inclusion_heading: "Diversity, Equity, and Inclusion"
   inclusion: >
-    EEG101 is committed to equity and inclusion. We provide dedicated funding for
-    Young Researchers & Innovators (YRIs) and researchers from Inclusiveness Target
-    Countries (ITCs). An Inclusivity Monitoring Committee ensures our community
-    reflects the diversity of European science.
+    EEG101 is fully committed to the COST inclusiveness policy centred around
+    geographical spread, researchers from all career stages, and gender balance.
+    Fostering fair and diverse scientific communities, EEG101 encourages its members
+    to embrace the <a href="https://www.alba.network/alba-declaration" target="_blank" rel="noopener">ALBA declaration</a>
+    promoting equity and inclusivity on individual and workplace levels.
+  cost_heading: "What is a COST Action?"
+  cost_explainer: >
+    <a href="https://www.cost.eu" target="_blank" rel="noopener">COST (European Cooperation in Science and Technology)</a>
+    is a funding agency for research and innovation networks. COST Actions help connect
+    research initiatives across Europe and enable scientists to grow their ideas by
+    sharing them with their peers. This boosts their research, career and innovation.
   cta:
     label: "Meet the team"
     url: "/coordination/"
@@ -105,13 +109,13 @@ news_preview:
   heading: "Latest news"
   cta:
     label: "All news"
-    url: "/news/"
+    url: "/events/"
 
 events_preview:
   heading: "Upcoming events"
   cta:
     label: "All events"
-    url: "/news/"
+    url: "/events/"
 
 videos_preview:
   heading: "Watch EEG101"
