@@ -21,7 +21,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 
 ## How to join {#how-to-join}
 
-<p class="join-overview-lead">An overview of the journey from first interest to taking part. Step 2 is the only formal application; the <a href="#detailed-guide">detailed guide</a> below takes you through it screen by screen.</p>
+<p class="join-overview-lead">An overview of the journey from first interest to taking part. Steps 2 and 3 take place on the e-COST platform, and the <a href="#detailed-guide">detailed guide</a> below takes you through both, screen by screen.</p>
 
 {::nomarkdown}
 <div class="join-steps">
@@ -35,27 +35,35 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <div class="join-step join-step--highlight">
 <div class="join-step__number">2</div>
 <div class="join-step__body">
-<h3>Apply through e-COST</h3>
-<p>Membership is managed through the <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">e-COST platform ↗</a>. You create and activate an e-COST account, then submit one application to your chosen EEG101 Working Groups.</p>
-<p class="join-step__guide-link"><a href="#detailed-guide">Follow the detailed, illustrated guide &darr;</a></p>
+<h3>Create an e-COST account</h3>
+<p>Membership is managed through COST&rsquo;s e-COST platform. Go to the <a href="https://e-services.cost.eu/user/login" target="_blank" rel="noopener">e-COST platform ↗</a>, select <strong>Create an account</strong>, and activate the account from the email e-COST sends you. If you already have an e-COST account, sign in and go straight to step 3.</p>
+<p class="join-step__guide-link"><a href="#guide-stage-1">Illustrated guide to creating your account &darr;</a></p>
+</div>
+</div>
+<div class="join-step join-step--highlight">
+<div class="join-step__number">3</div>
+<div class="join-step__body">
+<h3>Come back to this page and apply to EEG101</h3>
+<p>Once your account is active, return here and use this link to apply to EEG101 (COST Action CA24148): <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" target="_blank" rel="noopener">apply to EEG101 on e-COST ↗</a>. Select your Working Groups and submit the application.</p>
+<p class="join-step__guide-link"><a href="#guide-stage-2">Illustrated guide to the application &darr;</a></p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">3</div>
+<div class="join-step__number">4</div>
 <div class="join-step__body">
 <h3>Wait for your application to be approved</h3>
 <p>Every application is reviewed, so approval is not automatic. EEG101 normally responds within a couple of days, within COST&rsquo;s formal timeframe of up to three months. <a href="#after-you-submit">What happens after you submit</a>.</p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">4</div>
+<div class="join-step__number">5</div>
 <div class="join-step__body">
 <h3>Connect with the community</h3>
 <p>Once you are approved, you will receive an invitation to the EEG101 Discord community, where Working Group channels and meeting announcements are hosted. Introduce yourself, join Working Group activities, and come along to webinars and <a href="{{ '/events/' | relative_url }}">events</a>.</p>
 </div>
 </div>
 <div class="join-step">
-<div class="join-step__number">5</div>
+<div class="join-step__number">6</div>
 <div class="join-step__body">
 <h3>Apply for grants</h3>
 <p>As part of the Action, you can apply for <a href="{{ '/grants/' | relative_url }}">EEG101 grant schemes</a>. The Grants page sets out open calls, deadlines and who is eligible for each.</p>
@@ -68,7 +76,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <section class="join-guide" id="detailed-guide" aria-labelledby="detailed-guide-heading">
 <h2 id="detailed-guide-heading">Detailed guide: create your e-COST account and apply to EEG101 Working Groups</h2>
 <p class="join-guide__intro">There are two key steps to joining an EEG101 Working Group: first, create and activate an e-COST account; second, complete the profile prerequisite and submit the EEG101 Working Group application. The annotated screenshots below show the process from the live e-COST interface. Personal information has been redacted.</p>
-<p class="join-guide__relation">This guide expands step 2 of <a href="#how-to-join">How to join</a> above.</p>
+<p class="join-guide__relation">This guide expands steps 2 and 3 of <a href="#how-to-join">How to join</a> above.</p>
 
 <div class="join-guide__summary">
 <a class="join-guide__summary-card" href="#guide-stage-1">
