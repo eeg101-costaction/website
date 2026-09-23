@@ -1,44 +1,8 @@
 {
-  "generated_at": "2026-09-22T09:59:30+00:00",
+  "generated_at": "2026-09-23T10:00:21+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 19,
+  "pending_count": 2,
   "members": [
-    {
-      "name": "Francesca Pesciarelli",
-      "affiliation": "University of Modena and Reggio Emilia",
-      "country": "Italy",
-      "working_groups": [
-        "WG1",
-        "WG2",
-        "WG3"
-      ],
-      "email": "francesca.pesciarelli [at] unimore [dot] it",
-      "homepage": "https://www.researchgate.net/profile/Francesca-Pesciarelli?ev=hdr_xprf",
-      "orcid": "0000-0003-3007-4775"
-    },
-    {
-      "name": "Davide Bottari",
-      "affiliation": "IMT School for Advanced Studies Lucca",
-      "country": "Italy",
-      "working_groups": [
-        "WG1",
-        "WG3"
-      ],
-      "email": "davide.bottari [at] imtlucca [dot] it",
-      "homepage": "https://momilab.imtlucca.it/research/seed; https://www.imtlucca.it/davide.bottari",
-      "orcid": "0000-0001-6843-1569"
-    },
-    {
-      "name": "MARIJA MANDARIĆ",
-      "affiliation": "University of Kragujevac, Faculty of Hotel Management and Tourism",
-      "country": "Serbia",
-      "working_groups": [
-        "WG3"
-      ],
-      "email": "mmandaric [at] kg [dot] ac [dot] rs",
-      "homepage": "https://hit-vb.kg.ac.rs/index.php/nastavno-osoblje/redovni-profesori/41-dr-marija-mandaric; https://www.researchgate.net/profile/Marija-Mandaric",
-      "orcid": "0000-0002-8504-3944"
-    },
     {
       "name": "Stephen Applebaum",
       "affiliation": "CuttingEEG",
@@ -53,172 +17,15 @@
       "orcid": "0009-0000-1265-2370"
     },
     {
-      "name": "Riccardo Venturini",
-      "affiliation": "Istituto Universitario Di Studi Superiori ( I.u.s.s.) Di Pavia",
-      "country": "Italy",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "riccardo.venturini [at] iusspavia [dot] it",
-      "homepage": "https://riccardoventurini.github.io/",
-      "orcid": "0009-0008-3401-6162"
-    },
-    {
-      "name": "Gerardo Galvez",
-      "affiliation": "Bitsphi Diagnosis",
-      "country": "Spain",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "gerardo.galvez [at] bitsphi [dot] com",
-      "homepage": "",
-      "orcid": "0000-0001-5917-5743"
-    },
-    {
-      "name": "Julia Ballesteros",
-      "affiliation": "Bitsphi Diagnosis",
-      "country": "Spain",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "julia.ballesteros [at] bitsphi [dot] com",
-      "homepage": "",
-      "orcid": "0009-0008-7260-7510"
-    },
-    {
-      "name": "Anna Plieva",
-      "affiliation": "Moscow State University of Psyсhology and Education",
-      "country": "Russian Federation",
-      "working_groups": [
-        "WG1"
-      ],
-      "email": "anna.plieva09 [at] gmail [dot] com",
-      "homepage": "",
-      "orcid": ""
-    },
-    {
-      "name": "Martín Carrasco-Gomez",
-      "affiliation": "Bitsphi Diagnosis",
-      "country": "Spain",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "martin.carrasco [at] bitsphi [dot] com",
-      "homepage": "https://www.linkedin.com/in/martin-carrasco-gomez/; https://orcid.org/my-orcid?orcid=0000-0003-4735-4562",
-      "orcid": "0000-0003-4735-4562"
-    },
-    {
-      "name": "Silpa S",
-      "affiliation": "National Institute of Technology Raipur",
-      "country": "India",
-      "working_groups": [
-        "WG1",
-        "WG2"
-      ],
-      "email": "silpa.phd2024.bme [at] nitrr [dot] ac [dot] in",
-      "homepage": "",
-      "orcid": ""
-    },
-    {
-      "name": "Achayata Sharma",
-      "affiliation": "Shree Guru Gobind Singh Tricentenary University",
-      "country": "India",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "sharmaachayata18 [at] gmail [dot] com",
-      "homepage": "",
-      "orcid": "0009-0002-4790-5467"
-    },
-    {
-      "name": "Till Schneider",
-      "affiliation": "University Medical Center Hamburg-Eppendorf",
-      "country": "Germany",
-      "working_groups": [
-        "WG1"
-      ],
-      "email": "till.schneider [at] uni-hamburg [dot] de",
-      "homepage": "https://www.webofscience.com/wos/author/record/B-3751-2010; https://www.uke.de/neurophysiology",
-      "orcid": "0000-0002-8889-6248"
-    },
-    {
-      "name": "Ilacai Romero Reyes",
-      "affiliation": "Moscow State University of Pychology and Education",
-      "country": "Russian Federation",
-      "working_groups": [
-        "WG1"
-      ],
-      "email": "ilacai.romero [at] gmail [dot] com",
-      "homepage": "https://www.researchgate.net/profile/Ilacai-Romero-Reyes",
-      "orcid": "0000-0002-6743-6138"
-    },
-    {
-      "name": "Anne-Michelle Engelstad",
-      "affiliation": "The University Of North Carolina At Chapel Hill",
-      "country": "United States",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "anne-michelle_engelstad [at] med [dot] unc [dot] edu",
-      "homepage": "https://aengelstad.scholars.harvard.edu/bio",
-      "orcid": "0000-0003-1589-5671"
-    },
-    {
-      "name": "Tanmoy Sil",
-      "affiliation": "University Hospital Würzburg",
-      "country": "Germany",
-      "working_groups": [
-        "WG1",
-        "WG2"
-      ],
-      "email": "tanmoy_sil [at] hotmail [dot] com",
-      "homepage": "https://tanmoysil.github.io",
-      "orcid": "0009-0002-5041-7579"
-    },
-    {
-      "name": "Velu Prabhakar Kumaravel",
-      "affiliation": "Universita Degli Studi Gabriele D'annunzio Di Chieti-pescara",
-      "country": "Italy",
-      "working_groups": [
-        "WG1",
-        "WG2"
-      ],
-      "email": "vpr.kumaravel [at] gmail [dot] com",
-      "homepage": "https://scholar.google.com/citations?user=yeMiiZwAAAAJ&hl=en",
-      "orcid": ""
-    },
-    {
-      "name": "Federica Biondi",
-      "affiliation": "Istituto Universitario di Studi Superiori - IUSS",
-      "country": "Italy",
-      "working_groups": [
-        "WG2"
-      ],
-      "email": "federica.biondi [at] iusspavia [dot] it",
-      "homepage": "",
-      "orcid": "0009-0008-9313-824X"
-    },
-    {
-      "name": "Xintian Wang",
-      "affiliation": "Washington University in St. Louis School Of Medicine",
-      "country": "United States",
+      "name": "Iffah Syafiqah Binti Suhaili",
+      "affiliation": "Pannon Egyetem - University Of Pannonia",
+      "country": "Hungary",
       "working_groups": [
         "WG1",
         "WG2",
         "WG3"
       ],
-      "email": "w.xintian [at] wustl [dot] edu",
-      "homepage": "https://www.researchgate.net/profile/Xintian-Wang-14",
-      "orcid": ""
-    },
-    {
-      "name": "Chenyan Lu",
-      "affiliation": "Washington University in St. Louis School Of Medicine",
-      "country": "United States",
-      "working_groups": [
-        "WG1"
-      ],
-      "email": "chenyan.l [at] wustl [dot] edu",
+      "email": "ssiffah [at] gmail [dot] com",
       "homepage": "",
       "orcid": ""
     }

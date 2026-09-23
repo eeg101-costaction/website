@@ -1,8 +1,8 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 484,
-  "site_count": 289,
-  "country_count": 56,
+  "member_count": 510,
+  "site_count": 306,
+  "country_count": 58,
   "countries": [
     {
       "name": "Albania",
@@ -27,7 +27,7 @@
     {
       "name": "Belgium",
       "site_count": 3,
-      "member_count": 5
+      "member_count": 6
     },
     {
       "name": "Bosnia and Herzegovina",
@@ -96,13 +96,13 @@
     },
     {
       "name": "France",
-      "site_count": 18,
-      "member_count": 24
+      "site_count": 19,
+      "member_count": 28
     },
     {
       "name": "Germany",
-      "site_count": 26,
-      "member_count": 35
+      "site_count": 29,
+      "member_count": 42
     },
     {
       "name": "Greece",
@@ -121,8 +121,8 @@
     },
     {
       "name": "India",
-      "site_count": 2,
-      "member_count": 2
+      "site_count": 4,
+      "member_count": 4
     },
     {
       "name": "International Organisations",
@@ -137,7 +137,7 @@
     {
       "name": "Ireland",
       "site_count": 8,
-      "member_count": 11
+      "member_count": 12
     },
     {
       "name": "Israel",
@@ -146,8 +146,8 @@
     },
     {
       "name": "Italy",
-      "site_count": 19,
-      "member_count": 25
+      "site_count": 23,
+      "member_count": 30
     },
     {
       "name": "Japan",
@@ -170,6 +170,11 @@
       "member_count": 5
     },
     {
+      "name": "Luxembourg",
+      "site_count": 1,
+      "member_count": 1
+    },
+    {
       "name": "Malta",
       "site_count": 1,
       "member_count": 6
@@ -187,7 +192,7 @@
     {
       "name": "Netherlands",
       "site_count": 8,
-      "member_count": 15
+      "member_count": 22
     },
     {
       "name": "New Zealand",
@@ -225,9 +230,14 @@
       "member_count": 8
     },
     {
+      "name": "Russian Federation",
+      "site_count": 1,
+      "member_count": 2
+    },
+    {
       "name": "Serbia",
-      "site_count": 6,
-      "member_count": 14
+      "site_count": 7,
+      "member_count": 15
     },
     {
       "name": "Singapore",
@@ -251,13 +261,13 @@
     },
     {
       "name": "Spain",
-      "site_count": 15,
-      "member_count": 28
+      "site_count": 16,
+      "member_count": 31
     },
     {
       "name": "Sweden",
-      "site_count": 3,
-      "member_count": 3
+      "site_count": 4,
+      "member_count": 4
     },
     {
       "name": "Switzerland",
@@ -272,12 +282,12 @@
     {
       "name": "United Kingdom",
       "site_count": 21,
-      "member_count": 49
+      "member_count": 53
     },
     {
       "name": "United States",
-      "site_count": 8,
-      "member_count": 9
+      "site_count": 10,
+      "member_count": 13
     },
     {
       "name": "Uruguay",
@@ -1056,6 +1066,51 @@
     },
     {
       "id": "site-22",
+      "institution": "Bitsphi Diagnosis",
+      "city": "Zaragoza",
+      "country": "Spain",
+      "latitude": 41.6488,
+      "longitude": -0.8891,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Gerardo Galvez",
+          "affiliation": "Bitsphi Diagnosis",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "gerardo.galvez [at] bitsphi [dot] com",
+          "homepage": "",
+          "orcid": "0000-0001-5917-5743"
+        },
+        {
+          "name": "Julia Ballesteros",
+          "affiliation": "Bitsphi Diagnosis",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "julia.ballesteros [at] bitsphi [dot] com",
+          "homepage": "",
+          "orcid": "0009-0008-7260-7510"
+        },
+        {
+          "name": "Martín Carrasco-Gomez",
+          "affiliation": "Bitsphi Diagnosis",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "martin.carrasco [at] bitsphi [dot] com",
+          "homepage": "https://www.linkedin.com/in/martin-carrasco-gomez/; https://orcid.org/my-orcid?orcid=0000-0003-4735-4562",
+          "orcid": "0000-0003-4735-4562"
+        }
+      ],
+      "member_count": 3,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-23",
       "institution": "Bolu Abant İzzet Baysal University",
       "city": "Bolu",
       "country": "Türkiye",
@@ -1080,7 +1135,7 @@
       ]
     },
     {
-      "id": "site-23",
+      "id": "site-24",
       "institution": "Bordeaux INP",
       "city": "Talence",
       "country": "France",
@@ -1115,7 +1170,7 @@
       ]
     },
     {
-      "id": "site-24",
+      "id": "site-25",
       "institution": "Bournemouth University",
       "city": "Bournemouth",
       "country": "United Kingdom",
@@ -1199,7 +1254,7 @@
       ]
     },
     {
-      "id": "site-25",
+      "id": "site-26",
       "institution": "Boğaziçi University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -1322,7 +1377,7 @@
       ]
     },
     {
-      "id": "site-26",
+      "id": "site-27",
       "institution": "Brain Products GmbH",
       "city": "Gilching",
       "country": "Germany",
@@ -1373,7 +1428,7 @@
       ]
     },
     {
-      "id": "site-27",
+      "id": "site-28",
       "institution": "Breda University of Applied Sciences",
       "city": "Breda",
       "country": "Netherlands",
@@ -1400,7 +1455,7 @@
       ]
     },
     {
-      "id": "site-28",
+      "id": "site-29",
       "institution": "Brno University of Technology",
       "city": "Brno",
       "country": "Czechia",
@@ -1425,7 +1480,7 @@
       ]
     },
     {
-      "id": "site-29",
+      "id": "site-30",
       "institution": "Bursa Technical University",
       "city": "Bursa",
       "country": "Türkiye",
@@ -1452,7 +1507,7 @@
       ]
     },
     {
-      "id": "site-30",
+      "id": "site-31",
       "institution": "Bursa Uludağ University",
       "city": "Bursa",
       "country": "Türkiye",
@@ -1479,7 +1534,7 @@
       ]
     },
     {
-      "id": "site-31",
+      "id": "site-32",
       "institution": "Cappadocia University",
       "city": "Nevşehir",
       "country": "Türkiye",
@@ -1506,7 +1561,7 @@
       ]
     },
     {
-      "id": "site-32",
+      "id": "site-33",
       "institution": "Carl von Ossietzky University of Oldenburg",
       "city": "Oldenburg",
       "country": "Germany",
@@ -1567,7 +1622,7 @@
       ]
     },
     {
-      "id": "site-33",
+      "id": "site-34",
       "institution": "Carol Davila University of Medicine and Pharmacy",
       "city": "Bucharest",
       "country": "Netherlands",
@@ -1596,7 +1651,7 @@
       ]
     },
     {
-      "id": "site-34",
+      "id": "site-35",
       "institution": "Carol Davila University of Medicine and Pharmacy",
       "city": "Bucharest",
       "country": "Romania",
@@ -1625,7 +1680,7 @@
       ]
     },
     {
-      "id": "site-35",
+      "id": "site-36",
       "institution": "Centre National de la Recherche Scientifique",
       "city": "Paris",
       "country": "France",
@@ -1676,7 +1731,7 @@
       ]
     },
     {
-      "id": "site-36",
+      "id": "site-37",
       "institution": "Centro de Investigación Biomédica en Red en Bioingeniería, Biomateriales y Nanomedicina",
       "city": "Madrid",
       "country": "Spain",
@@ -1701,7 +1756,7 @@
       ]
     },
     {
-      "id": "site-37",
+      "id": "site-38",
       "institution": "Centro Internazionale Disordini Apprendimento Attenzione e Iperattività",
       "city": "Milan",
       "country": "Italy",
@@ -1726,7 +1781,7 @@
       ]
     },
     {
-      "id": "site-38",
+      "id": "site-39",
       "institution": "CergenX",
       "city": "Cork",
       "country": "Ireland",
@@ -1751,7 +1806,7 @@
       ]
     },
     {
-      "id": "site-39",
+      "id": "site-40",
       "institution": "Charité-Universitaetsmedizin Berlin",
       "city": "",
       "country": "Germany",
@@ -1780,7 +1835,7 @@
       ]
     },
     {
-      "id": "site-40",
+      "id": "site-41",
       "institution": "Charles University",
       "city": "Prague",
       "country": "Czechia",
@@ -1809,7 +1864,7 @@
       ]
     },
     {
-      "id": "site-41",
+      "id": "site-42",
       "institution": "CHRIST (Deemed to be University)",
       "city": "Bengaluru",
       "country": "India",
@@ -1838,7 +1893,7 @@
       ]
     },
     {
-      "id": "site-42",
+      "id": "site-43",
       "institution": "Christian-albrechts-universitaet  Zu Kiel",
       "city": "",
       "country": "Germany",
@@ -1863,7 +1918,7 @@
       ]
     },
     {
-      "id": "site-43",
+      "id": "site-44",
       "institution": "CITY College, University of York Europe Campus",
       "city": "Thessaloniki",
       "country": "Greece",
@@ -1890,7 +1945,7 @@
       ]
     },
     {
-      "id": "site-44",
+      "id": "site-45",
       "institution": "Coimbra Institute for Biomedical Imaging and Translational Research, University of Coimbra",
       "city": "Coimbra",
       "country": "Portugal",
@@ -1919,7 +1974,7 @@
       ]
     },
     {
-      "id": "site-45",
+      "id": "site-46",
       "institution": "Commissariat à l'énergie atomique et aux énergies alternatives",
       "city": "Paris",
       "country": "France",
@@ -1944,7 +1999,7 @@
       ]
     },
     {
-      "id": "site-46",
+      "id": "site-47",
       "institution": "Complutense University of Madrid",
       "city": "Madrid",
       "country": "Spain",
@@ -1973,7 +2028,7 @@
       ]
     },
     {
-      "id": "site-47",
+      "id": "site-48",
       "institution": "Consejo Nacional De Investigaciones Cientificas Y Tecnicas (conicet)",
       "city": "",
       "country": "Argentina",
@@ -1998,7 +2053,7 @@
       ]
     },
     {
-      "id": "site-48",
+      "id": "site-49",
       "institution": "Consejo Superior de Investigaciones Científicas (CSIC)",
       "city": "Madrid",
       "country": "Spain",
@@ -2039,7 +2094,7 @@
       ]
     },
     {
-      "id": "site-49",
+      "id": "site-50",
       "institution": "Consiglio Nazionale delle Ricerche - Istituto per le Applicazioni del Calcolo \"Mauro Picone\"",
       "city": "Rome",
       "country": "Italy",
@@ -2066,7 +2121,7 @@
       ]
     },
     {
-      "id": "site-50",
+      "id": "site-51",
       "institution": "Copenhagen University Hospital, Rigshospitalet",
       "city": "Copenhagen",
       "country": "Denmark",
@@ -2101,7 +2156,7 @@
       ]
     },
     {
-      "id": "site-51",
+      "id": "site-52",
       "institution": "Coventry University",
       "city": "Coventry",
       "country": "United Kingdom",
@@ -2130,7 +2185,7 @@
       ]
     },
     {
-      "id": "site-52",
+      "id": "site-53",
       "institution": "Dicle University",
       "city": "Diyarbakır",
       "country": "Türkiye",
@@ -2157,7 +2212,7 @@
       ]
     },
     {
-      "id": "site-53",
+      "id": "site-54",
       "institution": "Dokuz Eylül University",
       "city": "Izmir",
       "country": "Türkiye",
@@ -2208,7 +2263,7 @@
       ]
     },
     {
-      "id": "site-54",
+      "id": "site-55",
       "institution": "Dundalk Institute of Technology",
       "city": "Dundalk",
       "country": "Ireland",
@@ -2235,7 +2290,7 @@
       ]
     },
     {
-      "id": "site-55",
+      "id": "site-56",
       "institution": "Düzce University",
       "city": "Düzce",
       "country": "Türkiye",
@@ -2275,7 +2330,7 @@
       ]
     },
     {
-      "id": "site-56",
+      "id": "site-57",
       "institution": "Eskişehir Osmangazi University",
       "city": "Eskişehir",
       "country": "Türkiye",
@@ -2300,7 +2355,7 @@
       ]
     },
     {
-      "id": "site-57",
+      "id": "site-58",
       "institution": "Eötvös Loránd University",
       "city": "Budapest",
       "country": "Hungary",
@@ -2329,7 +2384,7 @@
       ]
     },
     {
-      "id": "site-58",
+      "id": "site-59",
       "institution": "Faculdade de Psicologia da Universidade de Lisboa",
       "city": "Lisbon",
       "country": "Portugal",
@@ -2356,7 +2411,7 @@
       ]
     },
     {
-      "id": "site-59",
+      "id": "site-60",
       "institution": "Faculty of Philosophy, University of Belgrade",
       "city": "Belgrade",
       "country": "Serbia",
@@ -2409,7 +2464,7 @@
       ]
     },
     {
-      "id": "site-60",
+      "id": "site-61",
       "institution": "Faculty of Philosophy, University of Novi Sad",
       "city": "Novi Sad",
       "country": "Serbia",
@@ -2438,7 +2493,7 @@
       ]
     },
     {
-      "id": "site-61",
+      "id": "site-62",
       "institution": "Faculty of Sciences of the University of Lisbon",
       "city": "Lisbon",
       "country": "Portugal",
@@ -2463,7 +2518,7 @@
       ]
     },
     {
-      "id": "site-62",
+      "id": "site-63",
       "institution": "Fondation Campus Biotech Geneva",
       "city": "Geneva",
       "country": "Switzerland",
@@ -2488,7 +2543,7 @@
       ]
     },
     {
-      "id": "site-63",
+      "id": "site-64",
       "institution": "Fondazione Bruno Kessler",
       "city": "",
       "country": "Italy",
@@ -2513,7 +2568,7 @@
       ]
     },
     {
-      "id": "site-64",
+      "id": "site-65",
       "institution": "Forward College",
       "city": "Lisbon",
       "country": "Portugal",
@@ -2540,7 +2595,7 @@
       ]
     },
     {
-      "id": "site-65",
+      "id": "site-66",
       "institution": "Freie Universität Berlin",
       "city": "Berlin",
       "country": "European RTD Organisations",
@@ -2565,7 +2620,7 @@
       ]
     },
     {
-      "id": "site-66",
+      "id": "site-67",
       "institution": "Freie Universität Berlin",
       "city": "Berlin",
       "country": "Germany",
@@ -2602,7 +2657,7 @@
       ]
     },
     {
-      "id": "site-67",
+      "id": "site-68",
       "institution": "Fundación para la Investigación Médica Aplicada (FIMA)",
       "city": "Pamplona",
       "country": "Spain",
@@ -2629,7 +2684,7 @@
       ]
     },
     {
-      "id": "site-68",
+      "id": "site-69",
       "institution": "Fırat University",
       "city": "Elazığ",
       "country": "Türkiye",
@@ -2670,7 +2725,7 @@
       ]
     },
     {
-      "id": "site-69",
+      "id": "site-70",
       "institution": "Gaziantep University",
       "city": "Gaziantep",
       "country": "Türkiye",
@@ -2699,7 +2754,7 @@
       ]
     },
     {
-      "id": "site-70",
+      "id": "site-71",
       "institution": "Georg-august-universitat Gottingen Stiftung Offentlichen Rechts",
       "city": "",
       "country": "Germany",
@@ -2726,7 +2781,7 @@
       ]
     },
     {
-      "id": "site-71",
+      "id": "site-72",
       "institution": "George Barițiu Institute of History of the Romanian Academy",
       "city": "Cluj-Napoca",
       "country": "Romania",
@@ -2751,7 +2806,7 @@
       ]
     },
     {
-      "id": "site-72",
+      "id": "site-73",
       "institution": "German Sport University Cologne",
       "city": "Cologne",
       "country": "Germany",
@@ -2778,7 +2833,7 @@
       ]
     },
     {
-      "id": "site-73",
+      "id": "site-74",
       "institution": "Ghent University",
       "city": "Ghent",
       "country": "Belgium",
@@ -2807,7 +2862,7 @@
       ]
     },
     {
-      "id": "site-74",
+      "id": "site-75",
       "institution": "Gheorghe Asachi Technical University of Iași",
       "city": "Iași",
       "country": "Romania",
@@ -2832,7 +2887,7 @@
       ]
     },
     {
-      "id": "site-75",
+      "id": "site-76",
       "institution": "Goethe University Frankfurt",
       "city": "Frankfurt am Main",
       "country": "Germany",
@@ -2857,7 +2912,7 @@
       ]
     },
     {
-      "id": "site-76",
+      "id": "site-77",
       "institution": "Government College University, Lahore",
       "city": "Lahore",
       "country": "Pakistan",
@@ -2886,7 +2941,7 @@
       ]
     },
     {
-      "id": "site-77",
+      "id": "site-78",
       "institution": "Greek Scientists Society",
       "city": "Athens",
       "country": "Greece",
@@ -2913,7 +2968,7 @@
       ]
     },
     {
-      "id": "site-78",
+      "id": "site-79",
       "institution": "Hacettepe University",
       "city": "Ankara",
       "country": "Türkiye",
@@ -2942,7 +2997,7 @@
       ]
     },
     {
-      "id": "site-79",
+      "id": "site-80",
       "institution": "Hitit University",
       "city": "Çorum",
       "country": "Türkiye",
@@ -2967,7 +3022,7 @@
       ]
     },
     {
-      "id": "site-80",
+      "id": "site-81",
       "institution": "Holon Institute of Technology",
       "city": "Holon",
       "country": "Israel",
@@ -2994,7 +3049,32 @@
       ]
     },
     {
-      "id": "site-81",
+      "id": "site-82",
+      "institution": "Humboldt University of Berlin",
+      "city": "",
+      "country": "Germany",
+      "latitude": 52.5183402,
+      "longitude": 13.3929202,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Sabine Bou Saba",
+          "affiliation": "Humboldt University of Berlin",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "bousabasabine [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": "0000-0002-5472-582X"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1"
+      ]
+    },
+    {
+      "id": "site-83",
       "institution": "HUN-REN Research Centre for Natural Sciences",
       "city": "Budapest",
       "country": "Hungary",
@@ -3032,7 +3112,7 @@
       ]
     },
     {
-      "id": "site-82",
+      "id": "site-84",
       "institution": "Imperial College London",
       "city": "London",
       "country": "United Kingdom",
@@ -3057,7 +3137,34 @@
       ]
     },
     {
-      "id": "site-83",
+      "id": "site-85",
+      "institution": "IMT School for Advanced Studies Lucca",
+      "city": "Lucca",
+      "country": "Italy",
+      "latitude": 43.8452,
+      "longitude": 10.5031,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Davide Bottari",
+          "affiliation": "IMT School for Advanced Studies Lucca",
+          "working_groups": [
+            "WG1",
+            "WG3"
+          ],
+          "email": "davide.bottari [at] imtlucca [dot] it",
+          "homepage": "https://momilab.imtlucca.it/research/seed; https://www.imtlucca.it/davide.bottari",
+          "orcid": "0000-0001-6843-1569"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-86",
       "institution": "Indian Institute Of Technology Madras (iitm)",
       "city": "",
       "country": "India",
@@ -3084,7 +3191,7 @@
       ]
     },
     {
-      "id": "site-84",
+      "id": "site-87",
       "institution": "Inria",
       "city": "Le Chesnay-Rocquencourt",
       "country": "France",
@@ -3113,7 +3220,7 @@
       ]
     },
     {
-      "id": "site-85",
+      "id": "site-88",
       "institution": "Inria Paris Centre",
       "city": "Paris",
       "country": "France",
@@ -3121,6 +3228,16 @@
       "longitude": 2.346437,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Camilla Mannino",
+          "affiliation": "Inria Paris",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "camilla.mannino [at] icm-institute [dot] org",
+          "homepage": "https://www.researchgate.net/scientific-contributions/Camilla-Mannino-2328767016",
+          "orcid": "0009-0006-2525-5941"
+        },
         {
           "name": "Marie-Constance Corsi",
           "affiliation": "Inria Paris",
@@ -3134,7 +3251,7 @@
           "orcid": "0000-0002-6262-5036"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -3142,7 +3259,32 @@
       ]
     },
     {
-      "id": "site-86",
+      "id": "site-89",
+      "institution": "INSERM U 1141",
+      "city": "",
+      "country": "France",
+      "latitude": 48.594799,
+      "longitude": 7.7055318,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Parvaneh Adibpour",
+          "affiliation": "INSERM U 1141",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "p.adibpour [at] gmail [dot] com",
+          "homepage": "https://orcid.org/0000-0002-6896-6261",
+          "orcid": "0000-0002-6896-6261"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-90",
       "institution": "Institut de Neurosciences des Systèmes",
       "city": "Marseille",
       "country": "France",
@@ -3167,7 +3309,7 @@
       ]
     },
     {
-      "id": "site-87",
+      "id": "site-91",
       "institution": "Institut de Psychiatrie et Neurosciences de Paris",
       "city": "Paris",
       "country": "France",
@@ -3196,7 +3338,7 @@
       ]
     },
     {
-      "id": "site-88",
+      "id": "site-92",
       "institution": "Institute of Information and Communication Technologies, Bulgarian Academy of Sciences",
       "city": "Sofia",
       "country": "Bulgaria",
@@ -3234,7 +3376,7 @@
       ]
     },
     {
-      "id": "site-89",
+      "id": "site-93",
       "institution": "Institute of Robotics, Bulgarian Academy of Sciences",
       "city": "Sofia",
       "country": "Bulgaria",
@@ -3261,7 +3403,7 @@
       ]
     },
     {
-      "id": "site-90",
+      "id": "site-94",
       "institution": "Instituto de Biofísica e Engenharia Biomédica",
       "city": "Lisbon",
       "country": "Portugal",
@@ -3286,7 +3428,7 @@
       ]
     },
     {
-      "id": "site-91",
+      "id": "site-95",
       "institution": "Instituto Politécnico do Porto",
       "city": "Porto",
       "country": "Portugal",
@@ -3315,7 +3457,7 @@
       ]
     },
     {
-      "id": "site-92",
+      "id": "site-96",
       "institution": "Instituto Superior Técnico",
       "city": "Lisbon",
       "country": "Portugal",
@@ -3352,7 +3494,7 @@
       ]
     },
     {
-      "id": "site-93",
+      "id": "site-97",
       "institution": "International University of Sarajevo",
       "city": "Sarajevo",
       "country": "Bosnia and Herzegovina",
@@ -3377,7 +3519,7 @@
       ]
     },
     {
-      "id": "site-94",
+      "id": "site-98",
       "institution": "Iscte - University Institute of Lisbon",
       "city": "Lisbon",
       "country": "Portugal",
@@ -3406,7 +3548,7 @@
       ]
     },
     {
-      "id": "site-95",
+      "id": "site-99",
       "institution": "Istanbul Commerce University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -3444,7 +3586,7 @@
       ]
     },
     {
-      "id": "site-96",
+      "id": "site-100",
       "institution": "Istanbul Medipol University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -3473,7 +3615,7 @@
       ]
     },
     {
-      "id": "site-97",
+      "id": "site-101",
       "institution": "Istanbul Technical University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -3502,7 +3644,7 @@
       ]
     },
     {
-      "id": "site-98",
+      "id": "site-102",
       "institution": "Istanbul University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -3540,7 +3682,42 @@
       ]
     },
     {
-      "id": "site-99",
+      "id": "site-103",
+      "institution": "Istituto Universitario di Studi Superiori (IUSS)",
+      "city": "Pavia",
+      "country": "Italy",
+      "latitude": 45.1859,
+      "longitude": 9.1594,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Federica Biondi",
+          "affiliation": "Istituto Universitario di Studi Superiori - IUSS",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "federica.biondi [at] iusspavia [dot] it",
+          "homepage": "",
+          "orcid": "0009-0008-9313-824X"
+        },
+        {
+          "name": "Riccardo Venturini",
+          "affiliation": "Istituto Universitario Di Studi Superiori ( I.u.s.s.) Di Pavia",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "riccardo.venturini [at] iusspavia [dot] it",
+          "homepage": "https://riccardoventurini.github.io/",
+          "orcid": "0009-0008-3401-6162"
+        }
+      ],
+      "member_count": 2,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-104",
       "institution": "Izmir Biomedicine and Genome Center (IBG)",
       "city": "İzmir",
       "country": "Türkiye",
@@ -3569,7 +3746,7 @@
       ]
     },
     {
-      "id": "site-100",
+      "id": "site-105",
       "institution": "Izmir Democracy University",
       "city": "Izmir",
       "country": "Türkiye",
@@ -3594,7 +3771,7 @@
       ]
     },
     {
-      "id": "site-101",
+      "id": "site-106",
       "institution": "Izmir Katip Celebi University",
       "city": "Izmir",
       "country": "Türkiye",
@@ -3623,7 +3800,7 @@
       ]
     },
     {
-      "id": "site-102",
+      "id": "site-107",
       "institution": "Işık University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -3652,7 +3829,7 @@
       ]
     },
     {
-      "id": "site-103",
+      "id": "site-108",
       "institution": "İnönü University",
       "city": "Malatya",
       "country": "Türkiye",
@@ -3679,7 +3856,7 @@
       ]
     },
     {
-      "id": "site-104",
+      "id": "site-109",
       "institution": "İzmir City Hospital",
       "city": "İzmir",
       "country": "Türkiye",
@@ -3708,7 +3885,7 @@
       ]
     },
     {
-      "id": "site-105",
+      "id": "site-110",
       "institution": "Jagiellonian University",
       "city": "Kraków",
       "country": "Poland",
@@ -3781,7 +3958,7 @@
       ]
     },
     {
-      "id": "site-106",
+      "id": "site-111",
       "institution": "Josip Juraj Strossmayer University of Osijek, Faculty of Humanities and Social Sciences",
       "city": "Osijek",
       "country": "Croatia",
@@ -3808,7 +3985,7 @@
       ]
     },
     {
-      "id": "site-107",
+      "id": "site-112",
       "institution": "Julius-Maximilians-Universität Würzburg",
       "city": "",
       "country": "Germany",
@@ -3837,7 +4014,7 @@
       ]
     },
     {
-      "id": "site-108",
+      "id": "site-113",
       "institution": "Justus Liebig University Giessen",
       "city": "Giessen",
       "country": "Germany",
@@ -3862,7 +4039,7 @@
       ]
     },
     {
-      "id": "site-109",
+      "id": "site-114",
       "institution": "Karadeniz Technical University",
       "city": "Trabzon",
       "country": "Türkiye",
@@ -4012,7 +4189,7 @@
       ]
     },
     {
-      "id": "site-110",
+      "id": "site-115",
       "institution": "Karolinska Institutet",
       "city": "Stockholm",
       "country": "Sweden",
@@ -4041,7 +4218,7 @@
       ]
     },
     {
-      "id": "site-111",
+      "id": "site-116",
       "institution": "Kaunas University of Technology",
       "city": "Kaunas",
       "country": "Lithuania",
@@ -4079,7 +4256,7 @@
       ]
     },
     {
-      "id": "site-112",
+      "id": "site-117",
       "institution": "King's College London",
       "city": "London",
       "country": "United Kingdom",
@@ -4129,7 +4306,7 @@
       ]
     },
     {
-      "id": "site-113",
+      "id": "site-118",
       "institution": "King’s College London",
       "city": "",
       "country": "United Kingdom",
@@ -4167,7 +4344,7 @@
       ]
     },
     {
-      "id": "site-114",
+      "id": "site-119",
       "institution": "Kirklareli University",
       "city": "Kirklareli",
       "country": "Türkiye",
@@ -4192,7 +4369,7 @@
       ]
     },
     {
-      "id": "site-115",
+      "id": "site-120",
       "institution": "Konya Food and Agriculture University",
       "city": "Konya",
       "country": "Türkiye",
@@ -4221,7 +4398,7 @@
       ]
     },
     {
-      "id": "site-116",
+      "id": "site-121",
       "institution": "Koç University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -4250,7 +4427,7 @@
       ]
     },
     {
-      "id": "site-117",
+      "id": "site-122",
       "institution": "KU Leuven",
       "city": "Leuven",
       "country": "Belgium",
@@ -4258,6 +4435,18 @@
       "longitude": 4.700391,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Idris Lacker",
+          "affiliation": "KU Leuven",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "idrischarlie.lacker [at] student [dot] kuleuven [dot] be",
+          "homepage": "",
+          "orcid": ""
+        },
         {
           "name": "Simon Ladouce",
           "affiliation": "KU Leuven",
@@ -4270,14 +4459,15 @@
           "orcid": "0000-0001-6760-6240"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
+        "WG2",
         "WG3"
       ]
     },
     {
-      "id": "site-118",
+      "id": "site-123",
       "institution": "Kütahya Dumlupınar University",
       "city": "Kütahya",
       "country": "Türkiye",
@@ -4304,7 +4494,7 @@
       ]
     },
     {
-      "id": "site-119",
+      "id": "site-124",
       "institution": "Kırıkkale University",
       "city": "Kırıkkale",
       "country": "Türkiye",
@@ -4331,7 +4521,7 @@
       ]
     },
     {
-      "id": "site-120",
+      "id": "site-125",
       "institution": "Lancaster University",
       "city": "Lancaster",
       "country": "United Kingdom",
@@ -4356,7 +4546,7 @@
       ]
     },
     {
-      "id": "site-121",
+      "id": "site-126",
       "institution": "Leibniz Research Centre for Working Environment and Human Factors",
       "city": "Dortmund",
       "country": "Germany",
@@ -4364,6 +4554,16 @@
       "longitude": 7.458295,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Sahcan Özdemir",
+          "affiliation": "Leibniz Research Centre for Working Environment and Human Factors",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "oezdemir [at] ifado [dot] de",
+          "homepage": "sahcanozdemir.github.io",
+          "orcid": "0000-0002-2541-2963"
+        },
         {
           "name": "Stephan Getzmann",
           "affiliation": "Leibniz Research Centre for Working Environment and Human Factors at Dortmund University",
@@ -4375,13 +4575,14 @@
           "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
-        "WG2"
+        "WG2",
+        "WG3"
       ]
     },
     {
-      "id": "site-122",
+      "id": "site-127",
       "institution": "Lille Neuroscience & Cognition (Inserm UMR-S 1172)",
       "city": "Lille",
       "country": "France",
@@ -4408,7 +4609,7 @@
       ]
     },
     {
-      "id": "site-123",
+      "id": "site-128",
       "institution": "Linköping University",
       "city": "Linköping",
       "country": "Sweden",
@@ -4433,7 +4634,7 @@
       ]
     },
     {
-      "id": "site-124",
+      "id": "site-129",
       "institution": "London South Bank University Lbg",
       "city": "London",
       "country": "United Kingdom",
@@ -4462,7 +4663,7 @@
       ]
     },
     {
-      "id": "site-125",
+      "id": "site-130",
       "institution": "Lucian Blaga University of Sibiu",
       "city": "Sibiu",
       "country": "Romania",
@@ -4491,7 +4692,7 @@
       ]
     },
     {
-      "id": "site-126",
+      "id": "site-131",
       "institution": "Ludwig-Maximilians-Universität München",
       "city": "Munich",
       "country": "Germany",
@@ -4520,7 +4721,7 @@
       ]
     },
     {
-      "id": "site-127",
+      "id": "site-132",
       "institution": "Lunds Universitet",
       "city": "",
       "country": "Sweden",
@@ -4549,7 +4750,7 @@
       ]
     },
     {
-      "id": "site-128",
+      "id": "site-133",
       "institution": "Lyon Neuroscience Research Center (CRNL)",
       "city": "Lyon",
       "country": "France",
@@ -4574,7 +4775,7 @@
       ]
     },
     {
-      "id": "site-129",
+      "id": "site-134",
       "institution": "Macedonian Academy of Sciences and Arts",
       "city": "Skopje",
       "country": "North Macedonia",
@@ -4603,7 +4804,7 @@
       ]
     },
     {
-      "id": "site-130",
+      "id": "site-135",
       "institution": "Manchester Metropolitan University",
       "city": "Manchester",
       "country": "United Kingdom",
@@ -4656,7 +4857,7 @@
       ]
     },
     {
-      "id": "site-131",
+      "id": "site-136",
       "institution": "Masaryk University",
       "city": "Brno",
       "country": "Czechia",
@@ -4681,7 +4882,7 @@
       ]
     },
     {
-      "id": "site-132",
+      "id": "site-137",
       "institution": "Max Planck Institute for Human Cognitive and Brain Sciences",
       "city": "Leipzig",
       "country": "Germany",
@@ -4689,6 +4890,26 @@
       "longitude": 12.389439,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Filip Miscevic",
+          "affiliation": "Max Planck Institute for Human Cognitive and Brain Sciences",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "miscevic [at] cbs [dot] mpg [dot] de",
+          "homepage": "https://ca.linkedin.com/in/filip-miscevic-1874498b",
+          "orcid": ""
+        },
+        {
+          "name": "Michael Gaebler",
+          "affiliation": "Max Planck Institute for Human Cognitive and Brain Sciences",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "gaebler [at] cbs [dot] mpg [dot] de",
+          "homepage": "https://www.michaelgaebler.com",
+          "orcid": "0000-0002-4442-5778"
+        },
         {
           "name": "Nicolás Hinrichs",
           "affiliation": "Max Planck Institute for Human Cognitive and Brain Sciences",
@@ -4702,7 +4923,7 @@
           "orcid": "0000-0003-4969-9644"
         }
       ],
-      "member_count": 1,
+      "member_count": 3,
       "working_groups": [
         "WG1",
         "WG2",
@@ -4710,7 +4931,7 @@
       ]
     },
     {
-      "id": "site-133",
+      "id": "site-138",
       "institution": "Medical University of Lublin",
       "city": "Lublin",
       "country": "Poland",
@@ -4735,7 +4956,7 @@
       ]
     },
     {
-      "id": "site-134",
+      "id": "site-139",
       "institution": "Middle East Technical University",
       "city": "Ankara",
       "country": "Türkiye",
@@ -4786,7 +5007,42 @@
       ]
     },
     {
-      "id": "site-135",
+      "id": "site-140",
+      "institution": "Moscow State University of Psychology and Education",
+      "city": "Moscow",
+      "country": "Russian Federation",
+      "latitude": 55.7676,
+      "longitude": 37.6247,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Anna Plieva",
+          "affiliation": "Moscow State University of Psyсhology and Education",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "anna.plieva09 [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": ""
+        },
+        {
+          "name": "Ilacai Romero Reyes",
+          "affiliation": "Moscow State University of Pychology and Education",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "ilacai.romero [at] gmail [dot] com",
+          "homepage": "https://www.researchgate.net/profile/Ilacai-Romero-Reyes",
+          "orcid": "0000-0002-6743-6138"
+        }
+      ],
+      "member_count": 2,
+      "working_groups": [
+        "WG1"
+      ]
+    },
+    {
+      "id": "site-141",
       "institution": "MSH Medical School Hamburg",
       "city": "Hamburg",
       "country": "Germany",
@@ -4825,7 +5081,7 @@
       ]
     },
     {
-      "id": "site-136",
+      "id": "site-142",
       "institution": "Nanyang Technological University",
       "city": "Singapore",
       "country": "Singapore",
@@ -4865,7 +5121,34 @@
       ]
     },
     {
-      "id": "site-137",
+      "id": "site-143",
+      "institution": "National Institute of Technology Raipur",
+      "city": "Raipur",
+      "country": "India",
+      "latitude": 21.2514,
+      "longitude": 81.6296,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Silpa S",
+          "affiliation": "National Institute of Technology Raipur",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "silpa.phd2024.bme [at] nitrr [dot] ac [dot] in",
+          "homepage": "",
+          "orcid": ""
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-144",
       "institution": "National Institutes of Health",
       "city": "",
       "country": "United States",
@@ -4892,7 +5175,7 @@
       ]
     },
     {
-      "id": "site-138",
+      "id": "site-145",
       "institution": "National Technical University of Athens",
       "city": "Athens",
       "country": "Greece",
@@ -4921,7 +5204,7 @@
       ]
     },
     {
-      "id": "site-139",
+      "id": "site-146",
       "institution": "Nevşehir Hacı Bektaş Veli University",
       "city": "Nevşehir",
       "country": "Türkiye",
@@ -4950,7 +5233,7 @@
       ]
     },
     {
-      "id": "site-140",
+      "id": "site-147",
       "institution": "New Zealand College of Chiropractic",
       "city": "Auckland",
       "country": "New Zealand",
@@ -4977,7 +5260,7 @@
       ]
     },
     {
-      "id": "site-141",
+      "id": "site-148",
       "institution": "NORCE Norwegian Research Centre",
       "city": "Bergen",
       "country": "Norway",
@@ -5002,7 +5285,7 @@
       ]
     },
     {
-      "id": "site-142",
+      "id": "site-149",
       "institution": "Ondokuz Mayıs University",
       "city": "Samsun",
       "country": "Türkiye",
@@ -5052,7 +5335,7 @@
       ]
     },
     {
-      "id": "site-143",
+      "id": "site-150",
       "institution": "Oxford Brookes University",
       "city": "Oxford",
       "country": "United Kingdom",
@@ -5081,7 +5364,7 @@
       ]
     },
     {
-      "id": "site-144",
+      "id": "site-151",
       "institution": "Panteion University of Social and Political Sciences",
       "city": "Athens",
       "country": "Greece",
@@ -5122,7 +5405,7 @@
       ]
     },
     {
-      "id": "site-145",
+      "id": "site-152",
       "institution": "Paris Brain Institute",
       "city": "Paris",
       "country": "France",
@@ -5141,6 +5424,18 @@
           "orcid": ""
         },
         {
+          "name": "Marion Pavaux",
+          "affiliation": "Institut du Cerveau et de la Moelle épinière",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "marion.pavaux [at] icm-institute [dot] org",
+          "homepage": "",
+          "orcid": ""
+        },
+        {
           "name": "Maximilien Chaumon",
           "affiliation": "Institut du Cerveau et de la Moelle épinière",
           "working_groups": [
@@ -5151,14 +5446,15 @@
           "orcid": "0000-0001-9664-8861"
         }
       ],
-      "member_count": 2,
+      "member_count": 3,
       "working_groups": [
+        "WG1",
         "WG2",
         "WG3"
       ]
     },
     {
-      "id": "site-146",
+      "id": "site-153",
       "institution": "Physikalisch-technische Bundesanstalt",
       "city": "",
       "country": "Germany",
@@ -5187,7 +5483,7 @@
       ]
     },
     {
-      "id": "site-147",
+      "id": "site-154",
       "institution": "Piri Reis University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -5212,7 +5508,7 @@
       ]
     },
     {
-      "id": "site-148",
+      "id": "site-155",
       "institution": "Politecnico di Milano",
       "city": "Milan",
       "country": "Italy",
@@ -5237,7 +5533,7 @@
       ]
     },
     {
-      "id": "site-149",
+      "id": "site-156",
       "institution": "Politecnico di Torino",
       "city": "",
       "country": "Italy",
@@ -5264,7 +5560,7 @@
       ]
     },
     {
-      "id": "site-150",
+      "id": "site-157",
       "institution": "Polytechnic University of Bari",
       "city": "Bari",
       "country": "Italy",
@@ -5291,7 +5587,7 @@
       ]
     },
     {
-      "id": "site-151",
+      "id": "site-158",
       "institution": "Pontificia Universidad Católica de Chile",
       "city": "",
       "country": "International Organisations",
@@ -5318,7 +5614,7 @@
       ]
     },
     {
-      "id": "site-152",
+      "id": "site-159",
       "institution": "Poznan University of Medical Sciences",
       "city": "Poznań",
       "country": "Poland",
@@ -5343,7 +5639,7 @@
       ]
     },
     {
-      "id": "site-153",
+      "id": "site-160",
       "institution": "Pwani University College",
       "city": "",
       "country": "Kenya",
@@ -5372,7 +5668,7 @@
       ]
     },
     {
-      "id": "site-154",
+      "id": "site-161",
       "institution": "Radboud University",
       "city": "Nijmegen",
       "country": "Netherlands",
@@ -5441,7 +5737,7 @@
       ]
     },
     {
-      "id": "site-155",
+      "id": "site-162",
       "institution": "Radboud University Medical Center",
       "city": "Nijmegen",
       "country": "Netherlands",
@@ -5480,7 +5776,7 @@
       ]
     },
     {
-      "id": "site-156",
+      "id": "site-163",
       "institution": "Republic of Türkiye Ministry of Health",
       "city": "Ankara",
       "country": "Türkiye",
@@ -5509,7 +5805,7 @@
       ]
     },
     {
-      "id": "site-157",
+      "id": "site-164",
       "institution": "Research and Development Institute \"Life Activities Advancement Institute\"",
       "city": "Belgrade",
       "country": "Serbia",
@@ -5550,7 +5846,7 @@
       ]
     },
     {
-      "id": "site-158",
+      "id": "site-165",
       "institution": "Riga Stradiņš University",
       "city": "Riga",
       "country": "Latvia",
@@ -5577,7 +5873,7 @@
       ]
     },
     {
-      "id": "site-159",
+      "id": "site-166",
       "institution": "Sabancı University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -5612,7 +5908,7 @@
       ]
     },
     {
-      "id": "site-160",
+      "id": "site-167",
       "institution": "San Diego State University Foundation",
       "city": "",
       "country": "United States",
@@ -5641,7 +5937,7 @@
       ]
     },
     {
-      "id": "site-161",
+      "id": "site-168",
       "institution": "Sapienza University of Rome",
       "city": "Rome",
       "country": "Italy",
@@ -5681,7 +5977,7 @@
       ]
     },
     {
-      "id": "site-162",
+      "id": "site-169",
       "institution": "Sapienza University of Rome",
       "city": "Rome",
       "country": "Romania",
@@ -5706,7 +6002,7 @@
       ]
     },
     {
-      "id": "site-163",
+      "id": "site-170",
       "institution": "School of Health, Polytechnic of Porto",
       "city": "Porto",
       "country": "Portugal",
@@ -5733,7 +6029,7 @@
       ]
     },
     {
-      "id": "site-164",
+      "id": "site-171",
       "institution": "Scuola IMT Alti Studi Lucca",
       "city": "Lucca",
       "country": "Italy",
@@ -5762,7 +6058,7 @@
       ]
     },
     {
-      "id": "site-165",
+      "id": "site-172",
       "institution": "Scuola Superiore Sant'Anna",
       "city": "Pisa",
       "country": "Italy",
@@ -5787,7 +6083,32 @@
       ]
     },
     {
-      "id": "site-166",
+      "id": "site-173",
+      "institution": "Shree Guru Gobind Singh Tricentenary University",
+      "city": "Gurugram",
+      "country": "India",
+      "latitude": 28.4595,
+      "longitude": 76.9779,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Achayata Sharma",
+          "affiliation": "Shree Guru Gobind Singh Tricentenary University",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "sharmaachayata18 [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": "0009-0002-4790-5467"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-174",
       "institution": "Sidi Mohamed Ben Abdellah University",
       "city": "Fez",
       "country": "Morocco",
@@ -5814,7 +6135,7 @@
       ]
     },
     {
-      "id": "site-167",
+      "id": "site-175",
       "institution": "Singidunum University",
       "city": "Belgrade",
       "country": "Serbia",
@@ -5843,7 +6164,7 @@
       ]
     },
     {
-      "id": "site-168",
+      "id": "site-176",
       "institution": "Sivas Cumhuriyet University",
       "city": "Sivas",
       "country": "Türkiye",
@@ -5870,7 +6191,7 @@
       ]
     },
     {
-      "id": "site-169",
+      "id": "site-177",
       "institution": "Sorbonne Universite",
       "city": "Paris",
       "country": "France",
@@ -5895,7 +6216,7 @@
       ]
     },
     {
-      "id": "site-170",
+      "id": "site-178",
       "institution": "Ss. Cyril and Methodius University in Skopje",
       "city": "Skopje",
       "country": "North Macedonia",
@@ -5924,7 +6245,7 @@
       ]
     },
     {
-      "id": "site-171",
+      "id": "site-179",
       "institution": "Starlab Barcelona S.L.",
       "city": "Barcelona",
       "country": "Spain",
@@ -5953,7 +6274,7 @@
       ]
     },
     {
-      "id": "site-172",
+      "id": "site-180",
       "institution": "Süleyman Demirel University",
       "city": "Isparta",
       "country": "Türkiye",
@@ -5982,7 +6303,7 @@
       ]
     },
     {
-      "id": "site-173",
+      "id": "site-181",
       "institution": "Tallinn University of Technology",
       "city": "Tallinn",
       "country": "Estonia",
@@ -6011,7 +6332,7 @@
       ]
     },
     {
-      "id": "site-174",
+      "id": "site-182",
       "institution": "Tarbiat Modares University",
       "city": "Tehran",
       "country": "Iran",
@@ -6038,7 +6359,7 @@
       ]
     },
     {
-      "id": "site-175",
+      "id": "site-183",
       "institution": "Tarsus University",
       "city": "Tarsus",
       "country": "Türkiye",
@@ -6091,7 +6412,7 @@
       ]
     },
     {
-      "id": "site-176",
+      "id": "site-184",
       "institution": "Technical University of Varna",
       "city": "Varna",
       "country": "Bulgaria",
@@ -6118,7 +6439,7 @@
       ]
     },
     {
-      "id": "site-177",
+      "id": "site-185",
       "institution": "Technische Universität Berlin",
       "city": "Berlin",
       "country": "Germany",
@@ -6145,7 +6466,7 @@
       ]
     },
     {
-      "id": "site-178",
+      "id": "site-186",
       "institution": "Technische Universität Dresden",
       "city": "Dresden",
       "country": "Germany",
@@ -6174,7 +6495,7 @@
       ]
     },
     {
-      "id": "site-179",
+      "id": "site-187",
       "institution": "Technological University Dublin",
       "city": "Dublin",
       "country": "Ireland",
@@ -6201,7 +6522,7 @@
       ]
     },
     {
-      "id": "site-180",
+      "id": "site-188",
       "institution": "The Lab Inc",
       "city": "Philadelphia",
       "country": "United States",
@@ -6230,7 +6551,32 @@
       ]
     },
     {
-      "id": "site-181",
+      "id": "site-189",
+      "institution": "The University of North Carolina at Chapel Hill",
+      "city": "Chapel Hill",
+      "country": "United States",
+      "latitude": 35.9049,
+      "longitude": -79.0469,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Anne-Michelle Engelstad",
+          "affiliation": "The University Of North Carolina At Chapel Hill",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "anne-michelle_engelstad [at] med [dot] unc [dot] edu",
+          "homepage": "https://aengelstad.scholars.harvard.edu/bio",
+          "orcid": "0000-0003-1589-5671"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-190",
       "institution": "Trakya University",
       "city": "Edirne",
       "country": "Türkiye",
@@ -6257,7 +6603,7 @@
       ]
     },
     {
-      "id": "site-182",
+      "id": "site-191",
       "institution": "Transylvanian Institute of Neuroscience",
       "city": "Cluj-Napoca",
       "country": "Romania",
@@ -6284,7 +6630,7 @@
       ]
     },
     {
-      "id": "site-183",
+      "id": "site-192",
       "institution": "Trinity College Dublin",
       "city": "Dublin",
       "country": "Ireland",
@@ -6322,7 +6668,7 @@
       ]
     },
     {
-      "id": "site-184",
+      "id": "site-193",
       "institution": "UiT The Arctic University of Norway",
       "city": "Tromsø",
       "country": "Norway",
@@ -6374,7 +6720,32 @@
       ]
     },
     {
-      "id": "site-185",
+      "id": "site-194",
+      "institution": "Umea University",
+      "city": "",
+      "country": "Sweden",
+      "latitude": 63.8217763,
+      "longitude": 20.3043163,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Carlos Felipe Buitrago",
+          "affiliation": "Umea University",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "cafebp28 [at] gmail [dot] com",
+          "homepage": "www.linkedin.com/in/carlos-felipe-buitrago-panader-16963261",
+          "orcid": "0000-0002-5821-6272"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-195",
       "institution": "Uniklinik RWTH Aachen",
       "city": "Aachen",
       "country": "Germany",
@@ -6399,7 +6770,7 @@
       ]
     },
     {
-      "id": "site-186",
+      "id": "site-196",
       "institution": "Universidad Catolica Del Uruguay Damaso Antonio Larranaga Asociacion Civil",
       "city": "",
       "country": "Uruguay",
@@ -6428,7 +6799,7 @@
       ]
     },
     {
-      "id": "site-187",
+      "id": "site-197",
       "institution": "Universidad Católica del Maule",
       "city": "Talca",
       "country": "Chile",
@@ -6479,7 +6850,7 @@
       ]
     },
     {
-      "id": "site-188",
+      "id": "site-198",
       "institution": "Universidad de Granada",
       "city": "",
       "country": "Spain",
@@ -6508,7 +6879,7 @@
       ]
     },
     {
-      "id": "site-189",
+      "id": "site-199",
       "institution": "Universidad de Talca",
       "city": "Talca",
       "country": "Chile",
@@ -6537,7 +6908,7 @@
       ]
     },
     {
-      "id": "site-190",
+      "id": "site-200",
       "institution": "Universidad del Atlántico Medio",
       "city": "",
       "country": "Spain",
@@ -6572,7 +6943,7 @@
       ]
     },
     {
-      "id": "site-191",
+      "id": "site-201",
       "institution": "Universidad Nacional de Educación a Distancia",
       "city": "Madrid",
       "country": "Spain",
@@ -6599,7 +6970,7 @@
       ]
     },
     {
-      "id": "site-192",
+      "id": "site-202",
       "institution": "Universidad Pompeu Fabra",
       "city": "",
       "country": "Spain",
@@ -6628,7 +6999,7 @@
       ]
     },
     {
-      "id": "site-193",
+      "id": "site-203",
       "institution": "Universidade De Sao Paulo",
       "city": "",
       "country": "Brazil",
@@ -6655,7 +7026,7 @@
       ]
     },
     {
-      "id": "site-194",
+      "id": "site-204",
       "institution": "Universidade Lusófona",
       "city": "Lisbon",
       "country": "Portugal",
@@ -6684,7 +7055,7 @@
       ]
     },
     {
-      "id": "site-195",
+      "id": "site-205",
       "institution": "Universidade Lusófona - Centro Universitário do Porto",
       "city": "Porto",
       "country": "Portugal",
@@ -6711,7 +7082,7 @@
       ]
     },
     {
-      "id": "site-196",
+      "id": "site-206",
       "institution": "Universita Degli Studi Di Foggia",
       "city": "",
       "country": "Italy",
@@ -6750,7 +7121,7 @@
       ]
     },
     {
-      "id": "site-197",
+      "id": "site-207",
       "institution": "Universita degli Studi di Urbino Carlo Bo",
       "city": "Urbino",
       "country": "Italy",
@@ -6779,7 +7150,7 @@
       ]
     },
     {
-      "id": "site-198",
+      "id": "site-208",
       "institution": "Universitair Medisch Centrum Groningen",
       "city": "Groningen",
       "country": "Netherlands",
@@ -6804,7 +7175,7 @@
       ]
     },
     {
-      "id": "site-199",
+      "id": "site-209",
       "institution": "Universitat de Barcelona",
       "city": "Barcelona",
       "country": "Spain",
@@ -6864,7 +7235,7 @@
       ]
     },
     {
-      "id": "site-200",
+      "id": "site-210",
       "institution": "Universitat Politècnica de Catalunya",
       "city": "Barcelona",
       "country": "Spain",
@@ -6889,7 +7260,7 @@
       ]
     },
     {
-      "id": "site-201",
+      "id": "site-211",
       "institution": "Universitat Pompeu Fabra",
       "city": "",
       "country": "Spain",
@@ -6930,7 +7301,7 @@
       ]
     },
     {
-      "id": "site-202",
+      "id": "site-212",
       "institution": "University College Cork",
       "city": "Cork",
       "country": "Ireland",
@@ -6979,7 +7350,7 @@
       ]
     },
     {
-      "id": "site-203",
+      "id": "site-213",
       "institution": "University College Dublin",
       "city": "Dublin",
       "country": "Ireland",
@@ -7006,7 +7377,7 @@
       ]
     },
     {
-      "id": "site-204",
+      "id": "site-214",
       "institution": "University College London",
       "city": "London",
       "country": "United Kingdom",
@@ -7065,7 +7436,7 @@
       ]
     },
     {
-      "id": "site-205",
+      "id": "site-215",
       "institution": "University Hospital Frankfurt",
       "city": "Frankfurt am Main",
       "country": "European Commission and EU Agencies",
@@ -7090,7 +7461,47 @@
       ]
     },
     {
-      "id": "site-206",
+      "id": "site-216",
+      "institution": "University Hospital Würzburg",
+      "city": "Würzburg",
+      "country": "Germany",
+      "latitude": 49.7979,
+      "longitude": 9.9409,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Hanwei Liu",
+          "affiliation": "University Hospital Würzburg",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "violalhw [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": ""
+        },
+        {
+          "name": "Tanmoy Sil",
+          "affiliation": "University Hospital Würzburg",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "tanmoy_sil [at] hotmail [dot] com",
+          "homepage": "https://tanmoysil.github.io",
+          "orcid": "0009-0002-5041-7579"
+        }
+      ],
+      "member_count": 2,
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-217",
       "institution": "University of Akureyri",
       "city": "Akureyri",
       "country": "Iceland",
@@ -7130,7 +7541,7 @@
       ]
     },
     {
-      "id": "site-207",
+      "id": "site-218",
       "institution": "University of Bari Aldo Moro",
       "city": "Bari",
       "country": "Italy",
@@ -7157,7 +7568,7 @@
       ]
     },
     {
-      "id": "site-208",
+      "id": "site-219",
       "institution": "University of Belgrade School of Electrical Engineering",
       "city": "Belgrade",
       "country": "Serbia",
@@ -7227,7 +7638,7 @@
       ]
     },
     {
-      "id": "site-209",
+      "id": "site-220",
       "institution": "University of Bergen",
       "city": "Bergen",
       "country": "Norway",
@@ -7287,7 +7698,7 @@
       ]
     },
     {
-      "id": "site-210",
+      "id": "site-221",
       "institution": "University of Birmingham",
       "city": "Birmingham",
       "country": "United Kingdom",
@@ -7326,7 +7737,7 @@
       ]
     },
     {
-      "id": "site-211",
+      "id": "site-222",
       "institution": "University of Bordeaux",
       "city": "Bordeaux",
       "country": "France",
@@ -7351,7 +7762,7 @@
       ]
     },
     {
-      "id": "site-212",
+      "id": "site-223",
       "institution": "University of Bremen",
       "city": "Bremen",
       "country": "Germany",
@@ -7403,7 +7814,7 @@
       ]
     },
     {
-      "id": "site-213",
+      "id": "site-224",
       "institution": "University of British Columbia",
       "city": "Vancouver",
       "country": "Canada",
@@ -7432,7 +7843,7 @@
       ]
     },
     {
-      "id": "site-214",
+      "id": "site-225",
       "institution": "University of Bucharest",
       "city": "Bucharest",
       "country": "Romania",
@@ -7459,7 +7870,7 @@
       ]
     },
     {
-      "id": "site-215",
+      "id": "site-226",
       "institution": "University of Cagliari",
       "city": "Cagliari",
       "country": "Italy",
@@ -7486,7 +7897,7 @@
       ]
     },
     {
-      "id": "site-216",
+      "id": "site-227",
       "institution": "University of California San Diego",
       "city": "",
       "country": "United States",
@@ -7503,15 +7914,26 @@
           "email": "t2ramirez [at] health [dot] ucsd [dot] edu",
           "homepage": "https://www.linkedin.com/in/travis-ramirez2797ca/",
           "orcid": ""
+        },
+        {
+          "name": "Victoria Ho",
+          "affiliation": "University of California, Los Angeles",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "vho [at] mednet [dot] ucla [dot] edu",
+          "homepage": "https://www.uclahealth.org/providers/victoria-ho",
+          "orcid": "0000-0003-4159-1356"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
+        "WG1",
         "WG3"
       ]
     },
     {
-      "id": "site-217",
+      "id": "site-228",
       "institution": "University of Cambridge",
       "city": "Cambridge",
       "country": "United Kingdom",
@@ -7519,6 +7941,26 @@
       "longitude": 0.11696,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Grete Feldman",
+          "affiliation": "University of Cambridge",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "gtf24 [at] cam [dot] ac [dot] uk",
+          "homepage": "https://www.researchgate.net/profile/Grete-Feldman?ev=hdr_xprf",
+          "orcid": ""
+        },
+        {
+          "name": "Junkai Ma",
+          "affiliation": "University of Cambridge",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "junkai.ma [at] outlook [dot] com",
+          "homepage": "https://www.mmll.cam.ac.uk/",
+          "orcid": ""
+        },
         {
           "name": "Louise Barne",
           "affiliation": "University of Cambridge",
@@ -7532,7 +7974,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 3,
       "working_groups": [
         "WG1",
         "WG2",
@@ -7540,7 +7982,7 @@
       ]
     },
     {
-      "id": "site-218",
+      "id": "site-229",
       "institution": "University of Cape Town",
       "city": "Cape Town",
       "country": "South Africa",
@@ -7569,7 +8011,7 @@
       ]
     },
     {
-      "id": "site-219",
+      "id": "site-230",
       "institution": "University of Coimbra",
       "city": "Coimbra",
       "country": "Portugal",
@@ -7620,7 +8062,7 @@
       ]
     },
     {
-      "id": "site-220",
+      "id": "site-231",
       "institution": "University of Copenhagen",
       "city": "Copenhagen",
       "country": "Denmark",
@@ -7649,7 +8091,7 @@
       ]
     },
     {
-      "id": "site-221",
+      "id": "site-232",
       "institution": "University of Cyprus",
       "city": "Nicosia",
       "country": "Cyprus",
@@ -7690,7 +8132,7 @@
       ]
     },
     {
-      "id": "site-222",
+      "id": "site-233",
       "institution": "University of Dundee",
       "city": "Dundee",
       "country": "United Kingdom",
@@ -7742,7 +8184,7 @@
       ]
     },
     {
-      "id": "site-223",
+      "id": "site-234",
       "institution": "University of Edinburgh",
       "city": "Edinburgh",
       "country": "United Kingdom",
@@ -7767,7 +8209,7 @@
       ]
     },
     {
-      "id": "site-224",
+      "id": "site-235",
       "institution": "University of Galway",
       "city": "Galway",
       "country": "Ireland",
@@ -7775,6 +8217,16 @@
       "longitude": -9.06,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Bharat Lal",
+          "affiliation": "University of Galway",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "bharat.lal [at] universityofgalway [dot] ie",
+          "homepage": "https://www.linkedin.com/in/bharat-lal/",
+          "orcid": "0000-0001-7795-4601"
+        },
         {
           "name": "Bharat Tripathi",
           "affiliation": "University of Galway",
@@ -7788,7 +8240,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -7796,7 +8248,7 @@
       ]
     },
     {
-      "id": "site-225",
+      "id": "site-236",
       "institution": "University of Geneva",
       "city": "Geneva",
       "country": "Switzerland",
@@ -7867,7 +8319,7 @@
       ]
     },
     {
-      "id": "site-226",
+      "id": "site-237",
       "institution": "University of Glasgow",
       "city": "",
       "country": "United Kingdom",
@@ -7894,7 +8346,7 @@
       ]
     },
     {
-      "id": "site-227",
+      "id": "site-238",
       "institution": "University of Granada",
       "city": "Granada",
       "country": "Spain",
@@ -7934,7 +8386,7 @@
       ]
     },
     {
-      "id": "site-228",
+      "id": "site-239",
       "institution": "University of Groningen",
       "city": "Groningen",
       "country": "Netherlands",
@@ -7955,6 +8407,48 @@
           "orcid": ""
         },
         {
+          "name": "Jelmer Borst",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "j.p.borst [at] rug [dot] nl",
+          "homepage": "",
+          "orcid": "0000-0002-4493-8223"
+        },
+        {
+          "name": "Lisa-Marie Vortmann",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "l.vortmann [at] rug [dot] nl",
+          "homepage": "",
+          "orcid": ""
+        },
+        {
+          "name": "Mingmin Zhang",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "mingmin.zhang [at] rug [dot] nl",
+          "homepage": "https://www.researchgate.net/profile/Mingmin-Zhang-4?ev=hdr_xprf",
+          "orcid": ""
+        },
+        {
+          "name": "Nursena Ataseven",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "n.ataseven [at] rug [dot] nl",
+          "homepage": "",
+          "orcid": "0000-0002-5739-3509"
+        },
+        {
           "name": "Olaf Dimigen",
           "affiliation": "Rijksuniversiteit Groningen",
           "working_groups": [
@@ -7964,6 +8458,26 @@
           "email": "olaf [at] dimigen [dot] de",
           "homepage": "https://olaf.dimigen.de; https://www.rug.nl/staff/olaf.dimigen/?lang=en",
           "orcid": "0000-0002-2507-2823"
+        },
+        {
+          "name": "Wouter Kruijne",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "w.kruijne [at] rug [dot] nl",
+          "homepage": "https://www.rug.nl/staff/w.kruijne/",
+          "orcid": "0000-0001-6358-7468"
+        },
+        {
+          "name": "Y. Zhang",
+          "affiliation": "Rijksuniversiteit Groningen",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "yiyue.zhang [at] rug [dot] nl",
+          "homepage": "https://www.researchgate.net/profile/Yiyue-Zhang-13",
+          "orcid": ""
         },
         {
           "name": "Yining Chen",
@@ -7976,7 +8490,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 3,
+      "member_count": 9,
       "working_groups": [
         "WG1",
         "WG2",
@@ -7984,7 +8498,7 @@
       ]
     },
     {
-      "id": "site-229",
+      "id": "site-240",
       "institution": "University of Hamburg",
       "city": "Hamburg",
       "country": "Germany",
@@ -8009,7 +8523,7 @@
       ]
     },
     {
-      "id": "site-230",
+      "id": "site-241",
       "institution": "University of Health Sciences",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -8060,7 +8574,7 @@
       ]
     },
     {
-      "id": "site-231",
+      "id": "site-242",
       "institution": "University of Health Sciences, Gülhane Faculty of Medicine",
       "city": "Ankara",
       "country": "Türkiye",
@@ -8100,7 +8614,7 @@
       ]
     },
     {
-      "id": "site-232",
+      "id": "site-243",
       "institution": "University of Houston System",
       "city": "Houston",
       "country": "United States",
@@ -8140,7 +8654,7 @@
       ]
     },
     {
-      "id": "site-233",
+      "id": "site-244",
       "institution": "University of Innsbruck",
       "city": "Innsbruck",
       "country": "Austria",
@@ -8165,7 +8679,7 @@
       ]
     },
     {
-      "id": "site-234",
+      "id": "site-245",
       "institution": "University of Jyväskylä",
       "city": "Jyväskylä",
       "country": "Finland",
@@ -8194,7 +8708,32 @@
       ]
     },
     {
-      "id": "site-235",
+      "id": "site-246",
+      "institution": "University of Kragujevac",
+      "city": "Kragujevac",
+      "country": "Serbia",
+      "latitude": 43.927,
+      "longitude": 20.9247,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "MARIJA MANDARIĆ",
+          "affiliation": "University of Kragujevac, Faculty of Hotel Management and Tourism",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "mmandaric [at] kg [dot] ac [dot] rs",
+          "homepage": "https://hit-vb.kg.ac.rs/index.php/nastavno-osoblje/redovni-profesori/41-dr-marija-mandaric; https://www.researchgate.net/profile/Marija-Mandaric",
+          "orcid": "0000-0002-8504-3944"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-247",
       "institution": "University of Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -8233,7 +8772,7 @@
       ]
     },
     {
-      "id": "site-236",
+      "id": "site-248",
       "institution": "University of Leeds",
       "city": "Leeds",
       "country": "United Kingdom",
@@ -8282,6 +8821,18 @@
           ],
           "email": "wwqv0557 [at] leeds [dot] ac [dot] uk",
           "homepage": "https://www.linkedin.com/in/fangzhou-hu-2043b6388/",
+          "orcid": ""
+        },
+        {
+          "name": "Fatima Sabir",
+          "affiliation": "University of Leeds",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "frnsabir [at] gmail [dot] com",
+          "homepage": "",
           "orcid": ""
         },
         {
@@ -8340,7 +8891,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 9,
+      "member_count": 10,
       "working_groups": [
         "WG1",
         "WG2",
@@ -8348,7 +8899,7 @@
       ]
     },
     {
-      "id": "site-237",
+      "id": "site-249",
       "institution": "University of Ljubljana",
       "city": "Ljubljana",
       "country": "Slovenia",
@@ -8375,7 +8926,36 @@
       ]
     },
     {
-      "id": "site-238",
+      "id": "site-250",
+      "institution": "University of Luxembourg",
+      "city": "",
+      "country": "Luxembourg",
+      "latitude": 49.5036259,
+      "longitude": 5.9487155,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Polina Tapal",
+          "affiliation": "University of Luxembourg",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "polinatapal [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": "0009-0004-7067-012X"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-251",
       "institution": "University of Madeira",
       "city": "Funchal",
       "country": "Portugal",
@@ -8400,7 +8980,7 @@
       ]
     },
     {
-      "id": "site-239",
+      "id": "site-252",
       "institution": "University of Malta",
       "city": "Msida",
       "country": "Malta",
@@ -8475,7 +9055,7 @@
       ]
     },
     {
-      "id": "site-240",
+      "id": "site-253",
       "institution": "University of Manchester",
       "city": "Manchester",
       "country": "United Kingdom",
@@ -8483,6 +9063,16 @@
       "longitude": -2.234597,
       "location_confidence": "high",
       "members": [
+        {
+          "name": "Cheryl Capek",
+          "affiliation": "University of Manchester",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "cheryl.capek [at] manchester [dot] ac [dot] uk",
+          "homepage": "https://research.manchester.ac.uk/en/persons/cheryl.capek/",
+          "orcid": "0000-0002-5228-2340"
+        },
         {
           "name": "Emanuele Perugia",
           "affiliation": "University of Manchester",
@@ -8505,14 +9095,15 @@
           "orcid": "0000-0001-5911-0472"
         }
       ],
-      "member_count": 2,
+      "member_count": 3,
       "working_groups": [
         "WG1",
-        "WG2"
+        "WG2",
+        "WG3"
       ]
     },
     {
-      "id": "site-241",
+      "id": "site-254",
       "institution": "University of Minho",
       "city": "Braga",
       "country": "Portugal",
@@ -8563,7 +9154,36 @@
       ]
     },
     {
-      "id": "site-242",
+      "id": "site-255",
+      "institution": "University of Modena and Reggio Emilia",
+      "city": "",
+      "country": "Italy",
+      "latitude": 44.64494444444444,
+      "longitude": 10.927861111111111,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Francesca Pesciarelli",
+          "affiliation": "University of Modena and Reggio Emilia",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "francesca.pesciarelli [at] unimore [dot] it",
+          "homepage": "https://www.researchgate.net/profile/Francesca-Pesciarelli?ev=hdr_xprf",
+          "orcid": "0000-0003-3007-4775"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-256",
       "institution": "University of Montenegro",
       "city": "Podgorica",
       "country": "Montenegro",
@@ -8592,7 +9212,7 @@
       ]
     },
     {
-      "id": "site-243",
+      "id": "site-257",
       "institution": "University of Notre Dame du Lac",
       "city": "",
       "country": "United States",
@@ -8617,7 +9237,7 @@
       ]
     },
     {
-      "id": "site-244",
+      "id": "site-258",
       "institution": "University of Nottingham",
       "city": "Nottingham",
       "country": "United Kingdom",
@@ -8644,7 +9264,7 @@
       ]
     },
     {
-      "id": "site-245",
+      "id": "site-259",
       "institution": "University of Novi Sad, Faculty of Technical Sciences",
       "city": "Novi Sad",
       "country": "Serbia",
@@ -8683,7 +9303,7 @@
       ]
     },
     {
-      "id": "site-246",
+      "id": "site-260",
       "institution": "University of Padua",
       "city": "Padua",
       "country": "Italy",
@@ -8710,7 +9330,7 @@
       ]
     },
     {
-      "id": "site-247",
+      "id": "site-261",
       "institution": "University of Porto",
       "city": "Porto",
       "country": "Portugal",
@@ -8759,7 +9379,7 @@
       ]
     },
     {
-      "id": "site-248",
+      "id": "site-262",
       "institution": "University of Potsdam",
       "city": "",
       "country": "Germany",
@@ -8786,7 +9406,7 @@
       ]
     },
     {
-      "id": "site-249",
+      "id": "site-263",
       "institution": "University of Pécs",
       "city": "Pécs",
       "country": "Hungary",
@@ -8823,7 +9443,7 @@
       ]
     },
     {
-      "id": "site-250",
+      "id": "site-264",
       "institution": "University of Queensland",
       "city": "Brisbane",
       "country": "Australia",
@@ -8848,7 +9468,7 @@
       ]
     },
     {
-      "id": "site-251",
+      "id": "site-265",
       "institution": "University of Seville",
       "city": "Seville",
       "country": "Spain",
@@ -8875,7 +9495,7 @@
       ]
     },
     {
-      "id": "site-252",
+      "id": "site-266",
       "institution": "University of Sheffield",
       "city": "Sheffield",
       "country": "United Kingdom",
@@ -8925,7 +9545,7 @@
       ]
     },
     {
-      "id": "site-253",
+      "id": "site-267",
       "institution": "University of Southern California",
       "city": "Los Angeles",
       "country": "United States",
@@ -8954,7 +9574,7 @@
       ]
     },
     {
-      "id": "site-254",
+      "id": "site-268",
       "institution": "University of Ss. Cyril and Methodius in Trnava",
       "city": "Trnava",
       "country": "Slovakia",
@@ -8983,7 +9603,7 @@
       ]
     },
     {
-      "id": "site-255",
+      "id": "site-269",
       "institution": "University Of Stuttgart",
       "city": "",
       "country": "Germany",
@@ -9008,7 +9628,7 @@
       ]
     },
     {
-      "id": "site-256",
+      "id": "site-270",
       "institution": "University of Tartu",
       "city": "Tartu",
       "country": "Estonia",
@@ -9082,7 +9702,7 @@
       ]
     },
     {
-      "id": "site-257",
+      "id": "site-271",
       "institution": "University of Tehran",
       "city": "Tehran",
       "country": "Iran",
@@ -9123,7 +9743,7 @@
       ]
     },
     {
-      "id": "site-258",
+      "id": "site-272",
       "institution": "University of Tirana",
       "city": "Tirana",
       "country": "Albania",
@@ -9159,7 +9779,7 @@
       ]
     },
     {
-      "id": "site-259",
+      "id": "site-273",
       "institution": "University of Trento",
       "city": "Trento",
       "country": "Italy",
@@ -9231,7 +9851,7 @@
       ]
     },
     {
-      "id": "site-260",
+      "id": "site-274",
       "institution": "University of Tübingen",
       "city": "Tübingen",
       "country": "Germany",
@@ -9260,7 +9880,7 @@
       ]
     },
     {
-      "id": "site-261",
+      "id": "site-275",
       "institution": "University of Warsaw",
       "city": "Warsaw",
       "country": "Poland",
@@ -9289,7 +9909,7 @@
       ]
     },
     {
-      "id": "site-262",
+      "id": "site-276",
       "institution": "University Of Warwick",
       "city": "",
       "country": "United Kingdom",
@@ -9314,7 +9934,7 @@
       ]
     },
     {
-      "id": "site-263",
+      "id": "site-277",
       "institution": "University Of Washington",
       "city": "",
       "country": "United States",
@@ -9339,7 +9959,7 @@
       ]
     },
     {
-      "id": "site-264",
+      "id": "site-278",
       "institution": "University of Wrocław",
       "city": "Wrocław",
       "country": "Poland",
@@ -9380,7 +10000,7 @@
       ]
     },
     {
-      "id": "site-265",
+      "id": "site-279",
       "institution": "University of Wuppertal",
       "city": "Wuppertal",
       "country": "Germany",
@@ -9409,7 +10029,7 @@
       ]
     },
     {
-      "id": "site-266",
+      "id": "site-280",
       "institution": "University of Zagreb, Faculty of Humanities and Social Sciences",
       "city": "Zagreb",
       "country": "Croatia",
@@ -9438,7 +10058,7 @@
       ]
     },
     {
-      "id": "site-267",
+      "id": "site-281",
       "institution": "University of Zurich",
       "city": "",
       "country": "Switzerland",
@@ -9465,7 +10085,7 @@
       ]
     },
     {
-      "id": "site-268",
+      "id": "site-282",
       "institution": "Università degli Studi della Campania \"Luigi Vanvitelli\"",
       "city": "",
       "country": "Italy",
@@ -9490,7 +10110,7 @@
       ]
     },
     {
-      "id": "site-269",
+      "id": "site-283",
       "institution": "Università degli Studi di Milano-Bicocca",
       "city": "",
       "country": "Italy",
@@ -9519,7 +10139,34 @@
       ]
     },
     {
-      "id": "site-270",
+      "id": "site-284",
+      "institution": "Università degli Studi Gabriele D'Annunzio di Chieti-Pescara",
+      "city": "Chieti",
+      "country": "Italy",
+      "latitude": 42.3607,
+      "longitude": 14.1715,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Velu Prabhakar Kumaravel",
+          "affiliation": "Universita Degli Studi Gabriele D'annunzio Di Chieti-pescara",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "vpr.kumaravel [at] gmail [dot] com",
+          "homepage": "https://scholar.google.com/citations?user=yeMiiZwAAAAJ&hl=en",
+          "orcid": ""
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-285",
       "institution": "Università Telematica eCampus",
       "city": "Novedrate",
       "country": "Italy",
@@ -9546,7 +10193,7 @@
       ]
     },
     {
-      "id": "site-271",
+      "id": "site-286",
       "institution": "Universität zu Lübeck",
       "city": "Lübeck",
       "country": "Germany",
@@ -9571,7 +10218,32 @@
       ]
     },
     {
-      "id": "site-272",
+      "id": "site-287",
+      "institution": "Universitätsklinikum Hamburg-Eppendorf",
+      "city": "Hamburg",
+      "country": "Germany",
+      "latitude": 53.5896,
+      "longitude": 9.9752,
+      "location_confidence": "override",
+      "members": [
+        {
+          "name": "Till Schneider",
+          "affiliation": "University Medical Center Hamburg-Eppendorf",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "till.schneider [at] uni-hamburg [dot] de",
+          "homepage": "https://www.webofscience.com/wos/author/record/B-3751-2010; https://www.uke.de/neurophysiology",
+          "orcid": "0000-0002-8889-6248"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1"
+      ]
+    },
+    {
+      "id": "site-288",
       "institution": "Universitätsklinikum Münster",
       "city": "",
       "country": "Germany",
@@ -9596,7 +10268,7 @@
       ]
     },
     {
-      "id": "site-273",
+      "id": "site-289",
       "institution": "Université Claude Bernard Lyon 1",
       "city": "Lyon",
       "country": "France",
@@ -9621,7 +10293,7 @@
       ]
     },
     {
-      "id": "site-274",
+      "id": "site-290",
       "institution": "Université de Lorraine",
       "city": "Nancy",
       "country": "France",
@@ -9646,7 +10318,7 @@
       ]
     },
     {
-      "id": "site-275",
+      "id": "site-291",
       "institution": "Université Laval",
       "city": "Quebec City",
       "country": "Canada",
@@ -9671,7 +10343,7 @@
       ]
     },
     {
-      "id": "site-276",
+      "id": "site-292",
       "institution": "Université Paris-Saclay",
       "city": "",
       "country": "France",
@@ -9688,15 +10360,28 @@
           "email": "claradriaiallegre [at] gmail [dot] com",
           "homepage": "",
           "orcid": ""
+        },
+        {
+          "name": "Maia Mallevays",
+          "affiliation": "Université Paris Saclay",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "maiamallevays [at] gmail [dot] com",
+          "homepage": "https://scholar.google.com/citations?user=SJg3ZsQAAAAJ&hl=en",
+          "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
+        "WG1",
+        "WG2",
         "WG3"
       ]
     },
     {
-      "id": "site-277",
+      "id": "site-293",
       "institution": "Université Toulouse III - Paul Sabatier",
       "city": "Toulouse",
       "country": "France",
@@ -9723,7 +10408,7 @@
       ]
     },
     {
-      "id": "site-278",
+      "id": "site-294",
       "institution": "Utrecht University",
       "city": "Utrecht",
       "country": "Netherlands",
@@ -9741,16 +10426,29 @@
           "email": "c.vandenboomen [at] uu [dot] nl",
           "homepage": "",
           "orcid": ""
+        },
+        {
+          "name": "Philine Link",
+          "affiliation": "Utrecht University",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "p.m.link [at] uu [dot] nl",
+          "homepage": "https://www.uu.nl/medewerkers/PMLink",
+          "orcid": "0009-0002-1233-6073"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
-        "WG2"
+        "WG2",
+        "WG3"
       ]
     },
     {
-      "id": "site-279",
+      "id": "site-295",
       "institution": "Vilnius University",
       "city": "Vilnius",
       "country": "Lithuania",
@@ -9801,7 +10499,7 @@
       ]
     },
     {
-      "id": "site-280",
+      "id": "site-296",
       "institution": "Vrije Universiteit Amsterdam",
       "city": "Amsterdam",
       "country": "Netherlands",
@@ -9830,7 +10528,7 @@
       ]
     },
     {
-      "id": "site-281",
+      "id": "site-297",
       "institution": "Vrije Universiteit Brussel",
       "city": "Brussels",
       "country": "Belgium",
@@ -9880,7 +10578,46 @@
       ]
     },
     {
-      "id": "site-282",
+      "id": "site-298",
+      "institution": "Washington University in St. Louis School Of Medicine",
+      "city": "",
+      "country": "United States",
+      "latitude": 38.6472402,
+      "longitude": -90.3084017,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Chenyan Lu",
+          "affiliation": "Washington University in St. Louis School Of Medicine",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "chenyan.l [at] wustl [dot] edu",
+          "homepage": "",
+          "orcid": ""
+        },
+        {
+          "name": "Xintian Wang",
+          "affiliation": "Washington University in St. Louis School Of Medicine",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "w.xintian [at] wustl [dot] edu",
+          "homepage": "https://www.researchgate.net/profile/Xintian-Wang-14",
+          "orcid": ""
+        }
+      ],
+      "member_count": 2,
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-299",
       "institution": "Waterford Institute of Technology",
       "city": "Waterford",
       "country": "Ireland",
@@ -9905,7 +10642,7 @@
       ]
     },
     {
-      "id": "site-283",
+      "id": "site-300",
       "institution": "Xiberlinc Inc.",
       "city": "Tokyo",
       "country": "Japan",
@@ -9946,7 +10683,7 @@
       ]
     },
     {
-      "id": "site-284",
+      "id": "site-301",
       "institution": "Yozgat Bozok University",
       "city": "",
       "country": "Türkiye",
@@ -9973,7 +10710,7 @@
       ]
     },
     {
-      "id": "site-285",
+      "id": "site-302",
       "institution": "Yıldız Technical University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -10014,7 +10751,7 @@
       ]
     },
     {
-      "id": "site-286",
+      "id": "site-303",
       "institution": "Zurich University of Applied Sciences",
       "city": "Winterthur",
       "country": "Switzerland",
@@ -10041,7 +10778,7 @@
       ]
     },
     {
-      "id": "site-287",
+      "id": "site-304",
       "institution": "Çanakkale Onsekiz Mart University",
       "city": "Çanakkale",
       "country": "Türkiye",
@@ -10080,7 +10817,7 @@
       ]
     },
     {
-      "id": "site-288",
+      "id": "site-305",
       "institution": "École Polytechnique Fédérale de Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -10107,7 +10844,7 @@
       ]
     },
     {
-      "id": "site-289",
+      "id": "site-306",
       "institution": "Üsküdar University",
       "city": "Istanbul",
       "country": "Türkiye",
