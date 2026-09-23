@@ -1,0 +1,15 @@
+---
+layout: null
+sitemap: false
+---
+{%- assign first = true -%}
+[
+{%- for e in site.data.events -%}
+{%- assign link = e.joining_link | default: "" | strip -%}
+{%- if link != "" -%}
+{%- unless first -%},{%- endunless -%}
+{"id": {{ e.id | jsonify }}, "joining_link": {{ link | jsonify }}}
+{%- assign first = false -%}
+{%- endif -%}
+{%- endfor -%}
+]

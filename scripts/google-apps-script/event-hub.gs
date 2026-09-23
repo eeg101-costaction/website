@@ -11,9 +11,12 @@
  * daily email quota is used up, the email is queued in the ledger and sent
  * automatically by an hourly trigger once quota is available again.
  *
- * Online joining links are kept privately on the "Joining links" tab, never on
- * the public website. When a link is present it is included in confirmation
- * emails and calendar files; otherwise attendees are told it will follow.
+ * Online joining links can be entered in either of two places. A private link
+ * on the "Joining links" tab of the workbook, or a public `joining_link` in the
+ * website's _data/events.yml, which the hourly trigger reads from the published
+ * site and emails automatically to everyone already booked. A private link takes
+ * precedence. When a link is present it is included in confirmation emails and
+ * calendar files; otherwise attendees are told it will follow.
  */
 const EEG101_EVENT_BOOKING = {
   replyTo: 'eeg101costaction@gmail.com',
@@ -22,13 +25,16 @@ const EEG101_EVENT_BOOKING = {
   emailSent: 'Email sent',
   emailPending: 'Email pending',
   promotionPending: 'Promotion email pending',
-  linksSheet: 'Joining links'
+  linksSheet: 'Joining links',
+  websiteLinks: 'https://www.eeg101.eu/assets/data/joining-links.json'
 };
 
 const LEDGER_HEADERS = ['Event ID', 'Event title', 'Event date', 'First name', 'Last name', 'Email', 'Institution', 'Country', 'YRI (under 40)', 'Gender', 'Status', 'Registered at', 'Consent', 'Privacy notice version', 'Email status', 'Notes', 'Metadata', 'Recording consent', 'EEG101 member', 'Joining link emailed'];
 // Columns (1-based) of every event tab, matching LEDGER_HEADERS.
 const COL = { eventId: 1, title: 2, date: 3, firstName: 4, lastName: 5, email: 6, status: 11, emailStatus: 15, meta: 17, recordingConsent: 18, member: 19, linkEmailed: 20 };
-const LINK_HEADERS = ['Event ID', 'Event tab', 'Joining link', 'Link emailed to attendees'];
+const LINK_HEADERS = ['Event ID', 'Event tab', 'Joining link (private)', 'Link emailed to attendees', 'Joining link from website', 'Link last sent'];
+// Columns (1-based) of the "Joining links" tab.
+const LINK_COL = { eventId: 1, tab: 2, privateLink: 3, emailed: 4, websiteLink: 5, lastSent: 6 };
 const MEMBER_OPTIONS = ['Yes', 'No'];
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 // Country and territory names in British English, alphabetical.
@@ -40,7 +46,7 @@ function doGet(e) {
   const event = {
     id: String(e.parameter.event_id || ''), title: String(e.parameter.title || ''), start_date: String(e.parameter.start_date || ''),
     end_date: String(e.parameter.end_date || e.parameter.start_date || ''), time: String(e.parameter.time || ''), end_time: String(e.parameter.end_time || ''),
-    timezone: String(e.parameter.timezone || 'Europe/London'), timezone_label: String(e.parameter.timezone_label || ''), location: String(e.parameter.location || ''), capacity: Number(e.parameter.capacity || 0),
+    timezone: String(e.parameter.timezone || 'Europe/London'), timezone_label: String(e.parameter.timezone_label || ''), joining_link: String(e.parameter.joining_link || ''), location: String(e.parameter.location || ''), capacity: Number(e.parameter.capacity || 0),
     short_name: String(e.parameter.short_name || ''), format: String(e.parameter.format || ''), audience: String(e.parameter.audience || 'open'), summary: String(e.parameter.summary || ''), privacy_url: String(e.parameter.privacy_url || 'https://www.eeg101.eu/privacy/')
   };
   if (!event.id || !event.title || !event.start_date) return HtmlService.createHtmlOutput('<p>Event details are missing. Please return to the EEG101 Event Hub.</p>');
@@ -201,17 +207,22 @@ function promoteNextWaitlisted(eventId) {
     : 'The next waiting-list attendee has been promoted. The daily email quota is used up, so their email is queued and will be sent automatically.');
 }
 
-// ---- Joining links (private "Joining links" tab) ----
+// ---- Joining links ("Joining links" tab, or joining_link in the website's event data) ----
+
+const isLink = value => /^https?:\/\/\S+$/i.test(String(value || '').trim());
 
 function linksSheet() {
   const book = workbook();
   let sheet = book.getSheetByName(EEG101_EVENT_BOOKING.linksSheet);
   if (!sheet) {
     sheet = book.insertSheet(EEG101_EVENT_BOOKING.linksSheet, 0);
-    sheet.getRange(1, 1, 1, LINK_HEADERS.length).setValues([LINK_HEADERS]).setFontWeight('bold');
     sheet.setFrozenRows(1);
-    sheet.setColumnWidth(1, 260); sheet.setColumnWidth(2, 300); sheet.setColumnWidth(3, 380); sheet.setColumnWidth(4, 200);
-    sheet.getRange(1, 3).setNote('Paste the online joining link for the event here. It is added to confirmation emails and calendar files. Use the menu EEG101 Event Booking > Email the joining link to everyone booked to send it to people who registered before the link was added.');
+    [260, 300, 380, 200, 380, 380].forEach((w, i) => sheet.setColumnWidth(i + 1, w));
+  }
+  if (sheet.getRange(1, LINK_HEADERS.length).getValue() !== LINK_HEADERS[LINK_HEADERS.length - 1]) {
+    sheet.getRange(1, 1, 1, LINK_HEADERS.length).setValues([LINK_HEADERS]).setFontWeight('bold');
+    sheet.getRange(1, LINK_COL.privateLink).setNote('Optional private link. It takes precedence over a link added on the website. Use the menu EEG101 Event Booking > Email the joining link to everyone booked to send it.');
+    sheet.getRange(1, LINK_COL.websiteLink).setNote('Filled in automatically from joining_link in the website event data. Attendees are emailed automatically, within the hour, when it appears or changes.');
   }
   return sheet;
 }
@@ -220,24 +231,45 @@ function linksSheet() {
 function ensureLinkRow(event, tabName) {
   const sheet = linksSheet();
   const ids = sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues().map(r => String(r[0])) : [];
-  if (ids.indexOf(String(event.id)) < 0) sheet.appendRow([event.id, tabName, '', '']);
+  if (ids.indexOf(String(event.id)) < 0) sheet.appendRow([event.id, tabName || '', '', '', '', '']);
 }
 
 function linkRowFor(eventId) {
   const sheet = linksSheet();
   const values = sheet.getDataRange().getValues();
   const index = values.findIndex((row, i) => i > 0 && String(row[0]) === String(eventId));
-  return index < 0 ? null : { sheet: sheet, rowNumber: index + 1, link: String(values[index][2] || '').trim(), emailed: values[index][3] };
+  if (index < 0) return null;
+  const row = values[index];
+  const privateLink = String(row[LINK_COL.privateLink - 1] || '').trim();
+  const websiteLink = String(row[LINK_COL.websiteLink - 1] || '').trim();
+  return {
+    sheet: sheet, rowNumber: index + 1, emailed: row[LINK_COL.emailed - 1],
+    privateLink: privateLink, websiteLink: websiteLink, lastSent: String(row[LINK_COL.lastSent - 1] || '').trim(),
+    link: isLink(privateLink) ? privateLink : isLink(websiteLink) ? websiteLink : '',
+    source: isLink(privateLink) ? 'private' : isLink(websiteLink) ? 'website' : ''
+  };
 }
 
+// The private link wins, then the website link held on the tab, then a link passed from the website form.
 function withJoiningLink(event) {
   const row = linkRowFor(event.id);
-  const link = row && /^https?:\/\//i.test(row.link) ? row.link : '';
+  const link = row && row.link ? row.link : isLink(event.joining_link) ? String(event.joining_link).trim() : '';
   return Object.assign({}, event, { joining_link: link });
 }
 
 function isOnline(event) {
   return /online|hybrid/i.test(String(event.format || '') + ' ' + String(event.location || ''));
+}
+
+// Starts (or restarts, if the link has changed) the joining-link mailing for one event.
+function startJoiningLinkMailing(row, eventId) {
+  if (row.lastSent && row.lastSent !== row.link) {
+    const sheet = ledgerFor({ id: eventId }, false);
+    if (sheet && sheet.getLastRow() > 1) sheet.getRange(2, COL.linkEmailed, sheet.getLastRow() - 1, 1).clearContent();
+  }
+  row.sheet.getRange(row.rowNumber, LINK_COL.emailed).setValue(new Date());
+  row.sheet.getRange(row.rowNumber, LINK_COL.lastSent).setValue(row.link);
+  return sendJoiningLinks(eventId);
 }
 
 function promptSendJoiningLink() {
@@ -252,13 +284,17 @@ function promptSendJoiningLink() {
     eventId = response.getResponseText().trim();
   }
   const row = linkRowFor(eventId);
-  if (!row || !/^https?:\/\//i.test(row.link)) { ui.alert('No joining link has been entered for this event. Add it on the "Joining links" tab first (it must start with https://).'); return; }
+  if (!row || !row.link) { ui.alert('No joining link has been entered for this event. Add it on the "Joining links" tab or as joining_link on the website (it must start with https://).'); return; }
+  const changed = row.lastSent && row.lastSent !== row.link;
   const sheet = ledgerFor({ id: eventId }, false);
-  const waiting = sheet ? sheet.getDataRange().getValues().filter((r, i) => i > 0 && r[COL.status - 1] === 'confirmed' && !r[COL.linkEmailed - 1]).length : 0;
+  const values = sheet ? sheet.getDataRange().getValues().filter((r, i) => i > 0 && r[COL.status - 1] === 'confirmed') : [];
+  const waiting = changed ? values.length : values.filter(r => !r[COL.linkEmailed - 1]).length;
   if (!waiting) { ui.alert('Everyone booked on this event has already been sent the joining link.'); return; }
-  if (ui.alert('Email the joining link', 'Send the joining link to ' + waiting + ' confirmed attendee(s) who have not yet received it?', ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
-  row.sheet.getRange(row.rowNumber, 4).setValue(new Date());
-  const sent = sendJoiningLinks(eventId);
+  const question = changed
+    ? 'The joining link has changed. Send the new link to all ' + waiting + ' confirmed attendee(s)?'
+    : 'Send the joining link to ' + waiting + ' confirmed attendee(s) who have not yet received it?';
+  if (ui.alert('Email the joining link', question, ui.ButtonSet.OK_CANCEL) !== ui.Button.OK) return;
+  const sent = startJoiningLinkMailing(row, eventId);
   const left = waiting - sent;
   ui.alert(sent + ' joining link email(s) sent.' + (left > 0 ? ' The daily email quota is used up, so the remaining ' + left + ' will be sent automatically once quota is available.' : ''));
 }
@@ -281,13 +317,42 @@ function sendJoiningLinks(eventId) {
   return sent;
 }
 
-// Continues any joining-link mailing that an organiser started but the quota interrupted.
+// Reads joining_link values published by the website into the "Joining links" tab.
+function syncWebsiteLinks() {
+  let published;
+  try {
+    const response = UrlFetchApp.fetch(EEG101_EVENT_BOOKING.websiteLinks + '?t=' + Date.now(), { muteHttpExceptions: true, followRedirects: true });
+    if (response.getResponseCode() !== 200) return;
+    published = JSON.parse(response.getContentText());
+  } catch (error) {
+    console.warn('Could not read joining links from the website: ' + error);
+    return;
+  }
+  const byId = {};
+  (published || []).forEach(item => { if (item && item.id) byId[String(item.id)] = isLink(item.joining_link) ? String(item.joining_link).trim() : ''; });
+  Object.keys(byId).forEach(id => ensureLinkRow({ id: id }, ''));
+  const sheet = linksSheet();
+  const values = sheet.getDataRange().getValues();
+  for (let i = 1; i < values.length; i++) {
+    const id = String(values[i][0]);
+    const website = byId[id] || '';
+    if (String(values[i][LINK_COL.websiteLink - 1] || '') !== website) sheet.getRange(i + 1, LINK_COL.websiteLink).setValue(website);
+  }
+}
+
+// Runs hourly: picks up website links, emails them automatically when they appear or change,
+// and continues any mailing that the daily quota interrupted.
 function sendQueuedJoiningLinks() {
+  syncWebsiteLinks();
   const values = linksSheet().getDataRange().getValues();
   let sent = 0;
   for (let i = 1; i < values.length; i++) {
-    if (values[i][2] && values[i][3]) sent += sendJoiningLinks(String(values[i][0]));
     if (MailApp.getRemainingDailyQuota() < 1) break;
+    const eventId = String(values[i][0]);
+    const row = linkRowFor(eventId);
+    if (!row || !row.link) continue;
+    if (row.source === 'website' && row.link !== row.lastSent) sent += startJoiningLinkMailing(row, eventId);
+    else if (row.emailed && row.link === row.lastSent) sent += sendJoiningLinks(eventId);
   }
   return sent;
 }

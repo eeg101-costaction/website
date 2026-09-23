@@ -57,9 +57,13 @@ The same menu provides **Delete records older than 12 months**. This action incl
 
 ## Online joining links
 
-Joining links are kept private on the **Joining links** tab of the registration workbook, never in the public website files (the site validation rejects them). A row is added automatically for each event. Paste the link into the **Joining link** column, starting with `https://`.
+A joining link can be added in either of two places.
 
-When a link is present, it appears on the attendee's confirmation screen, in the confirmation email and in the calendar file. When no link has been added yet, attendees of online and hybrid events are told that the joining link will be emailed nearer the time. Once the link is added, open the event's tab and choose **EEG101 Event Booking → Email the joining link to everyone booked**. This sends the link and an updated calendar invitation to every confirmed attendee who has not yet received it, records the time in the **Joining link emailed** column, and continues automatically through the hourly trigger if the daily email quota runs out.
+**On the website (simplest).** Add `joining_link: "https://..."` to the event in `_data/events.yml` and push to `main`. Within the hour, the booking system reads the link from the published site, emails it with an updated calendar invitation to every confirmed attendee who has not yet received it, and includes it in every later confirmation. If the link is changed later, the new link is sent to all confirmed attendees. The event data is public, so anyone viewing the page source or the repository can see a link added this way.
+
+**Privately in the registration workbook.** For a link that must not be public, leave `joining_link` empty and paste the link into the **Joining link (private)** column of the **Joining links** tab. Then open the event's tab and choose **EEG101 Event Booking → Email the joining link to everyone booked**. A private link takes precedence over a website link.
+
+When no link has been added yet, attendees of online and hybrid events are told that the joining link will be emailed nearer the time. The **Joining link emailed** column on each event tab records who has been sent the link, and the hourly trigger continues any mailing that the daily email quota interrupted.
 
 ## Pre-publication checks
 

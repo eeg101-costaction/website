@@ -60,9 +60,12 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
             errors.append(f"{label}: bookable entries must use category 'Events'.")
         if event.get("audience") not in (None, "", "open", "members"):
             errors.append(f"{label}: audience must be 'open' or 'members'.")
-        for key in ("joining_link", "online_link", "meeting_link", "zoom_link"):
+        link = str(event.get("joining_link") or "").strip()
+        if link and not (link.startswith("https://") and " " not in link):
+            errors.append(f"{label}: joining_link must be a single web address starting with https://.")
+        for key in ("online_link", "meeting_link", "zoom_link", "join_link"):
             if event.get(key):
-                errors.append(f"{label}: {key} must not be stored in the public event data. Add it on the private 'Joining links' tab instead.")
+                errors.append(f"{label}: use joining_link rather than {key}.")
         if len(str(event.get("short_name") or "")) > 60:
             errors.append(f"{label}: short_name must be 60 characters or fewer.")
         if event.get("registration_url"):
