@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 510,
+  "member_count": 516,
   "site_count": 306,
   "country_count": 58,
   "countries": [
@@ -97,7 +97,7 @@
     {
       "name": "France",
       "site_count": 19,
-      "member_count": 28
+      "member_count": 32
     },
     {
       "name": "Germany",
@@ -1721,9 +1721,21 @@
           "email": "clement.francois [at] cnrs [dot] fr",
           "homepage": "https://cv.hal.science/clement-francois;",
           "orcid": "0000-0003-2271-6942"
+        },
+        {
+          "name": "Karim N'DIAYE",
+          "affiliation": "Centre National de la Recherche Scientifique",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "karim.ndiaye [at] icm-institute [dot] org",
+          "homepage": "",
+          "orcid": "0000-0003-2142-0576"
         }
       ],
-      "member_count": 3,
+      "member_count": 4,
       "working_groups": [
         "WG1",
         "WG2",
@@ -5444,9 +5456,30 @@
           "email": "maximilien.chaumon [at] icm-institute [dot] org",
           "homepage": "https://scholar.google.fr/citations?user=C81NXEkAAAAJ&hl=fr",
           "orcid": "0000-0001-9664-8861"
+        },
+        {
+          "name": "Michelle George",
+          "affiliation": "Paris Brain Institute",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "michelle.george [at] icm-institute [dot] org",
+          "homepage": "https://www.linkedin.com/in/michelle-george-43130765/",
+          "orcid": ""
+        },
+        {
+          "name": "Yvan NEDELEC",
+          "affiliation": "Institut du Cerveau et de la Moelle épinière",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "yvan.nedelec [at] inserm [dot] fr",
+          "homepage": "https://scholar.google.com/citations?user=98OJAawAAAAJ&hl=fr&oi=ao",
+          "orcid": ""
         }
       ],
-      "member_count": 3,
+      "member_count": 5,
       "working_groups": [
         "WG1",
         "WG2",
@@ -6208,10 +6241,21 @@
           "email": "kevinnoche666 [at] gmail [dot] com",
           "homepage": "",
           "orcid": ""
+        },
+        {
+          "name": "Malgorzata Rotkiewicz",
+          "affiliation": "Sorbonne Universite",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "gosia.rotkiewicz [at] gmail [dot] com",
+          "homepage": "",
+          "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
+        "WG1",
         "WG2"
       ]
     },

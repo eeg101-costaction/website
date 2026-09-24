@@ -1,8 +1,19 @@
 {
-  "generated_at": "2026-09-23T10:00:21+00:00",
+  "generated_at": "2026-09-24T10:03:31+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 2,
+  "pending_count": 4,
   "members": [
+    {
+      "name": "Zoltan Juhasz",
+      "affiliation": "Pannon Egyetem - University Of Pannonia",
+      "country": "Hungary",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "juhasz.zoltan [at] mik [dot] uni-pannon [dot] hu",
+      "homepage": "https://www.researchgate.net/profile/Zoltan-Juhasz-2",
+      "orcid": "0000-0003-0677-8588"
+    },
     {
       "name": "Stephen Applebaum",
       "affiliation": "CuttingEEG",
@@ -27,6 +38,19 @@
       ],
       "email": "ssiffah [at] gmail [dot] com",
       "homepage": "",
+      "orcid": ""
+    },
+    {
+      "name": "Ahmad Lotfi",
+      "affiliation": "Ecole Normale Supérieure (ENS) - Paris, Sciences et Lettres (PSL)",
+      "country": "France",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "ahmadorlotfi [at] gmail [dot] com",
+      "homepage": "https://fr.linkedin.com/in/ahmad-lotfi-259651b8",
       "orcid": ""
     }
   ]
