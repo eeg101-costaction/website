@@ -21,7 +21,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 
 ## How to join {#how-to-join}
 
-<p class="join-overview-lead">An overview of the journey from first interest to taking part. Please sign the EEG101 Community Framework (step 2) before you apply. Steps 3 and 4 then take place on the e-COST platform, and the <a href="#detailed-guide">detailed guide</a> below takes you through both, screen by screen.</p>
+<p class="join-overview-lead">An overview of the journey from first interest to taking part. Please sign the EEG101 Community Framework (step 2) before you apply. Steps 3 and 4 then take place on the e-COST platform, and the <a href="#detailed-guide">Step-by-Step Guide</a> below takes you through both, screen by screen.</p>
 
 {::nomarkdown}
 <div class="join-steps">
@@ -83,7 +83,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 
 {::nomarkdown}
 <section class="join-guide" id="detailed-guide" aria-labelledby="detailed-guide-heading">
-<h2 id="detailed-guide-heading">Detailed guide: create your e-COST account and apply to EEG101 Working Groups</h2>
+<h2 id="detailed-guide-heading">Step-by-Step Guide</h2>
 <p class="join-guide__intro">There are two key steps to joining an EEG101 Working Group: first, create and activate an e-COST account; second, complete the profile prerequisite and submit the EEG101 Working Group application. The annotated screenshots below show the process from the live e-COST interface. Personal information has been redacted.</p>
 <p class="join-guide__relation">This guide expands steps 3 and 4 of <a href="#how-to-join">How to join</a> above. If you have not yet done so, please <a href="#sign-community-framework">sign the EEG101 Community Framework</a> (step 2) before you begin.</p>
 
