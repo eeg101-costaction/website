@@ -19,6 +19,39 @@
 # leave joining_link out and add it on the "Joining links" tab of the
 # registration workbook instead (a link there takes precedence). An event's Events card and calendar popover both
 # read these fields directly, so booking can never be created as a separate list.
+# external: true marks an event run by another organisation rather than EEG101
+# itself (registration, if any, happens on that organisation's own website via
+# registration_url). It shows an "External event" badge so it reads differently
+# from EEG101's own bookable events; leave it out for EEG101 events.
+
+- id: ipeg-conference-2026
+  external: true
+  title: "2026 International PharmacoEEG (IPEG) Conference"
+  start_date: 2026-11-16
+  end_date: 2026-11-19
+  location: "Medical Science Centre, Vilnius University, Vilnius, Lithuania"
+  format: "in-person"
+  category: "Events"
+  summary: >
+    The International Pharmaco-EEG Society's 2026 conference, with keynotes from
+    Robert Oostenveld, Andreea Diaconescu, Thomas Koenig and Pedro Mediano, and
+    symposia on EEG and AI, psychedelics and EEG, sleep and epilepsy,
+    translational research, sex/gender and EEG/imaging, and auditory
+    steady-state responses. Organised by the International Pharmaco-EEG
+    Society, not EEG101. Abstract submission deadline: 30 September 2026.
+  image: "/assets/images/events/ipeg-2026-vilnius.jpg"
+  alt: "2026 International PharmacoEEG (IPEG) Conference poster, 16 to 19 November 2026, Vilnius, Lithuania"
+  registration_url: "https://www.ipeg-society.org/meetings/"
+  programme_url: ""
+  recording_url: ""
+  slides_url: ""
+  related_wg: ""
+  tags:
+    - external
+    - IPEG
+    - in-person
+    - pharmaco-EEG
+    - conference
 
 - id: diversity-eeg-populations-2026-11
   short_name: "Diversity in EEG populations"

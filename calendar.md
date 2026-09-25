@@ -144,10 +144,13 @@ permalink: /calendar/
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">How to attend</button>"
       : ev.booking_enabled === true && ev.booking_status === "open"
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">Register</button>"
+      : ev.registration_url
+      ? "<a href=\"" + esc(ev.registration_url) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
       : "";
     popover.innerHTML =
       "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
       "<span class=\"event-card__format event-card__format--" + fmt + "\">" + esc(fmtLabel) + "</span>" +
+      (ev.external === true ? "<span class=\"event-card__external-badge\">External event</span>" : "") +
       "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +

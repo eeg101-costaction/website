@@ -17,6 +17,9 @@
       {% if event.audience == "members" %}
         <span class="event-card__members-badge">COST members only</span>
       {% endif %}
+      {% if event.external == true %}
+        <span class="event-card__external-badge">External event</span>
+      {% endif %}
       {% if status == "past" %}
         <span class="event-card__past-badge">Past event</span>
       {% elsif status == "recent" %}
