@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 516,
+  "member_count": 522,
   "site_count": 306,
   "country_count": 58,
   "countries": [
@@ -27,7 +27,7 @@
     {
       "name": "Belgium",
       "site_count": 3,
-      "member_count": 6
+      "member_count": 7
     },
     {
       "name": "Bosnia and Herzegovina",
@@ -97,12 +97,12 @@
     {
       "name": "France",
       "site_count": 19,
-      "member_count": 32
+      "member_count": 33
     },
     {
       "name": "Germany",
       "site_count": 29,
-      "member_count": 42
+      "member_count": 44
     },
     {
       "name": "Greece",
@@ -1827,6 +1827,16 @@
       "location_confidence": "geocoded",
       "members": [
         {
+          "name": "Hanna Schulz",
+          "affiliation": "Charité-Universitaetsmedizin Berlin",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "hanna-bianca.schulz [at] charite [dot] de",
+          "homepage": "",
+          "orcid": "0009-0001-5036-2443"
+        },
+        {
           "name": "Wei Zhao",
           "affiliation": "Charité-Universitaetsmedizin Berlin",
           "working_groups": [
@@ -1839,7 +1849,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -2854,6 +2864,17 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "Daniele Marinazzo",
+          "affiliation": "Ghent University",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "daniele.marinazzo [at] gmail [dot] com",
+          "homepage": "http://users.ugent.be/~dmarinaz/",
+          "orcid": "0000-0002-9803-0122"
+        },
+        {
           "name": "Gilles Pourtois",
           "affiliation": "Ghent University",
           "working_groups": [
@@ -2866,7 +2887,7 @@
           "orcid": "0000-0002-5109-2801"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -3070,6 +3091,16 @@
       "location_confidence": "geocoded",
       "members": [
         {
+          "name": "Laura Raveling",
+          "affiliation": "Humboldt University of Berlin",
+          "working_groups": [
+            "WG3"
+          ],
+          "email": "laura.isabel.raveling [at] student [dot] hu-berlin [dot] de",
+          "homepage": "https://orcid.org/0009-0000-6120-3029",
+          "orcid": "0009-0000-6120-3029"
+        },
+        {
           "name": "Sabine Bou Saba",
           "affiliation": "Humboldt University of Berlin",
           "working_groups": [
@@ -3080,9 +3111,10 @@
           "orcid": "0000-0002-5472-582X"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
-        "WG1"
+        "WG1",
+        "WG3"
       ]
     },
     {
@@ -5448,6 +5480,17 @@
           "orcid": ""
         },
         {
+          "name": "Marta Navarro Bernad",
+          "affiliation": "Institut du Cerveau et de la Moelle épinière",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "marta.navarrobernad [at] icm-institute [dot] org",
+          "homepage": "https://institutducerveau.org/equipes-recherche-linstitut-cerveau/picnic-lab-neuropsychologie-et-neuroimagerie-fonctionnelle",
+          "orcid": ""
+        },
+        {
           "name": "Maximilien Chaumon",
           "affiliation": "Institut du Cerveau et de la Moelle épinière",
           "working_groups": [
@@ -5479,7 +5522,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 5,
+      "member_count": 6,
       "working_groups": [
         "WG1",
         "WG2",

@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-24T10:03:31+00:00",
+  "generated_at": "2026-09-25T10:13:11+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 4,
+  "pending_count": 6,
   "members": [
     {
       "name": "Zoltan Juhasz",
@@ -13,6 +13,17 @@
       "email": "juhasz.zoltan [at] mik [dot] uni-pannon [dot] hu",
       "homepage": "https://www.researchgate.net/profile/Zoltan-Juhasz-2",
       "orcid": "0000-0003-0677-8588"
+    },
+    {
+      "name": "Hrant Arzumanyan",
+      "affiliation": "Institute For Informatics And Automation Problems Of The National Academy Of Sciences Of The Republic Of Armenia",
+      "country": "Armenia",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "hrant99 [at] gmail [dot] com",
+      "homepage": "",
+      "orcid": ""
     },
     {
       "name": "Stephen Applebaum",
@@ -39,6 +50,17 @@
       "email": "ssiffah [at] gmail [dot] com",
       "homepage": "",
       "orcid": ""
+    },
+    {
+      "name": "Giovanni Lazzaro",
+      "affiliation": "San Camillo IRCCS s.r.l.",
+      "country": "Italy",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "giovannilazzaro94 [at] gmail [dot] com",
+      "homepage": "https://www.researchgate.net/profile/Giovanni-Lazzaro/research; https://giovannilazzaro.github.io/",
+      "orcid": "0009-0000-9304-902X"
     },
     {
       "name": "Ahmad Lotfi",
