@@ -301,16 +301,6 @@ strong { font-weight: 600; }
   );
 }
 
-/* Continuous background motion is exactly what this preference asks us to stop:
-   swap the looping hero video for its still poster frame. Path is relative to
-   this stylesheet so it survives a non-empty baseurl (preview builds). */
-@media (prefers-reduced-motion: reduce) {
-  .hero__media {
-    background: var(--color-dark) url("../images/hero-fallback.jpg") center / cover no-repeat;
-  }
-  .hero__media .hero__video { display: none; }
-}
-
 .hero__wave-decoration {
   position: absolute;
   bottom: 0;

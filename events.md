@@ -37,7 +37,6 @@ permalink: /events/
   </div>
 </div>
 
-<h2 class="visually-hidden">Events and announcements</h2>
 <div class="row g-4" id="unifiedGrid">
   {% comment %}
     Build a combined list. Events use start_date; news items use date.

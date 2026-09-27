@@ -2,7 +2,7 @@
 layout: page
 title: "Join EEG101"
 subtitle: "Membership is free and open to all"
-description: "How to join the EEG101 COST Action network. Free membership, open internationally to researchers at all career stages."
+description: "How to join the EEG101 COST Action network. Free membership for researchers at all career stages from COST member countries."
 permalink: /join/
 ---
 
@@ -45,7 +45,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <div class="join-step__number">3</div>
 <div class="join-step__body">
 <h3>Create an e-COST account</h3>
-<p>Membership is managed through COST&rsquo;s e-COST platform. Go to the <a href="https://e-services.cost.eu/user/login" target="_blank" rel="noopener">e-COST platform ↗</a>, select <strong>Create an account</strong>, and activate the account from the email e-COST sends you. If you already have an e-COST account, sign in and go straight to step 4.</p>
+<p>Membership is managed through COST&rsquo;s e-COST platform. Go to the <a href="https://e-services.cost.eu/user/login" target="_blank" rel="noopener">e-COST platform ↗</a>, select <strong>Create an account</strong>, and activate the account from the email e-COST sends you. If you already have an e-COST account, sign in and go straight to step 3.</p>
 <p class="join-step__guide-link"><a href="#guide-stage-1">Illustrated guide to creating your account &darr;</a></p>
 </div>
 </div>
@@ -248,9 +248,9 @@ National Management Committee (MC) representatives are nominated through COST Na
 
 ## Who can join?
 
-**Membership is open internationally.** Researchers and professionals working in or adjacent to EEG research can join from anywhere in the world — academics, industry professionals, clinicians, students, and open science advocates at every career stage. Our members are based across COST countries and well beyond them, including Argentina, Chile, India, and the United States.
+EEG101 is open to researchers and professionals from **COST Full Member countries** and **COST Cooperating Member countries**, as well as approved Near Neighbour Countries. This includes academics, industry professionals, clinicians, and others working in or adjacent to EEG research.
 
-**Grant eligibility is narrower than membership.** Applicants for STSMs, Virtual Mobility Grants, and Conference Grants must be affiliated with an institution in a **COST Full Member** or **COST Cooperating Member** country, or an approved Near Neighbour Country. Members based elsewhere are very welcome in Working Groups, events, and collaborative projects, but cannot hold a COST grant. The [Grants page]({{ '/grants/' | relative_url }}) sets out the rules for each scheme.
+Researchers from non-member countries may participate as observers and collaborators in many activities, though formal grant eligibility is subject to COST membership rules.
 
 ---
 

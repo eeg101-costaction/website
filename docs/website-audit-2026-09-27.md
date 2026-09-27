@@ -1,12 +1,5 @@
 # EEG101 website audit — 27 September 2026
 
-> **Status: findings 1–34 were addressed on 27 September 2026**, in the commit that
-> follows this one on `claude/eeg101-website-audit-egbzr4`. This document is kept as
-> the point-in-time record of what was found; the notes below describe the site *as
-> audited*, not as it stands now. Four items were deliberately left for the
-> coordination team to decide, and are listed at the end under
-> [Left open](#left-open).
-
 Audit of `eeg101-costaction/website` (live at [www.eeg101.eu](https://www.eeg101.eu)) covering build
 health, broken links and missing files, content accuracy, SEO, accessibility, and performance.
 
@@ -352,37 +345,3 @@ Worth recording, since much of this was clearly deliberate:
    Findings 12–20.
 9. Housekeeping: run the tests in CI, fix the baseurl-unsafe paths so preview builds work, link or
    retire `/calendar/`, delete the dead include and the unreferenced images. Findings 23–26.
-
----
-
-## Left open
-
-Four items were not changed, because they are decisions for the coordination team
-rather than defects to repair:
-
-1. **A public Discord invite (finding 5).** The dead `discord.gg/eeg101` link was
-   removed rather than replaced — `site.yml`'s `discord_url` is now empty, which
-   hides the footer icon, and the Contact and Join pages describe the existing
-   policy that invites go to approved members. If a permanent public invite is
-   wanted, paste it into `discord_url` and the icon returns.
-
-2. **The Azure brand colour (finding 14).** The RGB row on the Graphical Charter was
-   corrected to `0, 0, 153` so it matches the `#000099` the stylesheet actually uses.
-   If the intended colour was COST/EU Reflex Blue `#003399` — which the listed CMYK
-   values suggest — then the hex, the RGB and `--color-primary` in `style.css` all
-   need changing together, and that is a visual change to every page.
-
-3. **The four COST guidance links (finding 8).** They now point at
-   `cost.eu/cost-actions-event/action-networking-tools/` and its per-scheme anchors,
-   which is the live replacement for the retired pages. Worth confirming with the
-   Science Officer that this is where applicants should be sent.
-
-4. **Email and ORCID on Team cards (finding 15).** The malformed address was fixed
-   and the ORCID iDs normalised to full URLs, but `person-card.html` still renders
-   neither. Publishing member email addresses invites spam, so whether to surface
-   either field is a deliberate choice, not an oversight to correct.
-
-Also left in place: roughly 28 unreferenced image files that are *not* byte-identical
-duplicates — among them `mc1-meeting.jpg`, `ohbm-brainhack-day1.jpg`,
-`group-photo-mc1.jpg`, `activities/training.png` and `people/avatar.jpg`. They may be
-wanted for future pages, so they were kept; the 12 exact duplicates were deleted.

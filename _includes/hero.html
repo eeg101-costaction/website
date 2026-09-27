@@ -6,11 +6,8 @@
   <!-- Video background -->
   <div class="hero__media" aria-hidden="true">
     <video class="hero__video"
-           autoplay muted loop playsinline preload="metadata"
+           autoplay muted loop playsinline
            poster="{{ s.hero_fallback | relative_url }}">
-      {% if s.hero_video_webm and s.hero_video_webm != "" %}
-      <source src="{{ s.hero_video_webm | relative_url }}" type="video/webm">
-      {% endif %}
       <source src="{{ s.hero_video | relative_url }}" type="video/mp4">
     </video>
     <div class="hero__overlay"></div>

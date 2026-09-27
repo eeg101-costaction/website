@@ -9,7 +9,7 @@ permalink: /grants/
 EEG101 offers several COST grant schemes to support research collaboration, training, and dissemination. Grants are open to researchers affiliated with institutions in COST Full Member or Cooperating Member countries.
 
 <div class="grants-status-banner">
-<h2>Important information</h2>
+<h3>Important information</h3>
 
 🔹 Please note that the **academic lead at the host institution for all STSM placements must be a member of EEG101**. Applicants should ensure that prospective hosts have joined the Action before submitting their application. Membership is open to eligible researchers internationally, including those based outside COST countries.
 

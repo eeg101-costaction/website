@@ -9,7 +9,7 @@ permalink: /logos/
 Official visual identity guidelines for EEG101, including logos in all formats, colour specifications, and typography. Use these assets when acknowledging EEG101 membership or collaboration in presentations, posters, publications, and other materials.
 
 {::nomarkdown}
-<a href="{{ '/assets/EEG101-logos.zip' | relative_url }}" download class="btn btn-primary mb-5">Download all logos (ZIP)</a>
+<a href="/assets/EEG101-logos.zip" download class="btn btn-primary mb-5">Download all logos (ZIP)</a>
 
 <hr>
 
@@ -41,7 +41,7 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
         <p class="colour-card__pantone">Pantone Reflex Blue</p>
         <table class="colour-card__values">
           <tr><td>HEX</td><td><code>#000099</code></td></tr>
-          <tr><td>RGB</td><td>0, 0, 153</td></tr>
+          <tr><td>RGB</td><td>0, 51, 153</td></tr>
           <tr><td>CMYK</td><td>100, 80, 0, 0</td></tr>
         </table>
       </div>
@@ -91,11 +91,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EEG101-logo-v2.png' | relative_url }}" alt="EEG101 logo v2">
+        <img src="/assets/images/logo/EEG101-logo-v2.png" alt="EEG101 logo v2">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Standard (colour)</p>
-        <a href="{{ '/assets/images/logo/EEG101-logo-v2.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101-logo-v2.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -103,11 +103,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EEG101-logo-v1.png' | relative_url }}" alt="EEG101 logo v1">
+        <img src="/assets/images/logo/EEG101-logo-v1.png" alt="EEG101 logo v1">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Standard v1</p>
-        <a href="{{ '/assets/images/logo/EEG101-logo-v1.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101-logo-v1.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -115,11 +115,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EEG101_logo_horizontal_B.png' | relative_url }}" alt="EEG101 horizontal logo black">
+        <img src="/assets/images/logo/EEG101_logo_horizontal_B.png" alt="EEG101 horizontal logo black">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Horizontal (black)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_horizontal_B.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_horizontal_B.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -127,11 +127,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logo_horizontal_transp.png' | relative_url }}" alt="EEG101 horizontal logo transparent">
+        <img src="/assets/images/logo/EEG101_logo_horizontal_transp.png" alt="EEG101 horizontal logo transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Horizontal (transparent)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_horizontal_transp.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_horizontal_transp.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -139,11 +139,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logo_horizontal_transp_noborder.png' | relative_url }}" alt="EEG101 horizontal logo no border">
+        <img src="/assets/images/logo/EEG101_logo_horizontal_transp_noborder.png" alt="EEG101 horizontal logo no border">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Horizontal (no border)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_horizontal_transp_noborder.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_horizontal_transp_noborder.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -151,11 +151,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EEG101_logo_squared_B.png' | relative_url }}" alt="EEG101 squared logo black">
+        <img src="/assets/images/logo/EEG101_logo_squared_B.png" alt="EEG101 squared logo black">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Squared (black)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_squared_B.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_squared_B.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -163,11 +163,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logo_squared_transp.png' | relative_url }}" alt="EEG101 squared logo transparent">
+        <img src="/assets/images/logo/EEG101_logo_squared_transp.png" alt="EEG101 squared logo transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Squared (transparent)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_squared_transp.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_squared_transp.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -175,11 +175,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logo_squared_transp_noborder.png' | relative_url }}" alt="EEG101 squared logo no border">
+        <img src="/assets/images/logo/EEG101_logo_squared_transp_noborder.png" alt="EEG101 squared logo no border">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Squared (no border)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_squared_transp_noborder.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_squared_transp_noborder.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -187,11 +187,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EEG101_logos_small_B.png' | relative_url }}" alt="EEG101 small logos black">
+        <img src="/assets/images/logo/EEG101_logos_small_B.png" alt="EEG101 small logos black">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Small (black)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logos_small_B.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logos_small_B.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -199,11 +199,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logos_small_transp.png' | relative_url }}" alt="EEG101 small logos transparent">
+        <img src="/assets/images/logo/EEG101_logos_small_transp.png" alt="EEG101 small logos transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Small (transparent)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logos_small_transp.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logos_small_transp.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -211,11 +211,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EEG101_logo_small_transp_noborder.png' | relative_url }}" alt="EEG101 small logo no border">
+        <img src="/assets/images/logo/EEG101_logo_small_transp_noborder.png" alt="EEG101 small logo no border">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Small (no border)</p>
-        <a href="{{ '/assets/images/logo/EEG101_logo_small_transp_noborder.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EEG101_logo_small_transp_noborder.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -232,11 +232,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/COST_LOGO_rgb_highresolution.jpg' | relative_url }}" alt="COST logo RGB high resolution">
+        <img src="/assets/images/logo/COST_LOGO_rgb_highresolution.jpg" alt="COST logo RGB high resolution">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">COST (RGB, high res)</p>
-        <a href="{{ '/assets/images/logo/COST_LOGO_rgb_highresolution.jpg' | relative_url }}" download class="logo-card__dl">Download JPG</a>
+        <a href="/assets/images/logo/COST_LOGO_rgb_highresolution.jpg" download class="logo-card__dl">Download JPG</a>
       </div>
     </div>
   </div>
@@ -244,11 +244,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/COST_LOGO_darkgrey_transparentbackground.png' | relative_url }}" alt="COST logo dark grey transparent">
+        <img src="/assets/images/logo/COST_LOGO_darkgrey_transparentbackground.png" alt="COST logo dark grey transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">COST (dark grey, transparent)</p>
-        <a href="{{ '/assets/images/logo/COST_LOGO_darkgrey_transparentbackground.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/COST_LOGO_darkgrey_transparentbackground.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -256,11 +256,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/COST_LOGO_mediumgrey_transparentbackground.png' | relative_url }}" alt="COST logo medium grey transparent">
+        <img src="/assets/images/logo/COST_LOGO_mediumgrey_transparentbackground.png" alt="COST logo medium grey transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">COST (medium grey, transparent)</p>
-        <a href="{{ '/assets/images/logo/COST_LOGO_mediumgrey_transparentbackground.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/COST_LOGO_mediumgrey_transparentbackground.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -268,11 +268,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/COST_LOGO_white_transparentbackground.png' | relative_url }}" alt="COST logo white transparent">
+        <img src="/assets/images/logo/COST_LOGO_white_transparentbackground.png" alt="COST logo white transparent">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">COST (white, transparent)</p>
-        <a href="{{ '/assets/images/logo/COST_LOGO_white_transparentbackground.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/COST_LOGO_white_transparentbackground.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -289,11 +289,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EN V Funded by the EU_POS.png' | relative_url }}" alt="Funded by the EU positive">
+        <img src="/assets/images/logo/EN V Funded by the EU_POS.png" alt="Funded by the EU positive">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Funded by the EU (positive)</p>
-        <a href="{{ '/assets/images/logo/EN V Funded by the EU_POS.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EN V Funded by the EU_POS.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -301,11 +301,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--dark">
-        <img src="{{ '/assets/images/logo/EN V Funded by the EU_NEG.png' | relative_url }}" alt="Funded by the EU negative">
+        <img src="/assets/images/logo/EN V Funded by the EU_NEG.png" alt="Funded by the EU negative">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Funded by the EU (negative)</p>
-        <a href="{{ '/assets/images/logo/EN V Funded by the EU_NEG.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EN V Funded by the EU_NEG.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -313,11 +313,11 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EN V Funded by the EU_BLACK.png' | relative_url }}" alt="Funded by the EU black">
+        <img src="/assets/images/logo/EN V Funded by the EU_BLACK.png" alt="Funded by the EU black">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Funded by the EU (black)</p>
-        <a href="{{ '/assets/images/logo/EN V Funded by the EU_BLACK.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EN V Funded by the EU_BLACK.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
@@ -325,18 +325,18 @@ Official visual identity guidelines for EEG101, including logos in all formats, 
   <div class="col-6 col-md-4 col-lg-3">
     <div class="logo-card">
       <div class="logo-card__preview logo-card__preview--light">
-        <img src="{{ '/assets/images/logo/EN V Funded by the EU_WHITE Outline.png' | relative_url }}" alt="Funded by the EU white outline">
+        <img src="/assets/images/logo/EN V Funded by the EU_WHITE Outline.png" alt="Funded by the EU white outline">
       </div>
       <div class="logo-card__body">
         <p class="logo-card__name">Funded by the EU (white outline)</p>
-        <a href="{{ '/assets/images/logo/EN V Funded by the EU_WHITE Outline.png' | relative_url }}" download class="logo-card__dl">Download PNG</a>
+        <a href="/assets/images/logo/EN V Funded by the EU_WHITE Outline.png" download class="logo-card__dl">Download PNG</a>
       </div>
     </div>
   </div>
 
 </div>
 
-<p><a href="{{ '/resources/' | relative_url }}">← Back to Resources</a></p>
+<p><a href="/resources/">← Back to Resources</a></p>
 
 <style>
 .colour-card { border: 1px solid var(--color-border); border-radius: var(--radius); overflow: hidden; background: var(--color-bg); box-shadow: var(--shadow-sm); }

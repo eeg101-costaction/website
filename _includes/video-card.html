@@ -1,0 +1,17 @@
+{% assign video = include.video %}
+{% if video.thumbnail and video.thumbnail != "" %}
+{% assign thumb = video.thumbnail %}
+{% elsif video.youtube_id != "REPLACE_WITH_YOUTUBE_ID" %}
+{% assign thumb = "https://img.youtube.com/vi/" | append: video.youtube_id | append: "/hqdefault.jpg" %}
+{% else %}
+{% assign thumb = "/assets/images/placeholders/video-placeholder.jpg" %}
+{% endif %}
+<article class="video-card">
+<a href="https://www.youtube.com/watch?v={{ video.youtube_id }}" class="video-card__thumb-wrap" target="_blank" rel="noopener" aria-label="Watch: {{ video.title }} on YouTube"><img src="{{ thumb }}" alt="Thumbnail for {{ video.title }}" class="video-card__thumb" loading="lazy" width="480" height="270"><span class="video-card__play" aria-hidden="true"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="rgba(0,0,153,0.85)"/><polygon points="19,15 37,24 19,33" fill="#FFCC00"/></svg></span>{% if video.category %}<span class="video-card__category">{{ video.category | capitalize }}</span>{% endif %}</a>
+<div class="video-card__body">
+<time class="video-card__date" datetime="{{ video.date | date: '%Y-%m-%d' }}">{{ video.date | date: "%B %Y" }}</time>
+<h3 class="video-card__title"><a href="https://www.youtube.com/watch?v={{ video.youtube_id }}" target="_blank" rel="noopener">{{ video.title }}</a></h3>
+{% if video.speaker and video.speaker != "" and video.speaker != "TBC" %}<p class="video-card__speaker">{{ video.speaker }}</p>{% endif %}
+{% if video.summary %}<p class="video-card__summary">{{ video.summary | truncatewords: 25 }}</p>{% endif %}
+</div>
+</article>

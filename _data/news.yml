@@ -15,15 +15,13 @@
 #   button_label — optional CTA label (default: "Read more")
 #   tags        — list of tags
 
-- title: "Round 1 grants: STSMs, VMGs, and Conference Grants"
+- title: "Round 1 grants open: STSMs, VMGs, and Conference Grants"
   date: 2026-03-01
   category: "Grants"
   summary: >
-    Round 1 applications for Short-Term Scientific Missions, Virtual Mobility
-    Grants, and Conference Grants opened on 1 March 2026 and closed on
-    3 April 2026. All Year 1 funding has now been allocated — see the Grants
-    page for the current status of each scheme and the Spotlight page for the
-    funded projects.
+    Applications are now open for Round 1 Short-Term Scientific Missions,
+    Virtual Mobility Grants, and Conference Grants. The deadline is
+    31 October 2026, 17:00 CET. Decisions will be announced by 30 April 2026.
   image: "/assets/images/news/round1-grants-open.jpg"
   alt: "A network of connected places with travel routes and a gold destination pin"
   featured: false
