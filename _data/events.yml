@@ -105,7 +105,7 @@
     and MEG data-analysis methods. A shared global programme is broadcast to
     participating Gardens, alongside locally organised talks, tutorials, poster
     sessions, and community activities across multiple continents.
-  image: "/assets/images/events/cuttinggardens-2026.png"
+  image: "/assets/images/events/cuttinggardens-2026.jpg"
   alt: "CuttingGardens 2026 distributed EEG and MEG methods meeting"
   registration_url: "https://cuttingeeg.org/cuttinggardens2026/gardens/"
   programme_url: "https://cuttingeeg.org/cuttinggardens2026/"
@@ -169,14 +169,14 @@
     - open-science
 
 - id: funding-round-2-announcement
-  title: "Funding Round 2 Opening Shortly"
+  title: "Funding Round 2: Get Ready to Apply"
   start_date: 2026-06-01
   end_date: 2026-06-01
   location: "Announcement"
   format: "online"
   category: "Announcement"
   summary: >
-    Funding Round 2 will open shortly. Make sure you are signed up to EEG101 via e-COST and eligible to apply for our range of grant schemes.
+    Year 2 grant calls for STSMs, Virtual Mobility Grants, and Conference Grants are expected to open from November 2026. Make sure you are signed up to EEG101 via e-COST now, so that you are eligible to apply as soon as the round opens. Exact dates will be announced here and on the Grants page.
   image: "/assets/images/events/funding-round-2-announcement.jpg"
   alt: "A door standing ajar with light spilling out"
   registration_url: "/join/"
@@ -261,7 +261,7 @@
   category: "Events"
   summary: >
     The first management committee (MC) meeting was hosted on 24 September 2025 at the COST headquarters in Brussels. The COST action was explained to all members by Wioleta Walentowska (Science Officer) and Flavya Ricci (Administrative Officer), including the networking tools and financial support. We discussed the initial actions to be undertaken by the working groups. Furthermore, the action chair, vice chair and others of the core team were selected and voted into position.
-  image: "/assets/images/events/mc1-brussels.png"
+  image: "/assets/images/events/mc1-brussels.jpg"
   alt: "Group photo from EEG101 Management Committee meeting in Brussels"
   registration_url: ""
   programme_url: ""

@@ -32,7 +32,8 @@ layout: default
   </div>
 </section>
 
-{% assign featured_spotlight = site.data.spotlights | where: "featured", true | first %}
+{% assign featured_candidates = site.data.spotlights | where: "featured", true | sort: "sort_date" %}
+{% assign featured_spotlight = featured_candidates | last %}
 {% if featured_spotlight %}
 <!-- Featured Spotlight -->
 <section class="section" id="spotlight">
@@ -94,6 +95,127 @@ layout: default
   </div>
 </section>
 
+<!-- Upcoming events -->
+{% assign now_epoch = "now" | date: "%s" | plus: 0 %}
+{% assign events_by_date = site.data.events | sort: "start_date" %}
+{% assign upcoming_events = "" | split: "," %}
+{% for event in events_by_date %}
+  {% assign event_epoch = event.start_date | date: "%s" | plus: 0 %}
+  {% if event_epoch >= now_epoch and upcoming_events.size < 3 %}
+    {% assign upcoming_events = upcoming_events | push: event %}
+  {% endif %}
+{% endfor %}
+{% if upcoming_events.size > 0 %}
+<section class="section" id="upcoming-events">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="section-label">What's on</span>
+        <h2 class="section-heading mb-0">{{ c.events_preview.heading }}</h2>
+      </div>
+      <a href="{{ c.events_preview.cta.url | relative_url }}" class="btn btn-outline-primary d-none d-md-inline-flex">{{ c.events_preview.cta.label }}</a>
+    </div>
+    <div class="row g-4">
+      {% for event in upcoming_events %}
+      <div class="col-12 col-md-6 col-lg-4">{% include event-card.html event=event computed_status="upcoming" %}</div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4 d-md-none">
+      <a href="{{ c.events_preview.cta.url | relative_url }}" class="btn btn-outline-primary">{{ c.events_preview.cta.label }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Latest news -->
+{% assign latest_news = site.data.news | sort: "date" | reverse %}
+{% if latest_news.size > 0 %}
+<section class="section section--alt" id="news">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="section-label">Updates</span>
+        <h2 class="section-heading mb-0">{{ c.news_preview.heading }}</h2>
+      </div>
+      <a href="{{ c.news_preview.cta.url | relative_url }}" class="btn btn-outline-primary d-none d-md-inline-flex">{{ c.news_preview.cta.label }}</a>
+    </div>
+    <div class="row g-4">
+      {% for item in latest_news limit: 3 %}
+      <div class="col-12 col-md-6 col-lg-4">{% include news-card.html item=item %}</div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4 d-md-none">
+      <a href="{{ c.news_preview.cta.url | relative_url }}" class="btn btn-outline-primary">{{ c.news_preview.cta.label }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Grants preview -->
+<section class="section" id="grants">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-label">Funding</span>
+      <h2 class="section-heading">{{ c.grants_preview.heading }}</h2>
+      <p class="section-lead mx-auto" style="max-width:640px">{{ c.grants_preview.intro }}</p>
+    </div>
+    <div class="row g-4 mt-2">
+      {% for grant in site.data.grants.schemes %}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div class="obj-card">
+          <div class="obj-card__icon" aria-hidden="true">{{ grant.icon }}</div>
+          <h3 class="obj-card__title">{{ grant.title }}</h3>
+          <p class="obj-card__body"><strong>{{ grant.value }}</strong><br>{{ grant.summary | truncatewords: 22 }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="{{ c.grants_preview.cta.url | relative_url }}" class="btn btn-outline-primary">{{ c.grants_preview.cta.label }}</a>
+    </div>
+  </div>
+</section>
+
+<!-- Video Hub preview -->
+{% if site.data.video_hub.size > 0 %}
+<section class="section section--alt" id="videos">
+  <div class="container">
+    <div class="section-header d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="section-label">Watch</span>
+        <h2 class="section-heading mb-0">{{ c.videos_preview.heading }}</h2>
+        <p class="section-lead mt-2 mb-0">{{ c.videos_preview.intro }}</p>
+      </div>
+      <a href="{{ c.videos_preview.cta.url | relative_url }}" class="btn btn-outline-primary d-none d-md-inline-flex">{{ c.videos_preview.cta.label }}</a>
+    </div>
+    <div class="row g-4">
+      {% for video in site.data.video_hub limit: 3 %}
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="video-card">
+          <a href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" rel="noopener" class="video-thumb-link">
+            <div class="video-thumb">
+              <img src="https://i.ytimg.com/vi/{{ video.id }}/mqdefault.jpg" alt="{{ video.title }}" loading="lazy" width="320" height="180">
+              <span class="video-duration">{{ video.duration }}</span>
+              <div class="video-play-overlay">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              </div>
+            </div>
+          </a>
+          <div class="video-info">
+            <p class="video-series">{{ video.series }}</p>
+            <h3 class="video-title"><a href="https://www.youtube.com/watch?v={{ video.id }}" target="_blank" rel="noopener">{{ video.title }}</a></h3>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4 d-md-none">
+      <a href="{{ c.videos_preview.cta.url | relative_url }}" class="btn btn-outline-primary">{{ c.videos_preview.cta.label }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
 <!-- Join CTA -->
 <section class="section join-cta">
   <div class="container text-center">
@@ -104,5 +226,12 @@ layout: default
     </div>
   </div>
 </section>
+
+{% comment %}
+  The upcoming-events cards above can render "Register" / "How to attend"
+  buttons, which are wired up by this modal. It must stay on any page that
+  renders event-card.html.
+{% endcomment %}
+{% include event-booking-modal.html %}
 
 {% include cost-footer.html %}

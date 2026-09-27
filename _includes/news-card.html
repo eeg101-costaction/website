@@ -3,7 +3,7 @@
   {% assign card_url = item.external_url %}
   {% assign card_external = true %}
 {% elsif item.internal_url and item.internal_url != "" %}
-  {% assign card_url = item.internal_url %}
+  {% assign card_url = item.internal_url | relative_url %}
   {% assign card_external = false %}
 {% else %}
   {% assign card_url = "" %}

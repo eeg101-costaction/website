@@ -549,8 +549,22 @@ To edit a page, open the corresponding file, change the content below the `---` 
 | EEG101 logos | `assets/images/logo/` | Keep existing filenames |
 | Working Group images | `assets/images/working-groups/` | Keep existing filenames |
 | Resource icons | `assets/images/resources/` | Square PNG |
-| Hero video | `assets/video/hero.mp4` | H.264 MP4, 1920x1080, loopable |
+| Hero video | `assets/video/hero.mp4` + `hero.webm` | H.264 MP4 and VP9 WebM, 1920x1080, loopable, under 2MB each |
+| Hero poster frame | `assets/images/hero-fallback.jpg` | 1600x900 JPEG — shown before the video loads and to visitors who prefer reduced motion |
+| Social sharing image | `assets/images/og-image.png` | 1200x630 PNG — the preview shown when a page is shared |
+| Favicon | `assets/images/logo/favicon.png` | 192x192 PNG |
+| Logo pack | `assets/EEG101-logos.zip` | Regenerate after adding or replacing any logo (see below) |
 | PDFs and documents | `assets/docs/` | Any filename |
+
+> **Team photos are the single biggest page-weight risk.** The Team page loads
+> every portrait at once. Keep each one at or under 800px on its longest side
+> and roughly 100KB; a phone photo dropped in unresized can be 3MB on its own.
+
+> **Regenerating the logo ZIP:** `assets/EEG101-logos.zip` is a plain zip of
+> `assets/images/logo/` grouped into `EEG101-logos/`, `COST-logos/` and
+> `EU-funding-logos/`, plus a `README.txt`. Rebuild it whenever a logo changes,
+> otherwise the "Download all logos" button on the Graphical Charter page
+> serves stale artwork.
 
 ---
 
@@ -616,15 +630,23 @@ assets/
   js/network-map.js            #   Members map and directory JavaScript
   data/network-map.json        #   Generated member data (do not edit directly)
   images/                      #   All images, organised by type
-  video/                       #   Hero video
+  video/                       #   Hero video (MP4 + WebM)
 spotlights/                    #   Individual Spotlight detail pages
-scripts/                       #   Automation and validation scripts
+scripts/                       #   Automation and validation scripts (not published)
   validate_event_booking.py    #     Runs on every build to check event data
+  test_*.py                    #     Unit tests, run in CI before every build
   sync_network_map.py          #     Converts eCOST export to map data
   google-apps-script/          #     Apps Script source for booking and Members publishing
-docs/                          #   Internal documentation and validation records
-.github/workflows/pages.yml   #   GitHub Actions deployment workflow
+docs/                          #   Internal documentation (not published)
+.github/workflows/
+  pages.yml                    #   Tests, builds and deploys main to GitHub Pages
+  preview.yml                  #   Builds the preview branch to gh-pages-preview
+  ecost-network-map-sync.yml   #   Daily eCOST membership sync for the Members map
 *.md / *.html                  #   Individual page files
+
+Note: `README.md`, `todo.md`, `docs/` and `scripts/` are listed under `exclude`
+in `_config.yml`, so they are not served from www.eeg101.eu. Add any new
+internal file to that list too.
 ```
 
 ---

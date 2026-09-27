@@ -1,7 +1,7 @@
 ---
 layout: page
-title: "Coordination"
-subtitle: "The team leading EEG101"
+title: "Team"
+subtitle: "The people leading EEG101"
 description: "Meet the EEG101 coordination team — Action Chair, Vice Chair, and coordinators leading the network."
 permalink: /coordination/
 ---
@@ -19,6 +19,7 @@ EEG101 was officially launched in November 2025. The coordination team oversees 
 <button class="people-filter__btn" data-filter="community">Community Support</button>
 </div>
 
+<h2 class="visually-hidden">Coordination team</h2>
 <div class="people-grid" id="peopleGrid">
 {% assign coordination = site.data.people | sort: "order" %}
 {% for person in coordination %}
@@ -47,6 +48,11 @@ EEG101 operates through a **Management Committee (MC)** comprising representativ
 | **Community Engagement Lead** | Internal engagement, community building, and outreach |
 | **Grant Awarding Coordinator** | STSMs, VMGs, and Conference Grant administration |
 | **Grant Holder Scientific Representative** | Liaison with host institution and financial administration |
+| **EDIA Lead** | Equity, diversity, inclusion and accessibility across the Action |
+| **Industry Engagement Lead** | Partnerships with EEG hardware, software, and applied research organisations |
+| **Training School Lead** | Training schools and capacity-building activities |
+| **Working Group Leaders and Co-leaders** | Scientific delivery of WG1, WG2, and WG3 |
+| **Community Support** | Day-to-day support for members, events, and Working Group activity |
 
 ---
 

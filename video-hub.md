@@ -13,6 +13,7 @@ permalink: /video-hub/
 
     <!-- Filter controls -->
     <div class="library-controls">
+      <label for="library-search" class="visually-hidden">Search videos by title, speaker, or topic</label>
       <input type="text" id="library-search" class="library-search" placeholder="Search by title, speaker, or topic...">
       <div class="library-filters" id="library-filters">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -28,6 +29,7 @@ permalink: /video-hub/
     <p class="library-count" id="library-count">Showing {{ site.data.video_hub | size }} videos</p>
 
     <!-- Video grid -->
+    <h2 class="visually-hidden">Recordings</h2>
     <div class="library-grid" id="library-grid">
       {% for video in site.data.video_hub %}
       <div class="video-card"

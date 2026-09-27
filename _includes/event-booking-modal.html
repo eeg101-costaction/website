@@ -47,6 +47,32 @@
   var membersNo = document.getElementById('eventMembersNo');
   var bookingNotice = document.getElementById('eventBookingFormNotice');
   var eyebrow = document.getElementById('eventBookingEyebrow');
+  var panel = dialog.querySelector('.event-booking-dialog__panel');
+  var closeButton = dialog.querySelector('.event-booking-dialog__close');
+  var lastFocused = null;
+  // aria-modal only tells assistive tech the dialog is modal; the focus still has
+  // to be moved in, kept in, and handed back for keyboard users.
+  function focusable() {
+    return Array.prototype.filter.call(
+      panel.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select, textarea, iframe, [tabindex]:not([tabindex="-1"])'),
+      function (el) { return el.offsetParent !== null || el === closeButton; }
+    );
+  }
+  function trapTab(event) {
+    if (event.key !== 'Tab') return;
+    var items = focusable();
+    if (!items.length) return;
+    var first = items[0], last = items[items.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+  function reveal() {
+    lastFocused = document.activeElement;
+    dialog.hidden = false;
+    dialog.setAttribute('aria-hidden', 'false');
+    document.addEventListener('keydown', trapTab, true);
+    if (closeButton) closeButton.focus();
+  }
   // Members-only events: invitations are sent through e-COST, so no registration data is collected here.
   function openMembers(event) {
     if (!event) return;
@@ -62,8 +88,7 @@
     membersChoices.hidden = false;
     membersYes.hidden = true;
     membersNo.hidden = true;
-    dialog.hidden = false;
-    dialog.setAttribute('aria-hidden', 'false');
+    reveal();
   }
   document.querySelectorAll('[data-members-answer]').forEach(function (button) {
     button.addEventListener('click', function () {
@@ -92,10 +117,16 @@
       registrationFrame.src = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') + query.toString();
       registrationFrame.hidden = false;
     }
-    dialog.hidden = false;
-    dialog.setAttribute('aria-hidden', 'false');
+    reveal();
   }
-  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; }
+  function close() {
+    dialog.hidden = true;
+    dialog.setAttribute('aria-hidden', 'true');
+    registrationFrame.src = 'about:blank';
+    document.removeEventListener('keydown', trapTab, true);
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    lastFocused = null;
+  }
   window.EEG101EventBooking = { open: open, openMembers: openMembers, canBook: canBook };
   document.querySelectorAll('[data-event-booking]').forEach(function (button) { button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); }); });
   document.querySelectorAll('[data-event-members]').forEach(function (button) { button.addEventListener('click', function () { openMembers(findEvent(button.dataset.eventMembers)); }); });

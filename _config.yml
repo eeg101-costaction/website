@@ -8,6 +8,20 @@ description: >
 url: "https://www.eeg101.eu"
 baseurl: ""
 
+# Used by jekyll-seo-tag, which emits the title, description, canonical,
+# Open Graph and Twitter Card tags for every page.
+logo: /assets/images/logo/EEG101-logo-v2.png
+twitter:
+  username: eeg101costaction
+  card: summary_large_image
+social:
+  name: "EEG101"
+  links:
+    - https://www.youtube.com/@eeg101costaction
+    - https://bsky.app/profile/eeg101costaction.bsky.social
+    - https://www.linkedin.com/groups/16491058/
+    - https://github.com/eeg101-costaction
+
 # Build settings
 markdown: kramdown
 kramdown:
@@ -33,6 +47,8 @@ defaults:
     values:
       layout: home
 
+# Anything listed here stays out of the published site. Without this, internal
+# files are served from www.eeg101.eu (e.g. /todo.md, /docs/…, /scripts/….gs).
 exclude:
   - Gemfile
   - Gemfile.lock
@@ -41,3 +57,8 @@ exclude:
   - .jekyll-cache
   - node_modules
   - "*.py"
+  - README.md
+  - LICENSE.md
+  - todo.md
+  - docs/
+  - scripts/

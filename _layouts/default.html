@@ -3,22 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% if page.title %}{{ page.title }} — {{ site.data.site.title }}{% else %}{{ site.data.site.title }}: {{ site.data.site.tagline }}{% endif %}</title>
-  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.site.description }}{% endif %}">
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.data.site.title }}{% endif %}">
-  <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.site.description }}{% endif %}">
-  <meta property="og:image" content="{{ site.data.site.url }}{% if page.image %}{{ page.image }}{% else %}/assets/images/og-image.png{% endif %}">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="{{ site.data.site.url }}{{ page.url }}">
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="{{ site.data.site.twitter_handle }}">
-
-  <!-- Canonical -->
-  <link rel="canonical" href="{{ site.data.site.url }}{{ page.url }}">
+  {% comment %}
+    Title, description, canonical, Open Graph and Twitter Card tags are all
+    emitted by {% seo %} at the end of this head, using the values in
+    _config.yml (title, description, url, logo, twitter, defaults.image) and
+    each page's own title/description/image front matter. Do not hand-roll
+    them here as well — that produced two of every tag on every page.
+  {% endcomment %}
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">

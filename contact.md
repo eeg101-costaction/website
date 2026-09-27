@@ -23,7 +23,7 @@ We welcome enquiries from researchers, institutions, industry partners, and anyo
 
 <div class="contact-route">
 <h3>Joining the network</h3>
-<p>See the <a href="{{ '/join/' | relative_url }}">How to Join page</a> for step-by-step instructions, or join the <a href="{{ site.data.site.discord_url }}" target="_blank" rel="noopener">EEG101 Discord ↗</a> to connect with the community immediately.</p>
+<p>See the <a href="{{ '/join/' | relative_url }}">How to Join page</a> for step-by-step instructions. Once your application is approved, you will receive an invitation to the EEG101 Discord community, where Working Group channels and meeting announcements are hosted.</p>
 </div>
 
 <div class="contact-route">
@@ -72,7 +72,7 @@ f dot mushtaq at leeds dot ac uk
 [eeg101-costaction]({{ site.data.site.github_url }}){: target="_blank" rel="noopener"}
 
 **Discord**
-[Join the community]({{ site.data.site.discord_url }}){: target="_blank" rel="noopener"}
+Invitations are sent to members once their application is approved. [How to join]({{ '/join/' | relative_url }})
 
 ---
 

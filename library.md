@@ -13,6 +13,7 @@ permalink: /library/
 
     <!-- Filter controls -->
     <div class="library-controls">
+      <label for="hub-search" class="visually-hidden">Search papers by title, author, or keyword</label>
       <input type="text" id="hub-search" class="library-search" placeholder="Search by title, author, or keyword...">
       <div class="library-filters" id="hub-filters">
         <button class="filter-btn active" data-filter="all">All</button>
@@ -30,6 +31,7 @@ permalink: /library/
     <p class="library-count" id="hub-count">Showing {{ site.data.library | size }} papers</p>
 
     <!-- Paper grid -->
+    <h2 class="visually-hidden">Papers and presentations</h2>
     <div class="hub-grid" id="hub-grid">
       {% for paper in site.data.library %}
       <div class="paper-card"
@@ -38,7 +40,7 @@ permalink: /library/
            data-authors="{{ paper.authors | downcase }}"
            data-tags="{{ paper.tags | join: ' ' | downcase }}">
         <a href="{{ paper.source_url }}" target="_blank" rel="noopener" class="paper-cover">
-          <img src="{{ paper.image }}" alt="{{ paper.title }}" loading="lazy">
+          <img src="{{ paper.image | relative_url }}" alt="{{ paper.title }}" loading="lazy">
         </a>
         <div class="paper-info">
           <p class="paper-theme">{{ paper.theme }}</p>

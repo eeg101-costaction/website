@@ -41,13 +41,25 @@
       {% elsif event.booking_enabled == true and event.booking_status == "open" and status == "upcoming" %}
       <button type="button" class="btn btn-primary btn-sm" data-event-booking="{{ event.id }}">Register</button>
       {% elsif event.registration_url and event.registration_url != "" and status == "upcoming" %}
+      {% if event.registration_url contains "://" %}
       <a href="{{ event.registration_url }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Register ↗</a>
+      {% else %}
+      <a href="{{ event.registration_url | relative_url }}" class="btn btn-primary btn-sm">Register</a>
+      {% endif %}
       {% endif %}
       {% if event.programme_url and event.programme_url != "" %}
+      {% if event.programme_url contains "://" %}
       <a href="{{ event.programme_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Programme</a>
+      {% else %}
+      <a href="{{ event.programme_url | relative_url }}" class="btn btn-outline-primary btn-sm">Programme</a>
+      {% endif %}
       {% endif %}
       {% if event.recording_url and event.recording_url != "" %}
+      {% if event.recording_url contains "://" %}
       <a href="{{ event.recording_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Watch recording ↗</a>
+      {% else %}
+      <a href="{{ event.recording_url | relative_url }}" class="btn btn-outline-primary btn-sm">Watch recording</a>
+      {% endif %}
       {% endif %}
     </div>
   </div>

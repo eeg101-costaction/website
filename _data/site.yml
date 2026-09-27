@@ -15,11 +15,14 @@ url: "https://www.eeg101.eu"
 email: "eeg101costaction@gmail.com"
 
 # Social & external links
-discord_url: "https://discord.gg/eeg101"
+# discord_url is intentionally empty: Discord invites are sent to approved members
+# rather than published. Leaving it blank hides the footer icon. To publish a public
+# invite again, paste a current, non-expiring discord.gg link here.
+discord_url: ""
 github_url: "https://github.com/eeg101-costaction"
 youtube_url: "https://www.youtube.com/@eeg101costaction"
-linkedin_url: "https://www.linkedin.com/company/eeg101"
-bluesky_url: "https://bsky.app/profile/eeg101.bsky.social"
+linkedin_url: "https://www.linkedin.com/groups/16491058/"
+bluesky_url: "https://bsky.app/profile/eeg101costaction.bsky.social"
 twitter_handle: "@eeg101costaction"
 cost_action_url: "https://www.cost.eu/actions/CA24148/"
 ecost_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
@@ -28,6 +31,7 @@ ecost_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"
 logo: "/assets/images/logo/EEG101-logo-v2.png"
 logo_alt: "EEG101 COST Action logo"
 hero_video: "/assets/video/hero.mp4"
+hero_video_webm: "/assets/video/hero.webm"
 hero_fallback: "/assets/images/hero-fallback.jpg"
 
 # Google Analytics GA4

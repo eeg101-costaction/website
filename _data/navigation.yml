@@ -41,6 +41,8 @@ footer_resources:
     url: "/resources/"
   - title: "Events"
     url: "/events/"
+  - title: "Calendar"
+    url: "/calendar/"
   - title: "Spotlight"
     url: "/spotlight/"
   - title: "Library"

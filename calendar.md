@@ -44,11 +44,17 @@ permalink: /calendar/
     return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
   }
 
+  // Multi-day events (conferences, meeting weeks) occupy every day they run,
+  // not just their start date.
   function eventsOnDay(year, month, day) {
+    var cell = new Date(year, month, day).setHours(0, 0, 0, 0);
     return EVENTS.filter(function (ev) {
       if (!ev.start_date) return false;
-      var d = parseLocalDate(ev.start_date);
-      return d && d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+      var start = parseLocalDate(ev.start_date);
+      if (!start) return false;
+      var end = parseLocalDate(ev.end_date) || start;
+      if (end < start) end = start;
+      return cell >= start.setHours(0, 0, 0, 0) && cell <= end.setHours(0, 0, 0, 0);
     });
   }
 
