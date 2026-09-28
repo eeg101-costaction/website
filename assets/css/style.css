@@ -951,9 +951,9 @@ strong { font-weight: 600; }
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 110px;
+  min-height: 140px;
 }
-.partner-card__logo { max-height: 70px; max-width: 220px; object-fit: contain; }
+.partner-card__logo { max-height: 100px; max-width: 220px; object-fit: contain; }
 .partner-card__logo-placeholder {
   font-family: var(--font-heading);
   font-size: 2rem;
