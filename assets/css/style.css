@@ -587,7 +587,6 @@ strong { font-weight: 600; }
 .event-card {
   background: var(--color-bg);
   border-radius: var(--radius);
-  overflow: hidden;
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition);
@@ -596,7 +595,7 @@ strong { font-weight: 600; }
 }
 .event-card--past { opacity: 0.8; }
 .event-card__share[disabled] { opacity: 0.75; }
-.event-card__img-wrap { aspect-ratio: 16/9; overflow: hidden; }
+.event-card__img-wrap { aspect-ratio: 16/9; overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
 .event-card__img { width: 100%; height: 100%; object-fit: cover; }
 .event-card__body { padding: 1.25rem; }
 .event-card__meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
