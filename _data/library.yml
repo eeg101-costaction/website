@@ -165,3 +165,18 @@
   theme: "Reporting standards"
   image: "/assets/images/hub/kljajic-2026-med-eng-phys.jpg"
   tags: ["#EEG101-funded", Reporting standards, Neonatal EEG, Machine learning, Methodology]
+
+- id: skoric-2026-cmpb
+  title: "Forecasting and real-time detection of neonatal seizures: A machine learning perspective"
+  authors: "Skoric T, Djermanovic M, O'Toole JM, De Vos M, Spasojevic S"
+  journal: "Computer Methods and Programs in Biomedicine"
+  year: 2026
+  source_url: "https://doi.org/10.1016/j.cmpb.2026.109552"
+  source_label: "Journal source"
+  open_access_url: "https://doi.org/10.2139/ssrn.5734906"
+  open_access_label: "Read the accepted manuscript"
+  access_version: "Author-accepted manuscript"
+  open_access: true
+  theme: "Clinical EEG"
+  image: "/assets/images/hub/skoric-2026-cmpb.jpg"
+  tags: ["#EEG101-funded", Clinical EEG, Neonatal EEG, Machine learning, Seizure detection]
