@@ -150,3 +150,18 @@
   theme: "Software"
   image: "/assets/images/hub/oostenveld-2011-fieldtrip.jpg"
   tags: [Software, FieldTrip, Open source, EEG, MEG, Analysis tools]
+
+- id: kljajic-2026-med-eng-phys
+  title: "Honest and Reliable Evaluation and Expert Equivalence Testing of Automated Neonatal Seizure Detection"
+  authors: "Kljajic J, O'Toole JM, Hogan R, Skoric T"
+  journal: "Medical Engineering & Physics"
+  year: 2026
+  source_url: "https://doi.org/10.1088/1873-4030/aea852"
+  source_label: "Journal source"
+  open_access_url: "https://arxiv.org/abs/2508.04899"
+  open_access_label: "Read the preprint"
+  access_version: "Preprint (arXiv)"
+  open_access: true
+  theme: "Reporting standards"
+  image: "/assets/images/hub/kljajic-2026-med-eng-phys.jpg"
+  tags: ["#EEG101-funded", Reporting standards, Neonatal EEG, Machine learning, Methodology]
