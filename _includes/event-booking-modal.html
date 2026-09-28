@@ -45,6 +45,27 @@
     if (registrationFrame.src && registrationFrame.src.indexOf('about:blank') === -1) registrationFrame.hidden = false;
   });
   function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
+  // On mobile Safari a fixed-position dialog does not stop the page behind it from also
+  // scrolling: a drag that reaches the end of the panel's own content "chains" into the
+  // body, which then snaps back. Locking the body's scroll position while the dialog is
+  // open keeps the drag confined to the panel.
+  var lockedScrollY = 0;
+  function lockBodyScroll() {
+    lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -lockedScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBodyScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, lockedScrollY);
+  }
   function timeWithZone(event) {
     if (!event.time) return '';
     var range = event.time + (event.end_time ? '–' + event.end_time : '');
@@ -74,6 +95,7 @@
     membersChoices.hidden = false;
     membersYes.hidden = true;
     membersNo.hidden = true;
+    lockBodyScroll();
     dialog.hidden = false;
     dialog.setAttribute('aria-hidden', 'false');
   }
@@ -106,10 +128,11 @@
       loading.hidden = false;
       registrationFrame.src = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') + query.toString();
     }
+    lockBodyScroll();
     dialog.hidden = false;
     dialog.setAttribute('aria-hidden', 'false');
   }
-  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; loading.hidden = true; }
+  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; loading.hidden = true; unlockBodyScroll(); }
   window.EEG101EventBooking = { open: open, openMembers: openMembers, canBook: canBook };
   // Warm up the connection to the registration endpoint as soon as someone shows intent to
   // register, so the form has a head start by the time the click actually opens it.

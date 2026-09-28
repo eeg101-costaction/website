@@ -622,9 +622,9 @@ strong { font-weight: 600; }
 
 /* --- Event booking modal, used directly by Events and Calendar --- */
 .event-booking-dialog[hidden] { display: none; }
-.event-booking-dialog { align-items: center; display: flex; inset: 0; justify-content: center; padding: 1rem; position: fixed; z-index: 10000; }
+.event-booking-dialog { align-items: center; display: flex; inset: 0; justify-content: center; overscroll-behavior: contain; padding: 1rem; position: fixed; touch-action: none; z-index: 10000; }
 .event-booking-dialog__backdrop { background: rgba(9, 10, 44, 0.62); inset: 0; position: absolute; }
-.event-booking-dialog__panel { background: var(--color-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-height: min(88vh, 920px); max-width: 720px; overflow-y: auto; padding: clamp(1.4rem, 4vw, 2.25rem); position: relative; width: 100%; }
+.event-booking-dialog__panel { -webkit-overflow-scrolling: touch; background: var(--color-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-height: min(88vh, 920px); max-width: 720px; overflow-y: auto; overscroll-behavior: contain; padding: clamp(1.4rem, 4vw, 2.25rem); position: relative; touch-action: pan-y; width: 100%; }
 .event-booking-dialog__panel h2 { margin: 0.35rem 2rem 0.5rem 0; }
 .event-booking-dialog__details { color: var(--color-text-muted); margin-bottom: 1.4rem; }
 .event-booking-dialog__close { background: transparent; border: 0; color: var(--color-primary); cursor: pointer; font-size: 2rem; line-height: 1; padding: 0; position: absolute; right: 1.2rem; top: 1rem; }
