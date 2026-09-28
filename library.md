@@ -16,7 +16,7 @@ permalink: /library/
       <input type="text" id="hub-search" class="library-search" placeholder="Search by title, author, or keyword...">
       <div class="library-filters" id="hub-filters">
         <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="#EEG101-funded">#EEG101-funded</button>
+        <button class="filter-btn" data-filter="#EEG101-supported">#EEG101-supported</button>
         <button class="filter-btn" data-filter="History">History</button>
         <button class="filter-btn" data-filter="Reporting standards">Reporting standards</button>
         <button class="filter-btn" data-filter="Data harmonisation">Data harmonisation</button>

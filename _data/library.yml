@@ -164,7 +164,7 @@
   open_access: true
   theme: "Reporting standards"
   image: "/assets/images/hub/kljajic-2026-med-eng-phys.jpg"
-  tags: ["#EEG101-funded", Reporting standards, Neonatal EEG, Machine learning, Methodology]
+  tags: ["#EEG101-supported", Reporting standards, Neonatal EEG, Machine learning, Methodology]
 
 - id: skoric-2026-cmpb
   title: "Forecasting and real-time detection of neonatal seizures: A machine learning perspective"
@@ -179,4 +179,4 @@
   open_access: true
   theme: "Clinical EEG"
   image: "/assets/images/hub/skoric-2026-cmpb.jpg"
-  tags: ["#EEG101-funded", Clinical EEG, Neonatal EEG, Machine learning, Seizure detection]
+  tags: ["#EEG101-supported", Clinical EEG, Neonatal EEG, Machine learning, Seizure detection]
