@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 523,
+  "member_count": 525,
   "site_count": 307,
   "country_count": 58,
   "countries": [
@@ -222,7 +222,7 @@
     {
       "name": "Portugal",
       "site_count": 16,
-      "member_count": 23
+      "member_count": 24
     },
     {
       "name": "Romania",
@@ -9481,9 +9481,19 @@
           "email": "frsantos [at] fpce [dot] up [dot] pt",
           "homepage": "http://ferreira-santos.eu",
           "orcid": "0000-0002-2656-5291"
+        },
+        {
+          "name": "Violeta Magalhães",
+          "affiliation": "Universidade do Porto",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "violetadmag [at] gmail [dot] com",
+          "homepage": "https://www.researchgate.net/profile/Violeta-Amelia-Magalhaes?ev=hdr_xprf; https://www.linkedin.com/in/violetamagalh%C3%A3es/; https://www.cienciavitae.pt//0C1F-E444-6EC6",
+          "orcid": "0000-0003-2163-2835"
         }
       ],
-      "member_count": 3,
+      "member_count": 4,
       "working_groups": [
         "WG1",
         "WG2",

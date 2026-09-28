@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-09-27T10:35:03+00:00",
+  "generated_at": "2026-09-28T11:43:00+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 6,
+  "pending_count": 7,
   "members": [
     {
       "name": "Zoltan Juhasz",
@@ -74,6 +74,19 @@
       "email": "ahmadorlotfi [at] gmail [dot] com",
       "homepage": "https://fr.linkedin.com/in/ahmad-lotfi-259651b8",
       "orcid": ""
+    },
+    {
+      "name": "Francisco José Sánchez Cuesta",
+      "affiliation": "Fundacion Universidad Francisco de Vitoria",
+      "country": "Spain",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "fjose.sanchez [at] ufv [dot] es",
+      "homepage": "www.linkedin.com/in/francisco-josé-sánchez-cuesta-69b0b2176; https://www.researchgate.net/profile/Francisco-Sanchez-Cuesta?ev=hdr_xprf",
+      "orcid": "0000-0001-6202-7071"
     }
   ]
 }
