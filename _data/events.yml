@@ -33,11 +33,10 @@
   format: "in-person"
   category: "Events"
   summary: >
-    The International Pharmaco-EEG Society's 2026 conference, with keynotes from
-    Robert Oostenveld, Andreea Diaconescu, Thomas Koenig and Pedro Mediano, and
-    symposia on EEG and AI, psychedelics and EEG, sleep and epilepsy,
-    translational research, sex/gender and EEG/imaging, and auditory
-    steady-state responses. Abstract submission deadline: 30 September 2026.
+    The International Pharmaco-EEG Society's 2026 conference, with keynotes
+    from Robert Oostenveld, Andreea Diaconescu, Thomas Koenig and Pedro
+    Mediano, and symposia spanning EEG and AI, psychedelics, sleep, epilepsy,
+    and translational research.
   image: "/assets/images/events/ipeg-logo.png"
   alt: "International Pharmaco-EEG Society (IPEG) logo"
   registration_url: "https://www.ipeg-society.org/meetings/"
@@ -67,15 +66,10 @@
   format: "online"
   category: "Events"
   summary: >
-    Bringing together EEG researchers to present findings, share expertise, and
-    discuss open questions on how to better include diverse and representative
-    study populations. Talks and a panel discussion will cover insight into EEG
-    research results including underrepresented populations, the barriers people
-    face in taking part in EEG studies, and strategies for researchers to
-    enhance diversity in their studies. Confirmed speakers are Emilie Casper
-    (Ghent University, Belgium), Annika Wienke and Birgit Mathes (University of
-    Bremen, Germany), and Mahnaz Arvaneh (University of Sheffield, UK). An
-    initiative of Working Groups 2 and 3.
+    Bringing together EEG researchers to discuss how to include more diverse
+    and representative study populations, covering the barriers people face
+    and strategies to improve diversity. Talks and a panel discussion, hosted
+    by Working Groups 2 and 3.
   image: "/assets/images/events/diversity-eeg-populations-2026-crowd.jpg"
   alt: "Illustration of a large crowd of people wearing EEG caps, with a spotlight picking out a few of them"
   registration_url: ""
@@ -101,10 +95,10 @@
   format: "hybrid"
   category: "Events"
   summary: >
-    CuttingGardens is a distributed international conference on cutting-edge EEG
-    and MEG data-analysis methods. A shared global programme is broadcast to
-    participating Gardens, alongside locally organised talks, tutorials, poster
-    sessions, and community activities across multiple continents.
+    CuttingGardens is a distributed international conference on cutting-edge
+    EEG and MEG data-analysis methods, broadcasting a shared global programme
+    alongside locally organised talks, tutorials, and poster sessions
+    worldwide.
   image: "/assets/images/events/cuttinggardens-2026.png"
   alt: "CuttingGardens 2026 distributed EEG and MEG methods meeting"
   registration_url: "https://cuttingeeg.org/cuttinggardens2026/gardens/"
@@ -127,7 +121,10 @@
   format: "online"
   category: "Events"
   summary: >
-    The second EEG101 WG2 Virtual Symposium on EEG artifact rejection, cleaning, and reproducible preprocessing was successfully held on 3 September 2026, bringing together more than 120 attendees. Thank you to the speakers, chairs, panellists, and everyone who joined and contributed to the discussions. Recordings are being edited and will be published in the EEG101 Library shortly.
+    The second EEG101 WG2 Virtual Symposium on EEG artifact rejection,
+    cleaning, and reproducible preprocessing, held on 3 September 2026,
+    brought together more than 120 attendees. Recordings will follow in the
+    EEG101 Library.
   image: "/assets/images/events/wg2-artifact-rejection-symposium-2026.jpg"
   alt: "A noisy EEG trace passing through a filter and emerging clean"
   registration_url: ""
@@ -151,9 +148,9 @@
   category: "Events"
   summary: >
     EEG101 hosted a two-day satellite event at OHBM Brainhack in June 2026,
-    bringing together over 120 participants for workshops, open discussions,
-    and community-building sessions on standardisation, data curation, and
-    reproducibility in EEG research.
+    bringing together over 120 participants for workshops and
+    community-building sessions on standardisation, curation, and
+    reproducibility.
   image: "/assets/images/events/ohbm-brainhack-day2.jpg"
   alt: "Group photo of over 120 participants at EEG101 OHBM Brainhack 2026"
   registration_url: ""
@@ -176,7 +173,8 @@
   format: "online"
   category: "Announcement"
   summary: >
-    Funding Round 2 will open shortly. Make sure you are signed up to EEG101 via e-COST and eligible to apply for our range of grant schemes.
+    Funding Round 2 opens shortly. Make sure you are signed up to EEG101 via
+    e-COST and eligible to apply for our range of grant schemes.
   image: "/assets/images/events/funding-round-2-announcement.jpg"
   alt: "A door standing ajar with light spilling out"
   registration_url: "/join/"
@@ -198,7 +196,9 @@
   time: "15:00 – 17:00 (Central European Time)"
   category: "Events"
   summary: >
-    This first EEG101 WG2 virtual meeting brings together researchers and practitioners working on EEG data curation, preprocessing, harmonization, and open data infrastructures. The symposium aims to foster discussion, share ongoing work, and build alignment around best practices within the EEG101 COST Action.
+    This first EEG101 WG2 virtual meeting brought together researchers and
+    practitioners working on EEG data curation, preprocessing, harmonisation,
+    and open data infrastructures, fostering alignment on best practices.
   image: "/assets/images/events/wg2-virtual-apr2026.jpg"
   alt: "A laptop showing a grid of video-call participants wearing EEG caps"
   registration_url: ""
@@ -220,7 +220,8 @@
   time: "Closed 17:00 CET"
   category: "Announcement"
   summary: >
-    The application window for Funding Round 1 has now closed. The coordination team is currently reviewing applications for STSMs, VMGs, and Conference Grants.
+    The application window for Funding Round 1 has closed. The coordination
+    team is reviewing applications for STSMs, VMGs, and Conference Grants.
   image: "/assets/images/events/funding-round-1-closed.jpg"
   alt: "A stack of applications under a magnifying glass"
   registration_url: ""
@@ -260,7 +261,10 @@
   format: "in-person"
   category: "Events"
   summary: >
-    The first management committee (MC) meeting was hosted on 24 September 2025 at the COST headquarters in Brussels. The COST action was explained to all members by Wioleta Walentowska (Science Officer) and Flavya Ricci (Administrative Officer), including the networking tools and financial support. We discussed the initial actions to be undertaken by the working groups. Furthermore, the action chair, vice chair and others of the core team were selected and voted into position.
+    The first Management Committee meeting was hosted on 24 September 2025 at
+    the COST headquarters in Brussels, where the Action was introduced by
+    COST's Science and Administrative Officers, and the chair, vice chair,
+    and core team were selected.
   image: "/assets/images/events/mc1-brussels.png"
   alt: "Group photo from EEG101 Management Committee meeting in Brussels"
   registration_url: ""
