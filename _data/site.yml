@@ -15,11 +15,14 @@ url: "https://www.eeg101.eu"
 email: "eeg101costaction@gmail.com"
 
 # Social & external links
-discord_url: "https://discord.gg/eeg101"
+# The discord.gg/eeg101 invite is no longer valid ("Unknown Invite"), so this key
+# is commented out — the footer icon and the Contact entry hide themselves while it
+# is absent. Uncomment it with a current invite to bring both back.
+# discord_url: "https://discord.gg/XXXXXXX"
 github_url: "https://github.com/eeg101-costaction"
 youtube_url: "https://www.youtube.com/@eeg101costaction"
-linkedin_url: "https://www.linkedin.com/company/eeg101"
-bluesky_url: "https://bsky.app/profile/eeg101.bsky.social"
+linkedin_url: "https://www.linkedin.com/groups/16491058/"
+bluesky_url: "https://bsky.app/profile/eeg101costaction.bsky.social"
 twitter_handle: "@eeg101costaction"
 cost_action_url: "https://www.cost.eu/actions/CA24148/"
 ecost_url: "https://e-services.cost.eu/action/CA24148/working-groups/apply"

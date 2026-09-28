@@ -23,7 +23,7 @@ We welcome enquiries from researchers, institutions, industry partners, and anyo
 
 <div class="contact-route">
 <h3>Joining the network</h3>
-<p>See the <a href="{{ '/join/' | relative_url }}">How to Join page</a> for step-by-step instructions, or join the <a href="{{ site.data.site.discord_url }}" target="_blank" rel="noopener">EEG101 Discord ↗</a> to connect with the community immediately.</p>
+<p>See the <a href="{{ '/join/' | relative_url }}">How to Join page</a> for step-by-step instructions{% if site.data.site.discord_url and site.data.site.discord_url != "" %}, or join the <a href="{{ site.data.site.discord_url }}" target="_blank" rel="noopener">EEG101 Discord ↗</a> to connect with the community immediately{% endif %}.</p>
 </div>
 
 <div class="contact-route">
@@ -71,8 +71,10 @@ f dot mushtaq at leeds dot ac uk
 **GitHub**
 [eeg101-costaction]({{ site.data.site.github_url }}){: target="_blank" rel="noopener"}
 
+{% if site.data.site.discord_url and site.data.site.discord_url != "" %}
 **Discord**
 [Join the community]({{ site.data.site.discord_url }}){: target="_blank" rel="noopener"}
+{% endif %}
 
 ---
 
