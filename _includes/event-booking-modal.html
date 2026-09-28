@@ -45,6 +45,11 @@
     if (registrationFrame.src && registrationFrame.src.indexOf('about:blank') === -1) registrationFrame.hidden = false;
   });
   function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
+  function timeWithZone(event) {
+    if (!event.time) return '';
+    var range = event.time + (event.end_time ? '–' + event.end_time : '');
+    return event.timezone_label ? range + ' ' + event.timezone_label : range;
+  }
   function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open' && event.audience !== 'members'; }
   var membersPanel = document.getElementById('eventMembersPanel');
   var membersChoices = document.getElementById('eventMembersChoices');
@@ -58,7 +63,7 @@
     if (!event) return;
     message.textContent = '';
     title.textContent = event.title;
-    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    details.textContent = [event.start_date, timeWithZone(event), event.location].filter(Boolean).join(' · ');
     registrationFrame.hidden = true;
     registrationFrame.src = 'about:blank';
     loading.hidden = true;
@@ -89,7 +94,7 @@
     notice.hidden = false;
     registrationFrame.style.minHeight = '';
     title.textContent = 'Register for ' + event.title;
-    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    details.textContent = [event.start_date, timeWithZone(event), event.location].filter(Boolean).join(' · ');
     if (!endpoint) {
       message.textContent = 'Registration is being prepared. Please check back shortly or contact eeg101costaction@gmail.com.';
       message.className = 'event-booking-form__message event-booking-form__message--error';
