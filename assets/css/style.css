@@ -592,8 +592,10 @@ strong { font-weight: 600; }
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition);
   height: 100%;
+  scroll-margin-top: 90px;
 }
 .event-card--past { opacity: 0.8; }
+.event-card__share[disabled] { opacity: 0.75; }
 .event-card__img-wrap { aspect-ratio: 16/9; overflow: hidden; }
 .event-card__img { width: 100%; height: 100%; object-fit: cover; }
 .event-card__body { padding: 1.25rem; }

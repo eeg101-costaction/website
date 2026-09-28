@@ -147,6 +147,12 @@ permalink: /calendar/
       : ev.registration_url
       ? "<a href=\"" + esc(ev.registration_url) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
       : "";
+    var eventDate = parseLocalDate(ev.start_date);
+    var todayDate = new Date();
+    var isUpcoming = eventDate && eventDate >= new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+    var shareAction = isUpcoming
+      ? "<button type=\"button\" class=\"btn btn-outline-primary btn-sm mt-2\" id=\"calendar-share-action\">Share</button>"
+      : "";
     popover.innerHTML =
       "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
       "<span class=\"event-card__format event-card__format--" + fmt + "\">" + esc(fmtLabel) + "</span>" +
@@ -155,11 +161,33 @@ permalink: /calendar/
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
       bookingAction +
+      shareAction +
       "<a href=\"{{ '/events/' | relative_url }}\" class=\"btn btn-outline-primary btn-sm mt-2\">Events &rarr;</a>";
 
     popover.hidden = false;
     var bookingButton = popover.querySelector("#calendar-booking-action");
     if (bookingButton && window.EEG101EventBooking) bookingButton.addEventListener("click", function () { popover.hidden = true; membersOnly ? window.EEG101EventBooking.openMembers(ev) : window.EEG101EventBooking.open(ev); });
+    var shareButton = popover.querySelector("#calendar-share-action");
+    if (shareButton) {
+      shareButton.addEventListener("click", function () {
+        var url = "{{ site.url }}{{ '/events/' | relative_url }}#event-" + ev.id;
+        if (navigator.share) {
+          navigator.share({ title: ev.title, text: "EEG101 event: " + ev.title, url: url }).catch(function () {});
+          return;
+        }
+        var restoreLabel = shareButton.textContent;
+        function showCopied() {
+          shareButton.textContent = "Link copied!";
+          shareButton.disabled = true;
+          setTimeout(function () { shareButton.textContent = restoreLabel; shareButton.disabled = false; }, 1800);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(showCopied, function () { window.prompt("Copy this link:", url); });
+        } else {
+          window.prompt("Copy this link:", url);
+        }
+      });
+    }
     popover.querySelector(".cal-popover__close").addEventListener("click", function () {
       popover.hidden = true;
     });

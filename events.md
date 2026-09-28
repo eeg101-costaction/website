@@ -198,6 +198,30 @@ permalink: /events/
   });
 
   updateDisplay();
+
+  // Share button: Web Share API on devices that support it, otherwise copy
+  // a direct link to the event's card to the clipboard.
+  document.getElementById('unifiedGrid').addEventListener('click', function (e) {
+    var button = e.target.closest('.event-card__share');
+    if (!button) return;
+    var url = button.dataset.shareUrl;
+    var title = button.dataset.shareTitle;
+    if (navigator.share) {
+      navigator.share({ title: title, text: 'EEG101 event: ' + title, url: url }).catch(function () {});
+      return;
+    }
+    var restoreLabel = button.textContent;
+    function showCopied() {
+      button.textContent = 'Link copied!';
+      button.disabled = true;
+      setTimeout(function () { button.textContent = restoreLabel; button.disabled = false; }, 1800);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(showCopied, function () { window.prompt('Copy this link:', url); });
+    } else {
+      window.prompt('Copy this link:', url);
+    }
+  });
 })();
 </script>
 {:/nomarkdown}
