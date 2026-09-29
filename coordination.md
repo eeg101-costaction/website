@@ -15,6 +15,7 @@ EEG101 was officially launched in November 2025. The coordination team oversees 
 <button class="people-filter__btn" data-filter="WG1">WG1</button>
 <button class="people-filter__btn" data-filter="WG2">WG2</button>
 <button class="people-filter__btn" data-filter="WG3">WG3</button>
+<button class="people-filter__btn" data-filter="WG4">WG4</button>
 <button class="people-filter__btn" data-filter="MC">Management Committee</button>
 <button class="people-filter__btn" data-filter="community">Community Support</button>
 </div>
