@@ -260,6 +260,7 @@ Videos appear on the [Video Hub](https://www.eeg101.eu/video-hub/) page. Add a n
   title: "Title of the video -- Speaker Name"
   duration: "12:30"
   series: "WG2 Mini-Symposium"
+  thumbnail: "/assets/images/video-hub/abc123XYZ.jpg"   # optional — see below
   tags: [WG2, Invited talk, Data harmonisation]
 ```
 
@@ -269,11 +270,27 @@ Videos appear on the [Video Hub](https://www.eeg101.eu/video-hub/) page. Add a n
 | `title` | Video title in quotes | Yes |
 | `duration` | Length as `"MM:SS"` | Yes |
 | `series` | The series name, e.g. `"WG2 Mini-Symposium"` | No |
+| `thumbnail` | A still from the talk, in `assets/images/video-hub/`. Only needed when the YouTube thumbnail is unhelpful — see below | No |
 | `tags` | A list of tags in square brackets. These become the filter buttons on the Video Hub page. Use existing tags where possible | Yes |
 
 **Current tag categories used on the Video Hub:** `WG2`, `Introduction`, `Invited talk`, `Flash talks`, `#EEGManyLabs`, `Data harmonisation`, `Open Science`.
 
-The Video Hub automatically generates a thumbnail from YouTube. You do not need to provide an image.
+### Thumbnails
+
+By default the Video Hub uses whatever thumbnail YouTube serves, and you do not
+need to provide an image.
+
+The exception is a video uploaded with the EEG101 logo as its custom YouTube
+thumbnail. Every such video looks identical in the grid, which makes a set of
+talks impossible to tell apart. In that case, save a still from the talk itself
+to `assets/images/video-hub/<video id>.jpg` and point `thumbnail:` at it.
+
+The quickest way to get one without downloading the video: YouTube publishes three
+auto-generated stills for every video, taken from roughly a quarter, half and
+three quarters of the way through, at
+`https://i.ytimg.com/vi/<video id>/maxres1.jpg` (also `maxres2`, `maxres3`).
+Pick whichever best shows what the talk is about — usually a slide rather than a
+speaker's webcam — crop it to 16:9, and save it around 960px wide.
 
 ---
 

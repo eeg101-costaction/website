@@ -38,9 +38,21 @@ permalink: /video-hub/
            target="_blank" rel="noopener"
            class="video-thumb-link">
           <div class="video-thumb">
+            {% comment %}
+              Videos uploaded with the EEG101 logo as their YouTube thumbnail all
+              look identical here, so an entry can set `thumbnail:` to a still from
+              the talk itself in assets/images/video-hub/. Without it we fall back
+              to whatever YouTube serves.
+            {% endcomment %}
+            {% if video.thumbnail and video.thumbnail != "" %}
+            <img src="{{ video.thumbnail | relative_url }}"
+                 alt="{{ video.title }}"
+                 loading="lazy">
+            {% else %}
             <img src="https://i.ytimg.com/vi/{{ video.id }}/mqdefault.jpg"
                  alt="{{ video.title }}"
                  loading="lazy">
+            {% endif %}
             <span class="video-duration">{{ video.duration }}</span>
             <div class="video-play-overlay">
               <svg viewBox="0 0 24 24" fill="currentColor" width="40" height="40"><path d="M8 5v14l11-7z"/></svg>

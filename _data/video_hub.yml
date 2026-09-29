@@ -45,29 +45,34 @@
 - id: RiScJB8tCZQ
   title: "Return of the GEDAI: unsupervised EEG denoising based on leadfield filtering — Tomas Ros"
   duration: "30:46"
+  thumbnail: "/assets/images/video-hub/RiScJB8tCZQ.jpg"
   series: "Second WG2 Virtual Symposium"
   tags: [WG2, Invited talk, Artifact rejection, Preprocessing]
 
 - id: YIn8LIf8PJM
   title: "Automated artifact detection in infant EEG — Robin Kemmerich"
   duration: "25:30"
+  thumbnail: "/assets/images/video-hub/YIn8LIf8PJM.jpg"
   series: "Second WG2 Virtual Symposium"
   tags: [WG2, Invited talk, Artifact rejection, Infant EEG]
 
 - id: Y8vLXORU8hE
   title: "EEGPrep: Python reproduction of a validated EEGLAB artifact rejection — Arnaud Delorme"
   duration: "24:38"
+  thumbnail: "/assets/images/video-hub/Y8vLXORU8hE.jpg"
   series: "Second WG2 Virtual Symposium"
   tags: [WG2, Invited talk, Artifact rejection, Preprocessing, Open Science]
 
 - id: NrTdvTIfVVM
   title: "Flash talks: Ismail Çalıkuşu, Sahar Sattari, Fangzhou Hu"
   duration: "21:39"
+  thumbnail: "/assets/images/video-hub/NrTdvTIfVVM.jpg"
   series: "Second WG2 Virtual Symposium"
   tags: [WG2, Flash talks, Preprocessing, Open Science]
 
 - id: CL3FUPvmtSk
   title: "Flash talks: Aaron Jumarang, Jose Contreras-Vidal, Jorge Bosch-Bayard"
   duration: "22:15"
+  thumbnail: "/assets/images/video-hub/CL3FUPvmtSk.jpg"
   series: "Second WG2 Virtual Symposium"
   tags: [WG2, Flash talks, Preprocessing, Open Science]
