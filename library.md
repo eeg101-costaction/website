@@ -63,6 +63,16 @@ permalink: /library/
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
               {{ paper.source_label }}
             </a>
+            {% comment %}
+              Shown only for papers whose PDF we are allowed to redistribute and have
+              placed in assets/docs/. Set the entry's `pdf:` field to the file path.
+            {% endcomment %}
+            {% if paper.pdf and paper.pdf != "" %}
+            <a href="{{ paper.pdf | relative_url }}" class="paper-link paper-link--source" download>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              Download PDF
+            </a>
+            {% endif %}
           </div>
         </div>
       </div>

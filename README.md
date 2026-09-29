@@ -297,6 +297,7 @@ Papers appear on the [Library](https://www.eeg101.eu/library/) page. Add a new e
   open_access_label: "Read open access"
   access_version: "Author-accepted manuscript"
   open_access: true
+  pdf: "/assets/docs/authorname-2026-journal.pdf"   # optional — see below
   theme: "Reporting standards"
   image: "/assets/images/hub/authorname-2026-journal.jpg"
   tags: [Reporting standards, Methodology, Open Science]
@@ -315,11 +316,31 @@ Papers appear on the [Library](https://www.eeg101.eu/library/) page. Add a new e
 | `open_access_label` | Label for the open-access link, e.g. `"Read open access"` or `"Open manuscript"` | Yes |
 | `access_version` | Description of the open-access version, e.g. `"Publisher open access"` or `"Author-accepted manuscript"` | Yes |
 | `open_access` | `true` if an open-access version is available | Yes |
+| `pdf` | Path to a copy of the PDF hosted in `assets/docs/`. Adds a **Download PDF** button to the card. Leave it out unless the licence allows redistribution — see below | No |
 | `theme` | A broad theme. Current themes: `History`, `Reporting standards`, `Community`, `Software`, `Data harmonisation` | Yes |
 | `image` | Path to a screenshot from the paper (title page or a key figure). Take a screenshot, crop it to roughly 800x450px, save as JPEG | Yes |
 | `tags` | A list of tags for filtering | Yes |
 
 **Important:** Take a screenshot directly from the paper itself for the image. Do not use AI-generated or placeholder images.
+
+### Hosting a PDF on the site
+
+Adding `pdf:` puts a **Download PDF** button on the card and serves the file straight
+from this repository, so readers get the paper in one click without hitting a
+publisher paywall.
+
+**Only do this when the licence allows it.** Check the PDF's own copyright line:
+
+- **Safe to host:** anything under a Creative Commons licence (`CC BY`, `CC BY-SA`,
+  `CC BY-NC`, …), and most arXiv, bioRxiv or institutional-repository preprints. The
+  licence is usually printed on the first page or the abstract page.
+- **Do not host:** a publisher's version of record that says "All rights reserved",
+  which is the norm for subscription articles. Link to it with `source_url` instead.
+  Where a free author version exists, host that and say which version it is in
+  `access_version`.
+
+Put the file in `assets/docs/`, named like the entry `id`. Note that whatever is in
+that folder is publicly downloadable by anyone with the link.
 
 ---
 

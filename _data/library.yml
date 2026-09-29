@@ -160,8 +160,11 @@
   source_label: "Journal source"
   open_access_url: "https://arxiv.org/abs/2508.04899"
   open_access_label: "Read the preprint"
-  access_version: "Preprint (arXiv)"
+  access_version: "Preprint (arXiv), CC BY-SA 4.0"
   open_access: true
+  # Hosted copy of the CC BY-SA 4.0 preprint. The published version is
+  # "all rights reserved" and must not be redistributed here.
+  pdf: "/assets/docs/kljajic-2026-neonatal-seizure-evaluation-preprint.pdf"
   theme: "Reporting standards"
   image: "/assets/images/hub/kljajic-2026-med-eng-phys.jpg"
   tags: ["#EEG101-supported", Reporting standards, Neonatal EEG, Machine learning, Methodology]
