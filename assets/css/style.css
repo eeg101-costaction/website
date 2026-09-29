@@ -587,14 +587,15 @@ strong { font-weight: 600; }
 .event-card {
   background: var(--color-bg);
   border-radius: var(--radius);
-  overflow: hidden;
   border: 1px solid var(--color-border);
   box-shadow: var(--shadow-sm);
   transition: transform var(--transition), box-shadow var(--transition);
   height: 100%;
+  scroll-margin-top: 90px;
 }
 .event-card--past { opacity: 0.8; }
-.event-card__img-wrap { aspect-ratio: 16/9; overflow: hidden; }
+.event-card__share[disabled] { opacity: 0.75; }
+.event-card__img-wrap { aspect-ratio: 16/9; overflow: hidden; border-radius: var(--radius) var(--radius) 0 0; }
 .event-card__img { width: 100%; height: 100%; object-fit: cover; }
 .event-card__body { padding: 1.25rem; }
 .event-card__meta { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
@@ -620,11 +621,49 @@ strong { font-weight: 600; }
 .event-card__summary { font-size: 0.88rem; color: var(--color-text-muted); margin-bottom: 1rem; line-height: 1.6; }
 .event-card__links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
+/* --- Share dropdown, used on the Events page cards and the Calendar popover --- */
+.event-share { position: relative; }
+.event-share__menu[hidden] { display: none; }
+.event-share__menu {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  min-width: 172px;
+  padding: 0.4rem;
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  z-index: 20;
+}
+.event-share__menu a,
+.event-share__menu button.event-share__copy {
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  padding: 0.5rem 0.6rem;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.event-share__menu a:hover,
+.event-share__menu button.event-share__copy:hover {
+  background: var(--color-bg-alt);
+  color: var(--color-primary);
+}
+.event-share__copy[disabled] { color: var(--color-text-muted); cursor: default; }
+
 /* --- Event booking modal, used directly by Events and Calendar --- */
 .event-booking-dialog[hidden] { display: none; }
-.event-booking-dialog { align-items: center; display: flex; inset: 0; justify-content: center; padding: 1rem; position: fixed; z-index: 10000; }
+.event-booking-dialog { align-items: center; display: flex; inset: 0; justify-content: center; overscroll-behavior: contain; padding: 1rem; position: fixed; touch-action: none; z-index: 10000; }
 .event-booking-dialog__backdrop { background: rgba(9, 10, 44, 0.62); inset: 0; position: absolute; }
-.event-booking-dialog__panel { background: var(--color-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-height: min(88vh, 920px); max-width: 720px; overflow-y: auto; padding: clamp(1.4rem, 4vw, 2.25rem); position: relative; width: 100%; }
+.event-booking-dialog__panel { -webkit-overflow-scrolling: touch; background: var(--color-bg); border-radius: var(--radius); box-shadow: var(--shadow); max-height: min(88vh, 920px); max-width: 720px; overflow-y: auto; overscroll-behavior: contain; padding: clamp(1.4rem, 4vw, 2.25rem); position: relative; touch-action: pan-y; width: 100%; }
 .event-booking-dialog__panel h2 { margin: 0.35rem 2rem 0.5rem 0; }
 .event-booking-dialog__details { color: var(--color-text-muted); margin-bottom: 1.4rem; }
 .event-booking-dialog__close { background: transparent; border: 0; color: var(--color-primary); cursor: pointer; font-size: 2rem; line-height: 1; padding: 0; position: absolute; right: 1.2rem; top: 1rem; }
@@ -641,9 +680,12 @@ strong { font-weight: 600; }
 .event-members__small { font-size: 0.85rem; color: var(--color-text-muted); }
 .event-card__members-badge { background: var(--color-primary-light); color: var(--color-primary); border-radius: 999px; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.15rem 0.6rem; }
 .event-card__external-badge { background: #e5e7eb; color: #374151; border-radius: 999px; font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.15rem 0.6rem; }
-.event-booking-registration-frame[hidden], .event-members[hidden], .event-members__answer[hidden], .event-members__choices[hidden], .event-members__question[hidden] { display: none; }
+.event-booking-registration-frame[hidden], .event-members[hidden], .event-members__answer[hidden], .event-members__choices[hidden], .event-members__question[hidden], .event-booking-loading[hidden] { display: none; }
 .event-booking-registration-frame { border: 0; display: block; min-height: 860px; width: 100%; }
 @media (max-width: 540px) { .event-booking-registration-frame { min-height: 1150px; } }
+.event-booking-loading { align-items: center; color: var(--color-text-muted); display: flex; flex-direction: column; font-size: 0.88rem; gap: 0.9rem; justify-content: center; min-height: 320px; padding: 2rem 0; text-align: center; }
+.event-booking-loading__spinner { animation: event-booking-spin 0.8s linear infinite; border: 3px solid var(--color-primary-light); border-radius: 50%; border-top-color: var(--color-primary); display: block; height: 34px; width: 34px; }
+@keyframes event-booking-spin { to { transform: rotate(360deg); } }
 
 /* --- Members directory --- */
 .member-directory { border-top: 1px solid var(--color-border); margin-top: 4rem; padding-top: 3.5rem; }
@@ -948,9 +990,9 @@ strong { font-weight: 600; }
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 110px;
+  min-height: 140px;
 }
-.partner-card__logo { max-height: 70px; max-width: 220px; object-fit: contain; }
+.partner-card__logo { max-height: 100px; max-width: 220px; object-fit: contain; }
 .partner-card__logo-placeholder {
   font-family: var(--font-heading);
   font-size: 2rem;

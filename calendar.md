@@ -147,6 +147,24 @@ permalink: /calendar/
       : ev.registration_url
       ? "<a href=\"" + esc(ev.registration_url) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
       : "";
+    var eventDate = parseLocalDate(ev.start_date);
+    var todayDate = new Date();
+    var isUpcoming = eventDate && eventDate >= new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
+    var shareUrl = "{{ site.url }}{{ '/events/' | relative_url }}#event-" + ev.id;
+    var shareText = ev.title + " — EEG101 COST Action event";
+    var shareAction = isUpcoming
+      ? "<div class=\"event-share\">" +
+          "<button type=\"button\" class=\"btn btn-outline-primary btn-sm mt-2 event-card__share\" id=\"calendar-share-action\" aria-haspopup=\"true\" aria-expanded=\"false\">Share</button>" +
+          "<div class=\"event-share__menu\" id=\"calendar-share-menu\" hidden>" +
+            "<a href=\"https://twitter.com/intent/tweet?text=" + encodeURIComponent(shareText) + "&amp;url=" + encodeURIComponent(shareUrl) + "\" target=\"_blank\" rel=\"noopener\">Share on X</a>" +
+            "<a href=\"https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(shareUrl) + "\" target=\"_blank\" rel=\"noopener\">Share on LinkedIn</a>" +
+            "<a href=\"https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(shareUrl) + "\" target=\"_blank\" rel=\"noopener\">Share on Facebook</a>" +
+            "<a href=\"https://wa.me/?text=" + encodeURIComponent(shareText + " " + shareUrl) + "\" target=\"_blank\" rel=\"noopener\">Share on WhatsApp</a>" +
+            "<a href=\"mailto:?subject=" + encodeURIComponent(ev.title) + "&amp;body=" + encodeURIComponent(shareText + " " + shareUrl) + "\">Share by email</a>" +
+            "<button type=\"button\" class=\"event-share__copy\" data-copy-url=\"" + esc(shareUrl) + "\">Copy link</button>" +
+          "</div>" +
+        "</div>"
+      : "";
     popover.innerHTML =
       "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
       "<span class=\"event-card__format event-card__format--" + fmt + "\">" + esc(fmtLabel) + "</span>" +
@@ -155,11 +173,43 @@ permalink: /calendar/
       "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
       (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
       bookingAction +
+      shareAction +
       "<a href=\"{{ '/events/' | relative_url }}\" class=\"btn btn-outline-primary btn-sm mt-2\">Events &rarr;</a>";
 
     popover.hidden = false;
     var bookingButton = popover.querySelector("#calendar-booking-action");
     if (bookingButton && window.EEG101EventBooking) bookingButton.addEventListener("click", function () { popover.hidden = true; membersOnly ? window.EEG101EventBooking.openMembers(ev) : window.EEG101EventBooking.open(ev); });
+    var shareButton = popover.querySelector("#calendar-share-action");
+    var shareMenu = popover.querySelector("#calendar-share-menu");
+    if (shareButton && shareMenu) {
+      shareButton.addEventListener("click", function () {
+        if (navigator.share) {
+          navigator.share({ title: ev.title, text: shareText, url: shareUrl }).catch(function () {});
+          return;
+        }
+        var opening = shareMenu.hidden;
+        shareMenu.hidden = !opening;
+        shareButton.setAttribute("aria-expanded", String(opening));
+      });
+      shareMenu.querySelectorAll("a").forEach(function (link) {
+        link.addEventListener("click", function () { shareMenu.hidden = true; shareButton.setAttribute("aria-expanded", "false"); });
+      });
+      var copyButton = shareMenu.querySelector(".event-share__copy");
+      copyButton.addEventListener("click", function () {
+        var copyUrl = copyButton.dataset.copyUrl;
+        var restoreLabel = copyButton.textContent;
+        function showCopied() {
+          copyButton.textContent = "Link copied!";
+          copyButton.disabled = true;
+          setTimeout(function () { copyButton.textContent = restoreLabel; copyButton.disabled = false; }, 1800);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(copyUrl).then(showCopied, function () { window.prompt("Copy this link:", copyUrl); });
+        } else {
+          window.prompt("Copy this link:", copyUrl);
+        }
+      });
+    }
     popover.querySelector(".cal-popover__close").addEventListener("click", function () {
       popover.hidden = true;
     });

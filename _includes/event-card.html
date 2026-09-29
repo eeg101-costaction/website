@@ -1,6 +1,6 @@
 {% assign event = include.event %}
 {% assign status = include.computed_status | default: event.status %}
-<article class="event-card event-card--{{ status }}">
+<article class="event-card event-card--{{ status }}" id="event-{{ event.id }}">
   <div class="event-card__img-wrap">
     {% if event.image and event.image != "" %}
       <img src="{{ event.image | relative_url }}" alt="{{ event.alt }}" class="event-card__img" loading="lazy" width="800" height="450">
@@ -48,6 +48,21 @@
       {% endif %}
       {% if event.recording_url and event.recording_url != "" %}
       <a href="{{ event.recording_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Watch recording ↗</a>
+      {% endif %}
+      {% if status == "upcoming" %}
+      {% assign share_url = '/events/' | relative_url | prepend: site.url | append: '#event-' | append: event.id %}
+      {% assign share_text = event.title | append: ' — EEG101 COST Action event' %}
+      <div class="event-share">
+        <button type="button" class="btn btn-outline-primary btn-sm event-card__share" data-share-title="{{ event.title | escape }}" data-share-url="{{ share_url }}" aria-haspopup="true" aria-expanded="false">Share</button>
+        <div class="event-share__menu" hidden>
+          <a href="https://twitter.com/intent/tweet?text={{ share_text | url_encode }}&amp;url={{ share_url | url_encode }}" target="_blank" rel="noopener">Share on X</a>
+          <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url | url_encode }}" target="_blank" rel="noopener">Share on LinkedIn</a>
+          <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}" target="_blank" rel="noopener">Share on Facebook</a>
+          <a href="https://wa.me/?text={{ share_text | append: ' ' | append: share_url | url_encode }}" target="_blank" rel="noopener">Share on WhatsApp</a>
+          <a href="mailto:?subject={{ event.title | url_encode }}&amp;body={{ share_text | append: ' ' | append: share_url | url_encode }}">Share by email</a>
+          <button type="button" class="event-share__copy" data-copy-url="{{ share_url }}">Copy link</button>
+        </div>
+      </div>
       {% endif %}
     </div>
   </div>

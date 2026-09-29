@@ -24,6 +24,7 @@
         <a class="btn btn-primary" id="eventMembersJoin" href="{{ '/join/' | relative_url }}">Find out how to join EEG101</a>
       </div>
     </div>
+    <div class="event-booking-loading" id="eventBookingLoading" hidden><span class="event-booking-loading__spinner" aria-hidden="true"></span>Loading the registration form&hellip;</div>
     <iframe class="event-booking-registration-frame" id="eventBookingRegistrationFrame" title="EEG101 event registration" hidden></iframe>
   </section>
 </div>
@@ -38,7 +39,38 @@
   var details = document.getElementById('eventBookingDialogDetails');
   var notice = document.getElementById('eventBookingFormNotice');
   var registrationFrame = document.getElementById('eventBookingRegistrationFrame');
+  var loading = document.getElementById('eventBookingLoading');
+  registrationFrame.addEventListener('load', function () {
+    loading.hidden = true;
+    if (registrationFrame.src && registrationFrame.src.indexOf('about:blank') === -1) registrationFrame.hidden = false;
+  });
   function findEvent(id) { return events.find(function (event) { return String(event.id) === String(id); }); }
+  // On mobile Safari a fixed-position dialog does not stop the page behind it from also
+  // scrolling: a drag that reaches the end of the panel's own content "chains" into the
+  // body, which then snaps back. Locking the body's scroll position while the dialog is
+  // open keeps the drag confined to the panel.
+  var lockedScrollY = 0;
+  function lockBodyScroll() {
+    lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -lockedScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBodyScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, lockedScrollY);
+  }
+  function timeWithZone(event) {
+    if (!event.time) return '';
+    var range = event.time + (event.end_time ? '–' + event.end_time : '');
+    return event.timezone_label ? range + ' ' + event.timezone_label : range;
+  }
   function canBook(event) { return event && event.booking_enabled === true && event.booking_status === 'open' && event.audience !== 'members'; }
   var membersPanel = document.getElementById('eventMembersPanel');
   var membersChoices = document.getElementById('eventMembersChoices');
@@ -52,9 +84,10 @@
     if (!event) return;
     message.textContent = '';
     title.textContent = event.title;
-    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    details.textContent = [event.start_date, timeWithZone(event), event.location].filter(Boolean).join(' · ');
     registrationFrame.hidden = true;
     registrationFrame.src = 'about:blank';
+    loading.hidden = true;
     bookingNotice.hidden = true;
     eyebrow.textContent = "EEG101 MEMBERS' EVENT";
     membersPanel.hidden = false;
@@ -62,6 +95,7 @@
     membersChoices.hidden = false;
     membersYes.hidden = true;
     membersNo.hidden = true;
+    lockBodyScroll();
     dialog.hidden = false;
     dialog.setAttribute('aria-hidden', 'false');
   }
@@ -82,22 +116,46 @@
     notice.hidden = false;
     registrationFrame.style.minHeight = '';
     title.textContent = 'Register for ' + event.title;
-    details.textContent = [event.start_date, event.time, event.location].filter(Boolean).join(' · ');
+    details.textContent = [event.start_date, timeWithZone(event), event.location].filter(Boolean).join(' · ');
     if (!endpoint) {
       message.textContent = 'Registration is being prepared. Please check back shortly or contact eeg101costaction@gmail.com.';
       message.className = 'event-booking-form__message event-booking-form__message--error';
       registrationFrame.hidden = true;
+      loading.hidden = true;
     } else {
       var query = new URLSearchParams({ event_id: event.id, title: event.title, short_name: event.short_name || '', format: event.format || '', audience: event.audience || 'open', start_date: event.start_date, end_date: event.end_date || event.start_date, time: event.time || '', end_time: event.end_time || '', timezone: event.timezone || 'Europe/London', timezone_label: event.timezone_label || '', joining_link: event.joining_link || '', location: event.location || '', capacity: String(event.capacity || 0), summary: event.summary || '', privacy_url: '{{ "/privacy/" | absolute_url }}' });
+      registrationFrame.hidden = true;
+      loading.hidden = false;
       registrationFrame.src = endpoint + (endpoint.indexOf('?') >= 0 ? '&' : '?') + query.toString();
-      registrationFrame.hidden = false;
     }
+    lockBodyScroll();
     dialog.hidden = false;
     dialog.setAttribute('aria-hidden', 'false');
   }
-  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; }
+  function close() { dialog.hidden = true; dialog.setAttribute('aria-hidden', 'true'); registrationFrame.src = 'about:blank'; loading.hidden = true; unlockBodyScroll(); }
   window.EEG101EventBooking = { open: open, openMembers: openMembers, canBook: canBook };
-  document.querySelectorAll('[data-event-booking]').forEach(function (button) { button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); }); });
+  // Warm up the connection to the registration endpoint as soon as someone shows intent to
+  // register, so the form has a head start by the time the click actually opens it.
+  var warmed = false;
+  function warmEndpoint() {
+    if (warmed || !endpoint) return;
+    warmed = true;
+    try {
+      var origin = new URL(endpoint).origin;
+      ['preconnect', 'dns-prefetch'].forEach(function (rel) {
+        var link = document.createElement('link');
+        link.rel = rel;
+        link.href = origin;
+        if (rel === 'preconnect') link.crossOrigin = 'anonymous';
+        document.head.appendChild(link);
+      });
+    } catch (e) {}
+  }
+  document.querySelectorAll('[data-event-booking]').forEach(function (button) {
+    button.addEventListener('pointerenter', warmEndpoint, { once: true });
+    button.addEventListener('focus', warmEndpoint, { once: true });
+    button.addEventListener('click', function () { open(findEvent(button.dataset.eventBooking)); });
+  });
   document.querySelectorAll('[data-event-members]').forEach(function (button) { button.addEventListener('click', function () { openMembers(findEvent(button.dataset.eventMembers)); }); });
   document.querySelectorAll('[data-event-booking-close]').forEach(function (button) { button.addEventListener('click', close); });
   document.addEventListener('keydown', function (event) { if (event.key === 'Escape' && !dialog.hidden) close(); });

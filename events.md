@@ -198,6 +198,64 @@ permalink: /events/
   });
 
   updateDisplay();
+
+  // Share button: on devices with the Web Share API (mainly phones and tablets)
+  // this hands off straight to the native share sheet, which already lists
+  // installed social apps. Elsewhere it opens a small menu of direct links to
+  // X, LinkedIn, Facebook, WhatsApp and email, plus a copy-link option.
+  function closeAllShareMenus(except) {
+    document.querySelectorAll('.event-share__menu').forEach(function (menu) {
+      if (menu === except) return;
+      menu.hidden = true;
+      var btn = menu.previousElementSibling;
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  document.getElementById('unifiedGrid').addEventListener('click', function (e) {
+    var copyButton = e.target.closest('.event-share__copy');
+    if (copyButton) {
+      var copyUrl = copyButton.dataset.copyUrl;
+      var restoreLabel = copyButton.textContent;
+      function showCopied() {
+        copyButton.textContent = 'Link copied!';
+        copyButton.disabled = true;
+        setTimeout(function () { copyButton.textContent = restoreLabel; copyButton.disabled = false; }, 1800);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyUrl).then(showCopied, function () { window.prompt('Copy this link:', copyUrl); });
+      } else {
+        window.prompt('Copy this link:', copyUrl);
+      }
+      return;
+    }
+
+    var button = e.target.closest('.event-card__share');
+    if (button) {
+      var url = button.dataset.shareUrl;
+      var title = button.dataset.shareTitle;
+      if (navigator.share) {
+        navigator.share({ title: title, text: title + ' — EEG101 COST Action event', url: url }).catch(function () {});
+        return;
+      }
+      var menu = button.nextElementSibling;
+      var opening = menu.hidden;
+      closeAllShareMenus();
+      menu.hidden = !opening;
+      button.setAttribute('aria-expanded', String(opening));
+      return;
+    }
+
+    if (e.target.closest('.event-share__menu a')) closeAllShareMenus();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAllShareMenus();
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.event-share')) closeAllShareMenus();
+  });
 })();
 </script>
 {:/nomarkdown}
