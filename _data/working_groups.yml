@@ -103,6 +103,38 @@ working_groups:
     icon: "🌐"
     image: "/assets/images/working-groups/wg3.png"
 
+  - id: wg4
+    number: 4
+    title: "Mobile EEG Harmonisation"
+    short_title: "WG4"
+    tagline: "Our newest Working Group — reliable EEG beyond the lab"
+    aim: >
+      This work package extends EEG101 into mobile brain/body imaging (MoBI),
+      addressing how differences in wearable EEG hardware, acquisition
+      protocols, and analysis pipelines affect the reliability of findings
+      collected outside the traditional laboratory. Working with the
+      EEGManySteps initiative, it harmonises mobile EEG datasets into the BIDS
+      standard and promotes open, reproducible practice for research conducted
+      in naturalistic, moving settings. Working Group 4 joined EEG101 in
+      October 2026, and is the Action's newest Working Group.
+    activities:
+      - "Develop shared acquisition protocols for mobile EEG, motion, and EMG recordings across participating laboratories"
+      - "Convert and harmonise mobile brain/body imaging datasets into the BIDS standard"
+      - "Establish data curation and quality-control guidelines for EEG collected during movement"
+      - "Coordinate with the EEGManySteps initiative and related multi-lab projects, including EEGManyLabs, EEGManyPipelines, ARTEM-IS, and ICMoBI"
+      - "Provide open-access training materials on mobile EEG methodology and reproducibility"
+    outputs:
+      - "Common acquisition and reporting protocols for mobile brain/body imaging research"
+      - "BIDS-compliant, harmonised mobile EEG datasets open to the community"
+      - "Improved cross-laboratory comparability for EEG research conducted outside controlled settings"
+      - "Shared training resources for researchers new to mobile EEG methods"
+    mou_objectives:
+      - "Formal MOU objectives for Working Group 4 are being finalised following its inauguration and will be published here once agreed with the Management Committee."
+    leaders:
+      - sein
+    icon: "👣"
+    image: "/assets/images/working-groups/wg4.png"
+
 # Activity areas coordinated by the Management Committee
 activities:
   - id: podcast

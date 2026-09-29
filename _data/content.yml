@@ -91,7 +91,7 @@ objectives:
 
 wg_preview:
   heading: "Working Groups"
-  intro: "Three focused working groups drive EEG101's scientific programme."
+  intro: "Four focused working groups drive EEG101's scientific programme."
   cta:
     label: "Explore all Working Groups"
     url: "/working-groups/"

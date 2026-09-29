@@ -1,12 +1,12 @@
 ---
 layout: page
 title: "Our Work"
-subtitle: "Three focused groups driving EEG101's scientific programme"
-description: "EEG101 operates through three Working Groups addressing reporting standards, data curation, and a community framework for open EEG science."
+subtitle: "Four focused groups driving EEG101's scientific programme"
+description: "EEG101 operates through four Working Groups addressing reporting standards, data curation, a community framework for open EEG science, and mobile EEG harmonisation."
 permalink: /working-groups/
 ---
 
-EEG101's scientific programme is organised into three Working Groups, each addressing a distinct challenge in the field. The Working Groups are coordinated by the Management Committee and supported by education, dissemination, and community activities.
+EEG101's scientific programme is organised into four Working Groups, each addressing a distinct challenge in the field. The Working Groups are coordinated by the Management Committee and supported by education, dissemination, and community activities. Working Group 4 is the newest addition, joining EEG101 from October 2026.
 
 ---
 
@@ -91,7 +91,7 @@ EEG101's scientific programme is organised into three Working Groups, each addre
 
 ## Activities and community programmes
 
-In addition to the three Working Groups, EEG101 delivers a range of community activities coordinated by the Management Committee.
+In addition to the four Working Groups, EEG101 delivers a range of community activities coordinated by the Management Committee.
 
 {::nomarkdown}
 {% assign activities = site.data.working_groups.activities %}
