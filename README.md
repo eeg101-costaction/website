@@ -253,7 +253,9 @@ If you want people to register for an event directly on the website (rather than
 
 **File to edit:** `_data/video_hub.yml`
 
-Videos appear on the [Video Hub](https://www.eeg101.eu/video-hub/) page. Add a new entry at the top of the file.
+Videos appear on the [Video Hub](https://www.eeg101.eu/video-hub/) page in the
+order they appear in this file, newest first. **Add a new entry at the top**, so
+the most recent recordings lead the page.
 
 ```yaml
 - id: abc123XYZ
