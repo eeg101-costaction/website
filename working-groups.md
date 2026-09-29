@@ -53,7 +53,7 @@ EEG101's scientific programme is organised into four Working Groups, each addres
 </div>
 
 <div class="row g-3 mb-4">
-<div class="col-12 col-md-4">
+<div class="col-12 col-md-6">
 <div class="wg-detail-card">
 <h3 class="wg-detail-card__title">Activities</h3>
 <ul class="wg-detail-card__list">
@@ -63,22 +63,12 @@ EEG101's scientific programme is organised into four Working Groups, each addres
 </ul>
 </div>
 </div>
-<div class="col-12 col-md-4">
+<div class="col-12 col-md-6">
 <div class="wg-detail-card">
 <h3 class="wg-detail-card__title">Expected Outputs</h3>
 <ul class="wg-detail-card__list">
 {% for output in wg.outputs %}
 <li>{{ output }}</li>
-{% endfor %}
-</ul>
-</div>
-</div>
-<div class="col-12 col-md-4">
-<div class="wg-detail-card">
-<h3 class="wg-detail-card__title">MOU Objectives</h3>
-<ul class="wg-detail-card__list">
-{% for obj in wg.mou_objectives %}
-<li>{{ obj }}</li>
 {% endfor %}
 </ul>
 </div>

@@ -23,10 +23,6 @@ working_groups:
       - "Improved transparency and reproducibility across the EEG community"
       - "Increased publication of EEG research adhering to standardised reporting practices"
       - "Pre-registration templates and recommended preprocessing pipelines"
-    mou_objectives:
-      - "S1: Launch standardised reporting tools by Month 24"
-      - "S2: Provide pre-registered study templates and workflows by Month 18"
-      - "S3: Develop comprehensive training materials by Month 24"
     leaders:
       - andjela
     co_leaders:
@@ -59,10 +55,6 @@ working_groups:
       - "A centralised online platform hosting a meta-directory of datasets, standardised pipelines, and a software database"
       - "A publicly accessible FAIR-compliant EEG database supporting reuse and collaboration"
       - "Standardised datasets enabling cross-laboratory and cross-device comparisons"
-    mou_objectives:
-      - "I1: Establish a centralised online platform by Month 12"
-      - "I2: Provide comprehensive data descriptions and metadata standards by Month 24"
-      - "I3: Develop conversion tools to harmonise data from various devices by Month 32"
     leaders:
       - mahnaz
     co_leaders:
@@ -92,10 +84,6 @@ working_groups:
       - "An online pledge platform with widespread community adoption"
       - "Widespread recognition and endorsement of manifesto principles by journals and societies"
       - "The first-ever ethical framework for EEG research incorporating open science principles"
-    mou_objectives:
-      - "A1: Facilitate innovation through STSMs and VMGs — at least 15 community-driven projects"
-      - "A2: Build partnerships with global EEG initiatives — formal collaborations with ≥3 initiatives by Month 24"
-      - "A3: Launch educational and outreach channels by Month 12"
     leaders:
       - maximilien
     co_leaders:
@@ -110,26 +98,28 @@ working_groups:
     tagline: "Our newest Working Group — reliable EEG beyond the lab"
     aim: >
       This work package extends EEG101 into mobile brain/body imaging (MoBI),
-      addressing how differences in wearable EEG hardware, acquisition
-      protocols, and analysis pipelines affect the reliability of findings
-      collected outside the traditional laboratory. Working with the
-      EEGManySteps initiative, it harmonises mobile EEG datasets into the BIDS
-      standard and promotes open, reproducible practice for research conducted
-      in naturalistic, moving settings. Working Group 4 joined EEG101 in
+      where EEG is recorded in naturalistic, moving settings. Inconsistent
+      experimental setups and processing pipelines make such findings hard to
+      reproduce, so the group works with the
+      <a href="https://eegmanysteps.org" target="_blank" rel="noopener">EEGManySteps</a>
+      initiative to establish how acquisition and analysis choices shape results.
+      Rather than replicating specific findings, the emphasis is on collecting and
+      harmonising data across diverse settings, drawing on both existing public
+      datasets and newly collected recordings, and on making the resulting data
+      and software openly available. Working Group 4 joined EEG101 in
       October 2026, and is the Action's newest Working Group.
     activities:
-      - "Develop shared acquisition protocols for mobile EEG, motion, and EMG recordings across participating laboratories"
-      - "Convert and harmonise mobile brain/body imaging datasets into the BIDS standard"
-      - "Establish data curation and quality-control guidelines for EEG collected during movement"
-      - "Coordinate with the EEGManySteps initiative and related multi-lab projects, including EEGManyLabs, EEGManyPipelines, ARTEM-IS, and ICMoBI"
-      - "Provide open-access training materials on mobile EEG methodology and reproducibility"
+      - "Identify existing public mobile EEG datasets and work with their authors to bring them into the project"
+      - "Design a shared protocol and manual for new data collection, and support participating laboratories in setting up their experiments"
+      - "Convert existing and newly collected datasets to BIDS for EEG and motion — and potentially EMG — and parameterise the covariates that differ between them"
+      - "Develop and oversee common analysis pipelines applied consistently across all datasets"
+      - "Disseminate through joint publications, tutorials, and workshops, and coordinate with related multi-laboratory initiatives including EEGManyLabs, EEGManyPipelines, ARTEM-IS, and ICMoBI"
     outputs:
       - "Common acquisition and reporting protocols for mobile brain/body imaging research"
-      - "BIDS-compliant, harmonised mobile EEG datasets open to the community"
+      - "BIDS-compliant, openly documented mobile EEG and motion datasets"
+      - "Evidence on how acquisition setups and preprocessing choices affect the reliability of mobile EEG findings"
       - "Improved cross-laboratory comparability for EEG research conducted outside controlled settings"
-      - "Shared training resources for researchers new to mobile EEG methods"
-    mou_objectives:
-      - "Formal MOU objectives for Working Group 4 are being finalised following its inauguration and will be published here once agreed with the Management Committee."
+      - "Shared training resources and tutorials for researchers new to mobile EEG methods"
     leaders:
       - sein
     icon: "👣"
