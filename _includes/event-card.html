@@ -47,7 +47,15 @@
       <a href="{{ event.programme_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Programme</a>
       {% endif %}
       {% if event.recording_url and event.recording_url != "" %}
+      {% comment %}
+        recording_url can point at our own Video Hub or at an external host, so
+        only send the visitor off-site when the link actually leaves the site.
+      {% endcomment %}
+      {% if event.recording_url contains "://" %}
       <a href="{{ event.recording_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Watch recording ↗</a>
+      {% else %}
+      <a href="{{ event.recording_url | relative_url }}" class="btn btn-outline-primary btn-sm">Recordings</a>
+      {% endif %}
       {% endif %}
       {% if status == "upcoming" %}
       {% assign share_url = '/events/' | relative_url | prepend: site.url | append: '#event-' | append: event.id %}
