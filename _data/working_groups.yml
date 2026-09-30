@@ -111,7 +111,7 @@ working_groups:
     activities:
       - "Identify existing public mobile EEG datasets and work with their authors to bring them into the project"
       - "Design a shared protocol and manual for new data collection, and support participating laboratories in setting up their experiments"
-      - "Convert existing and newly collected datasets to BIDS for EEG and motion — and potentially EMG — and parameterise the covariates that differ between them"
+      - "Curate existing and newly collected datasets, converting them to BIDS for EEG and motion, developing metadata standards for gait-related information"
       - "Develop and oversee common analysis pipelines applied consistently across all datasets"
       - "Disseminate through joint publications, tutorials, and workshops, and coordinate with related multi-laboratory initiatives including EEGManyLabs, EEGManyPipelines, ARTEM-IS, and ICMoBI"
     outputs:
@@ -122,6 +122,9 @@ working_groups:
       - "Shared training resources and tutorials for researchers new to mobile EEG methods"
     leaders:
       - sein
+    co_leaders:
+      - aitana
+      - julius
     icon: "👣"
     image: "/assets/images/working-groups/wg4.png"
 

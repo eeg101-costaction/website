@@ -396,3 +396,29 @@
     Sein leads Working Group 4, bringing EEGManySteps' work on mobile brain/body imaging and data harmonisation into EEG101.
   tags: [WG4, CG]
   order: 29
+
+- id: aitana
+  name: "Aitana Grasso-Cladera"
+  role: "WG4 Co-leader — Mobile EEG Harmonisation"
+  institution: "University of Osnabrück"
+  country: "Germany"
+  email: ""
+  website: ""
+  orcid: ""
+  image: "/assets/images/people/aitana.jpg"
+  bio: ""
+  tags: [WG4, CG]
+  order: 30
+
+- id: julius
+  name: "Julius Welzel"
+  role: "WG4 Co-leader — Mobile EEG Harmonisation"
+  institution: "University of Kiel & University of Oldenburg"
+  country: "Germany"
+  email: ""
+  website: ""
+  orcid: ""
+  image: "/assets/images/people/julius.jpg"
+  bio: ""
+  tags: [WG4, CG]
+  order: 31
