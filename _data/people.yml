@@ -229,7 +229,7 @@
   image: "/assets/images/people/yuri.png"
   bio: ""
   tags: [CG, MC]
-  order: 17
+  order: 20
 
 - id: andras
   name: "Andras N. Zsido"
@@ -243,7 +243,7 @@
   bio: >
     Professor of Cognitive Psychology at the University of Pécs. Andras's research focuses on how fears and phobias affect attention, with an emphasis on human visual processing, and open science. He is a member of the EEG101 Management Committee and WG3.
   tags: [MC]
-  order: 18
+  order: 21
 
 - id: gabriela
   name: "Gabriela M. Marcu"
@@ -257,7 +257,7 @@
   bio: >
     Associate Professor and Scientific Researcher in Human Decision-Making, Psychophysiology (EEG, QEEG, ERPs) and Clinical Neuroscience at Lucian Blaga University of Sibiu. Gabriela's research focuses on neurophysiological markers of cognitive control and behavioral interventions. She serves as a Management Committee member for Romania and is active across all EEG101 Working Groups.
   tags: [MC, WG1, WG2, WG3]
-  order: 19
+  order: 22
   
 - id: guiomar
   name: "Guiomar Niso"
@@ -271,7 +271,7 @@
   bio: >
     Head of the Neuroimaging Group at Cajal Neuroscience Center (CNC-CSIC). She investigates human neurophysiology to characterize brain dynamics. EEG101 MC representative of Spain.
   tags: [MC, WG1, WG2, WG3]
-  order: 20
+  order: 23
 
 - id: mikkel
   name: "Mikkel C. Vinding"
@@ -284,7 +284,7 @@
   image: "/assets/images/people/mikkel.jpg"
   bio: ""
   tags: [MC, WG1, WG2, WG3]
-  order: 21
+  order: 24
 
 - id: heinrich
   name: "Heinrich R. Liesefeld"
@@ -298,7 +298,7 @@
   bio: >
     Senior Researcher at the University of Bremen. Heinrich conducts basic research on the human visual system, with a particular interest in visual search, visual working memory, and cognitive modeling using EEG. He is a Consulting Editor for Cortex and a lead investigator for the #EEGManyLabs project, promoting replicability and open science in electrophysiology. He serves as an EEG101 Management Committee member for Germany.
   tags: [MC, WG1, WG2, WG3]
-  order: 22
+  order: 25
 
 - id: fangzhou
   name: "Fangzhou Hu"
@@ -311,7 +311,7 @@
   image: "/assets/images/people/fangzhou.jpg"
   bio: ""
   tags: [WG2]
-  order: 23
+  order: 26
 
 - id: annalisa
   name: "Annalisa Pascarella"
@@ -325,7 +325,7 @@
   bio: >
     Annalisa Pascarella is a researcher at the Institute of Applied Mathematics M. Picone, part of Italy's National Research Council (CNR). She contributes to EEG101 as part of the Community Support team.
   tags: [community]
-  order: 24
+  order: 28
 
 - id: theodora
   name: "Theodora Gazea"
@@ -339,7 +339,7 @@
   bio: >
     Theodora Gazea is affiliated with the Aristotle University of Thessaloniki. She contributes to EEG101 as part of the Community Support team.
   tags: [community]
-  order: 25
+  order: 29
 
 - id: fatih
   name: "Fatih Onay"
@@ -353,7 +353,7 @@
   bio: >
     Fatih Onay is affiliated with Bursa Technical University. He contributes to EEG101 as part of the Community Support team.
   tags: [community]
-  order: 26
+  order: 30
 
 - id: francia
   name: "Francia Arriagada Mödinger"
@@ -367,7 +367,7 @@
   bio: >
     Francia Arriagada Mödinger is affiliated with the Universidad Católica del Maule in Chile. She contributes to EEG101 as part of the Community Support team.
   tags: [community]
-  order: 27
+  order: 31
 
 - id: fernando
   name: "Fernando Ferreira Santos"
@@ -381,7 +381,7 @@
   bio: >
     Professor at the Faculty of Psychology and Education Sciences of the University of Porto and Executive Coordinator of the Laboratory of Neuropsychophysiology.
   tags: [WG1, WG2, MC, CG]
-  order: 28
+  order: 27
 
 - id: sein
   name: "Sein Jung"
@@ -395,7 +395,7 @@
   bio: >
     Sein leads Working Group 4, bringing EEGManySteps' work on mobile brain/body imaging and data harmonisation into EEG101.
   tags: [WG4, CG]
-  order: 29
+  order: 17
 
 - id: aitana
   name: "Aitana Grasso-Cladera"
@@ -408,7 +408,7 @@
   image: "/assets/images/people/aitana.jpg"
   bio: ""
   tags: [WG4, CG]
-  order: 30
+  order: 18
 
 - id: julius
   name: "Julius Welzel"
@@ -421,4 +421,4 @@
   image: "/assets/images/people/julius.jpg"
   bio: ""
   tags: [WG4, CG]
-  order: 31
+  order: 19
