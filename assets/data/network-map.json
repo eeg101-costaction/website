@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 526,
+  "member_count": 528,
   "site_count": 308,
   "country_count": 58,
   "countries": [
@@ -217,7 +217,7 @@
     {
       "name": "Poland",
       "site_count": 5,
-      "member_count": 10
+      "member_count": 11
     },
     {
       "name": "Portugal",
@@ -3967,6 +3967,18 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "Ahmad Zandbagleh",
+          "affiliation": "Jagiellonian University",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "ahmad.zand.elec [at] gmail [dot] com",
+          "homepage": "https://www.researchgate.net/profile/Ahmad-Zandbagleh; https://scholar.google.com/citations?hl=en&user=Yy1WkpQAAAAJ&view_op=list_works&sortby=pubdate",
+          "orcid": "0009-0005-0912-2607"
+        },
+        {
           "name": "Karolina Raczek",
           "affiliation": "Jagiellonian University",
           "working_groups": [
@@ -4023,7 +4035,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 5,
+      "member_count": 6,
       "working_groups": [
         "WG1",
         "WG2",
