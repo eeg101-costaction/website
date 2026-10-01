@@ -97,6 +97,9 @@ In addition to the four Working Groups, EEG101 delivers a range of community act
 <h3 class="activity-card__title">{{ activity.title }}</h3>
 <p class="activity-card__tagline">{{ activity.tagline }}</p>
 <p class="activity-card__desc">{{ activity.description }}</p>
+{% if activity.url and activity.url != "" %}
+<p class="mt-3 mb-0"><a href="{{ activity.url | relative_url }}" class="btn btn-outline-primary btn-sm">Learn more about {{ activity.title }}</a></p>
+{% endif %}
 </div>
 </div>
 {% endfor %}
