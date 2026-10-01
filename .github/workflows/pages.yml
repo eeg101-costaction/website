@@ -45,8 +45,12 @@ jobs:
 
       - name: Validate the Community Framework
         run: |
-          python3 -m pip install --quiet pyyaml
-          python3 scripts/check_framework.py
+          if [ -f scripts/check_framework.py ]; then
+            python3 -m pip install --quiet pyyaml
+            python3 scripts/check_framework.py
+          else
+            echo "No Community Framework pages on this branch; nothing to check."
+          fi
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
