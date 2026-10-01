@@ -1,15 +1,32 @@
 name: Build preview branch
 
+# Pushing to `preview` checks that the branch builds and validates, then asks
+# the Pages workflow to restage it.
+#
+# The preview itself is served at https://www.eeg101.eu/preview/ — not from this
+# workflow. GitHub Pages serves one site per repository and this repository's
+# slot is the live site, so a preview cannot have a Pages site of its own here;
+# pages.yml stages the preview branch into /preview/ of the same site instead.
+# That path is noindexed and excluded in robots.txt. See docs/preview-site.md.
+#
+# This workflow deliberately publishes nothing. Its job is to fail loudly on a
+# broken preview branch, before pages.yml quietly skips staging it.
+
 on:
   push:
     branches: ["preview"]
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+
+concurrency:
+  group: preview-build
+  cancel-in-progress: true
 
 jobs:
   build-preview:
+    name: Check the preview branch builds
     runs-on: ubuntu-latest
     steps:
       - name: Checkout preview branch
@@ -23,16 +40,29 @@ jobs:
           ruby-version: "3.2"
           bundler-cache: true
 
-      - name: Build with Jekyll (preview baseurl)
-        run: bundle exec jekyll build --baseurl "/website"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # The same checks main runs, so a preview being reviewed is one that would
+      # actually deploy.
+      - name: Validate site data
+        run: |
+          python3 -m pip install --quiet pyyaml
+          python3 scripts/validate_event_booking.py
+          if [ -f scripts/check_framework.py ]; then
+            python3 scripts/check_framework.py
+          else
+            echo "No Community Framework pages on this branch; nothing to check."
+          fi
+
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "/preview"
         env:
           JEKYLL_ENV: production
 
-      - name: Deploy to gh-pages-preview branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages-preview
-          force_orphan: true
-          commit_message: "Preview build from ${{ github.sha }}"
+      - name: Summarise
+        run: |
+          echo "Preview branch builds cleanly: $(find _site -name '*.html' | wc -l) pages."
+          echo "pages.yml will restage it at https://www.eeg101.eu/preview/"

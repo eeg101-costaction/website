@@ -4,6 +4,12 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+  # Refresh the staged copy at /preview/ after a push to the preview branch.
+  # workflow_run runs this file from the default branch, in the default branch's
+  # context, so it can never deploy anything but main.
+  workflow_run:
+    workflows: ["Build preview branch"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -20,6 +26,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -34,10 +43,56 @@ jobs:
       - name: Validate event booking data
         run: python3 scripts/validate_event_booking.py
 
+      - name: Validate the Community Framework
+        run: |
+          if [ -f scripts/check_framework.py ]; then
+            python3 -m pip install --quiet pyyaml
+            python3 scripts/check_framework.py
+          else
+            echo "No Community Framework pages on this branch; nothing to check."
+          fi
+
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "${{ steps.pages.outputs.base_path }}"
         env:
           JEKYLL_ENV: production
+
+      # The `preview` branch is staged at /preview/ on the same Pages site,
+      # because GitHub Pages serves only one site per repository and this one is
+      # taken by the live site. It adds a path and changes nothing else: the
+      # live pages are built from main exactly as before.
+      #
+      # continue-on-error is deliberate. A broken preview branch must never stop
+      # the live site deploying; the step is skipped and the previous /preview/
+      # simply goes stale.
+      - name: Stage the preview branch at /preview/
+        id: stage_preview
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          if ! git rev-parse --verify origin/preview >/dev/null 2>&1; then
+            echo "No preview branch; nothing to stage."
+            exit 0
+          fi
+          git worktree add .preview-src origin/preview
+          bundle exec jekyll build \
+            --source .preview-src \
+            --config .preview-src/_config.yml \
+            --destination _site/preview \
+            --baseurl "${{ steps.pages.outputs.base_path }}/preview"
+          # CNAME and sitemap belong to the live site only, and a preview must
+          # never compete with it in search results.
+          rm -f _site/preview/CNAME _site/preview/sitemap.xml
+          printf '\nUser-agent: *\nDisallow: /preview/\n' >> _site/robots.txt
+          find _site/preview -name '*.html' -print0 | xargs -0 sed -i \
+            's|<head>|<head>\n  <meta name="robots" content="noindex, nofollow">|'
+          echo "Staged $(find _site/preview -name '*.html' | wc -l) preview pages at /preview/."
+        env:
+          JEKYLL_ENV: production
+
+      - name: Note a preview that failed to stage
+        if: steps.stage_preview.outcome == 'failure'
+        run: echo "::warning::The preview branch did not build, so /preview/ is unchanged. The live site deployed normally."
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
