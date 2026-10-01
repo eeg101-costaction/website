@@ -1,15 +1,16 @@
 name: Build preview branch
 
-# Pushing to `preview` builds that branch and publishes the result to
-# `gh-pages-preview`, so work can be looked at before it reaches `main`.
+# Pushing to `preview` checks that the branch builds and validates, then asks
+# the Pages workflow to restage it.
 #
-# NOTE ON VIEWING THE RESULT: GitHub Pages serves one site per repository, and
-# this repository's slot is taken by the live site at www.eeg101.eu (deployed
-# from `main` by pages.yml). So `gh-pages-preview` holds a correct build that
-# nothing serves until a Pages site is pointed at it — which must NOT be this
-# repository's, or the live site goes down. Point a second repository's Pages at
-# this branch, or copy the build into one. See
-# docs/community-framework-operations.md.
+# The preview itself is served at https://www.eeg101.eu/preview/ — not from this
+# workflow. GitHub Pages serves one site per repository and this repository's
+# slot is the live site, so a preview cannot have a Pages site of its own here;
+# pages.yml stages the preview branch into /preview/ of the same site instead.
+# That path is noindexed and excluded in robots.txt. See docs/preview-site.md.
+#
+# This workflow deliberately publishes nothing. Its job is to fail loudly on a
+# broken preview branch, before pages.yml quietly skips staging it.
 
 on:
   push:
@@ -17,7 +18,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: preview-build
@@ -25,6 +26,7 @@ concurrency:
 
 jobs:
   build-preview:
+    name: Check the preview branch builds
     runs-on: ubuntu-latest
     steps:
       - name: Checkout preview branch
@@ -43,42 +45,20 @@ jobs:
         with:
           python-version: "3.11"
 
-      # The preview is for looking at before merging, so it is worth knowing it
-      # would have built and validated on main too.
+      # The same checks main runs, so a preview being reviewed is one that would
+      # actually deploy.
       - name: Validate site data
         run: |
           python3 -m pip install --quiet pyyaml
           python3 scripts/validate_event_booking.py
           python3 scripts/check_framework.py
 
-      - name: Build with Jekyll (preview baseurl)
-        # Served from a path, not a domain root, so the build needs a baseurl.
-        # It defaults to the repository name and can be overridden with a
-        # PREVIEW_BASEURL repository variable if the preview is hosted elsewhere.
-        run: bundle exec jekyll build --baseurl "$PREVIEW_BASEURL"
+      - name: Build with Jekyll
+        run: bundle exec jekyll build --baseurl "/preview"
         env:
           JEKYLL_ENV: production
-          PREVIEW_BASEURL: ${{ vars.PREVIEW_BASEURL || format('/{0}', github.event.repository.name) }}
 
-      - name: Make the build safe to host
+      - name: Summarise
         run: |
-          set -euo pipefail
-          # CNAME claims www.eeg101.eu. Shipping it on a preview branch is a
-          # loaded gun: point any Pages site at this branch with it present and
-          # GitHub tries to take over the live domain.
-          rm -f _site/CNAME
-          # A preview must never compete with the live site in search results.
-          rm -f _site/sitemap.xml _site/robots.txt
-          printf 'User-agent: *\nDisallow: /\n' > _site/robots.txt
-          find _site -name '*.html' -print0 | xargs -0 sed -i \
-            's|<head>|<head>\n  <meta name="robots" content="noindex, nofollow">|'
-          echo "Removed CNAME, blocked indexing on $(find _site -name '*.html' | wc -l) pages."
-
-      - name: Deploy to gh-pages-preview branch
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages-preview
-          force_orphan: true
-          commit_message: "Preview build from ${{ github.sha }}"
+          echo "Preview branch builds cleanly: $(find _site -name '*.html' | wc -l) pages."
+          echo "pages.yml will restage it at https://www.eeg101.eu/preview/"
