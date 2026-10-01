@@ -2,20 +2,20 @@ name: Sync Community Framework data
 
 # Two data files behind the Community Framework pages go stale on their own:
 #
-#   _data/signatories.yml  — who has signed, read from the Framework's existing
-#                            Supabase store (needs SUPABASE_URL and
-#                            SUPABASE_SERVICE_ROLE_KEY repository secrets)
-#   _data/cf_catalogue.yml — the resource catalogue, read from the public
-#                            Zotero group (needs no credentials at all)
+#   _data/signatories.yml  — who has signed
+#   _data/cf_catalogue.yml — the resource catalogue
 #
-# Both refresh nightly. Each step is independent: a missing Supabase secret
-# leaves the signatory list untouched and still refreshes the catalogue, so the
-# catalogue never waits on someone configuring a secret.
+# Neither needs a credential. The catalogue is read from the public Zotero group,
+# and the signatory list from the list the Framework's own nightly job publishes
+# at sign-cf.eeg101.eu/signatories/. If SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
+# are set as repository secrets, the signatory step reads the signature store
+# directly instead: same data a day fresher, and it keeps working after the old
+# site is retired. Adding them is an upgrade, never a prerequisite.
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "41 02 * * *"
+    - cron: "41 05 * * *"
 
 permissions:
   contents: write
@@ -28,8 +28,6 @@ jobs:
   sync:
     name: Refresh signatories and resource catalogue
     runs-on: ubuntu-latest
-    # Declared at job level because the `secrets` context is not available in a
-    # step's own `if:` condition, but `env` is.
     env:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
@@ -45,25 +43,39 @@ jobs:
       - name: Install dependencies
         run: python -m pip install --upgrade pip pyyaml
 
+      # Each refresh is independent: one source being down must not stop the
+      # other from updating, so neither step fails the job on its own.
       - name: Refresh the resource catalogue from Zotero
         id: catalogue
         continue-on-error: true
         run: python3 scripts/build_catalogue.py
 
-      - name: Refresh the signatory list from the Framework signature store
+      - name: Refresh the signatory list
         id: signatories
-        if: env.SUPABASE_URL != '' && env.SUPABASE_SERVICE_ROLE_KEY != ''
+        continue-on-error: true
         run: python3 scripts/fetch_signatories.py
 
-      - name: Report a missing signature-store secret
-        if: env.SUPABASE_URL == '' || env.SUPABASE_SERVICE_ROLE_KEY == ''
+      - name: Note which signatory source was used
         run: |
-          echo "::warning::SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY are not" \
-               "set, so the signatory list was not refreshed. Add them under" \
-               "Settings > Secrets and variables > Actions. See" \
-               "docs/community-framework-operations.md."
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Signatories read directly from the signature store."
+          else
+            echo "::notice::Signatories were read from the Framework's published" \
+                 "list. That is a day behind the store and stops working if the" \
+                 "old site is retired. Adding the SUPABASE_URL and" \
+                 "SUPABASE_SERVICE_ROLE_KEY secrets switches to reading the store" \
+                 "directly. See docs/community-framework-operations.md."
+          fi
 
-      # Never publish a data file that would break the build or leak a field.
+      - name: Report a refresh that failed
+        if: steps.catalogue.outcome == 'failure' || steps.signatories.outcome == 'failure'
+        run: |
+          echo "::warning::catalogue=${{ steps.catalogue.outcome }}" \
+               "signatories=${{ steps.signatories.outcome }}." \
+               "The data file for any step that failed is unchanged."
+
+      # Never publish a data file that would break the build or leak a field
+      # people did not consent to publish.
       - name: Validate the refreshed data
         run: python3 scripts/check_framework.py
 

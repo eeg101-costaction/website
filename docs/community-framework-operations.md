@@ -47,23 +47,41 @@ needs no data work at all.
 
 ### What is published, and what is not
 
-The table holds email addresses, ages, genders, countries of origin, ORCIDs and
-free-text comments. **None of that may ever appear on the website.**
-`scripts/fetch_signatories.py` enforces this at the point of reading:
+The table holds personal data that is not for publication -- email address, age,
+gender, country of origin, ORCID and free-text comments. **None of that may ever
+appear on the website.** `scripts/fetch_signatories.py` enforces this:
 
-* it filters `show_name = true` **server-side**, so signatures from people who
-  did not opt in are never transmitted;
-* it selects only `first_name`, `last_name` and `affiliation`;
-* it asks for the overall total as a bare row count, never as rows.
+* only people who ticked "I'm happy for my name to be displayed publicly" are
+  read at all -- against Supabase the filter is applied server-side, so private
+  signatures are never transmitted;
+* only name and affiliation are selected;
+* the overall total is asked for as a bare count, never as rows.
 
-`scripts/check_framework.py` then fails the build if `_data/signatories.yml`
-ever contains a field other than `name` and `affiliation`.
+`scripts/check_framework.py` then fails the build if `_data/signatories.yml` ever
+contains a field other than `name` and `affiliation`.
 
-### One-off setup needed before the signatory list appears
+### Where the list comes from
 
-The signatory list ships empty and the page links to the old list until a
-repository admin adds two secrets under **Settings → Secrets and variables →
-Actions**:
+The refresh has two sources and takes the first that is available.
+
+**1. The signature store directly.** Used when `SUPABASE_URL` and
+`SUPABASE_SERVICE_ROLE_KEY` are set as repository secrets. This is the
+authoritative source and the one to end up on: it is current to the minute and
+keeps working after the original site is retired.
+
+**2. The published list** at `sign-cf.eeg101.eu/signatories/`. Used otherwise.
+The Framework's own nightly job regenerates that page from the same table, so
+this reads a list the Framework already publishes -- no credential needed, and
+**the signatory list on this site updates nightly out of the box.**
+
+Source 2 is a real source, not a stopgap, but it has two limits worth knowing:
+the list is up to a day behind the table, and it stops updating if the old site
+is taken down. So adding the secrets is an upgrade to make at some point, not
+something to do before launch.
+
+### Adding the secrets (optional, recommended eventually)
+
+Under **Settings → Secrets and variables → Actions**:
 
 | Secret | Value |
 | --- | --- |
@@ -71,15 +89,14 @@ Actions**:
 | `SUPABASE_SERVICE_ROLE_KEY` | Project settings → API Keys → Secret keys |
 
 These are the same two secrets the `sign-cf` repository already uses, so they can
-be copied across. Until they exist, the nightly job refreshes the catalogue,
-logs a warning about the missing secrets, and leaves the signatory list alone —
-it never fails the build.
+be copied across. The sync job picks them up on its next run with no other
+change; its log says which source it used.
 
-As a check on the first run: the live list at `sign-cf.eeg101.eu/signatories/`
-showed **143 signatures, 122 of them publicly named**. `_data/signatories.yml`
-should come back with a `total` and `public_count` at or above those figures. A
-materially lower number means the read is being filtered somewhere it should not
-be — investigate before deploying, rather than publishing a short list.
+As a check on any run: the published list showed **143 signatures, 122 of them
+publicly named** (120 after removing duplicate signatures). `_data/signatories.yml`
+should come back with figures at or above those. A materially lower number means
+the read is being filtered somewhere it should not be -- investigate before
+deploying, rather than publishing a short list.
 
 ---
 
@@ -175,7 +192,9 @@ the generated includes from upstream prose.
 
 ## Still to do
 
-* **Add the two Supabase secrets** (above) so the signatory list fills in.
+* **Optionally add the two Supabase secrets** (above). The signatory list
+  already updates nightly without them; the secrets make it current to the
+  minute and independent of the old site.
 * **Redirect the old URLs.** The new pages are live, but `sign-cf.eeg101.eu` and
   `catalog-cf.eeg101.eu` are separate deployments on their own subdomains, so
   their redirects have to be set in their own repositories. Ready-to-apply

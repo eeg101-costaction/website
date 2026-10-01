@@ -9,6 +9,16 @@ Apply these **after** the new pages are live, and keep the redirects in place
 indefinitely — these URLs are in the published literature, in emails, and on
 slides.
 
+> **Do the signatory step first.** Until the `SUPABASE_URL` and
+> `SUPABASE_SERVICE_ROLE_KEY` secrets are added to this repository, the nightly
+> sync reads the signatory list from `sign-cf.eeg101.eu/signatories/`. Redirect
+> that page before adding the secrets and the list on this site silently stops
+> updating — it will not fail, it will just freeze at whatever it last read. So
+> either add the two secrets first (see
+> `docs/community-framework-operations.md`), or leave the `signatories.md` entry
+> out of the redirect map below until you have. The sync job's log says which
+> source each run used.
+
 ---
 
 ## 1. `catalog-cf.eeg101.eu` → `/framework/catalogue/`
