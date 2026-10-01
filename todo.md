@@ -1,0 +1,20 @@
+# EEG101 Website TODO
+
+- [x] Make `_data/events.yml` the single source of truth for event information and booking settings
+- [x] Add a booking action directly to eligible Events cards
+- [x] Add the same booking action to eligible calendar popovers
+- [x] Reuse one registration modal and one private Apps Script configuration across all bookable events
+- [x] Add build-time validation for required booking fields and unsupported booking states
+- [x] Run automated regression tests for booking validation and publish the unified workflow
+- [x] Remove the separate Event Hub landing-page route and related cross-links
+- [x] Remove legacy links to the retired standalone Event Hub route
+- [x] Test and publish the unified Events booking workflow on main
+- [x] Test the new Members directory search, Working Group filters, country filters, and responsive layout
+- [x] Show all Members by default and limit results to 60 only while directory filters are active
+- [x] Keep the Members directory empty until a search, Working Group filter, or country filter is applied
+- [ ] Establish a maintainable raw eCOST-export paste workflow for Members data and synchronisation to the public map and directory
+- [ ] Build a controlled conversion and publishing action that accepts the unchanged eCOST export structure
+- [ ] Add a country-aware location reference so new eCOST countries remain represented without routine manual map maintenance
+- [ ] Verify the raw-export workbook seed and publication scripts before organiser handover
+- [x] Test and publish the 2026 Virtual Mobility Spotlight story from the submitted neonatal EEG report and portrait
+- [x] Test and publish Jovana Kljajic’s corrected Virtual Mobility date range and newest-to-oldest Spotlight ordering

@@ -1,0 +1,105 @@
+{
+  "generated_at": "2026-10-01T11:38:34+00:00",
+  "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
+  "pending_count": 8,
+  "members": [
+    {
+      "name": "Zoltan Juhasz",
+      "affiliation": "Pannon Egyetem - University Of Pannonia",
+      "country": "Hungary",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "juhasz.zoltan [at] mik [dot] uni-pannon [dot] hu",
+      "homepage": "https://www.researchgate.net/profile/Zoltan-Juhasz-2",
+      "orcid": "0000-0003-0677-8588"
+    },
+    {
+      "name": "Hrant Arzumanyan",
+      "affiliation": "Institute For Informatics And Automation Problems Of The National Academy Of Sciences Of The Republic Of Armenia",
+      "country": "Armenia",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "hrant99 [at] gmail [dot] com",
+      "homepage": "",
+      "orcid": ""
+    },
+    {
+      "name": "Stephen Applebaum",
+      "affiliation": "CuttingEEG",
+      "country": "France",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "sia [at] emneuroimaging [dot] com",
+      "homepage": "www.linkedin.com/in/siapplebaum; www.emneuroimaging.com",
+      "orcid": "0009-0000-1265-2370"
+    },
+    {
+      "name": "Iffah Syafiqah Binti Suhaili",
+      "affiliation": "Pannon Egyetem - University Of Pannonia",
+      "country": "Hungary",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "ssiffah [at] gmail [dot] com",
+      "homepage": "",
+      "orcid": ""
+    },
+    {
+      "name": "Giovanni Lazzaro",
+      "affiliation": "San Camillo IRCCS s.r.l.",
+      "country": "Italy",
+      "working_groups": [
+        "WG2"
+      ],
+      "email": "giovannilazzaro94 [at] gmail [dot] com",
+      "homepage": "https://www.researchgate.net/profile/Giovanni-Lazzaro/research; https://giovannilazzaro.github.io/",
+      "orcid": "0009-0000-9304-902X"
+    },
+    {
+      "name": "Ahmad Lotfi",
+      "affiliation": "Ecole Normale Supérieure (ENS) - Paris, Sciences et Lettres (PSL)",
+      "country": "France",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "ahmadorlotfi [at] gmail [dot] com",
+      "homepage": "https://fr.linkedin.com/in/ahmad-lotfi-259651b8",
+      "orcid": ""
+    },
+    {
+      "name": "Francisco José Sánchez Cuesta",
+      "affiliation": "Fundacion Universidad Francisco de Vitoria",
+      "country": "Spain",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "fjose.sanchez [at] ufv [dot] es",
+      "homepage": "www.linkedin.com/in/francisco-josé-sánchez-cuesta-69b0b2176; https://www.researchgate.net/profile/Francisco-Sanchez-Cuesta?ev=hdr_xprf",
+      "orcid": "0000-0001-6202-7071"
+    },
+    {
+      "name": "Sara Zago",
+      "affiliation": "San Camillo IRCCS s.r.l.",
+      "country": "Italy",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "sara.zago [at] hsancamillo [dot] it",
+      "homepage": "",
+      "orcid": "0000-0002-7831-3387"
+    }
+  ]
+}
