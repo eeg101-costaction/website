@@ -83,6 +83,16 @@ plugins:
         glossary.md: https://www.eeg101.eu/framework/glossary/
         references.md: https://www.eeg101.eu/framework/references/
         contributors.md: https://www.eeg101.eu/framework/contributors/
+        # The five section files are listed under `not_in_nav` in mkdocs.yml,
+        # but MkDocs still builds each as a standalone page, so /introduction/,
+        # /validity/, /democratization/, /responsibility/ and /conclusion/ are
+        # all live today (verified: HTTP 200) as duplicates of the home page.
+        # They need redirects too, each to its anchor on the one-page document.
+        introduction.md: https://www.eeg101.eu/framework/
+        validity.md: https://www.eeg101.eu/framework/#cf-validity
+        democratization.md: https://www.eeg101.eu/framework/#cf-democratization
+        responsibility.md: https://www.eeg101.eu/framework/#cf-responsibility
+        conclusion.md: https://www.eeg101.eu/framework/#cf-conclusion
 ```
 
 **Step 3.** Keep the nightly `build_docs.yml` workflow running for now. It is

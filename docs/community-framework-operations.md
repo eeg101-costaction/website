@@ -75,6 +75,12 @@ be copied across. Until they exist, the nightly job refreshes the catalogue,
 logs a warning about the missing secrets, and leaves the signatory list alone —
 it never fails the build.
 
+As a check on the first run: the live list at `sign-cf.eeg101.eu/signatories/`
+showed **143 signatures, 122 of them publicly named**. `_data/signatories.yml`
+should come back with a `total` and `public_count` at or above those figures. A
+materially lower number means the read is being filtered somewhere it should not
+be — investigate before deploying, rather than publishing a short list.
+
 ---
 
 ## The resource catalogue needs no credentials
