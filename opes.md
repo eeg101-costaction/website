@@ -6,7 +6,7 @@ description: "OPES combines expert input and resting-state EEG datasets to evalu
 permalink: /working-groups/opes/
 ---
 
-OPES is led by WG2 co-leader Prof Dr Claudio Babiloni in collaboration with colleagues across the EEG101 network. It combines expert input with resting-state EEG datasets from different laboratories to evaluate methodological choices to inform shared EEG standards.
+OPES is led by WG2 co-leader Prof Dr Claudio Babiloni in collaboration with colleagues across the EEG101 network. It combines expert input with resting-state EEG datasets from different laboratories to evaluate methodological choices and inform shared EEG standards.
 
 ## Expected outcomes
 
@@ -19,7 +19,10 @@ OPES aims to develop:
 
 ---
 
-## Phase 1: Expert survey
+**How can you collaborate?**
+{: .fs-4 }
+
+## 1: Expert survey
 
 {::nomarkdown}
 <div class="row g-3 my-4">
@@ -34,7 +37,7 @@ OPES aims to develop:
       <a href="https://shorturl.at/ikvFV" target="_blank" rel="noopener">
         <img src="{{ '/assets/images/qr_opes.png' | relative_url }}" alt="QR code for the OPES expert survey" width="208" class="img-fluid">
       </a>
-      <p class="small mt-2 mb-0">Scan to open the survey</p>
+      <p class="small mt-2 mb-0">OR scan to open the expert survey</p>
     </div>
   </div>
 </div>
@@ -42,7 +45,7 @@ OPES aims to develop:
 
 ---
 
-## Phase 2: EEG datasets
+## 2: EEG datasets
 
 The second phase brings together resting-state EEG recordings from healthy adults across laboratories. The datasets will be used to compare procedures at key stages of EEG processing, including:
 
@@ -64,7 +67,8 @@ The second phase brings together resting-state EEG recordings from healthy adult
 
 Recordings from different laboratories are welcome.
 
-**Have a suitable dataset?** To discuss a collaboration, contact Nesli Özhan at [neslihan.ozhan@soton.ac.uk](mailto:neslihan.ozhan@soton.ac.uk).
+**Have a suitable dataset?** Contact Nesli Özhan at [neslihan.ozhan@soton.ac.uk](mailto:neslihan.ozhan@soton.ac.uk).
+{: .fs-4 }
 
 ---
 
