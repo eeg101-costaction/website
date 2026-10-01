@@ -21,22 +21,24 @@ OPES aims to develop:
 
 ## Phase 1: Expert survey
 
+{::nomarkdown}
 <div class="row g-3 my-4">
   <div class="col-12 col-md-8">
     <div class="wg-detail-card">
-      <p>The first phase gathers researchers’ views on EEG methods and analytical practices. If you are an EEG researcher and have not yet completed the expert survey, please take part and share it with your EEG network.</p>
-      <a href="https://shorturl.at/ikvFV" class="btn btn-primary" target="_blank" rel="noopener">Complete the expert survey ↗</a>
+      <p>The first phase gathers researchers’ views on EEG methods and analytical practices. If you are an EEG researcher and have not yet completed the survey, please take part and share it with your network.</p>
+      <a href="https://shorturl.at/ikvFV" class="btn btn-primary" target="_blank" rel="noopener">Complete the expert survey</a>
     </div>
   </div>
   <div class="col-12 col-md-4">
     <div class="wg-detail-card text-center">
       <a href="https://shorturl.at/ikvFV" target="_blank" rel="noopener">
-        <img src="{{ '/assets/images/qr_opes.png' | relative_url }}" alt="QR code for the OPES expert survey" width="208" height="180" class="img-fluid">
+        <img src="{{ '/assets/images/qr_opes.png' | relative_url }}" alt="QR code for the OPES expert survey" width="208" class="img-fluid">
       </a>
-      <p class="small mt-2 mb-0">Scan to take the survey</p>
+      <p class="small mt-2 mb-0">Scan to open the survey</p>
     </div>
   </div>
 </div>
+{:/nomarkdown}
 
 ---
 
