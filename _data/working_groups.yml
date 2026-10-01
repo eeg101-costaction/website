@@ -175,3 +175,15 @@ activities:
       the most pressing issues in the field.
     icon: "🔬"
     image: "/assets/images/activities/stsm.png"
+
+  - id: opes
+    title: "OPES Initiative"
+    tagline: "Optimal Procedures for EEG Standards"
+    description: >
+      OPES gathers expert perspectives on EEG analysis methods and brings
+      together resting-state EEG datasets from different laboratories. By
+      comparing analytical procedures across key stages of EEG processing,
+      the project aims to inform a shared methodological framework.
+    icon: "🧠"
+    image: "/assets/images/activities/opes.png"
+    url: "/working-groups/opes/"
