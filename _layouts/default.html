@@ -65,6 +65,19 @@
   <script src="{{ '/assets/js/network-map.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
   {% endif %}
 
+  {% if page.framework_form %}
+  <!-- Community Framework document controls and signature submission -->
+  <script>
+    window.EEG101_FRAMEWORK = {
+      supabaseUrl: {{ site.data.framework.supabase_url | jsonify }},
+      supabaseKey: {{ site.data.framework.supabase_publishable_key | jsonify }},
+      table: {{ site.data.framework.signatories_table | jsonify }},
+      contactEmail: {{ site.data.framework.contact_email | jsonify }}
+    };
+  </script>
+  <script src="{{ '/assets/js/framework.js' | relative_url }}?v={{ site.time | date: '%s' }}"></script>
+  {% endif %}
+
   <!-- Google Analytics GA4 -->
   {% if site.data.site.ga_measurement_id %}
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.data.site.ga_measurement_id }}"></script>

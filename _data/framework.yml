@@ -1,0 +1,45 @@
+# EEG101 Community Framework — settings for the /framework/ pages.
+
+# Where signatures are stored. This is the same Supabase project that has
+# collected every signature since the Framework launched: the website
+# integration points a new form at the existing table rather than migrating the
+# data, so no signature is at risk.
+#
+# supabase_publishable_key is a *publishable* key and is meant to be visible in
+# page source — it is the browser's identity when it submits the form. Row-level
+# security on the table grants the anonymous role INSERT only, so this key can
+# add a signature and can neither read, amend nor delete one. Reading the list
+# back needs the service-role key, which lives only in a repository secret and is
+# used solely by scripts/fetch_signatories.py in CI.
+supabase_url: "https://gsdciyuqxcgkdqmbygci.supabase.co"
+supabase_publishable_key: "sb_publishable_Tn-yHR4XPb2VMq58C6VtsQ_-jF7fVin"
+signatories_table: "signatories"
+
+# The Framework's own contact address and discussion forum.
+contact_email: "eegcf@proton.me"
+forum_url: "https://forum.cuttingeeg.org/invites/TFWQZX1pBa"
+
+# The one-page summary, hosted here so it downloads straight from the site
+# rather than through Google Drive.
+one_pager: "/assets/docs/eeg101-community-framework-one-pager.pdf"
+
+# The Framework's three parts, used by the home page block and the catalogue.
+parts:
+  - number: 1
+    title: "Validity and scientific integrity"
+    anchor: "cf-validity"
+    summary: >
+      Reproducible practice, standardised and documented data, open science and
+      open source, and theory-driven, interpretable modelling.
+  - number: 2
+    title: "Democratization"
+    anchor: "cf-democratization"
+    summary: >
+      Diversity in the scientific community and in study populations, and
+      accessibility of research outcomes.
+  - number: 3
+    title: "Responsibility"
+    anchor: "cf-responsibility"
+    summary: >
+      Ethical use of EEG, realistic claims about technology, research
+      evaluation, and the environmental footprint of our work.

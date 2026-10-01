@@ -47,6 +47,28 @@ about:
     label: "Meet the team"
     url: "/coordination/"
 
+# The Community Framework block on the home page. The Framework is Working
+# Group 3's headline output and the thing we ask people to sign before they
+# join, so it sits directly below About.
+framework:
+  label: "Working Group 3"
+  heading: "The EEG Community Framework"
+  intro: >
+    A deontological framework for EEG science: the standards we believe are
+    essential to collectively maximise the positive impact of EEG research for
+    society.
+  body: >
+    Written by 43 contributors from across the community, the Framework sets out
+    commitments across three domains. You can sign all of it, or only the parts
+    you support — every commitment is recorded separately, so signing is a
+    statement of what you actually agree with rather than a single yes or no.
+  cta:
+    label: "Read and sign the Framework"
+    url: "/framework/"
+  cta_secondary:
+    label: "Resource catalogue"
+    url: "/framework/catalogue/"
+
 objectives:
   heading: "Our approach"
   intro: >

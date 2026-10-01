@@ -7,6 +7,8 @@ main:
     url: "/members/"
   - title: "Our Work"
     url: "/working-groups/"
+  - title: "Framework"
+    url: "/framework/"
   - title: "Grants"
     url: "/grants/"
   - title: "Events"
@@ -35,6 +37,8 @@ footer_network:
     url: "/contact/"
 
 footer_resources:
+  - title: "Community Framework"
+    url: "/framework/"
   - title: "Grants"
     url: "/grants/"
   - title: "Resources"

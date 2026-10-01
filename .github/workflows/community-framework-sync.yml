@@ -1,0 +1,81 @@
+name: Sync Community Framework data
+
+# Two data files behind the Community Framework pages go stale on their own:
+#
+#   _data/signatories.yml  — who has signed, read from the Framework's existing
+#                            Supabase store (needs SUPABASE_URL and
+#                            SUPABASE_SERVICE_ROLE_KEY repository secrets)
+#   _data/cf_catalogue.yml — the resource catalogue, read from the public
+#                            Zotero group (needs no credentials at all)
+#
+# Both refresh nightly. Each step is independent: a missing Supabase secret
+# leaves the signatory list untouched and still refreshes the catalogue, so the
+# catalogue never waits on someone configuring a secret.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 02 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: community-framework-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Refresh signatories and resource catalogue
+    runs-on: ubuntu-latest
+    # Declared at job level because the `secrets` context is not available in a
+    # step's own `if:` condition, but `env` is.
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pyyaml
+
+      - name: Refresh the resource catalogue from Zotero
+        id: catalogue
+        continue-on-error: true
+        run: python3 scripts/build_catalogue.py
+
+      - name: Refresh the signatory list from the Framework signature store
+        id: signatories
+        if: env.SUPABASE_URL != '' && env.SUPABASE_SERVICE_ROLE_KEY != ''
+        run: python3 scripts/fetch_signatories.py
+
+      - name: Report a missing signature-store secret
+        if: env.SUPABASE_URL == '' || env.SUPABASE_SERVICE_ROLE_KEY == ''
+        run: |
+          echo "::warning::SUPABASE_URL and/or SUPABASE_SERVICE_ROLE_KEY are not" \
+               "set, so the signatory list was not refreshed. Add them under" \
+               "Settings > Secrets and variables > Actions. See" \
+               "docs/community-framework-operations.md."
+
+      # Never publish a data file that would break the build or leak a field.
+      - name: Validate the refreshed data
+        run: python3 scripts/check_framework.py
+
+      - name: Commit any changes
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- _data/signatories.yml _data/cf_catalogue.yml; then
+            echo "Community Framework data is already up to date."
+            exit 0
+          fi
+          git config user.name "EEG101 Community Framework synchronisation"
+          git config user.email "eeg101costaction@gmail.com"
+          git add _data/signatories.yml _data/cf_catalogue.yml
+          git commit -m "Refresh Community Framework signatories and catalogue"
+          git push origin HEAD:main

@@ -37,8 +37,8 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <div class="join-step__body">
 <span class="join-step__flag">Do this first</span>
 <h3>Sign the EEG101 Community Framework</h3>
-<p>Before you apply through e-COST, read and sign the <a href="https://sign-cf.eeg101.eu/" target="_blank" rel="noopener">EEG101 Community Framework ↗</a>. The Framework sets out the shared commitments behind EEG101: scientific integrity and reproducible practice, diversity and inclusion, and societal and environmental responsibility. You can sign all of it or the parts you support, and signing is how you show you share the values of the community you are joining.</p>
-<p class="join-step__guide-link"><a href="https://sign-cf.eeg101.eu/#sign-the-pledge" target="_blank" rel="noopener">Go straight to Sign the Pledge ↗</a></p>
+<p>Before you apply through e-COST, read and sign the <a href="{{ '/framework/' | relative_url }}">EEG101 Community Framework</a>. The Framework sets out the shared commitments behind EEG101: scientific integrity and reproducible practice, diversity and inclusion, and societal and environmental responsibility. You can sign all of it or the parts you support, and signing is how you show you share the values of the community you are joining.</p>
+<p class="join-step__guide-link"><a href="{{ '/framework/#cf-sign' | relative_url }}">Go straight to Sign the Pledge</a></p>
 </div>
 </div>
 <div class="join-step join-step--highlight">
@@ -204,7 +204,7 @@ EEG101 welcomes researchers at all career stages — from PhD students to full p
 <ul>
 <li><strong>1. Reporting Standards:</strong> standardised reporting, templates, pre-registration and reproducible EEG methods.</li>
 <li><strong>2. Curation and Harmonization:</strong> FAIR EEG data, harmonised pipelines and data that can be compared across laboratories.</li>
-<li><strong>3. Manifesto:</strong> ethical, open and sustainable principles for EEG research. This website presents this work as the <a href="{{ '/working-groups/' | relative_url }}">EEG Community Framework</a>.</li>
+<li><strong>3. Manifesto:</strong> ethical, open and sustainable principles for EEG research. This website presents this work as the <a href="{{ '/framework/' | relative_url }}">EEG Community Framework</a>.</li>
 </ul>
 </div>
 <figure class="join-guide__figure">
@@ -258,7 +258,7 @@ Researchers from non-member countries may participate as observers and collabora
 {::nomarkdown}
 <div class="text-center mt-5">
   <p>Please sign the Community Framework first, then apply through e-COST.</p>
-  <a href="https://sign-cf.eeg101.eu/#sign-the-pledge" class="btn btn-outline-primary btn-lg" target="_blank" rel="noopener">1. Sign the Community Framework ↗</a>
+  <a href="{{ '/framework/#cf-sign' | relative_url }}" class="btn btn-outline-primary btn-lg">1. Sign the Community Framework</a>
   <a href="https://e-services.cost.eu/action/CA24148/working-groups/apply" class="btn btn-primary btn-lg" target="_blank" rel="noopener">2. Join via e-COST ↗</a>
 </div>
 {:/nomarkdown}
