@@ -2,291 +2,255 @@
 layout: page
 title: "Library"
 subtitle: "Papers, tools and resources from EEG101 and the Community Framework"
-description: "The EEG101 Library: curated open-access papers from the Action alongside the full Community Framework resource catalogue. Filter by topic, Framework part or resource type, or search by title, author or keyword."
+description: "The EEG101 Library: curated open-access papers from the Action alongside the full Community Framework resource catalogue. Filter by collection, Framework section, type or language, or search by title, author or keyword."
 permalink: /library/
+wide: true
 ---
 
 {::nomarkdown}
 
 {% assign lib = site.data.library_index %}
-{% assign curated = lib.items | where: "featured", true %}
-{% assign catalogue = lib.items | where: "featured", false %}
 
-<section class="section-content">
-  <div class="container">
+<div class="lib">
 
-    <p class="cf-helper">
-      Two collections, one place to search. The
-      <strong>EEG101 collection</strong> is {{ curated | size }} open-access
-      papers from the Action and its members. The
-      <strong>Community Framework catalogue</strong> is the
-      {{ catalogue | size }} readings, tools and recordings behind
+  <aside class="lib__filters" id="lib-filters">
+    <div class="lib__filters-head">
+      <h2 class="lib__filters-title">Filter</h2>
+      <button type="button" class="lib__clear" id="lib-clear" hidden>Clear all</button>
+    </div>
+
+    {% comment %}
+      Four facet groups, the same ones the standalone catalogue offered, plus
+      Collection so the Action's own papers can be told from the Framework's
+      reading list. Checkboxes within a group are OR; the groups are ANDed.
+    {% endcomment %}
+
+    <details class="lib__group" open>
+      <summary>Collection</summary>
+      <ul class="lib__options">
+        {% for c in lib.collections %}
+        <li><label><input type="checkbox" data-facet="collection" value="{{ c.slug }}">
+          <span>{{ c.name }}</span><em>{{ c.count }}</em></label></li>
+        {% endfor %}
+      </ul>
+    </details>
+
+    <details class="lib__group" open>
+      <summary>Framework Section</summary>
+      <ul class="lib__options">
+        {% for s in lib.sections %}
+        <li><label><input type="checkbox" data-facet="section" value="{{ s.name | downcase }}">
+          <span>{{ s.name }}</span><em>{{ s.count }}</em></label></li>
+        {% endfor %}
+      </ul>
+    </details>
+
+    <details class="lib__group" open>
+      <summary>Type</summary>
+      <ul class="lib__options">
+        {% for t in lib.types %}
+        <li><label><input type="checkbox" data-facet="type" value="{{ t.name | downcase }}">
+          <span>{{ t.name }}</span><em>{{ t.count }}</em></label></li>
+        {% endfor %}
+      </ul>
+    </details>
+
+    <details class="lib__group" open>
+      <summary>Language</summary>
+      <ul class="lib__options">
+        {% for l in lib.languages %}
+        <li><label><input type="checkbox" data-facet="language" value="{{ l.name | downcase }}">
+          <span>{{ l.name }}</span><em>{{ l.count }}</em></label></li>
+        {% endfor %}
+      </ul>
+    </details>
+  </aside>
+
+  <div class="lib__main">
+    <p class="lib__intro">
+      Two collections, one place to search. The <strong>EEG101 Collection</strong>
+      is {{ lib.curated_count }} open-access papers from the Action and its
+      members; the <strong>Community Framework</strong> catalogue is the
+      {{ lib.framework_count }} readings, tools and recordings behind
       <a href="{{ '/framework/' | relative_url }}">the Framework</a>, curated as a
-      public <a href="{{ lib.zotero_url | default: 'https://www.zotero.org/groups/5794905/library' }}" target="_blank" rel="noopener">Zotero group library</a>.
-      Both are tagged with the same EEG101 vocabulary, so the filters below
-      search across the two at once.
+      public <a href="https://www.zotero.org/groups/5794905/library" target="_blank" rel="noopener">Zotero group library</a>.
     </p>
 
-    <!-- Filter controls -->
-    <div class="library-controls">
-      <label for="hub-search" class="visually-hidden">Search the library by title, author or keyword</label>
-      <input type="text" id="hub-search" class="library-search" placeholder="Search by title, author, or keyword...">
-
-      <div class="library-filters" id="hub-collections" role="group" aria-label="Filter by collection">
-        <button class="filter-btn active" data-collection="all">Everything ({{ lib.total }})</button>
-        <button class="filter-btn" data-collection="eeg101">EEG101 collection ({{ curated | size }})</button>
-        <button class="filter-btn" data-collection="framework">Framework catalogue ({{ catalogue | size }})</button>
-      </div>
-
-      <div class="library-filters" id="hub-topics" role="group" aria-label="Filter by tag">
-        <button class="filter-btn active" data-topic="all">All tags</button>
-        {% comment %}
-          EEG101's own tags, carried across to the Framework catalogue so
-          both collections filter together. The first nine are the buttons the
-          Library already had, in the order it had them; the rest are curated
-          tags that only became worth a button once the catalogue was merged
-          in, so they sit one click away.
-        {% endcomment %}
-        {% for topic in lib.topics %}
-        <button class="filter-btn{% if forloop.index > 9 %} filter-btn--extra{% endif %}"
-                data-topic="{{ topic.name | downcase }}"{% if forloop.index > 9 %} hidden{% endif %}>{{ topic.name }} ({{ topic.count }})</button>
-        {% endfor %}
-        {% assign extra = lib.topics | size | minus: 9 %}
-        {% if extra > 0 %}
-        <button type="button" class="filter-btn filter-btn--toggle" id="hub-more-topics"
-                aria-expanded="false">+{{ extra }} more tags</button>
-        {% endif %}
-      </div>
-
-      <div class="library-filters" id="hub-parts" role="group" aria-label="Filter by Framework part">
-        <button class="filter-btn active" data-part="all">All Framework parts</button>
-        {% for section in site.data.cf_catalogue.sections %}
-        <button class="filter-btn" data-part="{{ section.number }}">Part {{ section.number }}: {{ section.title }}</button>
-        {% endfor %}
-      </div>
+    <div class="lib__toolbar">
+      <label for="lib-search" class="visually-hidden">Search by title, author or keyword</label>
+      <input type="search" id="lib-search" class="lib__search" placeholder="Search by title, author, or keyword...">
+      <button type="button" class="lib__filters-toggle" id="lib-filters-toggle" aria-expanded="false">Filters</button>
     </div>
 
-    <p class="library-count" id="hub-count">Showing {{ lib.total }} items</p>
+    <p class="lib__count" id="lib-count">Showing {{ lib.total }} items</p>
+    <div class="lib__chips" id="lib-chips"></div>
 
-    <!-- The EEG101 collection keeps its cover art: these are the Action's own
-         outputs and the covers are the point of the card. -->
-    <div class="hub-section" id="hub-curated">
-      <h2 class="hub-section__heading">EEG101 collection <span class="hub-section__count" data-count-for="curated"></span></h2>
-      <div class="hub-grid">
-        {% for paper in curated %}
-        <div class="paper-card lib-item"
-             data-collection="eeg101"
-             data-parts=""
-             data-topics="{{ paper.topics | join: '|' | downcase }}"
-             data-title="{{ paper.title | downcase }}"
-             data-authors="{{ paper.authors | downcase }}"
-             data-tags="{{ paper.tags | join: ' ' | downcase }} {{ paper.theme | downcase }}">
-          <a href="{{ paper.source_url }}" target="_blank" rel="noopener" class="paper-cover">
-            <img src="{{ paper.image | relative_url }}" alt="{{ paper.title }}" loading="lazy">
-          </a>
-          <div class="paper-info">
-            <p class="paper-theme">{{ paper.theme }}</p>
-            <h3 class="paper-title">
-              <a href="{{ paper.source_url }}" target="_blank" rel="noopener">{{ paper.title }}</a>
-            </h3>
-            <p class="paper-authors">{{ paper.authors }}</p>
-            <p class="paper-journal"><em>{{ paper.venue }}</em>, {{ paper.year }}</p>
-            <div class="paper-tag-list">
-              {% for tag in paper.tags %}
-                <span class="paper-tag">{{ tag }}</span>
-              {% endfor %}
-            </div>
-            <p class="paper-access-version">{{ paper.access_version }}</p>
-            <div class="paper-links">
-              <a href="{{ paper.oa_url }}" target="_blank" rel="noopener" class="paper-link paper-link--oa">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-9M14 3v7h7M14 3l7 7M8 16h8M8 12h3"/></svg>
-                {{ paper.oa_label }}
-              </a>
-              <a href="{{ paper.source_url }}" target="_blank" rel="noopener" class="paper-link paper-link--source">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                {{ paper.source_label }}
-              </a>
-              {% comment %}
-                Shown only for papers whose PDF we are allowed to redistribute and have
-                placed in assets/docs/. Set the entry's `pdf:` field in library.yml.
-              {% endcomment %}
-              {% if paper.pdf and paper.pdf != "" %}
-              <a href="{{ paper.pdf | relative_url }}" class="paper-link paper-link--source" download>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                Download PDF
-              </a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div class="hub-section" id="hub-catalogue">
-      <h2 class="hub-section__heading">Community Framework catalogue <span class="hub-section__count" data-count-for="catalogue"></span></h2>
-      <div class="cf-cat-grid">
-        {% for item in catalogue %}
-        <article class="cf-cat-card cf-cat-card--{{ item.family }} lib-item"
-                 data-collection="framework"
-                 data-parts="{{ item.parts | join: ' ' }}"
-                 data-topics="{{ item.topics | join: '|' | downcase }}"
-                 data-title="{{ item.title | downcase }}"
-                 data-authors="{{ item.authors | downcase }}"
-                 data-tags="{{ item.tags | join: ' ' | downcase }} {{ item.venue | downcase }}">
-          <div class="cf-cat-card__meta">
-            <span class="cf-cat-card__type">{{ item.type_label }}</span>
-            {% for number in item.parts %}
-            <span class="cf-cat-card__part">Part {{ number }}</span>
-            {% endfor %}
-            {% if item.year and item.year != "" %}<span class="cf-cat-card__year">{{ item.year }}</span>{% endif %}
-          </div>
-          <h3 class="cf-cat-card__title">
+    <div class="lib__grid" id="lib-grid">
+      {% for item in lib.items %}
+      <article class="lib-card{% if item.featured %} lib-card--featured{% endif %}"
+               data-collection="{{ item.collection }}"
+               data-section="{{ item.section_titles | join: '|' | downcase }}"
+               data-type="{{ item.type_label | downcase }}"
+               data-language="{{ item.language | downcase }}"
+               data-text="{{ item.title | append: ' ' | append: item.authors | append: ' ' | append: item.venue | append: ' ' | append: item.tags | join: ' ' | downcase | escape }}">
+        <a class="lib-card__media" href="{{ item.url }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+          {% if item.image and item.image != "" %}
+          <img src="{{ item.image | relative_url }}" alt="" loading="lazy" width="480" height="270">
+          {% else %}
+          <img src="{{ item.placeholder | relative_url }}" alt="" loading="lazy" width="480" height="270">
+          {% endif %}
+          {% if item.featured %}<span class="lib-card__flag">EEG101</span>{% endif %}
+        </a>
+        <div class="lib-card__body">
+          <p class="lib-card__meta">
+            <span class="lib-card__type">{{ item.type_label }}</span>
+            {% if item.year and item.year != "" %}<span class="lib-card__year">{{ item.year }}</span>{% endif %}
+          </p>
+          <h3 class="lib-card__title">
             <a href="{{ item.url }}" target="_blank" rel="noopener">{{ item.title }}</a>
           </h3>
           {% if item.authors and item.authors != "" %}
-          <p class="cf-cat-card__creators">{{ item.authors }}</p>
+          <p class="lib-card__authors">{{ item.authors | truncate: 78 }}</p>
           {% endif %}
           {% if item.venue and item.venue != "" %}
-          <p class="cf-cat-card__publication"><em>{{ item.venue }}</em></p>
+          <p class="lib-card__venue"><em>{{ item.venue | truncate: 60 }}</em></p>
           {% endif %}
-          {% if item.abstract and item.abstract != "" %}
-          <p class="cf-cat-card__abstract">{{ item.abstract | strip_html | truncate: 170 }}</p>
+          {% if item.featured and item.tags != empty %}
+          <p class="lib-card__tags">{% for tag in item.tags %}<span>{{ tag }}</span>{% endfor %}</p>
           {% endif %}
-          {% if item.topics and item.topics != empty %}
-          <div class="paper-tag-list">
-            {% for tag in item.topics %}<span class="paper-tag">{{ tag }}</span>{% endfor %}
-          </div>
-          {% endif %}
-          <div class="cf-cat-card__links">
-            {% if item.doi and item.doi != "" %}
-            <a href="https://doi.org/{{ item.doi }}" class="cf-cat-card__link">DOI</a>
+          <p class="lib-card__links">
+            {% if item.featured %}
+              <a href="{{ item.oa_url }}" target="_blank" rel="noopener">{{ item.oa_label | default: "Open access" }}</a>
+              {% if item.pdf and item.pdf != "" %}
+              <a href="{{ item.pdf | relative_url }}" download>PDF</a>
+              {% endif %}
+            {% else %}
+              {% if item.doi and item.doi != "" %}
+              <a href="https://doi.org/{{ item.doi }}" target="_blank" rel="noopener">DOI</a>
+              {% endif %}
+              <a href="{{ item.source_url }}" target="_blank" rel="noopener" class="lib-card__link--muted">Zotero</a>
             {% endif %}
-            <a href="{{ item.source_url }}" class="cf-cat-card__link cf-cat-card__link--muted">Zotero record</a>
-          </div>
-        </article>
-        {% endfor %}
-      </div>
+          </p>
+        </div>
+      </article>
+      {% endfor %}
     </div>
 
-    <p class="library-empty" id="hub-empty" style="display:none;">Nothing in the library matches your search.</p>
+    <p class="lib__empty" id="lib-empty" hidden>Nothing in the library matches those filters.</p>
 
-    <p class="cf-cat-footer">
-      Curated entries are maintained in the site repository; Framework entries come
-      from the public
-      <a href="https://www.zotero.org/groups/5794905/library" target="_blank" rel="noopener">EEG101 Community Framework Zotero library</a>
-      and refresh nightly (last updated {{ site.data.cf_catalogue.generated }}).
-      To suggest a resource, email
+    <p class="lib__footer">
+      Curated entries are maintained in the site repository; Framework entries
+      come from the public Zotero library and refresh nightly (last updated
+      {{ site.data.cf_catalogue.generated }}). To suggest a resource, email
       <a href="mailto:{{ site.data.framework.contact_email }}">{{ site.data.framework.contact_email }}</a>.
     </p>
-
   </div>
-</section>
+</div>
 
 <script>
 (function () {
-  var search   = document.getElementById('hub-search');
-  var items    = Array.prototype.slice.call(document.querySelectorAll('.lib-item'));
-  var countEl  = document.getElementById('hub-count');
-  var emptyEl  = document.getElementById('hub-empty');
-  var sections = Array.prototype.slice.call(document.querySelectorAll('.hub-section'));
-  if (!search) return;
+  var grid = document.getElementById('lib-grid');
+  if (!grid) return;
+  var cards   = Array.prototype.slice.call(grid.querySelectorAll('.lib-card'));
+  var boxes   = Array.prototype.slice.call(document.querySelectorAll('#lib-filters input[type="checkbox"]'));
+  var search  = document.getElementById('lib-search');
+  var countEl = document.getElementById('lib-count');
+  var emptyEl = document.getElementById('lib-empty');
+  var chipsEl = document.getElementById('lib-chips');
+  var clearEl = document.getElementById('lib-clear');
+  var panel   = document.getElementById('lib-filters');
+  var toggle  = document.getElementById('lib-filters-toggle');
 
-  var state = { collection: 'all', topic: 'all', part: 'all', term: '' };
-
-  function matches(el) {
-    if (state.collection !== 'all' && el.dataset.collection !== state.collection) return false;
-    if (state.topic !== 'all' &&
-        el.dataset.topics.split('|').indexOf(state.topic) === -1) return false;
-    /* Framework parts only apply to catalogue entries; selecting one narrows to
-       those, which is what someone picking "Part 2" is asking for. */
-    if (state.part !== 'all' &&
-        el.dataset.parts.split(' ').indexOf(state.part) === -1) return false;
-    if (state.term !== '') {
-      var hay = el.dataset.title + ' ' + el.dataset.authors + ' ' + el.dataset.tags;
-      if (hay.indexOf(state.term) === -1) return false;
+  /* data-section holds every section an item belongs to, pipe separated. */
+  function has(card, facet, values) {
+    if (!values.length) return true;
+    var field = card.dataset[facet] || '';
+    var owned = facet === 'section' ? field.split('|') : [field];
+    for (var i = 0; i < values.length; i++) {
+      if (owned.indexOf(values[i]) !== -1) return true;
     }
-    return true;
+    return false;
+  }
+
+  function selected() {
+    var out = { collection: [], section: [], type: [], language: [] };
+    boxes.forEach(function (b) { if (b.checked) out[b.dataset.facet].push(b.value); });
+    return out;
   }
 
   function update() {
+    var sel = selected();
+    var term = search.value.toLowerCase().trim();
     var visible = 0;
-    items.forEach(function (el) {
-      var show = matches(el);
-      el.style.display = show ? '' : 'none';
+    cards.forEach(function (card) {
+      var show =
+        has(card, 'collection', sel.collection) &&
+        has(card, 'section', sel.section) &&
+        has(card, 'type', sel.type) &&
+        has(card, 'language', sel.language) &&
+        (term === '' || card.dataset.text.indexOf(term) !== -1);
+      card.hidden = !show;
       if (show) visible++;
     });
 
-    /* Hide a collection heading when nothing in it survives the filter, and
-       show each section's own count beside its heading. */
-    sections.forEach(function (section) {
-      var shown = section.querySelectorAll('.lib-item').length -
-        Array.prototype.filter.call(
-          section.querySelectorAll('.lib-item'),
-          function (el) { return el.style.display === 'none'; }
-        ).length;
-      section.style.display = shown === 0 ? 'none' : '';
-      var badge = section.querySelector('.hub-section__count');
-      if (badge) badge.textContent = shown;
-    });
-
     countEl.textContent = 'Showing ' + visible + ' item' + (visible === 1 ? '' : 's');
-    emptyEl.style.display = visible === 0 ? '' : 'none';
-  }
+    emptyEl.hidden = visible !== 0;
 
-  function wire(containerId, key) {
-    var container = document.getElementById(containerId);
-    if (!container) return;
-    var buttons = Array.prototype.slice.call(container.querySelectorAll('.filter-btn'));
-    buttons.forEach(function (button) {
-      button.addEventListener('click', function () {
-        buttons.forEach(function (b) { b.classList.remove('active'); });
-        button.classList.add('active');
-        state[key] = button.dataset[key];
-        update();
-      });
+    /* A chip per active choice, so what is filtering stays visible when the
+       sidebar is collapsed on a phone. */
+    chipsEl.textContent = '';
+    var active = boxes.filter(function (b) { return b.checked; });
+    active.forEach(function (b) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'lib__chip';
+      chip.textContent = b.parentNode.querySelector('span').textContent;
+      chip.setAttribute('aria-label', 'Remove filter ' + chip.textContent);
+      chip.addEventListener('click', function () { b.checked = false; update(); });
+      chipsEl.appendChild(chip);
     });
+    clearEl.hidden = active.length === 0 && term === '';
   }
 
-  var moreBtn = document.getElementById('hub-more-topics');
-  if (moreBtn) {
-    moreBtn.addEventListener('click', function () {
-      var hidden = moreBtn.getAttribute('aria-expanded') === 'false';
-      document.querySelectorAll('.filter-btn--extra').forEach(function (b) {
-        b.hidden = !hidden;
-      });
-      moreBtn.setAttribute('aria-expanded', hidden ? 'true' : 'false');
-      moreBtn.textContent = hidden ? 'Fewer tags' : moreBtn.dataset.label;
-    });
-    moreBtn.dataset.label = moreBtn.textContent;
-  }
-
-  wire('hub-collections', 'collection');
-  wire('hub-topics', 'topic');
-  wire('hub-parts', 'part');
-
-  search.addEventListener('input', function () {
-    state.term = search.value.toLowerCase().trim();
+  boxes.forEach(function (b) { b.addEventListener('change', update); });
+  search.addEventListener('input', update);
+  clearEl.addEventListener('click', function () {
+    boxes.forEach(function (b) { b.checked = false; });
+    search.value = '';
     update();
+    search.focus();
   });
 
-  /* Deep links from the Framework pages: /library/#part-2, #framework, #eeg101 */
+  toggle.addEventListener('click', function () {
+    var open = panel.classList.toggle('lib__filters--open');
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  /* Deep links from the Framework pages: #framework, #eeg101, #part-1..3 */
+  var PART_SECTION = {
+    '1': 'validity and research integrity',
+    '2': 'democratization',
+    '3': 'responsibility'
+  };
   function applyHash() {
     var hash = (window.location.hash || '').replace('#', '');
     var part = hash.match(/^part-([123])$/);
-    if (part) {
-      var pb = document.querySelector('#hub-parts .filter-btn[data-part="' + part[1] + '"]');
-      if (pb) pb.click();
-      if (moreBtn && moreBtn.getAttribute('aria-expanded') === 'false') { /* part links need no topic row */ }
-    } else if (hash === 'framework' || hash === 'eeg101') {
-      var cb = document.querySelector('#hub-collections .filter-btn[data-collection="' + hash + '"]');
-      if (cb) cb.click();
-    }
+    var want = part ? PART_SECTION[part[1]] : null;
+    var known = want || ['framework', 'eeg101'].indexOf(hash) !== -1;
+    if (!known) return;
+    /* A fragment change does not reload the page, so following a second deep
+       link would otherwise stack its filters on top of the first. Start from a
+       clean slate whenever one is followed. */
+    boxes.forEach(function (b) { b.checked = false; });
+    boxes.forEach(function (b) {
+      if (want && b.dataset.facet === 'section' && b.value === want) b.checked = true;
+      if (!want && b.dataset.facet === 'collection' && b.value === hash) b.checked = true;
+    });
+    update();
   }
+  update();
   applyHash();
   window.addEventListener('hashchange', applyHash);
-
-  update();
 })();
 </script>
 

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" width="480" height="270" role="img" aria-label="Preprint">
+  <title>Preprint</title>
+  <rect width="480" height="270" fill="#faf8f5"/>
+  <rect width="480" height="270" fill="#2f5fd0" opacity="0.05"/>
+  <rect x="0" y="0" width="480" height="5" fill="#2f5fd0"/>
+  <polyline points="0,183.8 6,189.2 12,189.8 18,186.3 24,182.0 30,180.0 36,181.2 42,184.0 48,186.0 54,185.8 60,184.6 66,184.7 72,187.4 78,191.6 84,194.3 90,192.5 96,185.9 102,177.2 108,169.8 114,166.1 120,165.6 126,165.8 132,164.8 138,162.6 144,161.2 150,162.7 156,167.1 162,171.9 168,174.0 174,171.8 180,166.6 186,161.8 192,160.6 198,163.3 204,168.2 210,172.4 216,174.8 222,176.6 228,179.8 234,185.6 240,192.3 246,196.9 252,196.8 258,192.2 264,185.8 270,181.3 276,180.4 282,182.2 288,184.0 294,183.8 300,181.7 306,179.9 312,180.2 318,182.3 324,184.0 330,182.2 336,175.9 342,167.2 348,159.7 354,156.2 360,157.0 366,159.8 372,162.0 378,162.5 384,162.7 390,164.7 396,169.4 402,175.1 408,178.8 414,178.3 420,174.4 426,170.0 432,168.6 438,171.6 444,177.2 450,182.7 456,185.9 462,187.1 468,188.3 474,191.2 480,195.3" fill="none" stroke="#2f5fd0" stroke-width="2" stroke-linejoin="round" opacity="0.28"/>
+  <g transform="translate(216, 78) scale(1.35)" transform-origin="24 24">
+    <g transform="translate(-8,-8)">
+      <path d="M12 8h18l6 6v26H12z M30 8v6h6 M17 22h14 M17 28h14 M34 30l6 6-8 2 2-8z" fill="none" stroke="#2f5fd0" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+    </g>
+  </g>
+  <text x="240.0" y="236" text-anchor="middle" font-family="Lato, system-ui, sans-serif" font-size="15" font-weight="700" letter-spacing="1.6" fill="#1a1a2e" opacity="0.5">PREPRINT</text>
+  <rect x="0.5" y="0.5" width="479" height="269" fill="none" stroke="#e0dbd4"/>
+</svg>

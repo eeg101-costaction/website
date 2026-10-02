@@ -208,10 +208,32 @@ def check_data_files() -> dict:
         orphans = sum(1 for i in items if not i.get("url"))
         if orphans:
             fail(f"{orphans} library items have no link to follow")
+        # Every facet value an item carries must be offered as a checkbox,
+        # or that item becomes unreachable by filtering.
+        offered = {
+            "section": {s["name"].lower() for s in index.get("sections") or []},
+            "type": {t["name"].lower() for t in index.get("types") or []},
+            "language": {l["name"].lower() for l in index.get("languages") or []},
+        }
+        for field, facet in (("section_titles", "section"), ("type_label", "type"),
+                             ("language", "language")):
+            used = set()
+            for item in items:
+                value = item.get(field)
+                for v in (value if isinstance(value, list) else [value]):
+                    if v:
+                        used.add(str(v).lower())
+            orphaned = sorted(used - offered[facet])
+            if orphaned:
+                fail(
+                    f"{facet} values on items with no filter offered: "
+                    + ", ".join(orphaned[:5])
+                )
         note(
             f"library: {index.get('curated_count')} curated + "
-            f"{index.get('framework_count')} Framework = {len(items)} items, "
-            f"{len(index.get('topics') or [])} topics"
+            f"{index.get('framework_count')} Framework = {len(items)} items; "
+            f"facets {len(offered['section'])} sections, {len(offered['type'])} "
+            f"types, {len(offered['language'])} languages"
         )
 
     contributors = load_yaml("cf_contributors.yml")

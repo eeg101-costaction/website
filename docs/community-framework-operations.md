@@ -154,57 +154,49 @@ either source, so a hand edit to `library.yml` that is never rebuilt is caught
 rather than silently ignored. The nightly sync rebuilds the index after
 refreshing the catalogue.
 
-### Tags: EEG101's own vocabulary, carried across
+### How the Library filters
 
-The two collections could not share a tag vocabulary as they stood. The curated
-entries carry the Library's own tags. The Zotero records carry **485 distinct
-tags across 123 items, 411 of them appearing exactly once**, including MeSH
-headings (`Humans`, `Brain Mapping`), arXiv categories
-(`Computer Science - Machine Learning`), BISAC codes
-(`Computers / Social Aspects`) and many case variants of one idea
-(`Open science` / `open science`). As filter buttons those are unusable.
+Four facet groups, the same ones the standalone catalogue offered, plus
+Collection so the Action's own papers can be told from the Framework's reading
+list:
 
-So the filters are **EEG101's own curated tags** — the ones already applied to
-`library.yml` — carried across to the catalogue. Nothing in the vocabulary is
-invented: every facet is a tag the team already uses. The `TOPICS` dictionary at
-the top of `build_library.py` lists each tag with the words that mean it, used
-only to decide which catalogue items earn it.
+| Group | Values |
+| --- | --- |
+| Collection | EEG101 Collection, Community Framework |
+| Framework Section | Educational, Validity and Research integrity, Publishing, Democratization, Responsibility, Societal and technological responsibility |
+| Type | Journal Article, Webpage, Preprint, Blog Post, Book, ... |
+| Language | English, French, Not specified |
 
-* **Curated entries are not inferred.** They were tagged by hand, so their tags
-  are taken verbatim and only folded to a canonical spelling. The check script
-  confirms no curated paper is ever given a tag it was not assigned.
-* **The nine original filter buttons keep their order** and are pinned as
-  buttons whatever their count, because `#EEG101-supported` matters at two items
-  as much as at fifty. Tags carried by at least `FACET_MIN` (5) items are
-  promoted to buttons behind the "more tags" toggle; the rest stay on cards and
-  in search.
-* Patterns are anchored at a **word start**, so `reproducib` catches
-  "reproducibility" while `ica` would otherwise fire on "clinical",
-  "publication" and "statistical". Write acronyms with an explicit trailing
-  boundary, as `ica\b`.
-* Raw Zotero tags stay on each item and stay searchable. They are simply not
-  offered as buttons.
+Checkboxes within a group are OR; the groups are ANDed. `check_framework.py`
+fails the build if any item carries a facet value with no checkbox offered,
+which would make it unreachable by filtering.
 
-Re-run the script after editing the vocabulary; it prints the per-tag counts and
-the share of items that matched nothing.
+Tags are **not** facets. The curated entries carry the tags the team assigns
+them, shown on the card and searchable. The Zotero records carry 485 distinct
+tags across 123 items, 411 of them appearing exactly once, including MeSH
+headings, arXiv categories and BISAC codes; those could never be reconciled with
+the curated vocabulary, so filtering uses the structured facets instead of
+guessing tags for 311 records.
 
-### What the vocabulary does not reach
+### Cover art
 
-About 17% of catalogue items (52) carry no EEG101 tag. They are still reachable
-by search, by collection and by Framework part. They are not random — they
-cluster into four subjects the Action's own papers do not cover, each of which
-is a named section of the Framework:
+Most catalogue entries have no cover of their own. `scripts/make_library_placeholders.py`
+draws one per resource type into `assets/images/library/` — cream ground, a faint
+EEG trace, a glyph, and the type name, accented in the colour that resource
+family already used on its card. Re-run it after changing the designs; the
+mapping from type to artwork is `PLACEHOLDER_BY_TYPE` in `build_library.py`.
 
-| Cluster | Framework section | Roughly |
-| --- | --- | --- |
-| Ethics, neurorights, consumer neurotechnology | 3.1 Ethical use of EEG | ~20 |
-| Research evaluation, publishing reform, DORA | 3.3 Research evaluation | ~15 |
-| Theory, epistemology, reverse inference | 1.4 Theory-driven and data-driven research | ~12 |
-| Technology hype and expectations | 3.2 Overestimating technology | ~8 |
+### The catalogue reads every collection
 
-Adding four tags named after those sections would close most of the gap. That is
-an editorial decision for the team, not something to infer, so the vocabulary is
-left as it stands.
+`build_catalogue.py` reads all six Zotero collections the standalone catalogue
+exposes, including **Part 0: Educational** and the two subcollections
+(**Publishing**, **Societal and technological responsibility**) — 311 items in
+total, which matches the standalone catalogue item for item, as do its Type and
+Language counts. An earlier version read only the three top-level parts and so
+was missing 28 items.
+
+Framework Section counts here are computed live from Zotero and differ slightly
+from the standalone catalogue's, which renders from a cached copy.
 
 ---
 

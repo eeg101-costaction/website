@@ -15,7 +15,6 @@ Re-run it to refresh the catalogue (a scheduled GitHub Action does this nightly)
 Usage
 -----
     python3 scripts/build_catalogue.py
-    python3 scripts/build_catalogue.py --include-subcollections
 """
 
 from __future__ import annotations
@@ -35,35 +34,23 @@ API = f"https://api.zotero.org/groups/{ZOTERO_GROUP_ID}"
 # The three Framework parts, mirroring COLLECTION_KEYS in the standalone
 # catalogue so that the two views agree item for item.
 #
-# `children` lists subcollections of that part. They are EXCLUDED by default
-# because the standalone catalogue excludes them too, and porting a different
-# item set would make the two catalogues silently disagree. Together with the
-# separate "Part 0: Educational" collection (JR7LCI93, 13 further items) this
-# hides 28 items that are in the library but in no Framework part the catalogue
-# reads. Pass --include-subcollections to fold the children in; adding Part 0 is
-# an editorial decision for the Framework steering group, not a flag.
 SECTIONS = [
-    {
-        "key": "F9DNTXQA",
-        "number": 1,
-        "title": "Validity and Research integrity",
-        "anchor": "cf-validity",
-        "children": ["UKQ3NDAL"],  # Publishing (14 items in no other part)
-    },
-    {
-        "key": "ZD2RV8H9",
-        "number": 2,
-        "title": "Democratization",
-        "anchor": "cf-democratization",
-        "children": [],
-    },
-    {
-        "key": "L72L5WAP",
-        "number": 3,
-        "title": "Responsibility",
-        "anchor": "cf-responsibility",
-        "children": ["XT96NNWY"],  # Societal and technological responsibility (1)
-    },
+    # Every collection the standalone catalogue exposes as a "Framework
+    # Section" facet, including Part 0 and the two subcollections. An item can
+    # sit in several; it is listed once and carries all of them.
+    {"key": "JR7LCI93", "slug": "educational", "number": 0,
+     "title": "Educational", "anchor": "cf-validity"},
+    {"key": "F9DNTXQA", "slug": "validity", "number": 1,
+     "title": "Validity and Research integrity", "anchor": "cf-validity"},
+    {"key": "UKQ3NDAL", "slug": "publishing", "number": 1,
+     "title": "Publishing", "anchor": "cf-validity"},
+    {"key": "ZD2RV8H9", "slug": "democratization", "number": 2,
+     "title": "Democratization", "anchor": "cf-democratization"},
+    {"key": "L72L5WAP", "slug": "responsibility", "number": 3,
+     "title": "Responsibility", "anchor": "cf-responsibility"},
+    {"key": "XT96NNWY", "slug": "societal", "number": 3,
+     "title": "Societal and technological responsibility",
+     "anchor": "cf-responsibility"},
 ]
 
 # Zotero item type -> resource family, lifted from the standalone catalogue's
@@ -102,28 +89,38 @@ ITEM_TYPE_TO_FAMILY = {
 
 # Human-readable labels for the item types actually present in the library.
 TYPE_LABELS = {
-    "audioRecording": "Audio recording",
-    "blogPost": "Blog post",
+    "audioRecording": "Audio Recording",
+    "blogPost": "Blog Post",
     "book": "Book",
-    "bookSection": "Book chapter",
-    "computerProgram": "Software",
-    "conferencePaper": "Conference paper",
+    "bookSection": "Book Section",
+    "computerProgram": "Computer Program",
+    "conferencePaper": "Conference Paper",
     "dataset": "Dataset",
     "document": "Document",
-    "journalArticle": "Journal article",
-    "magazineArticle": "Magazine article",
+    "journalArticle": "Journal Article",
+    "magazineArticle": "Magazine Article",
     "manuscript": "Manuscript",
-    "newspaperArticle": "Newspaper article",
+    "newspaperArticle": "Newspaper Article",
     "podcast": "Podcast",
     "preprint": "Preprint",
     "presentation": "Presentation",
     "report": "Report",
-    "software": "Software",
+    "software": "Computer Program",
     "standard": "Standard",
     "thesis": "Thesis",
-    "videoRecording": "Video",
-    "webpage": "Web page",
+    "videoRecording": "Video Recording",
+    "webpage": "Webpage",
 }
+
+
+# Facet order, commonest first, matching the standalone catalogue's Type list.
+TYPE_ORDER = [
+    "Journal Article", "Webpage", "Preprint", "Blog Post", "Book",
+    "Computer Program", "Video Recording", "Book Section", "Conference Paper",
+    "Report", "Standard", "Document", "Manuscript", "Thesis", "Dataset",
+    "Presentation", "Podcast", "Audio Recording", "Magazine Article",
+    "Newspaper Article",
+]
 
 
 def label_for_type(item_type: str) -> str:
@@ -230,11 +227,6 @@ def yaml_scalar(value: object) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--include-subcollections",
-        action="store_true",
-        help="also read each part's subcollections (28 otherwise-hidden items)",
-    )
-    parser.add_argument(
         "--out",
         type=pathlib.Path,
         default=pathlib.Path(__file__).resolve().parent.parent,
@@ -247,24 +239,19 @@ def main() -> int:
     counts: dict[int, int] = {}
 
     for section in SECTIONS:
-        keys = [section["key"]]
-        if args.include_subcollections:
-            keys += section["children"]
-        raw_items: list[dict] = []
-        for key in keys:
-            raw_items.extend(fetch_collection(key))
-        counts[section["number"]] = len({i["key"] for i in raw_items})
-        print(
-            f"Part {section['number']} ({section['title']}): "
-            f"{len(raw_items)} items from {len(keys)} collection(s)"
-        )
+        raw_items = fetch_collection(section["key"])
+        counts[section["slug"]] = len({i["key"] for i in raw_items})
+        print(f"  {section['title']:<42} {len(raw_items):>4} items")
 
         for item in raw_items:
             data = item.get("data", item)
             key = item["key"]
             if key in records:
-                if section["number"] not in records[key]["sections"]:
-                    records[key]["sections"].append(section["number"])
+                if section["slug"] not in records[key]["sections"]:
+                    records[key]["sections"].append(section["slug"])
+                    records[key]["section_titles"].append(section["title"])
+                if section["number"] and section["number"] not in records[key]["parts"]:
+                    records[key]["parts"].append(section["number"])
                 continue
 
             item_type = data.get("itemType", "document")
@@ -297,7 +284,9 @@ def main() -> int:
                 "abstract": data.get("abstractNote") or "",
                 "video_id": video,
                 "tags": [t.get("tag", "") for t in data.get("tags") or []],
-                "sections": [section["number"]],
+                "sections": [section["slug"]],
+                "section_titles": [section["title"]],
+                "parts": [section["number"]] if section["number"] else [],
                 "zotero_url": (
                     f"https://www.zotero.org/groups/{ZOTERO_GROUP_ID}/items/{key}"
                 ),
@@ -309,7 +298,7 @@ def main() -> int:
         key=lambda r: (-(int(r["year"]) if r["year"].isdigit() else 0), r["title"].lower()),
     )
     for record in items:
-        record["sections"].sort()
+        record["parts"].sort()
 
     lines = [
         "# Generated by scripts/build_catalogue.py -- do not edit by hand.",
@@ -321,26 +310,53 @@ def main() -> int:
         f"zotero_group: {yaml_scalar(ZOTERO_GROUP_ID)}",
         f"zotero_url: {yaml_scalar(f'https://www.zotero.org/groups/{ZOTERO_GROUP_ID}/library')}",
         f"item_count: {len(items)}",
-        f"includes_subcollections: {yaml_scalar(args.include_subcollections)}",
         "",
         "sections:",
     ]
     for section in SECTIONS:
         lines += [
-            f"  - number: {section['number']}",
+            f"  - slug: {yaml_scalar(section['slug'])}",
             f"    title: {yaml_scalar(section['title'])}",
             f"    anchor: {yaml_scalar(section['anchor'])}",
-            f"    count: {counts[section['number']]}",
+            f"    part: {section['number']}",
+            f"    count: {counts[section['slug']]}",
         ]
+
+    lines += ["", "types:"]
+    type_counts: dict[str, int] = {}
+    for record in items:
+        type_counts[record["type_label"]] = type_counts.get(record["type_label"], 0) + 1
+    for label in TYPE_ORDER:
+        if type_counts.get(label):
+            lines += [
+                f"  - name: {yaml_scalar(label)}",
+                f"    count: {type_counts[label]}",
+            ]
+    for label, count in sorted(type_counts.items()):
+        if label not in TYPE_ORDER:
+            lines += [f"  - name: {yaml_scalar(label)}", f"    count: {count}"]
+
+    lines += ["", "languages:"]
+    lang_counts: dict[str, int] = {}
+    for record in items:
+        lang = record["language"] if record["language"] != "Unknown" else "Not specified"
+        lang_counts[lang] = lang_counts.get(lang, 0) + 1
+    for label in ("English", "French", "Not specified"):
+        if lang_counts.get(label):
+            lines += [
+                f"  - name: {yaml_scalar(label)}",
+                f"    count: {lang_counts[label]}",
+            ]
 
     lines += ["", "families:"]
     for slug, label in FAMILIES.items():
         count = sum(1 for r in items if r["family"] == slug)
-        lines += [
-            f"  - slug: {yaml_scalar(slug)}",
-            f"    label: {yaml_scalar(label)}",
-            f"    count: {count}",
-        ]
+        if count:
+            lines += [
+                f"  - slug: {yaml_scalar(slug)}",
+                f"    label: {yaml_scalar(label)}",
+                f"    count: {count}",
+            ]
 
     lines += ["", "items:"]
     for record in items:
@@ -364,7 +380,15 @@ def main() -> int:
         ):
             lines.append(f"    {field}: {yaml_scalar(record[field])}")
         lines.append(
-            "    sections: [" + ", ".join(str(s) for s in record["sections"]) + "]"
+            "    sections: [" + ", ".join(yaml_scalar(x) for x in record["sections"]) + "]"
+        )
+        lines.append(
+            "    section_titles: ["
+            + ", ".join(yaml_scalar(x) for x in record["section_titles"])
+            + "]"
+        )
+        lines.append(
+            "    parts: [" + ", ".join(str(x) for x in record["parts"]) + "]"
         )
         if record["tags"]:
             lines.append("    tags:")

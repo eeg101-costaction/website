@@ -15,10 +15,19 @@ layout: default
 
 <div class="page-content">
   <div class="container">
+    {% comment %}
+      Pages default to a reading column. A page that needs the full width --
+      the Library, with its filter sidebar beside a grid -- opts in with
+      `wide: true` in its front matter.
+    {% endcomment %}
+    {% if page.wide %}
+      {{ content }}
+    {% else %}
     <div class="row justify-content-center">
       <div class="col-12 col-lg-10 col-xl-9">
         {{ content }}
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
