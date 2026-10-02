@@ -2213,3 +2213,586 @@ strong { font-weight: 600; }
 .join-step--first .join-step__body { background: var(--color-gold-light); border: 1px solid var(--color-gold); border-left: 6px solid var(--color-gold); border-radius: var(--radius); padding: 1rem 1.25rem; margin-top: -0.25rem; }
 .join-step--first .join-step__number { background: var(--color-gold); color: var(--color-primary); }
 .join-step__flag { display: inline-block; font-family: var(--font-ui); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--color-primary); margin-bottom: 0.25rem; }
+
+/* ============================================================
+   EEG Community Framework (/framework/, /sign/)
+   The Framework is a long document that is also a form: every
+   commitment is a checkbox, so readability and form affordance
+   have to coexist. Everything here is namespaced cf-* and is
+   additive — no existing component changes.
+   ============================================================ */
+
+/* --- Page scaffolding --- */
+.cf-intro { margin-bottom: 1.5rem; }
+.cf-intro > h2:first-child { margin-top: 0; }
+
+.cf-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.75rem 0; }
+
+.cf-helper {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  background: var(--color-bg-alt);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem 1.2rem;
+  margin: 1.5rem 0;
+}
+.cf-helper:last-child { margin-bottom: 0; }
+
+.cf-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1.75rem;
+  /* The site header is sticky at top: 0 and 65px tall, so a toolbar stuck at 0
+     would sit behind it and never be seen. */
+  position: sticky;
+  top: 64px;
+  z-index: 5;
+  background: var(--color-bg);
+}
+.cf-toolbar > div { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.cf-tally {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin: 0;
+  white-space: nowrap;
+}
+.cf-tally[data-cf-all="false"] { color: var(--color-gold-dark); }
+
+/* --- The document: info notes and pledge groups --- */
+.cf-document h2, .cf-prose h2 {
+  font-size: var(--step-3);
+  margin: 2.5rem 0 0.75rem;
+  scroll-margin-top: 90px;
+}
+.cf-document h3, .cf-prose h3 {
+  font-size: var(--step-2);
+  margin: 2rem 0 0.6rem;
+  scroll-margin-top: 90px;
+}
+/* On the framework page itself the sticky toolbar sits below the header, so a
+   jumped-to anchor needs to clear both. */
+.cf-page [id] { scroll-margin-top: 145px; }
+.cf-document > div:first-child > h2:first-child { margin-top: 0; }
+
+.cf-note, .cf-pledges {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: #fff;
+  margin: 1.1rem 0;
+  overflow: hidden;
+}
+.cf-note > summary, .cf-pledges > summary {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.2rem;
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background var(--transition);
+}
+.cf-note > summary::-webkit-details-marker,
+.cf-pledges > summary::-webkit-details-marker { display: none; }
+.cf-note > summary::before, .cf-pledges > summary::before {
+  content: "▸";
+  font-size: 0.8em;
+  transition: transform var(--transition);
+  flex: 0 0 auto;
+}
+.cf-note[open] > summary::before, .cf-pledges[open] > summary::before {
+  transform: rotate(90deg);
+}
+.cf-note > summary:hover, .cf-pledges > summary:hover { background: var(--color-bg-alt); }
+.cf-note > summary:focus-visible, .cf-pledges > summary:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: -3px;
+}
+
+.cf-note { border-left: 4px solid var(--color-primary); }
+.cf-note > summary { background: var(--color-primary-light); color: var(--color-primary); }
+.cf-note > :not(summary) { padding-inline: 1.2rem; }
+.cf-note > p, .cf-note > ul, .cf-note > ol { margin: 0.75rem 0; }
+.cf-note > :last-child { margin-bottom: 1rem; }
+
+.cf-pledges { border-left: 4px solid var(--color-gold); }
+.cf-pledges > summary { background: var(--color-gold-light); color: var(--color-dark); }
+.cf-pledges > :not(summary) { padding-inline: 1.2rem; }
+.cf-pledges > p {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin: 1rem 0 0.5rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+.cf-pledges > :last-child { margin-bottom: 1.1rem; }
+
+/* --- Commitment checkboxes --- */
+.cf-select-all, .cf-pledge-input {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.22rem 0 0;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+}
+.cf-select-all:focus-visible, .cf-pledge-input:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+ul.cf-tasklist { list-style: none; padding-left: 0.4rem; margin: 0.4rem 0 1rem; }
+ul.cf-tasklist > li {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  padding: 0.5rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.97rem;
+  line-height: 1.65;
+  transition: background var(--transition);
+}
+ul.cf-tasklist > li:hover { background: var(--color-bg-alt); }
+ul.cf-tasklist > li:has(.cf-pledge-input:not(:checked)) { opacity: 0.6; }
+
+/* --- Footnotes carried over from the source document --- */
+.cf-document .footnote, .cf-prose .footnote {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  border-top: 1px solid var(--color-border);
+  margin-top: 2rem;
+  padding-top: 0.5rem;
+}
+.cf-document .footnote ol, .cf-prose .footnote ol { padding-left: 1.4rem; }
+
+/* --- Sign block --- */
+.cf-sign {
+  margin-top: 3rem;
+  padding: 1.75rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  scroll-margin-top: 145px;
+}
+.cf-sign__heading { font-size: var(--step-3); margin: 0 0 1rem; }
+.cf-privacy { background: #fff; }
+
+.cf-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem;
+  margin-top: 1.5rem;
+}
+.cf-field { display: flex; flex-direction: column; gap: 0.35rem; }
+.cf-field--wide { grid-column: 1 / -1; }
+
+.cf-field > label {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+}
+.cf-required { color: #b3261e; }
+.cf-optional {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cf-input {
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  width: 100%;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.cf-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+textarea.cf-input { resize: vertical; min-height: 4.5rem; }
+
+.cf-field__help {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Only flag empty required fields once someone has tried to submit. */
+.cf-form--validated .cf-data:invalid {
+  border-color: #b3261e;
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.12);
+}
+
+.cf-consent {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 400 !important;
+  line-height: 1.6;
+  cursor: pointer;
+}
+.cf-consent input {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.2rem 0 0;
+  accent-color: var(--color-primary);
+}
+
+.cf-form-actions { align-items: flex-start; gap: 0.75rem; }
+.cf-form-status {
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin: 0;
+  min-height: 1.4em;
+}
+.cf-form-status--success { color: #1b5e20; }
+.cf-form-status--error   { color: #b3261e; }
+.cf-form-status--info    { color: var(--color-primary); }
+
+/* --- Submission snackbar --- */
+.cf-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translate(-50%, 180%);
+  max-width: min(42rem, calc(100vw - 2rem));
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: #fff;
+  background: var(--color-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: 0.9rem 1.25rem;
+  z-index: 1080;
+  transition: transform var(--transition), opacity var(--transition);
+  opacity: 0;
+  pointer-events: none;
+}
+.cf-snackbar--show { transform: translate(-50%, 0); opacity: 1; }
+.cf-snackbar--success { background: #1b5e20; }
+.cf-snackbar--error   { background: #b3261e; }
+
+/* --- Closing links --- */
+.cf-after { margin-top: 3rem; }
+.cf-after h2 { font-size: var(--step-2); }
+.cf-after__links { padding-left: 1.3rem; }
+.cf-after__links li { margin-bottom: 0.4rem; }
+
+/* --- Glossary, references, contributors --- */
+.cf-glossary dt {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-top: 1.25rem;
+}
+.cf-glossary dd { margin: 0.3rem 0 0; padding-left: 0; }
+.cf-glossary strong { color: var(--color-primary); }
+
+.cf-references ul { list-style: none; padding-left: 0; }
+.cf-references li {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  padding: 0.6rem 0 0.6rem 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+  border-left: 3px solid transparent;
+  margin: 0;
+  scroll-margin-top: 90px;
+}
+.cf-references li:target,
+.cf-references a[id]:target { background: var(--color-gold-light); }
+.cf-references a[id] { scroll-margin-top: 90px; }
+
+.cf-contributors {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0.5rem 1rem;
+}
+.cf-contributors li {
+  font-family: var(--font-ui);
+  font-size: 0.93rem;
+  padding: 0.45rem 0.75rem;
+  background: var(--color-bg-alt);
+  border-radius: var(--radius-sm);
+  margin: 0;
+}
+
+/* --- Signatories --- */
+.cf-sig-summary {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2rem;
+}
+.cf-sig-summary__count { font-size: var(--step-2); margin: 0 0 0.4rem; }
+.cf-sig-summary__count strong { color: var(--color-primary); }
+.cf-sig-summary__note { font-size: 0.95rem; margin: 0 0 0.5rem; }
+.cf-sig-summary__updated {
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 0 0 1rem;
+}
+
+.cf-sig-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+.cf-sig {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  margin: 0;
+}
+.cf-sig__name {
+  display: block;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.cf-sig__affiliation {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* --- Resource catalogue --- */
+.cf-cat-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.9rem;
+  margin: 1.75rem 0;
+}
+.cf-cat-part {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-top: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.cf-cat-part:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.cf-cat-part__number {
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+.cf-cat-part__title { font-family: var(--font-heading); font-size: 1.05rem; line-height: 1.3; }
+.cf-cat-part__count { font-family: var(--font-ui); font-size: 0.8rem; color: var(--color-text-muted); }
+
+.cf-cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.cf-cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.1rem;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.cf-cat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+
+/* One colour per resource family, matching the standalone catalogue. */
+.cf-cat-card--bibliographic { border-left-color: #2f5fd0; }
+.cf-cat-card--multimedia    { border-left-color: #7c4dcc; }
+.cf-cat-card--technical     { border-left-color: #d1711f; }
+.cf-cat-card--webpage       { border-left-color: var(--color-gold-dark); }
+
+.cf-cat-card__meta { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+.cf-cat-card__type, .cf-cat-card__part, .cf-cat-card__year {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+}
+.cf-cat-card__type { background: var(--color-primary-light); color: var(--color-primary); }
+.cf-cat-card__part { background: var(--color-gold-light); color: var(--color-dark); }
+.cf-cat-card__year { background: var(--color-bg-alt); color: var(--color-text-muted); }
+
+.cf-cat-card__title { font-size: 1.02rem; line-height: 1.35; margin: 0.1rem 0 0; }
+.cf-cat-card__title a { color: var(--color-dark); text-decoration: none; }
+.cf-cat-card__title a:hover { color: var(--color-primary); text-decoration: underline; }
+.cf-cat-card__creators {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+.cf-cat-card__publication { font-size: 0.85rem; color: var(--color-text-muted); margin: 0; }
+.cf-cat-card__abstract { font-size: 0.86rem; line-height: 1.55; margin: 0.25rem 0 0; }
+
+.cf-cat-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding-top: 0.6rem;
+}
+.cf-cat-card__link {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.cf-cat-card__link:hover { border-bottom-color: currentColor; }
+.cf-cat-card__link--muted { color: var(--color-text-muted); font-weight: 400; }
+
+.cf-cat-footer {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* --- /sign/ landing --- */
+.cf-redirect { text-align: center; padding: 2rem 0; }
+.cf-redirect__lead { font-size: var(--step-1); max-width: 40rem; margin: 0 auto 1.5rem; }
+.cf-redirect .cf-actions { justify-content: center; }
+.cf-redirect__note { font-family: var(--font-ui); font-size: 0.85rem; color: var(--color-text-muted); }
+
+/* --- Home page Community Framework block --- */
+.cf-home__card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-top: 5px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: 1.5rem 1.6rem;
+  height: 100%;
+}
+.cf-home__parts { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.9rem; }
+.cf-home__part { display: flex; gap: 0.85rem; align-items: flex-start; margin: 0; }
+.cf-home__part-number {
+  flex: 0 0 auto;
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.cf-home__part-title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: block;
+  color: var(--color-dark);
+  text-decoration: none;
+}
+.cf-home__part-title:hover { color: var(--color-primary); text-decoration: underline; }
+.cf-home__part-summary { font-size: 0.88rem; color: var(--color-text-muted); margin: 0.1rem 0 0; line-height: 1.5; }
+.cf-home__stats { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 1.5rem 0 0; }
+.cf-home__stat { margin: 0; }
+.cf-home__stat-value {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--color-primary);
+}
+.cf-home__stat-label {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 575.98px) {
+  .cf-form-grid { grid-template-columns: 1fr; }
+  .cf-toolbar { position: static; }
+  .cf-page [id] { scroll-margin-top: 80px; }
+  .cf-sign { padding: 1.1rem; }
+}
+
+/* --- Library: the two collections share one page and one filter bar --- */
+.hub-section { margin-top: 2.25rem; }
+.hub-section:first-of-type { margin-top: 1rem; }
+.hub-section__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: var(--step-2);
+  margin: 0 0 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.hub-section__count {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+}
+.hub-section__count:empty { display: none; }
+.filter-btn--toggle { font-style: italic; opacity: 0.85; }
+.filter-btn--toggle:hover { opacity: 1; }

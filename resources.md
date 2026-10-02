@@ -31,7 +31,16 @@ A growing library of open resources developed by and for the EEG101 community. R
 {% if resource.status %}<p class="resource-card__status">{{ resource.status }}</p>{% endif %}
 <div class="resource-card__links">
 {% if resource.url and resource.url != "" %}
+{% comment %}
+  A resource can live on this site or elsewhere, so only send the visitor
+  off-site when the link actually leaves it, and keep internal links
+  baseurl-safe.
+{% endcomment %}
+{% if resource.url contains "://" %}
 <a href="{{ resource.url }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Open ↗</a>
+{% else %}
+<a href="{{ resource.url | relative_url }}" class="btn btn-primary btn-sm">Open</a>
+{% endif %}
 {% endif %}
 {% if resource.file and resource.file != "" %}
 <a href="{{ resource.file | relative_url }}" class="btn btn-outline-primary btn-sm" download>Download</a>

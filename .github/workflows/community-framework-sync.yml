@@ -1,0 +1,98 @@
+name: Sync Community Framework data
+
+# Two data files behind the Community Framework pages go stale on their own:
+#
+#   _data/signatories.yml  — who has signed
+#   _data/cf_catalogue.yml — the resource catalogue
+#
+# Neither needs a credential. The catalogue is read from the public Zotero group,
+# and the signatory list from the list the Framework's own nightly job publishes
+# at sign-cf.eeg101.eu/signatories/. If SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY
+# are set as repository secrets, the signatory step reads the signature store
+# directly instead: same data a day fresher, and it keeps working after the old
+# site is retired. Adding them is an upgrade, never a prerequisite.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "41 05 * * *"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: community-framework-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Refresh signatories and resource catalogue
+    runs-on: ubuntu-latest
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip pyyaml
+
+      # Each refresh is independent: one source being down must not stop the
+      # other from updating, so neither step fails the job on its own.
+      - name: Refresh the resource catalogue from Zotero
+        id: catalogue
+        continue-on-error: true
+        run: python3 scripts/build_catalogue.py
+
+      - name: Refresh the signatory list
+        id: signatories
+        continue-on-error: true
+        run: python3 scripts/fetch_signatories.py
+
+      # The Library renders a merged index built from the curated entries and
+      # the refreshed catalogue, so it has to be rebuilt after them.
+      - name: Rebuild the merged Library index
+        run: python3 scripts/build_library.py
+
+      - name: Note which signatory source was used
+        run: |
+          if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
+            echo "Signatories read directly from the signature store."
+          else
+            echo "::notice::Signatories were read from the Framework's published" \
+                 "list. That is a day behind the store and stops working if the" \
+                 "old site is retired. Adding the SUPABASE_URL and" \
+                 "SUPABASE_SERVICE_ROLE_KEY secrets switches to reading the store" \
+                 "directly. See docs/community-framework-operations.md."
+          fi
+
+      - name: Report a refresh that failed
+        if: steps.catalogue.outcome == 'failure' || steps.signatories.outcome == 'failure'
+        run: |
+          echo "::warning::catalogue=${{ steps.catalogue.outcome }}" \
+               "signatories=${{ steps.signatories.outcome }}." \
+               "The data file for any step that failed is unchanged."
+
+      # Never publish a data file that would break the build or leak a field
+      # people did not consent to publish.
+      - name: Validate the refreshed data
+        run: python3 scripts/check_framework.py
+
+      - name: Commit any changes
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- _data/signatories.yml _data/cf_catalogue.yml _data/library_index.yml; then
+            echo "Community Framework data is already up to date."
+            exit 0
+          fi
+          git config user.name "EEG101 Community Framework synchronisation"
+          git config user.email "eeg101costaction@gmail.com"
+          git add _data/signatories.yml _data/cf_catalogue.yml _data/library_index.yml
+          git commit -m "Refresh Community Framework signatories and catalogue"
+          git push origin HEAD:main

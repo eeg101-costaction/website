@@ -32,6 +32,55 @@ layout: default
   </div>
 </section>
 
+<!-- Community Framework -->
+<section class="section" id="community-framework">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-12 col-lg-6">
+        <span class="section-label">{{ c.framework.label }}</span>
+        <h2 class="section-heading">{{ c.framework.heading }}</h2>
+        <p class="section-lead">{{ c.framework.intro }}</p>
+        <p>{{ c.framework.body }}</p>
+        <div class="cf-home__stats">
+          {% if site.data.signatories.total > 0 %}
+          <p class="cf-home__stat">
+            <span class="cf-home__stat-value">{{ site.data.signatories.total }}</span>
+            <span class="cf-home__stat-label">Signatories</span>
+          </p>
+          {% endif %}
+          <p class="cf-home__stat">
+            <span class="cf-home__stat-value">{{ site.data.cf_meta.pledge_count }}</span>
+            <span class="cf-home__stat-label">Commitments</span>
+          </p>
+          <p class="cf-home__stat">
+            <span class="cf-home__stat-value">{{ site.data.cf_catalogue.item_count }}</span>
+            <span class="cf-home__stat-label">Catalogued resources</span>
+          </p>
+        </div>
+        <div class="cf-actions">
+          <a href="{{ c.framework.cta.url | relative_url }}" class="btn btn-gold">{{ c.framework.cta.label }}</a>
+          <a href="{{ c.framework.cta_secondary.url | relative_url }}" class="btn btn-outline-primary">{{ c.framework.cta_secondary.label }}</a>
+        </div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div class="cf-home__card">
+          <ul class="cf-home__parts">
+            {% for part in site.data.framework.parts %}
+            <li class="cf-home__part">
+              <span class="cf-home__part-number" aria-hidden="true">{{ part.number }}</span>
+              <span>
+                <a class="cf-home__part-title" href="{{ '/framework/#' | append: part.anchor | relative_url }}">{{ part.title }}</a>
+                <span class="cf-home__part-summary">{{ part.summary }}</span>
+              </span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% assign featured_spotlight = site.data.spotlights | where: "featured", true | first %}
 {% if featured_spotlight %}
 <!-- Featured Spotlight -->
