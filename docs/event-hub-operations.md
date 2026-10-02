@@ -14,6 +14,29 @@ Create or open an Apps Script project at [script.google.com](https://script.goog
 
 Before the first deployment, run `installPendingEmailTrigger` once to create the hourly trigger that sends queued emails. This asks for authorisation the first time it runs. If columns are later added to the script, run `updateLedgerHeaders` to add the new headers to every event tab. After authorising the deployment, copy the resulting web-app URL. When the script changes later, paste the new version into the editor and use **Deploy → Manage deployments → Edit → New version**, which keeps the same web-app URL. In `_data/site.yml`, set `event_booking_endpoint` to that URL. This is a public endpoint URL, not a secret. The web-app does not contain credentials in the Jekyll repository. Commit and push the website update on `main`; GitHub Pages will rebuild the site.
 
+## Changes waiting to be deployed
+
+Editing `scripts/google-apps-script/event-hub.gs` in this repository does **not**
+change the live booking form. The form is served by the Apps Script deployment
+at `event_booking_endpoint`, which runs its own copy of the file. Until someone
+pastes the new version in and runs **Deploy → Manage deployments → Edit → New
+version**, the old code keeps serving.
+
+Outstanding at the time of writing:
+
+| Change | Why |
+| --- | --- |
+| The Community Framework prompt now links to `https://www.eeg101.eu/framework/` instead of `https://sign-cf.eeg101.eu/` | The Framework moved onto the main site; the old microsite is being retired. The prompt is shown only for events with `communityFrameworkPrompt: true` in `EVENT_EXTRA_QUESTIONS`, currently just `diversity-eeg-populations-2026-11`. |
+
+To check what the live deployment is actually serving, request the endpoint
+directly with any event's ID and search the HTML:
+
+```bash
+curl -sL "<event_booking_endpoint>?event_id=diversity-eeg-populations-2026-11" | grep -c sign-cf
+```
+
+`0` means the deployment is current.
+
 ## Add an event with booking
 
 Add the event once to `_data/events.yml` using the established event fields and include the booking fields below. The `id` must be unique and should remain stable because it links the Events card, calendar popover, registration, calendar invitation, and Sheet records.
