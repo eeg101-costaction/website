@@ -1282,6 +1282,92 @@ strong { font-weight: 600; }
 .cal-popover__title { font-size: var(--step-1); margin: 0.5rem 0 0.4rem; }
 .cal-popover__meta { font-size: 0.82rem; color: var(--color-text-muted); margin-bottom: 0.5rem; }
 .cal-popover__summary { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 0; line-height: 1.6; }
+.cal-popover__badge {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+}
+
+.cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.1rem;
+  margin: 0.9rem 0 0.75rem;
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+.cal-legend__item { display: inline-flex; align-items: center; gap: 0.4rem; }
+/* The Events list and the Calendar are two views of the same feed, so each
+   points at the other. */
+.events-view-switch {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+.events-view-switch__link {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+.events-view-switch__link:hover { text-decoration: underline; }
+.cal-legend__link { margin-left: auto; }
+
+/* A class that sets display beats the browser's own [hidden] rule, so the
+   internal swatch would otherwise show before anything has been unlocked. */
+.cal-legend__item[hidden] { display: none; }
+.cal-legend__swatch { display: inline-block; width: 0.85rem; height: 0.85rem; border-radius: 3px; }
+.cal-legend__swatch--online    { background: #dbeafe; }
+.cal-legend__swatch--in-person { background: #dcfce7; }
+.cal-legend__swatch--hybrid    { background: #fef3c7; }
+.cal-legend__swatch--internal  { background: var(--color-primary-light); border: 1px solid var(--color-primary); }
+
+/* The internal calendar is read live from Google, so this bar is the only trace
+   of it in the built site. */
+.cal-internal { margin: 0 0 1.1rem; }
+.cal-internal__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+}
+.cal-internal__text {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+.cal-internal__text--on { color: var(--color-primary); font-weight: 600; }
+.cal-internal__panel { margin-top: 0.6rem; }
+.cal-internal__frame {
+  width: 100%;
+  height: 200px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+}
+
+.cal-event-chip--internal {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  box-shadow: inset 2px 0 0 var(--color-primary);
+}
 
 /* --- Utility --- */
 .text-muted { color: var(--color-text-muted) !important; }

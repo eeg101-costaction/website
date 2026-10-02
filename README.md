@@ -559,7 +559,7 @@ Each page on the site corresponds to a Markdown (`.md`) or HTML (`.html`) file i
 | Working Groups | `working-groups.md` | Pulls from `_data/working_groups.yml` |
 | Grants | `grants.md` | Pulls from `_data/grants.yml` |
 | Events | `events.md` | Merges `_data/events.yml` and `_data/news.yml` |
-| Calendar | `calendar.md` | Pulls from `_data/events.yml` |
+| Calendar | `calendar.md` | Pulls from `_data/events.yml`; multi-day events fill their whole span. Core group and MC members can also add an internal Google Calendar behind a passphrase — see `docs/internal-calendar.md` |
 | Spotlight | `spotlight.html` | Pulls from `_data/spotlights.yml` |
 | Resources | `resources.md` | Plain Markdown with resource cards |
 | Library | `library.md` | Pulls from `_data/library.yml` |

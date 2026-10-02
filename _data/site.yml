@@ -40,6 +40,12 @@ ga_measurement_id: "G-CNKHMEVHS4"
 # It contains no credential. Registration details are written only to the private Sheet.
 event_booking_endpoint: "https://script.google.com/macros/s/AKfycby8dCtwmx30rgM17SZRDUZ9yyUpZNDJ9NEurxcfcBzJSVO_2pXXv1kLfxTM-vgMMfo/exec"
 
+# The internal calendar bridge, deployed from scripts/google-apps-script/internal-calendar.gs.
+# Leave empty and the Calendar page shows public events only, with no unlock control.
+# This URL is public; the passphrase and the calendar ID live in that script's
+# properties and are never published here. See docs/internal-calendar.md.
+internal_calendar_endpoint: ""
+
 footer_text: >
   EEG101 (CA24148) is supported by COST (European Cooperation in Science and
   Technology), a funding agency for research and innovation networks.

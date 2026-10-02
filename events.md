@@ -15,7 +15,10 @@ permalink: /events/
 <div class="news-filter-section mb-5">
   <!-- Status Filters -->
   <div class="mb-3">
-    <label class="text-muted small text-uppercase fw-bold mb-2 d-block">Timeframe</label>
+    <div class="events-view-switch">
+      <label class="text-muted small text-uppercase fw-bold mb-2 d-block">Timeframe</label>
+      <a class="events-view-switch__link" href="{{ '/calendar/' | relative_url }}">Calendar view &rarr;</a>
+    </div>
     <div class="news-filter d-flex flex-wrap gap-2" id="statusFilters">
       <button class="news-filter__btn" data-filter-type="status" data-filter-val="upcoming-recent">Upcoming & Recent</button>
       <button class="news-filter__btn active" data-filter-type="status" data-filter-val="all">All Time</button>

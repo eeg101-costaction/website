@@ -12,6 +12,28 @@ permalink: /calendar/
   <button class="btn btn-outline-primary btn-sm" id="cal-next" type="button">Next &#8594;</button>
 </div>
 
+<div class="cal-legend" aria-hidden="true">
+  <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--online"></span>Online</span>
+  <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--in-person"></span>In person</span>
+  <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--hybrid"></span>Hybrid</span>
+  {% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
+  <span class="cal-legend__item cal-legend__item--internal" id="cal-legend-internal" hidden><span class="cal-legend__swatch cal-legend__swatch--internal"></span>Internal</span>
+  {% endif %}
+  <a class="events-view-switch__link cal-legend__link" href="{{ '/events/' | relative_url }}">List view &rarr;</a>
+</div>
+
+{% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
+<div class="cal-internal" id="cal-internal">
+  <div class="cal-internal__bar">
+    <p class="cal-internal__text" id="cal-internal-text">Core group and Management Committee members can add the internal calendar to this view.</p>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="cal-internal-toggle">Show internal calendar</button>
+  </div>
+  <div class="cal-internal__panel" id="cal-internal-panel" hidden>
+    <iframe class="cal-internal__frame" id="cal-internal-frame" title="Internal calendar passphrase" loading="lazy"></iframe>
+  </div>
+</div>
+{% endif %}
+
 <div class="cal-grid-wrap">
   <div class="cal-grid" id="cal-grid">
     <div class="cal-header-cell">Mon</div>
@@ -29,6 +51,7 @@ permalink: /calendar/
 <script>
 (function () {
   var EVENTS = {{ site.data.events | jsonify }};
+  var INTERNAL = [];
   var MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
 
@@ -44,12 +67,29 @@ permalink: /calendar/
     return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
   }
 
+  // A multi-day event belongs on every square it runs across, not only the one
+  // it starts on, so a conference week reads as a week.
   function eventsOnDay(year, month, day) {
-    return EVENTS.filter(function (ev) {
-      if (!ev.start_date) return false;
-      var d = parseLocalDate(ev.start_date);
-      return d && d.getFullYear() === year && d.getMonth() === month && d.getDate() === day;
+    var cell = new Date(year, month, day).getTime();
+    return EVENTS.concat(INTERNAL).filter(function (ev) {
+      var start = parseLocalDate(ev.start_date);
+      if (!start) return false;
+      var end = parseLocalDate(ev.end_date) || start;
+      if (end < start) end = start;
+      return cell >= start.getTime() && cell <= end.getTime();
     });
+  }
+
+  function formatRange(ev) {
+    var start = parseLocalDate(ev.start_date);
+    var end   = parseLocalDate(ev.end_date);
+    if (!start) return ev.start_date || "";
+    var opts  = { day: "numeric", month: "long", year: "numeric" };
+    var first = start.toLocaleDateString("en-GB", opts);
+    if (!end || end <= start) return first;
+    var sameMonth = end.getFullYear() === start.getFullYear() && end.getMonth() === start.getMonth();
+    return (sameMonth ? start.getDate() : start.toLocaleDateString("en-GB", opts)) +
+           " \u2013 " + end.toLocaleDateString("en-GB", opts);
   }
 
   function esc(str) {
@@ -63,7 +103,9 @@ permalink: /calendar/
     var btn = document.createElement("button");
     var fmt = (ev.format || "online").toLowerCase().replace(/[^a-z-]/g, "");
     btn.type = "button";
-    btn.className = "cal-event-chip cal-event-chip--" + fmt;
+    btn.className = ev.internal === true
+      ? "cal-event-chip cal-event-chip--internal"
+      : "cal-event-chip cal-event-chip--" + fmt;
     btn.textContent = ev.title;
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -135,9 +177,21 @@ permalink: /calendar/
   function showPopover(ev) {
     var fmt      = (ev.format || "online").toLowerCase();
     var fmtLabel = { "online": "Online", "in-person": "In Person", "hybrid": "Hybrid" }[fmt] || fmt;
-    var dateLine = esc(ev.start_date || "");
-    if (ev.time)     dateLine += " &middot; " + esc(ev.time);
+    var dateLine = esc(formatRange(ev));
+    if (ev.time)     dateLine += " &middot; " + esc(ev.time) + (ev.end_time ? "&ndash;" + esc(ev.end_time) : "") + (ev.timezone_label ? " " + esc(ev.timezone_label) : "");
     if (ev.location) dateLine += "<br>" + esc(ev.location);
+
+    if (ev.internal === true) {
+      popover.innerHTML =
+        "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
+        "<span class=\"cal-popover__badge\">Internal</span>" +
+        "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
+        "<p class=\"cal-popover__meta\">" + dateLine + (ev.all_day ? "<br>All day" : "") + "</p>" +
+        (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "");
+      popover.hidden = false;
+      popover.querySelector(".cal-popover__close").addEventListener("click", function () { popover.hidden = true; });
+      return;
+    }
 
     var membersOnly = ev.audience === "members";
     var bookingAction = membersOnly
@@ -229,6 +283,66 @@ permalink: /calendar/
     if (curMonth > 11) { curMonth = 0; curYear++; }
     render();
   });
+
+  // Internal events are never built into this site: they stay in Google Calendar
+  // and are fetched, on demand, by a Google-hosted page in the iframe below. The
+  // passphrase is typed into that iframe, so it is sent to Google and never
+  // passes through eeg101.eu, and the events are held in memory only — a reload
+  // asks again.
+  (function internalCalendar() {
+    var wrap = document.getElementById("cal-internal");
+    if (!wrap) return;
+
+    var endpoint = {{ site.data.site.internal_calendar_endpoint | default: "" | jsonify }};
+    var toggle   = document.getElementById("cal-internal-toggle");
+    var panel    = document.getElementById("cal-internal-panel");
+    var frame    = document.getElementById("cal-internal-frame");
+    var text     = document.getElementById("cal-internal-text");
+    var legend   = document.getElementById("cal-legend-internal");
+    var prompt   = text.textContent;
+
+    function lock() {
+      INTERNAL = [];
+      panel.hidden = true;
+      frame.removeAttribute("src");
+      if (legend) legend.hidden = true;
+      text.textContent = prompt;
+      text.className = "cal-internal__text";
+      toggle.textContent = "Show internal calendar";
+      render();
+    }
+
+    function unlock(events) {
+      INTERNAL = events || [];
+      panel.hidden = true;
+      frame.removeAttribute("src");
+      if (legend) legend.hidden = false;
+      text.textContent = INTERNAL.length === 1
+        ? "1 internal event is showing. It is visible to you only, and goes when you reload."
+        : INTERNAL.length + " internal events are showing. They are visible to you only, and go when you reload.";
+      text.className = "cal-internal__text cal-internal__text--on";
+      toggle.textContent = "Hide internal events";
+      render();
+    }
+
+    toggle.addEventListener("click", function () {
+      if (INTERNAL.length) { lock(); return; }
+      if (!panel.hidden) { panel.hidden = true; return; }
+      if (!frame.getAttribute("src")) {
+        frame.src = endpoint + (endpoint.indexOf("?") >= 0 ? "&" : "?") +
+                    "origin=" + encodeURIComponent(window.location.origin);
+      }
+      panel.hidden = false;
+    });
+
+    window.addEventListener("message", function (e) {
+      // Only the iframe we opened may speak for the internal calendar.
+      if (!frame.contentWindow || e.source !== frame.contentWindow) return;
+      var data = e.data || {};
+      if (data.type !== "eeg101-internal-calendar") return;
+      if (data.ok === true && Array.isArray(data.events)) unlock(data.events);
+    });
+  }());
 
   var now = new Date();
   curYear  = now.getFullYear();
