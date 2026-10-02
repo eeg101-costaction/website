@@ -12,42 +12,56 @@ curated_count: 12
 framework_count: 283
 
 topics:
-  - name: "Reproducibility"
-    count: 41
-  - name: "Reporting standards"
-    count: 35
-  - name: "Open science"
-    count: 65
-  - name: "Data standards"
-    count: 24
-  - name: "Software & tools"
-    count: 46
-  - name: "Machine learning & AI"
-    count: 37
-  - name: "Diversity & inclusion"
-    count: 70
-  - name: "Global & equitable research"
-    count: 14
-  - name: "Ethics & neurorights"
-    count: 39
-  - name: "Sustainability"
-    count: 63
-  - name: "Publishing & peer review"
-    count: 67
-  - name: "Research culture & careers"
-    count: 71
-  - name: "Clinical EEG"
-    count: 33
-  - name: "Theory & epistemology"
-    count: 38
-  - name: "Hardware & low-cost EEG"
-    count: 18
-  - name: "EEG methods"
-    count: 26
-  - name: "BCI & neurotechnology"
-    count: 21
+  - name: "#EEG101-supported"
+    count: 2
   - name: "History"
     count: 15
+  - name: "Reporting standards"
+    count: 35
+  - name: "Data harmonisation"
+    count: 24
+  - name: "Global neuroscience"
+    count: 14
+  - name: "#EEGManyLabs"
+    count: 2
+  - name: "Community"
+    count: 93
+  - name: "Software"
+    count: 39
+  - name: "Open Science"
+    count: 57
+  - name: "Methodology"
+    count: 81
+  - name: "Inclusivity"
+    count: 75
+  - name: "Sustainability"
+    count: 55
+  - name: "Reproducibility"
+    count: 39
+  - name: "Machine learning"
+    count: 36
+  - name: "Clinical EEG"
+    count: 27
+  - name: "EEG"
+    count: 53
+  - name: "MEG"
+    count: 19
+  - name: "Conferences"
+    count: 10
+  - name: "Large-scale collaboration"
+    count: 14
+  - name: "BIDS"
+    count: 8
+  - name: "ARTEM-IS"
+    count: 5
+  - name: "FieldTrip"
+    count: 6
+  - name: "Open source"
+    count: 17
+  - name: "Analysis tools"
+    count: 7
+  - name: "Replication"
+    count: 11
 
 types:
   - name: "Journal article"
@@ -100,8 +114,11 @@ items:
     featured: true
     parts: []
     topics:
-      - "Machine learning & AI"
+      - "#EEG101-supported"
       - "Clinical EEG"
+      - "Machine learning"
+      - "Neonatal EEG"
+      - "Seizure detection"
     tags:
       - "#EEG101-supported"
       - "Clinical EEG"
@@ -130,9 +147,11 @@ items:
     featured: true
     parts: []
     topics:
+      - "#EEG101-supported"
+      - "Machine learning"
+      - "Methodology"
+      - "Neonatal EEG"
       - "Reporting standards"
-      - "Machine learning & AI"
-      - "Clinical EEG"
     tags:
       - "#EEG101-supported"
       - "Machine learning"
@@ -161,9 +180,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Clinical EEG"
+      - "Alzheimer’s disease"
+      - "EEG"
       - "History"
+      - "Open Science"
     tags:
       - "Alzheimer’s disease"
       - "EEG"
@@ -191,9 +211,10 @@ items:
     featured: true
     parts: []
     topics:
+      - "ARTEM-IS"
+      - "Methodology"
+      - "Open Science"
       - "Reporting standards"
-      - "Open science"
-      - "EEG methods"
     tags:
       - "ARTEM-IS"
       - "Methodology"
@@ -221,8 +242,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
+      - "Community"
+      - "Conferences"
+      - "Inclusivity"
+      - "Open Science"
       - "Sustainability"
     tags:
       - "Community"
@@ -252,10 +275,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Publishing & peer review"
+      - "EEG"
+      - "Global neuroscience"
+      - "Inclusivity"
+      - "Open Science"
     tags:
       - "EEG"
       - "Global neuroscience"
@@ -283,7 +306,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
+      - "Community"
+      - "Conferences"
+      - "CuttingEEG"
+      - "Open Science"
       - "Sustainability"
     tags:
       - "Community"
@@ -313,12 +339,13 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Global & equitable research"
+      - "EEG"
+      - "Global neuroscience"
       - "History"
+      - "Open Science"
     tags:
       - "EEG"
-      - "Global Neuroscience"
+      - "Global neuroscience"
       - "History"
       - "Open Science"
   - id: "pavlov-2021-cortex"
@@ -343,8 +370,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Reproducibility"
-      - "Open science"
+      - "#EEGManyLabs"
+      - "Large-scale collaboration"
+      - "Open Science"
+      - "Replication"
     tags:
       - "#EEGManyLabs"
       - "Large-scale collaboration"
@@ -372,9 +401,11 @@ items:
     featured: true
     parts: []
     topics:
-      - "Reproducibility"
+      - "EEG"
+      - "MEG"
+      - "Open Science"
       - "Reporting standards"
-      - "Open science"
+      - "Reproducibility"
     tags:
       - "EEG"
       - "MEG"
@@ -403,8 +434,10 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Data standards"
+      - "BIDS"
+      - "Data harmonisation"
+      - "EEG"
+      - "Open Science"
     tags:
       - "BIDS"
       - "Data harmonisation"
@@ -432,8 +465,12 @@ items:
     featured: true
     parts: []
     topics:
-      - "Open science"
-      - "Software & tools"
+      - "Analysis tools"
+      - "EEG"
+      - "FieldTrip"
+      - "MEG"
+      - "Open source"
+      - "Software"
     tags:
       - "Analysis tools"
       - "EEG"
@@ -463,7 +500,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "HIXIJVUG"
     collection: "framework"
@@ -486,8 +524,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Publishing & peer review"
+    topics: []
     tags: []
   - id: "EXGAJQ6M"
     collection: "framework"
@@ -511,10 +548,13 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Research culture & careers"
+      - "Data harmonisation"
+      - "Global neuroscience"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
       - "Clinical EEG"
+      - "EEG"
     tags:
       - "Africa"
       - "Coverage - gap"
@@ -542,10 +582,12 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
+      - "Software"
+      - "Methodology"
       - "Sustainability"
-      - "EEG methods"
+      - "EEG"
+      - "MEG"
+      - "Open source"
     tags:
       - "biosignal"
       - "brain"
@@ -588,9 +630,8 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
-      - "Hardware & low-cost EEG"
     tags:
       - "Electricity"
       - "Environmental impacts"
@@ -622,13 +663,12 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Diversity & inclusion"
-      - "Global & equitable research"
+      - "Global neuroscience"
+      - "Software"
+      - "Open Science"
+      - "Inclusivity"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Hardware & low-cost EEG"
+      - "Open source"
     tags: []
   - id: "LUAVGNCL"
     collection: "framework"
@@ -652,7 +692,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "EEG"
+      - "MEG"
+      - "FieldTrip"
+      - "Analysis tools"
     tags: []
   - id: "GSYPSEG7"
     collection: "framework"
@@ -703,8 +747,8 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
     tags:
       - "Climate change"
       - "Scientific community"
@@ -731,12 +775,11 @@ items:
     featured: false
     parts: [1, 2]
     topics:
+      - "Community"
+      - "Open Science"
+      - "Methodology"
       - "Reproducibility"
-      - "Open science"
-      - "Software & tools"
-      - "Research culture & careers"
-      - "Theory & epistemology"
-      - "EEG methods"
+      - "EEG"
     tags:
       - "Cognitive neuroscience"
       - "EEG"
@@ -767,13 +810,18 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
-      - "Open science"
-      - "Data standards"
-      - "Software & tools"
-      - "Diversity & inclusion"
+      - "Data harmonisation"
+      - "Community"
+      - "Software"
+      - "Open Science"
+      - "Inclusivity"
       - "Sustainability"
+      - "Reproducibility"
       - "Clinical EEG"
+      - "EEG"
+      - "MEG"
+      - "BIDS"
+      - "Open source"
     tags: []
   - id: "ZWVHLNTA"
     collection: "framework"
@@ -797,14 +845,11 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
+      - "Community"
+      - "Software"
+      - "Open Science"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Machine learning"
     tags: []
   - id: "IT29UX3B"
     collection: "framework"
@@ -828,8 +873,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
       - "Sustainability"
+      - "Large-scale collaboration"
     tags: []
   - id: "5S2KASVF"
     collection: "framework"
@@ -853,9 +898,8 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Community"
       - "Reproducibility"
-      - "Publishing & peer review"
-      - "Research culture & careers"
     tags: []
   - id: "LBHLQYVH"
     collection: "framework"
@@ -879,11 +923,13 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Community"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
       - "Reproducibility"
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
-      - "Theory & epistemology"
+      - "Large-scale collaboration"
+      - "Replication"
     tags: []
   - id: "HKQBRA9P"
     collection: "framework"
@@ -907,11 +953,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "Sustainability"
-      - "Research culture & careers"
-      - "Theory & epistemology"
+      - "Community"
+      - "Machine learning"
     tags:
       - "ai"
       - "artificial intelligence"
@@ -950,8 +993,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Software & tools"
+      - "Software"
       - "Sustainability"
+      - "Open source"
     tags:
       - "Action"
       - "Greenhouse gas"
@@ -980,6 +1024,7 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Methodology"
       - "Sustainability"
     tags:
       - "Computer science"
@@ -1007,7 +1052,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
+      - "Machine learning"
     tags:
       - "generative agents"
       - "LLMs"
@@ -1036,15 +1081,15 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Data standards"
-      - "Software & tools"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
+      - "Data harmonisation"
+      - "Community"
+      - "Open Science"
+      - "Methodology"
+      - "Reproducibility"
+      - "EEG"
+      - "ARTEM-IS"
+      - "Replication"
     tags:
       - "ARTEM-IS"
       - "event-related potentials"
@@ -1074,14 +1119,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
+      - "Machine learning"
       - "Clinical EEG"
-      - "EEG methods"
-      - "BCI & neurotechnology"
     tags:
       - "artificial intelligence"
       - "brain–computer interfaces"
@@ -1115,14 +1157,10 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Publishing & peer review"
-      - "Theory & epistemology"
-      - "EEG methods"
+      - "Open Science"
+      - "Methodology"
+      - "Reproducibility"
     tags: []
   - id: "AP3IUWAF"
     collection: "framework"
@@ -1146,8 +1184,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Data standards"
-      - "Diversity & inclusion"
+      - "Inclusivity"
       - "Clinical EEG"
     tags:
       - "Medical research"
@@ -1176,11 +1213,9 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Open Science"
+      - "Inclusivity"
+      - "Machine learning"
     tags:
       - "Ethics"
       - "Generative artificial intelligence"
@@ -1209,10 +1244,12 @@ items:
     featured: false
     parts: [2, 3]
     topics:
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Research culture & careers"
       - "History"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
+      - "Sustainability"
+      - "Conferences"
     tags:
       - "Carbon dioxide"
       - "Careers"
@@ -1244,10 +1281,12 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Research culture & careers"
       - "History"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
+      - "Sustainability"
+      - "Conferences"
     tags:
       - "Carbon dioxide"
       - "Careers"
@@ -1303,8 +1342,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "BCI & neurotechnology"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "7V649X6N"
     collection: "framework"
@@ -1328,9 +1367,11 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Global & equitable research"
-      - "Research culture & careers"
+      - "Global neuroscience"
+      - "Community"
+      - "Methodology"
       - "Clinical EEG"
+      - "EEG"
     tags:
       - "EEG Curricula"
       - "EEG training"
@@ -1359,8 +1400,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Research culture & careers"
-      - "Theory & epistemology"
+      - "Community"
+      - "Methodology"
     tags: []
   - id: "UBDTFXPX"
     collection: "framework"
@@ -1384,9 +1425,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Research culture & careers"
-      - "Theory & epistemology"
+      - "Community"
+      - "Machine learning"
     tags: []
   - id: "LIB3I7Z8"
     collection: "framework"
@@ -1410,11 +1450,10 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
       - "History"
+      - "Community"
+      - "Inclusivity"
+      - "Sustainability"
     tags: []
   - id: "WI3QQ8GK"
     collection: "framework"
@@ -1438,9 +1477,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
+      - "Data harmonisation"
+      - "Methodology"
+      - "Machine learning"
     tags: []
   - id: "D89BSNZH"
     collection: "framework"
@@ -1464,9 +1503,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
+      - "Inclusivity"
       - "Sustainability"
+      - "Machine learning"
     tags:
       - "AI Bias"
       - "AI Ethics"
@@ -1495,7 +1534,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
+      - "Data harmonisation"
+      - "BIDS"
     tags:
       - "bids"
       - "brain imaging data structure"
@@ -1523,7 +1563,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Publishing & peer review"
+      - "Community"
     tags: []
   - id: "WLIDZJTC"
     collection: "framework"
@@ -1547,9 +1587,12 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Community"
+      - "Methodology"
       - "Reproducibility"
-      - "Research culture & careers"
-      - "EEG methods"
+      - "EEG"
+      - "Large-scale collaboration"
+      - "Replication"
     tags:
       - "cognitive neuroscience"
       - "EEG"
@@ -1577,9 +1620,9 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Reproducibility"
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
+      - "Machine learning"
     tags: []
   - id: "YNY3IUBL"
     collection: "framework"
@@ -1603,9 +1646,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
+      - "Software"
+      - "Methodology"
+      - "Machine learning"
       - "Clinical EEG"
     tags: []
   - id: "ZKUULW2A"
@@ -1654,7 +1697,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Research culture & careers"
+      - "Conferences"
     tags: []
   - id: "7SGUGUMZ"
     collection: "framework"
@@ -1678,7 +1721,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Publishing & peer review"
+      - "Inclusivity"
+      - "EEG"
     tags: []
   - id: "PEV5ZN3V"
     collection: "framework"
@@ -1703,9 +1747,9 @@ items:
     parts: [2]
     topics:
       - "Reporting standards"
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
+      - "Conferences"
     tags: []
   - id: "MFHLT6AZ"
     collection: "framework"
@@ -1729,11 +1773,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Theory & epistemology"
     tags:
       - "3E‐Cognition"
       - "4E‐Cognition"
@@ -1766,9 +1809,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Research culture & careers"
+      - "Community"
+      - "Methodology"
+      - "Machine learning"
     tags:
       - "Human behaviour"
       - "Interdisciplinary studies"
@@ -1796,8 +1839,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Research culture & careers"
+    topics: []
     tags: []
   - id: "Z2L3G6AP"
     collection: "framework"
@@ -1820,8 +1862,7 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics:
-      - "BCI & neurotechnology"
+    topics: []
     tags: []
   - id: "4BU8KM8Z"
     collection: "framework"
@@ -1845,7 +1886,9 @@ items:
     featured: false
     parts: [1, 2]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "Methodology"
+      - "Open source"
     tags: []
   - id: "FPIYAQRK"
     collection: "framework"
@@ -1869,8 +1912,8 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
     tags:
       - "academic practice"
       - "climate activism"
@@ -1896,9 +1939,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Research culture & careers"
+      - "Community"
+      - "Software"
+      - "Open Science"
+      - "Methodology"
+      - "Open source"
     tags:
       - "Quantitative Biology - Other Quantitative Biology"
   - id: "R7KWAK47"
@@ -1924,7 +1969,6 @@ items:
     parts: [3]
     topics:
       - "Sustainability"
-      - "Hardware & low-cost EEG"
     tags:
       - "Carbon footprint"
       - "Decarbonization"
@@ -1953,7 +1997,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Hardware & low-cost EEG"
+      - "EEG"
     tags: []
   - id: "7MTACVSJ"
     collection: "framework"
@@ -1978,8 +2022,9 @@ items:
     parts: [3]
     topics:
       - "Reporting standards"
-      - "Diversity & inclusion"
+      - "Inclusivity"
       - "Sustainability"
+      - "Conferences"
     tags: []
   - id: "WFAYFKYW"
     collection: "framework"
@@ -2003,9 +2048,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Open science"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Open Science"
     tags:
       - "altmetrics"
       - "assessment"
@@ -2037,8 +2080,7 @@ items:
     parts: [2]
     topics:
       - "Reporting standards"
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
+      - "Inclusivity"
     tags: []
   - id: "ZUKXBLMH"
     collection: "framework"
@@ -2062,9 +2104,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Publishing & peer review"
+      - "Software"
+      - "Open source"
     tags: []
   - id: "QI2CSFXG"
     collection: "framework"
@@ -2088,8 +2129,9 @@ items:
     featured: false
     parts: [1, 2, 3]
     topics:
-      - "Research culture & careers"
       - "History"
+      - "Community"
+      - "EEG"
     tags:
       - "Cognitive neuroscience"
       - "Human behaviour"
@@ -2116,7 +2158,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
+      - "Open Science"
     tags: []
   - id: "F5Z34KPK"
     collection: "framework"
@@ -2141,8 +2183,7 @@ items:
     parts: [3]
     topics:
       - "Reporting standards"
-      - "Machine learning & AI"
-      - "Publishing & peer review"
+      - "Machine learning"
     tags:
       - "Artificial Intelligence"
       - "CARE Guidelines"
@@ -2170,10 +2211,10 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Software"
       - "Reproducibility"
-      - "Open science"
-      - "Software & tools"
-      - "Publishing & peer review"
+      - "FieldTrip"
+      - "Open source"
     tags: []
   - id: "8K4A4FQF"
     collection: "framework"
@@ -2197,10 +2238,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Hardware & low-cost EEG"
-      - "BCI & neurotechnology"
+      - "Inclusivity"
+      - "Machine learning"
+      - "EEG"
     tags: []
   - id: "URJSZUU2"
     collection: "framework"
@@ -2225,8 +2265,8 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Publishing & peer review"
+      - "Community"
+      - "Open Science"
     tags: []
   - id: "6QDWD33M"
     collection: "framework"
@@ -2250,9 +2290,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
+      - "Machine learning"
     tags:
       - "Biodiversity"
       - "Carbon sequestration"
@@ -2284,10 +2324,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Research culture & careers"
+      - "Community"
+      - "Open Science"
+      - "Inclusivity"
+      - "Reproducibility"
     tags:
       - "preregistration"
       - "publication bias"
@@ -2316,8 +2357,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
       - "Sustainability"
+      - "Machine learning"
     tags:
       - "Climate-change mitigation"
       - "Computer science"
@@ -2343,9 +2384,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+      - "Machine learning"
     tags:
       - "AI Act"
       - "Brain data"
@@ -2375,11 +2414,11 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Data standards"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Research culture & careers"
       - "History"
+      - "Data harmonisation"
+      - "Community"
+      - "Inclusivity"
+      - "Machine learning"
     tags: []
   - id: "42EF556J"
     collection: "framework"
@@ -2403,8 +2442,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Machine learning & AI"
+      - "Open Science"
+      - "Methodology"
+      - "Machine learning"
     tags: []
   - id: "UU7YAPVP"
     collection: "framework"
@@ -2428,8 +2468,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
+      - "Methodology"
+      - "Inclusivity"
+      - "Machine learning"
       - "Clinical EEG"
     tags:
       - "Ethical considerations"
@@ -2459,10 +2500,12 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Theory & epistemology"
-      - "EEG methods"
+      - "Community"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
+      - "MEG"
+      - "Large-scale collaboration"
     tags: []
   - id: "8JGMVIHY"
     collection: "framework"
@@ -2486,7 +2529,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
     tags: []
   - id: "X8CFUD2P"
     collection: "framework"
@@ -2533,8 +2576,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
       - "History"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
     tags:
       - "Neuroimaging"
       - "Neurosciences"
@@ -2561,10 +2606,10 @@ items:
     featured: false
     parts: [1, 2]
     topics:
-      - "Machine learning & AI"
-      - "Research culture & careers"
+      - "Community"
+      - "Machine learning"
       - "Clinical EEG"
-      - "Theory & epistemology"
+      - "Large-scale collaboration"
     tags:
       - "Algorithms"
       - "Artificial Intelligence"
@@ -2596,10 +2641,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Clinical EEG"
-      - "EEG methods"
-      - "BCI & neurotechnology"
+      - "Methodology"
+      - "Machine learning"
+      - "EEG"
     tags:
       - "Artificial Intelligence"
       - "Brain–computer interface (BCI)"
@@ -2629,8 +2673,7 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics:
-      - "Publishing & peer review"
+    topics: []
     tags:
       - "Publishing"
   - id: "PWNLKALI"
@@ -2680,9 +2723,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "Research culture & careers"
+      - "Community"
+      - "Methodology"
+      - "Machine learning"
     tags:
       - "Education"
       - "Information systems and information technology"
@@ -2708,9 +2751,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
+      - "Data harmonisation"
       - "Sustainability"
-      - "Publishing & peer review"
     tags:
       - "Publishing"
       - "Sustainability"
@@ -2736,8 +2778,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
     tags:
       - "Lab life"
       - "Publishing"
@@ -2764,8 +2805,8 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
     tags:
       - "activism"
       - "climate change"
@@ -2794,9 +2835,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Open Science"
     tags: []
   - id: "SS9JXN6N"
     collection: "framework"
@@ -2819,8 +2858,7 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics:
-      - "Publishing & peer review"
+    topics: []
     tags: []
   - id: "V3DWWMFR"
     collection: "framework"
@@ -2844,9 +2882,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
+      - "Reproducibility"
+      - "Large-scale collaboration"
+      - "Replication"
     tags:
       - "Psychology"
       - "Publication characteristics"
@@ -2905,7 +2945,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Research culture & careers"
+      - "Community"
     tags:
       - "careers in science"
       - "early-career researchers"
@@ -2937,11 +2977,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
-      - "BCI & neurotechnology"
+      - "Methodology"
+      - "Inclusivity"
+      - "EEG"
     tags:
       - "EEG"
       - "Human brain"
@@ -2971,8 +3009,8 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Community"
       - "Reproducibility"
-      - "Research culture & careers"
     tags:
       - "Science"
       - "Scientific community"
@@ -2999,7 +3037,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Theory & epistemology"
+      - "Community"
     tags:
       - "Abduction"
       - "Cognitive neuroscience"
@@ -3028,9 +3066,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
+      - "Methodology"
+      - "Inclusivity"
+      - "EEG"
     tags:
       - "Electroencephalography"
       - "Racism"
@@ -3056,8 +3094,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "DL46PGL5"
     collection: "framework"
@@ -3081,10 +3119,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Theory & epistemology"
+      - "Inclusivity"
     tags: []
   - id: "TGQWHUBN"
     collection: "framework"
@@ -3108,9 +3143,10 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Open Science"
+      - "Methodology"
       - "Reproducibility"
-      - "Open science"
-      - "EEG methods"
+      - "EEG"
     tags:
       - "EEG"
       - "ERP"
@@ -3141,8 +3177,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Theory & epistemology"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
     tags:
       - "community advisory board (CAB)"
       - "community-based participatory research (CBPR)"
@@ -3171,14 +3208,15 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
+      - "Community"
+      - "Open Science"
+      - "Inclusivity"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Reproducibility"
+      - "EEG"
+      - "MEG"
+      - "Conferences"
     tags:
       - "Electroencephalography"
       - "Electroencephalography (EEG)"
@@ -3206,9 +3244,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
       - "Clinical EEG"
-      - "Theory & epistemology"
     tags: []
   - id: "HDJHNM3C"
     collection: "framework"
@@ -3232,7 +3268,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
+      - "Open Science"
       - "Sustainability"
       - "Clinical EEG"
     tags: []
@@ -3258,10 +3294,12 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
-      - "Open science"
-      - "Data standards"
+      - "Community"
+      - "Open Science"
       - "Sustainability"
+      - "Reproducibility"
+      - "EEG"
+      - "MEG"
     tags:
       - "EEG"
       - "MEG"
@@ -3292,7 +3330,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Publishing & peer review"
+      - "Methodology"
       - "Clinical EEG"
     tags: []
   - id: "BM244WVB"
@@ -3317,11 +3355,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
       - "Sustainability"
-      - "Theory & epistemology"
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
+      - "EEG"
     tags:
       - "EEG"
       - "Minority samples"
@@ -3349,11 +3385,10 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "History"
+      - "Community"
       - "Sustainability"
       - "Clinical EEG"
-      - "Theory & epistemology"
-      - "Hardware & low-cost EEG"
-      - "History"
     tags:
       - "4E cognition"
       - "Brain"
@@ -3386,9 +3421,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Sustainability"
-      - "Research culture & careers"
       - "History"
+      - "Community"
+      - "Sustainability"
     tags:
       - "activism"
       - "biodiversity crisis"
@@ -3418,10 +3453,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Diversity & inclusion"
+      - "Community"
+      - "Inclusivity"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
     tags: []
   - id: "FXD4MYF3"
     collection: "framework"
@@ -3444,8 +3478,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Publishing & peer review"
+    topics: []
     tags: []
   - id: "F9SCHZDH"
     collection: "framework"
@@ -3469,8 +3502,9 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "Methodology"
       - "Reproducibility"
-      - "Theory & epistemology"
+      - "Replication"
     tags:
       - "Experimental Methods"
       - "Experimentation"
@@ -3502,7 +3536,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Theory & epistemology"
+      - "Community"
     tags:
       - "Databases"
       - "Human behaviour"
@@ -3528,8 +3562,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Global & equitable research"
-      - "Clinical EEG"
+      - "Global neuroscience"
+      - "Methodology"
+      - "EEG"
     tags:
       - "Africa"
       - "Coma"
@@ -3557,11 +3592,16 @@ items:
     featured: false
     parts: [1, 3]
     topics:
+      - "Data harmonisation"
+      - "#EEGManyLabs"
+      - "Community"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
       - "Reproducibility"
-      - "Open science"
-      - "Software & tools"
-      - "Diversity & inclusion"
-      - "EEG methods"
+      - "EEG"
+      - "Large-scale collaboration"
+      - "Replication"
     tags:
       - "Cognitive neuroscience"
       - "EEG"
@@ -3591,10 +3631,10 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Theory & epistemology"
+      - "Open Science"
+      - "Methodology"
+      - "Reproducibility"
     tags:
       - "Medical research"
       - "Psychology"
@@ -3620,9 +3660,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
+      - "Data harmonisation"
+      - "Methodology"
+      - "Inclusivity"
+      - "MEG"
+      - "Large-scale collaboration"
     tags:
       - "Neurophysiology"
       - "Neuroscience"
@@ -3648,10 +3690,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Data standards"
-      - "Software & tools"
-      - "Publishing & peer review"
+      - "Data harmonisation"
+      - "Software"
+      - "Open source"
     tags: []
   - id: "5C8AKWA2"
     collection: "framework"
@@ -3675,11 +3716,11 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Global & equitable research"
+      - "Global neuroscience"
+      - "Community"
+      - "Open Science"
+      - "Inclusivity"
       - "Sustainability"
-      - "Research culture & careers"
     tags:
       - "Academic Medical Centers"
       - "Brain Mapping"
@@ -3711,10 +3752,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Ethics & neurorights"
+      - "Global neuroscience"
+      - "Open Science"
+      - "Inclusivity"
     tags:
       - "Double Standards"
       - "Equitable Research"
@@ -3743,9 +3783,11 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
+      - "Data harmonisation"
+      - "Methodology"
       - "Sustainability"
-      - "Hardware & low-cost EEG"
+      - "Machine learning"
+      - "Large-scale collaboration"
     tags:
       - "climate change"
       - "computational research"
@@ -3772,9 +3814,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
       - "Sustainability"
-      - "Research culture & careers"
     tags:
       - "biopolitics"
       - "health disparities"
@@ -3804,7 +3847,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Theory & epistemology"
+      - "Methodology"
     tags: []
   - id: "MX8QCEIM"
     collection: "framework"
@@ -3851,13 +3894,12 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Software & tools"
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
-      - "EEG methods"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
+      - "Reproducibility"
+      - "EEG"
     tags:
       - "EEG"
       - "ERP"
@@ -3885,7 +3927,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
+      - "Community"
+      - "Methodology"
     tags:
       - "Scientific data"
       - "Statistics"
@@ -3911,8 +3954,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Community"
+      - "Methodology"
+      - "Inclusivity"
       - "Clinical EEG"
     tags:
       - "Basic science"
@@ -3946,10 +3990,9 @@ items:
     parts: [3]
     topics:
       - "Reporting standards"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
+      - "Methodology"
+      - "Inclusivity"
       - "Clinical EEG"
-      - "BCI & neurotechnology"
     tags:
       - "Agency"
       - "Bias"
@@ -3978,7 +4021,8 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics: []
+    topics:
+      - "EEG"
     tags: []
   - id: "BMHG6K3T"
     collection: "framework"
@@ -4002,12 +4046,10 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Data standards"
-      - "Ethics & neurorights"
-      - "Research culture & careers"
-      - "Clinical EEG"
       - "History"
+      - "Community"
+      - "Open Science"
+      - "Clinical EEG"
     tags: []
   - id: "LEFM4ESD"
     collection: "framework"
@@ -4031,11 +4073,12 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "Data harmonisation"
+      - "Open Science"
       - "Reproducibility"
-      - "Open science"
-      - "Data standards"
-      - "Sustainability"
-      - "Publishing & peer review"
+      - "EEG"
+      - "MEG"
+      - "BIDS"
     tags:
       - "data sharing"
       - "EEG"
@@ -4088,8 +4131,7 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics:
-      - "Theory & epistemology"
+    topics: []
     tags:
       - "Causality"
       - "Philosophies"
@@ -4120,10 +4162,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Publishing & peer review"
+      - "Inclusivity"
+      - "Machine learning"
     tags: []
   - id: "TFXCQWFV"
     collection: "framework"
@@ -4147,8 +4187,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Software & tools"
-      - "Clinical EEG"
+      - "Software"
+      - "Neonatal EEG"
     tags: []
   - id: "IS93MHTM"
     collection: "framework"
@@ -4172,10 +4212,14 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Open science"
-      - "Publishing & peer review"
+      - "Community"
+      - "Open Science"
+      - "Methodology"
+      - "Reproducibility"
+      - "EEG"
+      - "Conferences"
+      - "ARTEM-IS"
     tags:
       - "ARTEM-IS"
       - "EEG"
@@ -4205,8 +4249,11 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Global & equitable research"
+      - "Global neuroscience"
+      - "Methodology"
       - "Clinical EEG"
+      - "EEG"
+      - "Seizure detection"
     tags: []
   - id: "5EFDTL6P"
     collection: "framework"
@@ -4230,7 +4277,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
     tags: []
   - id: "FJUDZSGW"
     collection: "framework"
@@ -4254,7 +4301,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Theory & epistemology"
+      - "Methodology"
     tags:
       - "Statistics - Methodology"
   - id: "SA7FYA4Z"
@@ -4279,8 +4326,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Theory & epistemology"
+      - "Methodology"
+      - "Inclusivity"
     tags: []
   - id: "9SASNS5N"
     collection: "framework"
@@ -4304,12 +4351,10 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Reporting standards"
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
-      - "Clinical EEG"
-      - "BCI & neurotechnology"
       - "History"
+      - "Reporting standards"
+      - "Methodology"
+      - "Clinical EEG"
     tags: []
   - id: "ZV5CK99Y"
     collection: "framework"
@@ -4334,9 +4379,10 @@ items:
     parts: [1, 3]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Data standards"
-      - "Diversity & inclusion"
+      - "Data harmonisation"
+      - "Community"
+      - "Open Science"
+      - "Inclusivity"
     tags:
       - "FAIR data"
       - "FAIR indicators"
@@ -4364,8 +4410,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
     tags:
       - "collaboration"
       - "diversity"
@@ -4418,7 +4464,7 @@ items:
     parts: [1]
     topics:
       - "Sustainability"
-      - "Clinical EEG"
+      - "Neonatal EEG"
     tags:
       - "cortical folding"
       - "individual variability"
@@ -4447,7 +4493,7 @@ items:
     parts: [3]
     topics:
       - "Sustainability"
-      - "BCI & neurotechnology"
+      - "EEG"
     tags:
       - "Technology & Engineering / Biomedical"
       - "Technology & Engineering / Engineering (General)"
@@ -4475,9 +4521,12 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Publishing & peer review"
+      - "Community"
+      - "Methodology"
+      - "Reproducibility"
+      - "EEG"
+      - "MEG"
     tags:
       - "Electroencephalography – EEG"
       - "Magnetoencephalography"
@@ -4553,7 +4602,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "MEG"
     tags:
       - "Computer software"
       - "Creativity"
@@ -4585,9 +4635,9 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Reproducibility"
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
+      - "Reproducibility"
     tags:
       - "Carbon dioxide"
       - "Environmental impacts"
@@ -4619,12 +4669,9 @@ items:
     featured: false
     parts: [2, 3]
     topics:
+      - "Software"
+      - "Open Science"
       - "Reproducibility"
-      - "Open science"
-      - "Data standards"
-      - "Software & tools"
-      - "Sustainability"
-      - "Publishing & peer review"
     tags: []
   - id: "J73RNM3E"
     collection: "framework"
@@ -4648,9 +4695,9 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "Community"
+      - "Inclusivity"
       - "Reproducibility"
-      - "Diversity & inclusion"
-      - "Research culture & careers"
       - "Clinical EEG"
     tags:
       - "cognitive neuroscience"
@@ -4702,8 +4749,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
       - "History"
+      - "Inclusivity"
+      - "Large-scale collaboration"
     tags:
       - "History"
   - id: "9GIM6R96"
@@ -4727,8 +4775,7 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics:
-      - "Theory & epistemology"
+    topics: []
     tags: []
   - id: "JTU3WZ4J"
     collection: "framework"
@@ -4752,7 +4799,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
+      - "Data harmonisation"
+      - "EEG"
+      - "BIDS"
     tags: []
   - id: "U2YCSAU3"
     collection: "framework"
@@ -4776,8 +4825,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
-      - "Theory & epistemology"
+      - "Methodology"
     tags:
       - "Brain reading"
       - "Criteria"
@@ -4806,8 +4854,7 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics:
-      - "Publishing & peer review"
+    topics: []
     tags:
       - "Equal Earth projection"
       - "Gall-Peters projection"
@@ -4836,9 +4883,8 @@ items:
     featured: false
     parts: [1, 3]
     topics:
-      - "Diversity & inclusion"
-      - "Theory & epistemology"
       - "History"
+      - "Inclusivity"
     tags: []
   - id: "995P9R67"
     collection: "framework"
@@ -4861,9 +4907,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+    topics: []
     tags:
       - "Computational biology and bioinformatics"
       - "Ethics"
@@ -4891,7 +4935,8 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics: []
+    topics:
+      - "Methodology"
     tags: []
   - id: "I5DZAA5T"
     collection: "framework"
@@ -4915,14 +4960,13 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "Global neuroscience"
+      - "Community"
+      - "Software"
+      - "Open Science"
+      - "Inclusivity"
       - "Reproducibility"
-      - "Open science"
-      - "Software & tools"
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Hardware & low-cost EEG"
+      - "Open source"
     tags:
       - "Cameras"
       - "Cell phones"
@@ -4954,11 +4998,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Ethics & neurorights"
+      - "Global neuroscience"
+      - "Community"
+      - "Methodology"
       - "Sustainability"
-      - "Publishing & peer review"
     tags: []
   - id: "DRUDY36S"
     collection: "framework"
@@ -4982,9 +5025,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
+      - "Open Science"
     tags:
       - "Europe"
       - "European Union"
@@ -5016,8 +5058,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+      - "EEG"
+      - "Conferences"
     tags:
       - "Brain–computer interfaces (BCIs)"
       - "Electroencephalography (EEGs)"
@@ -5045,8 +5087,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Inclusivity"
     tags: []
   - id: "2P5G4YA6"
     collection: "framework"
@@ -5070,8 +5111,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
     tags:
       - "Careers"
       - "Lab life"
@@ -5097,15 +5138,15 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
-      - "Open science"
-      - "Data standards"
-      - "Software & tools"
+      - "Data harmonisation"
+      - "Community"
+      - "Software"
+      - "Open Science"
+      - "Methodology"
       - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Theory & epistemology"
-      - "EEG methods"
+      - "Reproducibility"
+      - "BIDS"
+      - "Open source"
     tags: []
   - id: "JU6PIZLV"
     collection: "framework"
@@ -5152,7 +5193,8 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics: []
+    topics:
+      - "Large-scale collaboration"
     tags: []
   - id: "6MZ78XEQ"
     collection: "framework"
@@ -5176,10 +5218,9 @@ items:
     featured: false
     parts: [2]
     topics:
+      - "Community"
       - "Reproducibility"
-      - "Publishing & peer review"
-      - "Research culture & careers"
-      - "Theory & epistemology"
+      - "Replication"
     tags: []
   - id: "YEAZKGBD"
     collection: "framework"
@@ -5203,9 +5244,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+      - "Machine learning"
     tags:
       - "Ethics"
       - "Neuroscience"
@@ -5231,8 +5270,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
+      - "Methodology"
     tags:
       - "Analysis/statistical methods"
       - "ERPs"
@@ -5286,9 +5324,10 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Methodology"
       - "Reproducibility"
       - "Clinical EEG"
-      - "EEG methods"
+      - "EEG"
     tags: []
   - id: "9YFRAJUS"
     collection: "framework"
@@ -5312,11 +5351,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Diversity & inclusion"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
+      - "Reproducibility"
     tags:
       - "data analysis"
       - "jargon"
@@ -5344,9 +5382,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+    topics: []
     tags:
       - "Deep Brain Stimulation"
       - "Moral Enhancement"
@@ -5375,8 +5411,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Ethics & neurorights"
-      - "Theory & epistemology"
+      - "Community"
+      - "Inclusivity"
     tags:
       - "akrasia"
       - "collaborative irrationality"
@@ -5407,7 +5443,9 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics: []
+    topics:
+      - "Methodology"
+      - "Large-scale collaboration"
     tags: []
   - id: "QZXBZJMV"
     collection: "framework"
@@ -5431,9 +5469,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Diversity & inclusion"
-      - "Hardware & low-cost EEG"
+      - "Open Science"
+      - "Inclusivity"
     tags: []
   - id: "KJ236VI6"
     collection: "framework"
@@ -5457,9 +5494,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
       - "Clinical EEG"
-      - "BCI & neurotechnology"
     tags: []
   - id: "RE9YF7DM"
     collection: "framework"
@@ -5483,8 +5518,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Machine learning & AI"
-      - "Theory & epistemology"
+      - "Machine learning"
     tags: []
   - id: "J84QANCJ"
     collection: "framework"
@@ -5508,10 +5542,10 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Theory & epistemology"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
+      - "Machine learning"
     tags:
       - "Statistics - Machine Learning"
   - id: "3YIEEQYB"
@@ -5559,8 +5593,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Software & tools"
+      - "Data harmonisation"
+      - "Software"
+      - "BIDS"
     tags: []
   - id: "86BCNKUU"
     collection: "framework"
@@ -5585,12 +5620,8 @@ items:
     parts: [1, 3]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Data standards"
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
+      - "Open Science"
     tags:
       - "Publication characteristics"
       - "Research data"
@@ -5616,8 +5647,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
     tags:
       - "Careers"
       - "Publishing"
@@ -5644,8 +5674,10 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Methodology"
+      - "Inclusivity"
       - "Reproducibility"
-      - "Publishing & peer review"
+      - "Replication"
     tags: []
   - id: "U3BVCNCW"
     collection: "framework"
@@ -5669,10 +5701,10 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Diversity & inclusion"
-      - "Hardware & low-cost EEG"
+      - "Community"
+      - "Software"
+      - "Inclusivity"
+      - "Open source"
     tags:
       - "3D printing"
       - "Computer hardware"
@@ -5704,8 +5736,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
     tags:
       - "Bibliometrics"
       - "Citation analysis"
@@ -5738,9 +5769,11 @@ items:
     parts: [2]
     topics:
       - "Reporting standards"
-      - "Global & equitable research"
-      - "Research culture & careers"
+      - "Global neuroscience"
+      - "Community"
+      - "Methodology"
       - "Clinical EEG"
+      - "EEG"
     tags:
       - "Africa"
       - "EEG"
@@ -5769,7 +5802,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
+      - "Open Science"
     tags: []
   - id: "QH3B3VF9"
     collection: "framework"
@@ -5793,9 +5826,10 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Global & equitable research"
-      - "Publishing & peer review"
+      - "Global neuroscience"
+      - "Community"
+      - "Inclusivity"
+      - "Large-scale collaboration"
     tags: []
   - id: "69PWBLBH"
     collection: "framework"
@@ -5819,10 +5853,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
-      - "Research culture & careers"
-      - "Theory & epistemology"
-      - "BCI & neurotechnology"
+      - "Community"
     tags:
       - "brain augmentation"
       - "deception"
@@ -5852,7 +5883,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "EEG"
+      - "MEG"
     tags: []
   - id: "66A9ZURC"
     collection: "framework"
@@ -5876,12 +5909,15 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Sustainability"
-      - "EEG methods"
+      - "Community"
+      - "Software"
+      - "Methodology"
+      - "Reproducibility"
+      - "Machine learning"
+      - "EEG"
+      - "MEG"
+      - "Open source"
     tags:
       - "Electroencephalography (EEG)"
       - "Magnetoencephalography (MEG)"
@@ -5912,6 +5948,7 @@ items:
     parts: [3]
     topics:
       - "Reproducibility"
+      - "Replication"
     tags:
       - "Judgment and decision making"
       - "Neuroimaging"
@@ -5938,9 +5975,8 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Methodology"
       - "Reproducibility"
-      - "Ethics & neurorights"
-      - "EEG methods"
     tags:
       - "Molecular neuroscience"
   - id: "2EHKBVJG"
@@ -5965,9 +6001,9 @@ items:
     featured: false
     parts: [1]
     topics:
+      - "Community"
+      - "Open Science"
       - "Reproducibility"
-      - "Open science"
-      - "Publishing & peer review"
     tags:
       - "disclosure"
       - "false positive"
@@ -5996,11 +6032,11 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
+      - "Methodology"
       - "Reproducibility"
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
-      - "Research culture & careers"
-      - "EEG methods"
+      - "Machine learning"
+      - "EEG"
     tags:
       - "Artificial Intelligence"
       - "Brain fingerprinting"
@@ -6029,8 +6065,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "BCI & neurotechnology"
+    topics: []
     tags: []
   - id: "QRNYS2R3"
     collection: "framework"
@@ -6054,7 +6089,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Community"
+      - "Software"
     tags: []
   - id: "EVBABNNE"
     collection: "framework"
@@ -6078,10 +6114,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reproducibility"
       - "Reporting standards"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Methodology"
+      - "Inclusivity"
+      - "Reproducibility"
+      - "Replication"
     tags:
       - "false positives"
       - "incentives"
@@ -6132,8 +6169,7 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics:
-      - "Theory & epistemology"
+    topics: []
     tags: []
   - id: "LHZWSSY8"
     collection: "framework"
@@ -6156,7 +6192,8 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics: []
+    topics:
+      - "Methodology"
     tags:
       - "Bayesian analysis"
       - "Cognitive Psychology"
@@ -6183,7 +6220,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "EEG"
+      - "MEG"
     tags: []
   - id: "T97QL8HC"
     collection: "framework"
@@ -6231,7 +6270,7 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Hardware & low-cost EEG"
+      - "Methodology"
     tags: []
   - id: "K86YPR3X"
     collection: "framework"
@@ -6255,11 +6294,14 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Sustainability"
-      - "EEG methods"
+      - "Software"
+      - "Methodology"
+      - "Machine learning"
+      - "EEG"
+      - "MEG"
+      - "FieldTrip"
+      - "Open source"
+      - "Analysis tools"
     tags: []
   - id: "H32K5DCK"
     collection: "framework"
@@ -6283,7 +6325,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Theory & epistemology"
+      - "Methodology"
     tags: []
   - id: "BRPE3J4J"
     collection: "framework"
@@ -6307,7 +6349,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
     tags: []
   - id: "TA6SY8SX"
     collection: "framework"
@@ -6331,7 +6373,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "Analysis tools"
     tags: []
   - id: "Q2AYRULZ"
     collection: "framework"
@@ -6355,11 +6398,11 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Software & tools"
-      - "Diversity & inclusion"
+      - "Software"
+      - "Inclusivity"
       - "Sustainability"
       - "Clinical EEG"
-      - "BCI & neurotechnology"
+      - "EEG"
     tags:
       - "Assistive robotics"
       - "EEG-based brain–computer interfaces"
@@ -6386,8 +6429,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Theory & epistemology"
+    topics: []
     tags:
       - "Brain imaging"
       - "Cognitive neuroscience"
@@ -6415,9 +6457,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Publishing & peer review"
-      - "Theory & epistemology"
+    topics: []
     tags: []
   - id: "XEBVCDM6"
     collection: "framework"
@@ -6487,10 +6527,8 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
+      - "Methodology"
       - "Clinical EEG"
-      - "EEG methods"
     tags:
       - "Brain"
       - "Crime"
@@ -6520,7 +6558,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Publishing & peer review"
+      - "Methodology"
+      - "Inclusivity"
     tags:
       - "Cancer risk factors"
       - "Finance"
@@ -6551,9 +6590,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
-      - "BCI & neurotechnology"
+    topics: []
     tags: []
   - id: "6UGL8TXX"
     collection: "framework"
@@ -6577,13 +6614,14 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Reporting standards"
-      - "Open science"
-      - "Software & tools"
-      - "Sustainability"
-      - "Publishing & peer review"
-      - "EEG methods"
       - "History"
+      - "Reporting standards"
+      - "Software"
+      - "Methodology"
+      - "Sustainability"
+      - "EEG"
+      - "Open source"
+      - "Analysis tools"
     tags:
       - "EEG"
       - "ERP"
@@ -6614,8 +6652,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Ethics & neurorights"
-      - "Theory & epistemology"
+      - "Methodology"
     tags:
       - "Responsibility"
   - id: "CC2WMFIS"
@@ -6640,7 +6677,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Publishing & peer review"
+      - "Methodology"
     tags:
       - "Experimentation"
       - "Scientific Communication"
@@ -6691,10 +6728,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
-      - "Publishing & peer review"
-      - "Theory & epistemology"
+    topics: []
     tags:
       - "Philosophie"
   - id: "J9PQLN4D"
@@ -6718,8 +6752,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
+    topics: []
     tags:
       - "Ethics"
   - id: "96PFCSI9"
@@ -6768,8 +6801,13 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Software & tools"
-      - "Global & equitable research"
+      - "Global neuroscience"
+      - "Community"
+      - "Software"
+      - "EEG"
+      - "MEG"
+      - "FieldTrip"
+      - "Analysis tools"
     tags: []
   - id: "UZFM9TFN"
     collection: "framework"
@@ -6794,6 +6832,9 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
+      - "Methodology"
+      - "EEG"
+      - "ARTEM-IS"
     tags: []
   - id: "L747BFA6"
     collection: "framework"
@@ -6817,7 +6858,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "7NWRBSZA"
     collection: "framework"
@@ -6888,8 +6930,9 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Hardware & low-cost EEG"
-      - "EEG methods"
+      - "Methodology"
+      - "EEG"
+      - "ARTEM-IS"
     tags: []
   - id: "JIY9WBVI"
     collection: "framework"
@@ -6913,13 +6956,13 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Machine learning & AI"
-      - "Diversity & inclusion"
-      - "Ethics & neurorights"
+      - "Community"
+      - "Software"
+      - "Open Science"
+      - "Methodology"
+      - "Inclusivity"
       - "Sustainability"
-      - "Research culture & careers"
+      - "Machine learning"
       - "Clinical EEG"
     tags: []
   - id: "JASVLAJ6"
@@ -6943,7 +6986,8 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics: []
+    topics:
+      - "Inclusivity"
     tags: []
   - id: "QJYDLXU2"
     collection: "framework"
@@ -6989,8 +7033,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Research culture & careers"
+    topics: []
     tags: []
   - id: "64CX8IXZ"
     collection: "framework"
@@ -7014,7 +7057,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
+      - "EEG"
     tags: []
   - id: "Q2T7LHCT"
     collection: "framework"
@@ -7061,7 +7105,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
     tags: []
   - id: "BGVKRQHV"
     collection: "framework"
@@ -7085,8 +7129,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
-      - "Research culture & careers"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "IG57HIXQ"
     collection: "framework"
@@ -7110,7 +7154,10 @@ items:
     featured: false
     parts: [1, 2]
     topics:
-      - "Software & tools"
+      - "Data harmonisation"
+      - "Community"
+      - "Methodology"
+      - "EEG"
     tags: []
   - id: "HL4Q7J6R"
     collection: "framework"
@@ -7134,8 +7181,8 @@ items:
     featured: false
     parts: [3]
     topics:
+      - "Community"
       - "Sustainability"
-      - "Research culture & careers"
     tags: []
   - id: "XTKP7Y3W"
     collection: "framework"
@@ -7159,8 +7206,7 @@ items:
     featured: false
     parts: [3]
     topics:
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
+      - "Machine learning"
     tags: []
   - id: "JEMSH7RC"
     collection: "framework"
@@ -7185,10 +7231,10 @@ items:
     parts: [3]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Machine learning & AI"
-      - "Ethics & neurorights"
+      - "Open Science"
+      - "Methodology"
       - "Sustainability"
+      - "Machine learning"
     tags: []
   - id: "QRN2MGW7"
     collection: "framework"
@@ -7213,11 +7259,9 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Open science"
-      - "Data standards"
-      - "Diversity & inclusion"
-      - "Sustainability"
-      - "Publishing & peer review"
+      - "Data harmonisation"
+      - "Open Science"
+      - "Inclusivity"
     tags: []
   - id: "A7ZY2T3U"
     collection: "framework"
@@ -7241,8 +7285,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Research culture & careers"
+      - "Data harmonisation"
+      - "Community"
     tags: []
   - id: "T3RLS42V"
     collection: "framework"
@@ -7289,10 +7333,9 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Software & tools"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Data harmonisation"
+      - "Community"
+      - "Software"
     tags: []
   - id: "X927BR4B"
     collection: "framework"
@@ -7408,8 +7451,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Hardware & low-cost EEG"
+      - "Community"
+      - "Open Science"
     tags: []
   - id: "9TF64DH2"
     collection: "framework"
@@ -7455,8 +7498,7 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics:
-      - "BCI & neurotechnology"
+    topics: []
     tags: []
   - id: "LARGES4P"
     collection: "framework"
@@ -7479,7 +7521,8 @@ items:
     theme: ""
     featured: false
     parts: [1]
-    topics: []
+    topics:
+      - "Methodology"
     tags: []
   - id: "CTCM4TAU"
     collection: "framework"
@@ -7503,7 +7546,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
     tags: []
   - id: "CDKM2XLD"
     collection: "framework"
@@ -7552,7 +7595,6 @@ items:
     parts: [3]
     topics:
       - "Reporting standards"
-      - "Ethics & neurorights"
     tags: []
   - id: "6PY9FCKJ"
     collection: "framework"
@@ -7599,8 +7641,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Machine learning & AI"
-      - "Theory & epistemology"
+      - "Machine learning"
     tags: []
   - id: "LVASE7RJ"
     collection: "framework"
@@ -7625,8 +7666,8 @@ items:
     parts: [2]
     topics:
       - "Reporting standards"
-      - "Diversity & inclusion"
-      - "BCI & neurotechnology"
+      - "Community"
+      - "Inclusivity"
     tags: []
   - id: "YAUNP22L"
     collection: "framework"
@@ -7696,7 +7737,7 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
     tags: []
   - id: "FLFRZREQ"
     collection: "framework"
@@ -7720,9 +7761,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Publishing & peer review"
+      - "Software"
+      - "Open Science"
     tags: []
   - id: "QFFZP2WE"
     collection: "framework"
@@ -7746,8 +7786,8 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Software & tools"
+      - "Data harmonisation"
+      - "Software"
     tags: []
   - id: "RILANERH"
     collection: "framework"
@@ -7771,8 +7811,11 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Data standards"
-      - "Software & tools"
+      - "Data harmonisation"
+      - "Software"
+      - "EEG"
+      - "MEG"
+      - "BIDS"
     tags: []
   - id: "VQXWSU2I"
     collection: "framework"
@@ -7796,9 +7839,8 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Open science"
-      - "Publishing & peer review"
-      - "Research culture & careers"
+      - "Community"
+      - "Open Science"
     tags: []
   - id: "2TIV2C8T"
     collection: "framework"
@@ -7891,8 +7933,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Research culture & careers"
+    topics: []
     tags: []
   - id: "4J2LVZH6"
     collection: "framework"
@@ -7916,8 +7957,9 @@ items:
     featured: false
     parts: [2]
     topics:
-      - "Diversity & inclusion"
+      - "Inclusivity"
       - "Clinical EEG"
+      - "EEG"
     tags: []
   - id: "9GQZJ8IK"
     collection: "framework"
@@ -7941,8 +7983,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Publishing & peer review"
+      - "Open Science"
     tags: []
   - id: "ACXYVNSY"
     collection: "framework"
@@ -7965,8 +8006,7 @@ items:
     theme: ""
     featured: false
     parts: [3]
-    topics:
-      - "Ethics & neurorights"
+    topics: []
     tags: []
   - id: "TAMPQ4T4"
     collection: "framework"
@@ -7990,9 +8030,10 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
-      - "Software & tools"
-      - "Publishing & peer review"
+      - "Software"
+      - "Open Science"
+      - "Methodology"
+      - "Open source"
     tags: []
   - id: "PP649SFX"
     collection: "framework"
@@ -8086,7 +8127,6 @@ items:
     parts: [3]
     topics:
       - "Sustainability"
-      - "Publishing & peer review"
     tags: []
   - id: "54H3SLQC"
     collection: "framework"
@@ -8109,8 +8149,7 @@ items:
     theme: ""
     featured: false
     parts: [2]
-    topics:
-      - "Research culture & careers"
+    topics: []
     tags: []
   - id: "JHZD4WTY"
     collection: "framework"
@@ -8135,7 +8174,7 @@ items:
     parts: [1]
     topics:
       - "Reporting standards"
-      - "Software & tools"
+      - "Software"
     tags: []
   - id: "UDF4H3CG"
     collection: "framework"
@@ -8159,7 +8198,11 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Software & tools"
+      - "Software"
+      - "EEG"
+      - "MEG"
+      - "FieldTrip"
+      - "Analysis tools"
     tags: []
   - id: "DZFX4PEK"
     collection: "framework"
@@ -8206,7 +8249,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Open science"
+      - "Open Science"
     tags: []
   - id: "J4RU5QMQ"
     collection: "framework"
@@ -8230,7 +8273,7 @@ items:
     featured: false
     parts: [1]
     topics:
-      - "Data standards"
-      - "Software & tools"
-      - "EEG methods"
+      - "Data harmonisation"
+      - "Software"
+      - "Methodology"
     tags: []

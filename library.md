@@ -23,7 +23,8 @@ permalink: /library/
       {{ catalogue | size }} readings, tools and recordings behind
       <a href="{{ '/framework/' | relative_url }}">the Framework</a>, curated as a
       public <a href="{{ lib.zotero_url | default: 'https://www.zotero.org/groups/5794905/library' }}" target="_blank" rel="noopener">Zotero group library</a>.
-      The filters below search both at once.
+      Both are tagged with the same EEG101 vocabulary, so the filters below
+      search across the two at once.
     </p>
 
     <!-- Filter controls -->
@@ -37,21 +38,23 @@ permalink: /library/
         <button class="filter-btn" data-collection="framework">Framework catalogue ({{ catalogue | size }})</button>
       </div>
 
-      <div class="library-filters" id="hub-topics" role="group" aria-label="Filter by topic">
-        <button class="filter-btn active" data-topic="all">All topics</button>
+      <div class="library-filters" id="hub-topics" role="group" aria-label="Filter by tag">
+        <button class="filter-btn active" data-topic="all">All tags</button>
         {% comment %}
-          Eighteen topics is five rows of pills, which pushes the collection
-          itself below the fold. Show the eight largest and keep the rest one
-          click away.
+          EEG101's own tags, carried across to the Framework catalogue so
+          both collections filter together. The first nine are the buttons the
+          Library already had, in the order it had them; the rest are curated
+          tags that only became worth a button once the catalogue was merged
+          in, so they sit one click away.
         {% endcomment %}
         {% for topic in lib.topics %}
-        <button class="filter-btn{% if forloop.index > 8 %} filter-btn--extra{% endif %}"
-                data-topic="{{ topic.name | downcase }}"{% if forloop.index > 8 %} hidden{% endif %}>{{ topic.name }} ({{ topic.count }})</button>
+        <button class="filter-btn{% if forloop.index > 9 %} filter-btn--extra{% endif %}"
+                data-topic="{{ topic.name | downcase }}"{% if forloop.index > 9 %} hidden{% endif %}>{{ topic.name }} ({{ topic.count }})</button>
         {% endfor %}
-        {% assign extra = lib.topics | size | minus: 8 %}
+        {% assign extra = lib.topics | size | minus: 9 %}
         {% if extra > 0 %}
         <button type="button" class="filter-btn filter-btn--toggle" id="hub-more-topics"
-                aria-expanded="false">+{{ extra }} more topics</button>
+                aria-expanded="false">+{{ extra }} more tags</button>
         {% endif %}
       </div>
 
@@ -149,6 +152,11 @@ permalink: /library/
           {% endif %}
           {% if item.abstract and item.abstract != "" %}
           <p class="cf-cat-card__abstract">{{ item.abstract | strip_html | truncate: 170 }}</p>
+          {% endif %}
+          {% if item.topics and item.topics != empty %}
+          <div class="paper-tag-list">
+            {% for tag in item.topics %}<span class="paper-tag">{{ tag }}</span>{% endfor %}
+          </div>
           {% endif %}
           <div class="cf-cat-card__links">
             {% if item.doi and item.doi != "" %}
@@ -248,7 +256,7 @@ permalink: /library/
         b.hidden = !hidden;
       });
       moreBtn.setAttribute('aria-expanded', hidden ? 'true' : 'false');
-      moreBtn.textContent = hidden ? 'Fewer topics' : moreBtn.dataset.label;
+      moreBtn.textContent = hidden ? 'Fewer tags' : moreBtn.dataset.label;
     });
     moreBtn.dataset.label = moreBtn.textContent;
   }

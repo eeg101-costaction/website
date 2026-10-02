@@ -14,7 +14,7 @@
   open_access: true
   theme: "History"
   image: "/assets/images/hub/mushtaq-2024-nhb.jpg"
-  tags: [EEG, History, Open Science, Global Neuroscience]
+  tags: [EEG, History, Open Science, Global neuroscience]
 
 - id: soskic-2025-psychophysiology
   title: "ARTEM-IS for ERP: Agreed Reporting Template for EEG Methodology—International Standard for Event-Related Potential Experiments"

@@ -154,36 +154,57 @@ either source, so a hand edit to `library.yml` that is never rebuilt is caught
 rather than silently ignored. The nightly sync rebuilds the index after
 refreshing the catalogue.
 
-### Topics, and why the Zotero tags are not used as filters
+### Tags: EEG101's own vocabulary, carried across
 
 The two collections could not share a tag vocabulary as they stood. The curated
-entries carry a tidy dozen themes. The Zotero records carry **485 distinct tags
-across 123 items, 411 of them appearing exactly once**, and include MeSH
+entries carry the Library's own tags. The Zotero records carry **485 distinct
+tags across 123 items, 411 of them appearing exactly once**, including MeSH
 headings (`Humans`, `Brain Mapping`), arXiv categories
 (`Computer Science - Machine Learning`), BISAC codes
 (`Computers / Social Aspects`) and many case variants of one idea
-(`Open science` / `open science`).
+(`Open science` / `open science`). As filter buttons those are unusable.
 
-So the filters use a curated vocabulary of 18 topics instead. Every item is
-assigned topics by matching its own tags, title, venue and abstract against the
-patterns in `TOPICS` at the top of `build_library.py`. Raw tags are still
-carried on each item and are still searchable — they are simply not offered as
-buttons.
+So the filters are **EEG101's own curated tags** — the ones already applied to
+`library.yml` — carried across to the catalogue. Nothing in the vocabulary is
+invented: every facet is a tag the team already uses. The `TOPICS` dictionary at
+the top of `build_library.py` lists each tag with the words that mean it, used
+only to decide which catalogue items earn it.
 
-To change the topics, edit that `TOPICS` dictionary and re-run the script. Two
-things to know when you do:
-
+* **Curated entries are not inferred.** They were tagged by hand, so their tags
+  are taken verbatim and only folded to a canonical spelling. The check script
+  confirms no curated paper is ever given a tag it was not assigned.
+* **The nine original filter buttons keep their order** and are pinned as
+  buttons whatever their count, because `#EEG101-supported` matters at two items
+  as much as at fifty. Tags carried by at least `FACET_MIN` (5) items are
+  promoted to buttons behind the "more tags" toggle; the rest stay on cards and
+  in search.
 * Patterns are anchored at a **word start**, so `reproducib` catches
   "reproducibility" while `ica` would otherwise fire on "clinical",
   "publication" and "statistical". Write acronyms with an explicit trailing
   boundary, as `ica\b`.
-* The script prints the per-topic counts and the share of items that matched
-  nothing. If a topic balloons past a third of the collection, a pattern is
-  almost certainly over-matching; if the unmatched share climbs, the vocabulary
-  is missing something.
+* Raw Zotero tags stay on each item and stay searchable. They are simply not
+  offered as buttons.
 
-About 12% of items match no topic. They are still reachable by search, by type
-and by Framework part.
+Re-run the script after editing the vocabulary; it prints the per-tag counts and
+the share of items that matched nothing.
+
+### What the vocabulary does not reach
+
+About 17% of catalogue items (52) carry no EEG101 tag. They are still reachable
+by search, by collection and by Framework part. They are not random — they
+cluster into four subjects the Action's own papers do not cover, each of which
+is a named section of the Framework:
+
+| Cluster | Framework section | Roughly |
+| --- | --- | --- |
+| Ethics, neurorights, consumer neurotechnology | 3.1 Ethical use of EEG | ~20 |
+| Research evaluation, publishing reform, DORA | 3.3 Research evaluation | ~15 |
+| Theory, epistemology, reverse inference | 1.4 Theory-driven and data-driven research | ~12 |
+| Technology hype and expectations | 3.2 Overestimating technology | ~8 |
+
+Adding four tags named after those sections would close most of the gap. That is
+an editorial decision for the team, not something to infer, so the vocabulary is
+left as it stands.
 
 ---
 

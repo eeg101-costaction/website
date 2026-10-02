@@ -46,113 +46,116 @@ import sys
 #
 # Patterns are deliberately specific. "ai" alone would match "chair"; "bci"
 # alone would match nothing useful without the spelled-out form beside it.
+# EEG101's own curated vocabulary -- the tags already in use on library.yml,
+# which is what the Library has always filtered by. Nothing here is invented:
+# each key is a tag the team already applies to its own papers. The lists are
+# the words that mean that tag, used to carry it across to the Framework
+# catalogue so both collections filter together.
+#
+# Order is the order the facets appear. The first nine are the filter buttons
+# the Library already had; the rest are curated tags that only became worth
+# promoting to a button once the catalogue was merged in.
+#
+# Patterns are anchored at a word start, so "reproducib" catches
+# "reproducibility" while an acronym written "ica\\b" does not fire on
+# "clinical", "publication" or "statistical".
 TOPICS: dict[str, list[str]] = {
-    "Reproducibility": [
-        "reproducib", "replicat", "many labs", "manylabs", "manypipelines",
-        "multiverse", "preregistrat", "pre-registrat", "registered report",
-        "p-hacking", "questionable research", "robustness", "false positive",
-        "metascience", "meta-science", "many analysts",
+    "#EEG101-supported": ["eeg101-supported"],
+    "History": [
+        "history", "historical", "centenary", "100 years", "hans berger",
+        "a century",
     ],
     "Reporting standards": [
         "reporting", "cobidas", "artem-is", "artemis", "checklist",
         "guideline", "good scientific practice", "documentation",
         "international standards",
     ],
-    "Open science": [
-        "open science", "open-science", "open access", "open data",
-        "data sharing", "transparen", "preprint", "diamond", "open source",
-        "openness", "fair data", "fair principle", "fair indicator",
+    "Data harmonisation": [
+        r"bids\b", "brain imaging data structure", "harmonis", "harmoniz",
+        "standardis", "standardiz", "metadata", "curation", "interoperab",
+        "data standard", "openneuro", "datalad", "repositor",
     ],
-    "Data standards": [
-        r"bids\b", "brain imaging data structure", "metadata",
-        "data standard", "openneuro", "datalad", "curation", "harmonis",
-        "harmoniz", "interoperab", "repositor", "research data",
-    ],
-    "Software & tools": [
-        "software", "toolbox", r"mne\b", "eeglab", "fieldtrip", "brainstorm",
-        "matlab", "python", "pipeline", "computer program", "analysis tool",
-        "code sharing", "version control", "jupyter", "platform", "cloud",
-    ],
-    "Machine learning & AI": [
-        "machine learning", "deep learning", "artificial intelligence",
-        "neural network", "large language model", r"llms?\b", "chatgpt",
-        r"generative ai\b", "generative artificial", "classification",
-        "natural language processing", "algorithm", "ai ethics", "ai bias",
-        "ai act", "explainab", "interpretab",
-    ],
-    "Diversity & inclusion": [
-        "diversity", "diverse", "inclusi", "equity", "equitab", r"weird\b",
-        "representation", "gender", "ethnicit", "minorit", r"race\b",
-        "accessib", "disabilit", "neurodiver", "stigma", "cultural",
-        "black in neuro", "biaswatch", "bias watch", "anti-racis",
-        "under-represent", "underrepresent",
-    ],
-    "Global & equitable research": [
+    "Global neuroscience": [
         "africa", r"lmics?\b", "low-income", "low and middle", "global south",
         "global neuroscience", "capacity building", "brain drain",
-        "ethics dumping", "helicopter", "parachute", "decoloni",
+        "ethics dumping", "helicopter", "decoloni",
     ],
-    "Ethics & neurorights": [
-        "ethic", "neurorights", "neuro-rights", "privacy", "consent",
-        r"gdpr\b", "cognitive liberty", "dual use", "misuse", "mental data",
-        "brain reading", "brain fingerprint", "surveillance", "autonomy",
-        "regulation",
+    "#EEGManyLabs": ["eegmanylabs"],
+    "Community": [
+        "community", "collaborat", "network", "consortium",
+        "research culture", "career", "mentor", "training", "education",
+        "scientists", "lab life",
+    ],
+    "Software": [
+        "software", "toolbox", r"mne\b", "eeglab", "fieldtrip", "brainstorm",
+        "matlab", "python", "open source", "analysis tool",
+        "computer program", "code sharing", "platform",
+    ],
+    "Open Science": [
+        "open science", "open-science", "open access", "open data",
+        "data sharing", "transparen", "preprint", "fair data",
+        "fair principle", "fair indicator", "openness", "diamond",
+    ],
+    "Methodology": [
+        "methodolog", "method", "analysis pipeline", "statistical",
+        "experimental design", "sample size", "power analysis",
+        "signal processing", "artifact", "artefact", r"ica\b", "preprocess",
+        r"erps?\b", "event-related", "time-frequency", "evoked potential",
+    ],
+    "Inclusivity": [
+        "diversi", "inclusi", "equity", "equitab", r"weird\b",
+        "representation", "gender", "ethnicit", "minorit", "accessib",
+        "disabilit", "neurodiver", "under-represent", "underrepresent",
+        "bias", "stigma",
     ],
     "Sustainability": [
-        "carbon", "climate", "sustainab", "environment", r"energy\b",
-        "footprint", "greenhouse", "1point5", "emission", "decarbon",
-        "life cycle", "e-waste", "biodiversity", "conservation", "planetary",
-        "recycl", "reuse", "doughnut", "ecolog",
+        "carbon", "climate", "sustainab", "environment", "footprint",
+        "1point5", "emission", "decarbon", "life cycle", "greenhouse",
+        "recycl", "planetary", r"energy\b",
     ],
-    "Publishing & peer review": [
-        "publish", "journal", "peer review", "impact factor", "bibliometric",
-        "citation", "predatory", "editorial", r"dora\b",
-        "scholarly communicat", "authorship", "retraction",
+    "Reproducibility": [
+        "reproducib", "replicat", "preregistrat", "pre-registrat",
+        "registered report", "multiverse", "p-hacking",
+        "questionable research", "false positive", "metascience",
+        "many analysts",
     ],
-    "Research culture & careers": [
-        "career", "research culture", "lab life", "mentor", "training",
-        "education", "curricul", "incentive", "research management",
-        r"phd\b", "postdoc", "early career", "scientific community",
-        "scientists", "teaching", "workforce", "funding",
-        "research assessment", "research evaluation", "academic freedom",
-        "liberté académique", "research integrity", "code of conduct",
-        "singapore statement", "trust code", "misconduct",
+    "Machine learning": [
+        "machine learning", "deep learning", "artificial intelligence",
+        "neural network", "large language model", r"llms?\b", "chatgpt",
+        "classification", "algorithm", "generative ai",
     ],
     "Clinical EEG": [
-        "clinical", "patient", "diagnos", "seizure", "epilep", r"coma\b",
-        "dementia", "alzheimer", "biomarker", "neurological disorder",
-        "psychiatr", "rehabilitation", "neonat", "infant",
+        "clinical", "patient", "diagnos", "seizure", "epilep", "dementia",
+        "alzheimer", "biomarker", "neurological disorder", "psychiatr",
     ],
-    "Theory & epistemology": [
-        "theory", "theoretical", "epistem", "philosoph", "reverse inference",
-        "abduct", "explanation", "4e cognition", "4e‐cognition",
-        "3e‐cognition", "conceptual", "construct validity", "falsifia",
-        "adversarial collaboration", "inference", "causal",
+    "EEG": [r"eegs?\b", "electroencephalo"],
+    "MEG": [r"megs?\b", "magnetoencephalo"],
+    "Conferences": ["conference", "symposium", "cuttinggardens", "cuttingeeg"],
+    "Large-scale collaboration": [
+        "many labs", "manylabs", "multi-site", "multisite", "large-scale",
+        "consortium",
     ],
-    "Hardware & low-cost EEG": [
-        "hardware", "electrode", "amplifier", "headset", "3d print",
-        "low-cost", "low cost", "affordab", "diy", "open hardware",
-        "laboratory equipment", "conductive paste", "consumer-grade",
-        "consumer grade", "equipment",
-    ],
-    "EEG methods": [
-        r"erps?\b", "event-related", "evoked potential", "artifact",
-        "artefact", r"ica\b", "independent component", "preprocess",
-        "electrode", "montage", "oscillat", "frequency band",
-        "source localis", "source localiz", "signal processing",
-        "time-frequency", "statistical method", "experimental design",
-        "sample size", "power analysis",
-    ],
-    "BCI & neurotechnology": [
-        "brain-computer interface", "brain–computer interface",
-        "brain computer interface", r"bcis?\b", "neurofeedback",
-        "neurotechnolog", "neuromodulation", "stimulation", "wearable",
-        "mobile eeg", "headset", "assistive",
-    ],
-    "History": [
-        "history", "historical", "centenary", "100 years", "hans berger",
-        "a century",
-    ],
+    "BIDS": [r"bids\b", "brain imaging data structure"],
+    "Neonatal EEG": ["neonat", "newborn", r"infants?\b"],
+    "Seizure detection": ["seizure detection", "seizure"],
+    "ARTEM-IS": ["artem-is", "artemis"],
+    "CuttingEEG": ["cuttingeeg", "cuttinggardens"],
+    "FieldTrip": ["fieldtrip"],
+    "Open source": ["open source", "open-source"],
+    "Analysis tools": ["analysis tool", "toolbox"],
+    "Replication": ["replicat"],
+    "Alzheimer\u2019s disease": ["alzheimer"],
+}
+
+# A facet needs enough behind it to be worth a button; the rest stay as tags on
+# the cards and in search. The buttons the Library already had are pinned
+# regardless of count -- #EEG101-supported is how the Action surfaces the work
+# it funded, and matters at two items as much as at fifty.
+FACET_MIN = 5
+ALWAYS_FACET = {
+    "#EEG101-supported", "History", "Reporting standards", "Data harmonisation",
+    "Global neuroscience", "#EEGManyLabs", "Community", "Software",
+    "Open Science",
 }
 
 
@@ -246,16 +249,17 @@ def main() -> int:
     items: list[dict] = []
 
     # --- the curated EEG101 collection -----------------------------------
+    canonical_by_lower = {t.lower(): t for t in TOPICS}
     for paper in curated:
         tags = tidy_tags(paper.get("tags"))
-        topics = assign_topics(
-            tags, paper.get("theme"), paper.get("title"), paper.get("journal")
-        )
-        # The curated theme is editorial and always right; keep it as a topic
-        # when the vocabulary has a matching entry.
         theme = (paper.get("theme") or "").strip()
-        for canonical in TOPICS:
-            if theme and theme.lower() in canonical.lower() and canonical not in topics:
+        # These entries were tagged by hand, so the tags on them ARE the answer;
+        # take them as-is, folded to the canonical spelling, rather than
+        # re-deriving topics from their words.
+        topics = []
+        for label in tags + [theme]:
+            canonical = canonical_by_lower.get(label.strip().lower())
+            if canonical and canonical not in topics:
                 topics.append(canonical)
         items.append(
             {
@@ -360,7 +364,9 @@ def main() -> int:
         "topics:",
     ]
     for topic in TOPICS:
-        if topic_counts[topic]:
+        if topic_counts[topic] >= FACET_MIN or (
+            topic in ALWAYS_FACET and topic_counts[topic]
+        ):
             lines += [
                 f"  - name: {yaml_scalar(topic)}",
                 f"    count: {topic_counts[topic]}",
@@ -406,10 +412,21 @@ def main() -> int:
     print(f"  curated EEG101 collection : {sum(1 for i in items if i['featured'])}")
     print(f"  Framework catalogue       : {sum(1 for i in items if not i['featured'])}")
     print(f"  items with no topic       : {untagged} ({untagged*100//len(items)}%)")
-    print("\n  topics:")
-    for topic, n in sorted(topic_counts.items(), key=lambda kv: -kv[1]):
-        if n:
-            print(f"    {n:>4}  {topic}")
+    print(f"\n  facets (curated tags with at least {FACET_MIN} items):")
+    for topic in TOPICS:
+        if topic_counts[topic] >= FACET_MIN or (
+            topic in ALWAYS_FACET and topic_counts[topic]
+        ):
+            pin = "  (pinned)" if topic in ALWAYS_FACET and topic_counts[topic] < FACET_MIN else ""
+            print(f"    {topic_counts[topic]:>4}  {topic}{pin}")
+    small = [
+        (t, topic_counts[t]) for t in TOPICS
+        if 0 < topic_counts[t] < FACET_MIN and t not in ALWAYS_FACET
+    ]
+    if small:
+        print("\n  curated tags too small for a button (still on cards and in search):")
+        for t, n in small:
+            print(f"    {n:>4}  {t}")
     return 0
 
 
