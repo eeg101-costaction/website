@@ -133,6 +133,17 @@ def rewrite(name: str, markup: str) -> str:
         markup,
     )
 
+    # 1b. The upstream text points readers at the standalone catalogue and the
+    #     old signing site. Both now live on this site, so send them there
+    #     rather than off to a deployment that is being retired.
+    for stale, local in (
+        ("https://catalog-cf.eeg101.eu/", "{{ '/library/#framework' | relative_url }}"),
+        ("https://catalog-cf.eeg101.eu", "{{ '/library/#framework' | relative_url }}"),
+        ("https://sign-cf.eeg101.eu/", "{{ '/framework/' | relative_url }}"),
+        ("https://sign-cf.eeg101.eu", "{{ '/framework/' | relative_url }}"),
+    ):
+        markup = markup.replace(f'href="{stale}"', f'href="{local}"')
+
     # 2. Namespace upstream class names so they cannot collide with site styles.
     def rename_classes(match: re.Match[str]) -> str:
         names = [CLASS_RENAMES.get(c, c) for c in match.group(1).split()]

@@ -67,7 +67,7 @@ framework:
     url: "/framework/"
   cta_secondary:
     label: "Resource catalogue"
-    url: "/framework/catalogue/"
+    url: "/library/#framework"
 
 objectives:
   heading: "Our approach"

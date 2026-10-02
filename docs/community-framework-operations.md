@@ -9,7 +9,7 @@ The Community Framework used to live on two separate sites:
 | Glossary | `sign-cf.eeg101.eu/glossary/` | `/framework/glossary/` |
 | References | `sign-cf.eeg101.eu/references/` | `/framework/references/` |
 | Contributors | `sign-cf.eeg101.eu/contributors/` | `/framework/contributors/` |
-| Resource catalogue | `catalog-cf.eeg101.eu` (Next.js, `eeg101-costaction/catalog-cf`) | `/framework/catalogue/` |
+| Resource catalogue | `catalog-cf.eeg101.eu` (Next.js, `eeg101-costaction/catalog-cf`) | `/library/` (merged into the Library; `/framework/catalogue/` redirects there) |
 
 Nothing was migrated destructively. The signature store and the Zotero library
 are untouched and still the single source of truth; this site reads from both.
@@ -130,6 +130,60 @@ two subcollections in (15 of the 28). Whether to show them — and whether Part 
 belongs in the catalogue at all — is an editorial decision for the Framework
 steering group, so neither is on by default. Moving those items into their
 parent collection in Zotero would also fix it at source, for both catalogues.
+
+---
+
+## The Library holds both collections
+
+`/library/` renders `_data/library_index.yml`, which is **generated** by
+`scripts/build_library.py` from two sources:
+
+| Source | What it holds | Who edits it |
+| --- | --- | --- |
+| `_data/library.yml` | the curated EEG101 papers, with cover art, hosted PDFs and open-access links | edited by hand |
+| `_data/cf_catalogue.yml` | the Framework catalogue | generated from Zotero |
+
+Edit a source, then re-run the script:
+
+```bash
+python3 scripts/build_library.py
+```
+
+`scripts/check_framework.py` fails the build if the index has drifted from
+either source, so a hand edit to `library.yml` that is never rebuilt is caught
+rather than silently ignored. The nightly sync rebuilds the index after
+refreshing the catalogue.
+
+### Topics, and why the Zotero tags are not used as filters
+
+The two collections could not share a tag vocabulary as they stood. The curated
+entries carry a tidy dozen themes. The Zotero records carry **485 distinct tags
+across 123 items, 411 of them appearing exactly once**, and include MeSH
+headings (`Humans`, `Brain Mapping`), arXiv categories
+(`Computer Science - Machine Learning`), BISAC codes
+(`Computers / Social Aspects`) and many case variants of one idea
+(`Open science` / `open science`).
+
+So the filters use a curated vocabulary of 18 topics instead. Every item is
+assigned topics by matching its own tags, title, venue and abstract against the
+patterns in `TOPICS` at the top of `build_library.py`. Raw tags are still
+carried on each item and are still searchable — they are simply not offered as
+buttons.
+
+To change the topics, edit that `TOPICS` dictionary and re-run the script. Two
+things to know when you do:
+
+* Patterns are anchored at a **word start**, so `reproducib` catches
+  "reproducibility" while `ica` would otherwise fire on "clinical",
+  "publication" and "statistical". Write acronyms with an explicit trailing
+  boundary, as `ica\b`.
+* The script prints the per-topic counts and the share of items that matched
+  nothing. If a topic balloons past a third of the collection, a pattern is
+  almost certainly over-matching; if the unmatched share climbs, the vocabulary
+  is missing something.
+
+About 12% of items match no topic. They are still reachable by search, by type
+and by Framework part.
 
 ---
 

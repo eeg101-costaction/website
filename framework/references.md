@@ -15,7 +15,7 @@ category: "EEG Community Framework"
       Every citation in
       <a href="{{ '/framework/' | relative_url }}">the Community Framework</a>
       links to its entry below. The
-      <a href="{{ '/framework/catalogue/' | relative_url }}">resource catalogue</a>
+      <a href="{{ '/library/#framework' | relative_url }}">resource catalogue in the Library</a>
       offers another view on these works, alongside {{ site.data.cf_catalogue.item_count }}
       readings, tools and recordings in total.
     </p>

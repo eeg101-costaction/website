@@ -153,6 +153,67 @@ def check_data_files() -> dict:
         if untitled:
             fail(f"cf_catalogue.yml has {untitled} items with no title")
 
+    index = load_yaml("library_index.yml")
+    curated = load_yaml("library.yml")
+    if index is not None:
+        loaded["index"] = index
+        items = index.get("items") or []
+        if index.get("total") != len(items):
+            fail(
+                f"library_index.yml total is {index.get('total')} but lists "
+                f"{len(items)} items"
+            )
+        ids = [i.get("id") for i in items]
+        if len(ids) != len(set(ids)):
+            fail("library_index.yml contains duplicate item ids")
+
+        # The index is generated from library.yml and cf_catalogue.yml. If either
+        # source is edited without re-running scripts/build_library.py, the site
+        # silently keeps showing the old collection, so catch the drift here.
+        if curated is not None:
+            missing = [
+                p["id"] for p in curated
+                if p.get("id") and p["id"] not in set(ids)
+            ]
+            if missing:
+                fail(
+                    "library.yml entries missing from library_index.yml "
+                    f"({', '.join(missing[:5])}) -- re-run scripts/build_library.py"
+                )
+            if index.get("curated_count") != len(curated):
+                fail(
+                    f"library_index.yml says {index.get('curated_count')} curated "
+                    f"entries but library.yml has {len(curated)} -- re-run "
+                    "scripts/build_library.py"
+                )
+        if catalogue is not None:
+            cat_ids = {i.get("id") for i in (catalogue.get("items") or [])}
+            absent = sorted(cat_ids - set(ids))
+            if absent:
+                fail(
+                    f"{len(absent)} catalogue items missing from "
+                    "library_index.yml -- re-run scripts/build_library.py"
+                )
+        # Every curated paper must keep what makes its card worth showing.
+        for item in items:
+            if not item.get("featured"):
+                continue
+            for field in ("image", "oa_url", "source_url", "title"):
+                if not item.get(field):
+                    fail(
+                        f"curated library entry {item.get('id')} has lost its "
+                        f"{field}"
+                    )
+                    break
+        orphans = sum(1 for i in items if not i.get("url"))
+        if orphans:
+            fail(f"{orphans} library items have no link to follow")
+        note(
+            f"library: {index.get('curated_count')} curated + "
+            f"{index.get('framework_count')} Framework = {len(items)} items, "
+            f"{len(index.get('topics') or [])} topics"
+        )
+
     contributors = load_yaml("cf_contributors.yml")
     if contributors is not None:
         loaded["contributors"] = contributors
@@ -254,7 +315,10 @@ def check_includes(loaded: dict) -> None:
 
     # 6. No Liquid may reach the includes from upstream prose. The build script
     #    only ever emits the relative_url filter, so anything else is suspect.
-    allowed = re.compile(r"\{\{ '/framework/references/' \| relative_url \}\}")
+    allowed = re.compile(
+        r"\{\{ '/(?:framework/references/|library/\#framework|framework/)' "
+        r"\| relative_url \}\}"
+    )
     for path in sorted(INCLUDES.glob("*.html")):
         if path.stem == "sign-fields":
             continue  # authored here, not generated from upstream prose
@@ -281,6 +345,8 @@ def check_pages() -> None:
         ("framework/references.md", "framework/references.html"),
         ("framework/contributors.md", "site.data.cf_contributors"),
         ("sign.md", "/framework/#cf-sign"),
+        ("library.md", "site.data.library_index"),
+        ("framework/catalogue.md", "/library/#framework"),
     ]:
         path = ROOT / page
         if not path.exists():

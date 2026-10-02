@@ -21,7 +21,7 @@ slides.
 
 ---
 
-## 1. `catalog-cf.eeg101.eu` → `/framework/catalogue/`
+## 1. `catalog-cf.eeg101.eu` → `/library/`
 
 `eeg101-costaction/catalog-cf` is a Next.js app on Vercel, so redirects belong in
 `next.config.mjs`. Replace the file with:
@@ -35,7 +35,7 @@ const nextConfig = {
   // The catalogue moved into the main EEG101 site. These URLs are cited in
   // papers and emails, so the redirects are permanent and stay indefinitely.
   async redirects() {
-    const CATALOGUE = "https://www.eeg101.eu/framework/catalogue/";
+    const CATALOGUE = "https://www.eeg101.eu/library/#framework";
     return [
       { source: "/", destination: CATALOGUE, permanent: true },
       { source: "/resources", destination: CATALOGUE, permanent: true },

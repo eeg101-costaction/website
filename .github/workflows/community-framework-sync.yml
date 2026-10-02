@@ -55,6 +55,11 @@ jobs:
         continue-on-error: true
         run: python3 scripts/fetch_signatories.py
 
+      # The Library renders a merged index built from the curated entries and
+      # the refreshed catalogue, so it has to be rebuilt after them.
+      - name: Rebuild the merged Library index
+        run: python3 scripts/build_library.py
+
       - name: Note which signatory source was used
         run: |
           if [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_SERVICE_ROLE_KEY" ]; then
@@ -82,12 +87,12 @@ jobs:
       - name: Commit any changes
         run: |
           set -euo pipefail
-          if git diff --quiet -- _data/signatories.yml _data/cf_catalogue.yml; then
+          if git diff --quiet -- _data/signatories.yml _data/cf_catalogue.yml _data/library_index.yml; then
             echo "Community Framework data is already up to date."
             exit 0
           fi
           git config user.name "EEG101 Community Framework synchronisation"
           git config user.email "eeg101costaction@gmail.com"
-          git add _data/signatories.yml _data/cf_catalogue.yml
+          git add _data/signatories.yml _data/cf_catalogue.yml _data/library_index.yml
           git commit -m "Refresh Community Framework signatories and catalogue"
           git push origin HEAD:main

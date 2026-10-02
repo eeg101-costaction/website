@@ -2770,3 +2770,29 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
   .cf-page [id] { scroll-margin-top: 80px; }
   .cf-sign { padding: 1.1rem; }
 }
+
+/* --- Library: the two collections share one page and one filter bar --- */
+.hub-section { margin-top: 2.25rem; }
+.hub-section:first-of-type { margin-top: 1rem; }
+.hub-section__heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: var(--step-2);
+  margin: 0 0 1rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.hub-section__count {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+}
+.hub-section__count:empty { display: none; }
+.filter-btn--toggle { font-style: italic; opacity: 0.85; }
+.filter-btn--toggle:hover { opacity: 1; }

@@ -20,7 +20,7 @@ framework_form: true
     <div class="cf-actions">
       <a href="#cf-sign" class="btn btn-primary">Sign the Framework</a>
       <a href="{{ site.data.framework.one_pager | relative_url }}" class="btn btn-outline-primary" download>Download the one-page summary (PDF)</a>
-      <a href="{{ '/framework/catalogue/' | relative_url }}" class="btn btn-outline-primary">Resource catalogue</a>
+      <a href="{{ '/library/#framework' | relative_url }}" class="btn btn-outline-primary">Resource catalogue</a>
       <a href="{{ '/framework/signatories/' | relative_url }}" class="btn btn-outline-primary">Signatories{% if site.data.signatories.total > 0 %} ({{ site.data.signatories.total }}){% endif %}</a>
     </div>
 
@@ -93,7 +93,7 @@ framework_form: true
         <a href="mailto:{{ site.data.framework.contact_email }}">{{ site.data.framework.contact_email }}</a>.
       </p>
       <ul class="cf-after__links">
-        <li><a href="{{ '/framework/catalogue/' | relative_url }}">Resource catalogue</a> — {{ site.data.cf_catalogue.item_count }} readings, tools and recordings behind the Framework</li>
+        <li><a href="{{ '/library/#framework' | relative_url }}">Resource catalogue</a> — {{ site.data.cf_catalogue.item_count }} readings, tools and recordings behind the Framework, in the EEG101 Library</li>
         <li><a href="{{ '/framework/glossary/' | relative_url }}">Glossary</a> — the terms used in this document</li>
         <li><a href="{{ '/framework/references/' | relative_url }}">References</a> — the full bibliography</li>
         <li><a href="{{ '/framework/contributors/' | relative_url }}">Contributors</a> — the {{ site.data.cf_contributors | size }} people who wrote it</li>
