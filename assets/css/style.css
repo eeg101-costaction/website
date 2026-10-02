@@ -2995,6 +2995,10 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-light);
 }
+.lib__filters-close,
+.lib__filters-done,
+.lib__backdrop { display: none; }
+
 .lib__filters-toggle {
   display: none;
   font-family: var(--font-ui);
@@ -3142,14 +3146,77 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
 
 @media (max-width: 991.98px) {
   .lib { grid-template-columns: 1fr; }
+  /* The panel becomes a drawer. In the page's own flow it landed after the
+     results, which on a phone is tens of thousands of pixels down, so opening
+     it looked like nothing had happened. visibility (not display) keeps it out
+     of the tab order while still allowing it to slide. */
   .lib__filters {
-    position: static;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1080;
+    width: min(86vw, 340px);
     max-height: none;
-    display: none;
-    order: 2;
-    margin-top: 1rem;
+    margin: 0;
+    padding-bottom: 0;
+    border-width: 0 1px 0 0;
+    border-radius: 0;
+    box-shadow: var(--shadow-lg);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    visibility: hidden;
+    transform: translateX(-100%);
+    /* visibility is a discrete property: transitioning it would leave the panel
+       hidden for half the duration, and focus() on a hidden element does
+       nothing. So it flips at once on the way in, and waits for the slide on
+       the way out. */
+    transition: transform var(--transition), visibility 0s linear 0.2s;
   }
-  .lib__filters--open { display: block; }
+  .lib__filters--open {
+    visibility: visible;
+    transform: none;
+    transition: transform var(--transition), visibility 0s;
+  }
+  .lib__filters-head { position: sticky; top: 0; background: #fff; z-index: 1; padding-top: 0.15rem; }
+  .lib__filters-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    margin-left: 0.4rem;
+    border: 0;
+    border-radius: 50%;
+    background: var(--color-bg-alt);
+    color: var(--color-text-muted);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lib__filters-done {
+    position: sticky;
+    bottom: 0;
+    display: block;
+    width: 100%;
+    margin-top: 0.6rem;
+    padding: 0.8rem 1rem;
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-primary);
+    color: #fff;
+    font: 700 0.95rem var(--font-ui);
+    cursor: pointer;
+  }
+  .lib__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1075;
+    background: rgba(13, 13, 43, 0.45);
+  }
+  .lib__backdrop[hidden] { display: none; }
   .lib__filters-toggle { display: inline-block; }
 }
 @media (max-width: 575.98px) {

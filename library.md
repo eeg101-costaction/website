@@ -17,6 +17,7 @@ wide: true
     <div class="lib__filters-head">
       <h2 class="lib__filters-title">Filter</h2>
       <button type="button" class="lib__clear" id="lib-clear" hidden>Clear all</button>
+      <button type="button" class="lib__filters-close" id="lib-filters-close" aria-label="Close filters">&times;</button>
     </div>
 
     {% comment %}
@@ -64,7 +65,11 @@ wide: true
         {% endfor %}
       </ul>
     </details>
+
+    <button type="button" class="lib__filters-done" id="lib-filters-done">Show results</button>
   </aside>
+
+  <div class="lib__backdrop" id="lib-backdrop" hidden></div>
 
   <div class="lib__main">
     <p class="lib__intro">
@@ -160,6 +165,9 @@ wide: true
   var clearEl = document.getElementById('lib-clear');
   var panel   = document.getElementById('lib-filters');
   var toggle  = document.getElementById('lib-filters-toggle');
+  var backdrop = document.getElementById('lib-backdrop');
+  var closeEl  = document.getElementById('lib-filters-close');
+  var doneEl   = document.getElementById('lib-filters-done');
 
   /* data-section holds every section an item belongs to, pipe separated. */
   function has(card, facet, values) {
@@ -221,10 +229,59 @@ wide: true
     search.focus();
   });
 
+  var drawer = window.matchMedia('(max-width: 991.98px)');
+  var lockedScrollY = 0;
+
+  /* Same trick as the booking dialog: on mobile Safari a fixed panel does not
+     stop the page behind it from scrolling, so the body is pinned while open. */
+  function lockBody() {
+    lockedScrollY = window.scrollY || window.pageYOffset || 0;
+    document.body.style.position = 'fixed';
+    document.body.style.top = -lockedScrollY + 'px';
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+  }
+  function unlockBody() {
+    if (document.body.style.position !== 'fixed') return;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.left = '';
+    document.body.style.right = '';
+    document.body.style.width = '';
+    window.scrollTo(0, lockedScrollY);
+  }
+
+  function openFilters() {
+    panel.classList.add('lib__filters--open');
+    toggle.setAttribute('aria-expanded', 'true');
+    if (!drawer.matches) return;
+    backdrop.hidden = false;
+    lockBody();
+    /* The panel is still computed as hidden in this tick, and focus() on a
+       hidden element does nothing, so wait for the style to land. */
+    window.requestAnimationFrame(function () { closeEl.focus(); });
+  }
+  function closeFilters(returnFocus) {
+    panel.classList.remove('lib__filters--open');
+    toggle.setAttribute('aria-expanded', 'false');
+    backdrop.hidden = true;
+    unlockBody();
+    if (returnFocus && drawer.matches) toggle.focus();
+  }
+
   toggle.addEventListener('click', function () {
-    var open = panel.classList.toggle('lib__filters--open');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    panel.classList.contains('lib__filters--open') ? closeFilters(false) : openFilters();
   });
+  closeEl.addEventListener('click', function () { closeFilters(true); });
+  doneEl.addEventListener('click', function () { closeFilters(true); });
+  backdrop.addEventListener('click', function () { closeFilters(true); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && panel.classList.contains('lib__filters--open')) closeFilters(true);
+  });
+  /* Turning the phone sideways, or widening to the desktop layout, must not
+     leave the body pinned with no way to unpin it. */
+  drawer.addEventListener('change', function (e) { if (!e.matches) closeFilters(false); });
 
   /* Deep links from the Framework pages: #framework, #eeg101, #part-1..3 */
   var PART_SECTION = {
