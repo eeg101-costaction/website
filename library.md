@@ -68,12 +68,12 @@ wide: true
 
   <div class="lib__main">
     <p class="lib__intro">
-      Two collections, one place to search. The <strong>EEG101 Collection</strong>
-      is {{ lib.curated_count }} open-access papers from the Action and its
-      members; the <strong>Community Framework</strong> catalogue is the
-      {{ lib.framework_count }} readings, tools and recordings behind
+      Here you will find our <strong>Community Framework catalogue</strong> —
+      the readings, tools and recordings behind
       <a href="{{ '/framework/' | relative_url }}">the Framework</a>, curated as a
-      public <a href="https://www.zotero.org/groups/5794905/library" target="_blank" rel="noopener">Zotero group library</a>.
+      public <a href="https://www.zotero.org/groups/5794905/library" target="_blank" rel="noopener">Zotero group library</a>
+      — alongside the <strong>EEG101 Collection</strong> of open-access papers
+      from the Action and its members.
     </p>
 
     <div class="lib__toolbar">
