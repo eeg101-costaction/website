@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-02"
+generated: "2026-10-03"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 143
-public_count: 120
+total: 149
+public_count: 124
 
 people:
   - name: "Enes Abanoz"
@@ -16,6 +16,8 @@ people:
     affiliation: "Tarsus University, Department of Electrical and Electronics Engineering"
   - name: "LINA MAHMOUD SALEH ALQAM"
     affiliation: "Bogazici University"
+  - name: "Amin Alvani"
+    affiliation: "Urbino Carlo Bo University"
   - name: "João Amaro"
     affiliation: "University of Lisbon"
   - name: "Markos Apostolakis"
@@ -70,6 +72,8 @@ people:
     affiliation: "Hospital Regional Universitario de Málaga"
   - name: "João Miguel Alves Ferreira"
     affiliation: "Faculty of Medicine, Univ Coimbra, Coimbra, Portugal"
+  - name: "Fernando Ferreira-Santos"
+    affiliation: "University of Porto"
   - name: "Zigmunds Freibergs"
     affiliation: "University of Tartu, Institute of Psychology"
   - name: "LAURIE GALVAN"
@@ -158,6 +162,8 @@ people:
     affiliation: "Student"
   - name: "Quentin Moreau"
     affiliation: "Institut des Sciences Cognitives Marc Jeannerod"
+  - name: "Daniel Morillo-Cuadrado"
+    affiliation: "Universidad Nacional de Educación a Distancia (UNED)"
   - name: "NURAY BAYAR MULUK"
     affiliation: "KIRIKKALE UNIVERSITY"
   - name: "Faisal Mushtaq"
@@ -226,6 +232,8 @@ people:
     affiliation: "University of Houston"
   - name: "Mikkel C. Vinding"
     affiliation: "University of Copenhagen"
+  - name: "Vaishali Vinod"
+    affiliation: "Kiel University"
   - name: "Andrea Vranic"
     affiliation: "Department of Psychology, University of Zagreb"
   - name: "Ingmar Engbert Jacob de Vries"

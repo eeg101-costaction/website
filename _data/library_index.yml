@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-02"
-total: 323
+generated: "2026-10-03"
+total: 333
 curated_count: 12
-framework_count: 311
+framework_count: 321
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 311
+    count: 321
 
 sections:
   - slug: "educational"
@@ -33,16 +33,16 @@ sections:
     count: 83
   - slug: "responsibility"
     name: "Responsibility"
-    count: 102
+    count: 112
   - slug: "societal"
     name: "Societal and technological responsibility"
     count: 2
 
 types:
   - name: "Journal Article"
-    count: 185
+    count: 192
   - name: "Webpage"
-    count: 77
+    count: 79
   - name: "Preprint"
     count: 19
   - name: "Blog Post"
@@ -65,14 +65,16 @@ types:
     count: 1
   - name: "Manuscript"
     count: 1
+  - name: "Attachment"
+    count: 1
 
 languages:
   - name: "English"
-    count: 214
+    count: 221
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 103
+    count: 106
 
 items:
   - id: "skoric-2026-cmpb"
@@ -1143,6 +1145,31 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     tags: []
+  - id: "B8EL43P2"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Comparing the carbon footprint of fMRI data processing and analysis approaches"
+    authors: "Nicholas E. Souter, Chris Racey, Nikhil Bhagwat, Reese Wilkinson, Niall W. Duncan, Gabrielle Samuel, Loïc Lannelongue, Raghavendra Selvan, Charlotte L. Rae"
+    year: "2025"
+    venue: "Imaging Neuroscience"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://doi.org/10.1162/IMAG.a.36"
+    doi: "10.1162/IMAG.a.36"
+    abstract: "We compared the carbon emissions of preprocessing and statistical analysis of fMRI data in software packages FSL, SPM, and fMRIPrep using an existing open access dataset. Carbon emissions for fMRIPrep were 30x larger than those of FSL, and 23x those of SPM. We also compared the scientific performance of each package, reflected by sensitivity to statistical activation. Overall, fMRIPrep demonstrated slightly superior statistical sensitivity to both FSL and SPM, with FSL also outperforming SPM. However, this pattern varied by brain region. Researchers analysing fMRI data can use these findings to inform their choice of software package, considering the carbon footprint of data processing alongside usability and quality of derived output. Researchers should be conscious of how and when tools that elicit heavy compute are used, minimising energy usage and subsequent file size when possible. Researchers developing and using such tools should consider the extent to which computationally expensive steps are necessary to produce high-quality results."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/B8EL43P2"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags: []
   - id: "AP3IUWAF"
     collection: "framework"
     collection_label: "Community Framework"
@@ -1899,6 +1926,71 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     tags: []
+  - id: "LXJV5D8J"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Between politics and scholarship: the (un)settled debate over neurorights"
+    authors: "Diego Borbón, Jorge Alberto Ramírez-Gómez"
+    year: "2024"
+    venue: "Frontiers in Political Science"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.frontiersin.org/journals/political-science/articles/10.3389/fpos.2024.1335561/full"
+    doi: "10.3389/fpos.2024.1335561"
+    abstract: "Recent breakthroughs in neurotechnology and AI have led to proposals for &#39;neurorights&#39;—a new category of rights intended to safeguard cognitive liberty, neural data privacy, mental integrity, autonomy, psychological continuity, and others. This paper scrutinizes current political initiatives and the haste and ambiguity in the conceptualization of neurorights. It also presents what might be a settled debate and a false dilemma: the creation of new rights is not the only regulatory option. The development of current rights, as well as the promotion of legislative reforms and specific international conventions, seems to be a better and more effective solution. The conclusion argues that the neurorights dialogue must balance politics with caution and requires substantial academic deliberation before creating new lists of problematic rights that might be legally inconvenient, inconsistent, and premature.Without a doubt, politics has played a significant role in influencing the neurorights landscape. As we move further into the advancement of contemporary neurotechnology and artificial intelligence, nations and organizations worldwide have started to recognize the necessity for new regulations. The proposition to establish new neuro-specific rights originally came from Marcello Ienca and Roberto Andorno (2017), who suggested adding four new rights. This was complemented by the proposal from Yuste et al. (2017), who identified four ethical priorities regarding neurotechnology and proposed the creation of new rights that now integrate the list of five rights advocated by the NeuroRights Foundation (2023): mental privacy, personal identity, free will, fair access to mental augmentation, and protection from bias.At the forefront of this movement is Chile, with an important effort towards the inclusion of a brief protection of mental integrity, brain data, and brain activity, as seen in the new reform in article 19 of its Constitution (Biblioteca del Congreso Nacional de Chile, 2021). In addition, in 2021 a neuroprotection bill was presented that included the five neurorights proposed by the NeuroRights Foundation, but so far the project has not advanced (Senate of Chile, 2021). Likewise, Brazil is moving forward with a bill (PL 522/2022) to define neural data and establish rules for its protection (Chamber of Deputies of Brazil, 2022), Argentina is promoting bill 0339-D-2022, which would add safeguards and mandate prior consent and a court order before using neurotechnology in criminal proceedings (Argentine Deputies, 2022), France incorporated the new Law 2021-1017 relating to bioethics and the possibility to prohibit neurotechnologies that could cause harm (Government of France, 2021), and Spain has a new Digital Rights Act, nonbinding legally, but with a soft law approach on neurorights (Government of Spain, 2021).On the other hand, international organizations are also acknowledging the importance of neurorights. For example, the United Nations produced a report on ethical issues of neurotechnology, adopted by UNESCO (2022), and a recent resolution A/HRC/RES/51/3 of the Human Rights Council, approved on October 6, 2022, in which a study on the repercussions of neurotechnology for human rights is commissioned (Human Rights Council, 2022). At the regional level, in 2021 the Organization of American States (OAS) issued a declaration which contains a series of recommendations (IAJC, 2021) that was followed by a declaration of Inter-American Principles on Neurosciences and Human Rights approved in 2023 (IAJC, 2023). Finally, by April 2023, the Latin American Parliament issued a Model Law on neurorights (Parlatino, 2023).Although these political initiatives highlight the global recognition of the normative urgency, it is interesting to note that many of these initiatives are not, in the strict sense, neurorights initiatives, since in some cases, such as in Argentina, a bill is being promoted to address procedural and penitentiary rules, without creating new lists of rights. Others, as in the case of the proposals advanced in the OAS or the UN, advocate for a soft law approach with principles and guidelines, or prioritization of studies and research, again without lists of new rights. In any case, as more nations and organizations join this political tendency, it will be essential to establish a cohesive framework that encapsulates the diverse perspectives and nuances of the so-called “neurorights”.While these political developments signal a recognition of the importance of regulation, several academic voices have raised concerns. Christoph Bublitz criticizes the inflation of rights, warning that without a robust academic debate, the creation of neurorights might lead to a devaluation of existing rights (Bublitz, 2022). Moreover, he contends that the discussion around neurorights has been marked by political activism and lacks the appropriate involvement of legal experts, “[c]onsequently, lobbying on their behalf should cease” (Bublitz, 2022, p.2).Similarly, Marcello Ienca, who also led one of the seminal papers, argues that despite the media coverage, neurorights have limited presence in academic literature, and that “its relative sporadic nature in the academic literature raises a risk of semantic-normative ambiguity and conceptual confusion” (Ienca, 2021, p.6). Moreover, Joseph J. Fins, argues that the current Chilean neurorights reforms do not meet several critical criteria and that they are vague and premature, so they “should undergo additional scholarly scrutiny and should not be adopted by other jurisdictions” (Fins, 2022, p.8). Additionally, scholars such as Ruiz et al. (2021) have warned that certain proposals in Chile could lead to negative effects on research and medical practice. Moreu Carbonell (2021) argues that the Chilean reform is not justified and that &quot;rather than outlining new neuro-rights, it is more important to guarantee already existing rights against the risks of neurotechnology&quot; (p.162). L&#243;pez-Silva and Madrid (2021) consider the constitutional amendment to include neurorights technically unnecessary, but see the introduction of a bill on the matter as advisable. Similarly, De As&#237;s (2022) states that the most accurate criticism is the lack of a broad and profound academic debate on the subject. Fyfe, Lanphier, and Peterson (2022) maintain that the expansion of rights can inflate current human rights to the extent that it diminishes the actual and material capacity to enforce them. Recently, Ligthart et al. (2023) debated the desirability and necessity of translating and condensing the philosophical and ethical underpinnings of &quot;neurorights&quot; across disciplines into specific international rights and integrating them into existing human rights frameworks due to their varied conceptualization. Also, Ligthart, Bublitz and Alegre (2023) argue that we need new laws, not a new list of rights: a position with which we agree.Furthermore, Borb&#243;n and Borb&#243;n (2021) have proposed similar arguments emphasizing that creating the rights proposed by the NeuroRights Foundation is conceptually problematic, bioethically, and financially inconvenient, and legally unnecessary. For example, as a conceptual inconvenience, the notion of a neuroright to free will could be questioned due to its philosophical complexity (Borb&#243;n and Borb&#243;n, 2021; Mu&#241;oz 2019). Also, there are particular ethical and practical concerns on a neuroright to equal access to mental augmentation, as promoting access to cognitive enhancement might include the risk of creating new societal, academic, and labor standards that could pressure individuals who choose not to enhance themselves. Also, as a financial problem, creating a new positive right means that states would need to bear on the financial burden of providing these enhancement technologies that do not have purposes of public health (Borb&#243;n and Borb&#243;n, 2021; Mu&#241;oz and Borb&#243;n, 2023).Furthermore, it is important to question whether neurorights are legally necessary considering the aforementioned inconveniences (Borb&#243;n and Borb&#243;n, 2021; Bublitz, 2022). In general, all national and international legal systems, constitutions, and treaties, already protect freedom, consent, equality, integrity, privacy, and information (Borb&#243;n and Borb&#243;n, 2021). Having said this, we have suggested that the neurorights proposal should be extensively reviewed, and the scope and limits of each right must be properly analyzed before attempting to incorporate them (Borb&#243;n and Borb&#243;n, 2021). Another interesting criticism arose against the excessive relativization that could emerge from the proposal of Ienca and Andorno (2017), since the protection of the new neurorights could be sacrificed against, for example, national security. For this reason, it has been suggested that this proposal may be even more regressive and less progressive in terms of human rights (D&#237;az-Soto and Borb&#243;n, 2022).Instead of new lists of inconvenient and redundant rights, we have proposed the need to move forward with precise laws that address specific challenges, as well as the need to seek international consensus through treaties that establish guidelines, regulations, and prohibitions, but not vague rights.In this direction, for us, the debate over the necessity to establish new neurorights can be seen as settled, as three distinct positions have emerged: (i) take no action, (ii) create new rights, or (iii) further develop current rights, reform existing laws, and develop international treaties. Unfortunately, in the absence of scientific literature and academic debates, one might think that there is a false dilemma: either to create new lists of rights (neurorights) or face a dystopian future of unregulated neurotechnologies. However, we argue that this presents a false dilemma. The regulation of neurotechnology is not confined to the proposals that suggest that new categories of fundamental rights should be created, as if such regulation, or its absence, were the only possible option. We certainly agree with Bublitz (2023) in suggesting that we must transcend the neurorights debate. As suggested by Borb&#243;n and Borb&#243;n (2021) and argued by L&#243;pez-Silva and Madrid (2021), Moreu Carbonell (2021), and Bublitz (2022), instead of general proposals with ambiguous content that amend constitutions with new abstract rights, it could be much more beneficial and effective to create specific and precise legislation to regulate imminent problems based on evidence. For instance, the experience of Argentina and its proposal to reform the Federal Criminal Procedure Code is indicative of the real reforms that might be needed. Rather than creating new, ambiguous, and conceptually complex constitutional rights, bill 0339-D-2022 includes safeguards and requires prior consent and a judicial order before using neurotechnology in criminal proceedings. Those types of initiatives did not require the creation of a new category of fundamental rights but instead provided precise solutions for concrete problems. Therefore, we believe that it is a false dilemma to assert that it would not be possible to regulate human neuroscience without creating new &quot;neurorights&quot;. Legislative proposals and international treaties based on current human rights also appear to be suitable for addressing the challenges of the neurotechnological future.The intersection between politics and scholarship on the neurorights landscape presents a complex, yet necessary, debate. As countries and international organizations take initial steps to protect citizens&#39; rights, academics caution against hurried legislation without adequate scholarly input. Thus, the disparity between politics and scholarship, the former moving in a hasty disconnected manner from the latter, suggests the need for a more integrated dialogue between legislators, scientists, philosophers, jurists, and other key actors. Only through a synthesis of political action informed by reflection and critical commentary from meticulous scholarship, we can hope to adequately address the ethical, legal, and social challenges that neurotechnology and artificial intelligence present in our time. Without a doubt, we recognize that the emergence of neurorights proposals has been somewhat positive since it has raised the debate regarding the limits of human neuroscience. On the contrary, what we highlight is that creating new lists of redundant rights does not protect nor is it sufficient per se. We agree with Andorno and Lavazza (2023) who argue that concrete legal regulations would be required since “the mere formal recognition of such a right would be largely ineffective without concrete legal measures” (p.2). However, it seems to us that the broad inconveniences of neurorights allow us to conclude: we do not oppose regulation; we oppose bad regulation.In that sense, the neurorights dialogue requires substantial academic deliberation before creating new lists of problematic rights that might be legally inconvenient, inconsistent, and premature. On the other hand, the promotion of legislative reforms, the strengthening of current human rights, and the creation of specific international conventions seems to be a better and more effective solution. For that reason, the dialog must strike a balance between innovation and caution, taking into account that the debate over neurorights requires more robust academic deliberation. Until then, the academic challenge posed against these proposals is a necessary critique that disputes the hype around neurorights."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/LXJV5D8J"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags:
+      - "Cognitive liberty"
+      - "Human Rights"
+      - "Neuroethics"
+      - "Neurolaw"
+      - "neurorights"
+      - "Neuroscience"
+      - "neurotechnology"
+  - id: "NYTSM4HB"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Beyond neural data: Cognitive biometrics and mental privacy"
+    authors: "Patrick Magee, Marcello Ienca, Nita Farahany"
+    year: "2024"
+    venue: "Neuron"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.scopus.com/pages/publications/85205151878"
+    doi: "10.1016/j.neuron.2024.09.004"
+    abstract: "Innovations in wearable technology and artificial intelligence have enabled consumer devices to process and transmit data about human mental states (cognitive, affective, and conative) through what this paper refers to as “cognitive biometrics.” Devices such as brain-computer interfaces, extended reality headsets, and fitness wearables offer significant benefits in health, wellness, and entertainment through the collection and processing and cognitive biometric data. However, they also pose unique risks to mental privacy due to their ability to infer sensitive information about individuals. This paper challenges the current approach to protecting individuals through legal protections for “neural data” and advocates for a more expansive legal and industry framework, as recently reflected in the draft UNESCO Recommendation on the Ethics of Neurotechnology, to holistically address both neural and cognitive biometric data. Incorporating this broader and more inclusive approach into legislation and product design can facilitate responsible innovation while safeguarding individuals' mental privacy."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/NYTSM4HB"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags:
+      - "biometrics"
+      - "cognitive biometrics"
+      - "edge computing"
+      - "end-to-end encryption"
+      - "informed consent"
+      - "mental privacy"
+      - "neural data"
+      - "sensitive data"
   - id: "4BU8KM8Z"
     collection: "framework"
     collection_label: "Community Framework"
@@ -2139,6 +2231,38 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     tags: []
+  - id: "7QZ33RK6"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Measuring and reducing the carbon footprint of fMRI preprocessing in fMRIPrep"
+    authors: "Nicholas E. Souter, Nikhil Bhagwat, Chris Racey, Reese Wilkinson, Niall W. Duncan, Gabrielle Samuel, Loïc Lannelongue, Raghavendra Selvan, Charlotte L. Rae"
+    year: "2024"
+    venue: "Human Brain Mapping"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://onlinelibrary.wiley.com/doi/abs/10.1002/hbm.70003"
+    doi: "10.1002/hbm.70003"
+    abstract: "Computationally expensive data processing in neuroimaging research places demands on energy consumption—and the resulting carbon emissions contribute to the climate crisis. We measured the carbon footprint of the functional magnetic resonance imaging (fMRI) preprocessing tool fMRIPrep, testing the effect of varying parameters on estimated carbon emissions and preprocessing performance. Performance was quantified using (a) statistical individual-level task activation in regions of interest and (b) mean smoothness of preprocessed data. Eight variants of fMRIPrep were run with 257 participants who had completed an fMRI stop signal task (the same data also used in the original validation of fMRIPrep). Some variants led to substantial reductions in carbon emissions without sacrificing data quality: for instance, disabling FreeSurfer surface reconstruction reduced carbon emissions by 48%. We provide six recommendations for minimising emissions without compromising performance. By varying parameters and computational resources, neuroimagers can substantially reduce the carbon footprint of their preprocessing. This is one aspect of our research carbon footprint over which neuroimagers have control and agency to act upon."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/7QZ33RK6"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags:
+      - "Carbon"
+      - "Computing"
+      - "fMRI"
+      - "fMRIPrep"
+      - "footprint"
+      - "neuroimaging"
+      - "preprocessing"
   - id: "QI2CSFXG"
     collection: "framework"
     collection_label: "Community Framework"
@@ -2221,6 +2345,39 @@ items:
       - "CARE Guidelines"
       - "ChatGPT"
       - "Large Language Models"
+  - id: "D8CVTEXR"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Purchases dominate the carbon footprint of research laboratories"
+    authors: "Marianne De Paepe, Laurent Jeanneau, Jerôme Mariette, Olivier Aumont, André Estevez-Torres"
+    year: "2024"
+    venue: "PLOS Sustainability and Transformation"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://journals.plos.org/sustainabilitytransformation/article?id=10.1371/journal.pstr.0000116"
+    doi: "10.1371/journal.pstr.0000116"
+    abstract: "Despite increasing interest for the carbon footprint of higher education institutions, little is known about the carbon footprint associated to research activities. Air travel and attendance to conferences concentrate recent data and debates but purchases have attracted little attention. Here we develop a hybrid method to estimate the greenhouse gas emissions (GHG) associated to research purchases. To do so, we combine macroeconomic databases, research-centered companies footprints and life-cycle assessments to construct a public database of monetary emission factors (EF) for research purchases. We apply it to estimate the purchases emissions of a hundred of research laboratories in France, belonging to the Labos 1point5 network and gathering more than 20000 staff, from all disciplines. We find that purchases dominate laboratory emissions, accounting for more than 50% of emissions, with a median of 2.7 t CO2e/pers, which is 3 to 4-fold the separate contribution from travel, commutes and heating. Median electricity emissions are 5-fold lower in our dataset of laboratories using low carbon electricity but they become preponderant for high carbon electricity mixes (3.5 t CO2e/pers). Purchases emissions are very heterogeneous among laboratories and are linearly correlated with budget, with an average carbon intensity of 0.31 ± 0.07 kg CO2e/€ and differences between research domains. Finally, we quantify the effect of a series of demand-driven mitigation strategies obtaining up to −20% in total emissions (−40% in purchases emissions), suggesting that effectively reducing the carbon footprint of research activities calls for systemic changes."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/D8CVTEXR"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags:
+      - "Database and informatics methods"
+      - "Electricity"
+      - "Human mobility"
+      - "Laboratory equipment"
+      - "Medicine and health sciences"
+      - "Research laboratories"
+      - "Social sciences"
+      - "Transportation"
   - id: "232ANLD3"
     collection: "framework"
     collection_label: "Community Framework"
@@ -3329,6 +3486,31 @@ items:
     featured: false
     sections: ["democratization"]
     section_titles: ["Democratization"]
+    tags: []
+  - id: "79YKFPTU"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Novel Neurorights: From Nonsense to Substance"
+    authors: "Jan Christoph Bublitz"
+    year: "2022"
+    venue: "Neuroethics"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://link.springer.com/10.1007/s12152-022-09481-3"
+    doi: "10.1007/s12152-022-09481-3"
+    abstract: "This paper analyses recent calls for so called “neurorights”, suggested novel human rights whose adoption is allegedly required because of advances in neuroscience, exemplified by a proposal of the Neurorights Initiative. Advances in neuroscience and technology are indeed impressive and pose a range of challenges for the law, and some novel applications give grounds for human rights concerns. But whether addressing these concerns requires adopting novel human rights, and whether the proposed neurorights are suitable candidates, are a different matter. This paper argues that the proposed rights, as individuals and a class, should not be adopted and lobbying on their behalf should stop. The proposal tends to promote rights inflationism, is tainted by neuroexceptionalism and neuroessentialism, and lacks grounding in relevant scholarship. None of the proposed individual rights passes quality criteria debated in the field. While understandable from a moral perspective, the proposal is fundamentally flawed from a legal perspective. Rather than conjuring up novel human rights, existing rights should be further developed in face of changing societal circumstances and technological possibilities."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/79YKFPTU"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
     tags: []
   - id: "GHGTPV4R"
     collection: "framework"
@@ -4919,6 +5101,31 @@ items:
       - "Neuroethics"
       - "Neuroimaging"
       - "Societal implications"
+  - id: "9SD6T56V"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Owning Ethical Innovation: Claims about Commercial Wearable Brain Technologies"
+    authors: "Iris Coates McCall, Chloe Lau, Nicole Minielly, Judy Illes"
+    year: "2019"
+    venue: "Neuron"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://linkinghub.elsevier.com/retrieve/pii/S0896627319302892"
+    doi: "10.1016/j.neuron.2019.03.026"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/9SD6T56V"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags: []
   - id: "FVRZ2UM7"
     collection: "framework"
     collection_label: "Community Framework"
@@ -7040,6 +7247,31 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     tags: []
+  - id: "MLS8LGHE"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "All the World's Neural Data, No Common Rule | Davis Wright Tremaine"
+    authors: ""
+    year: ""
+    venue: ""
+    type_label: "Webpage"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/webpage.svg"
+    url: "https://www.dwt.com/blogs/privacy--security-law-blog/2026/05/all-the-neural-data-and-no-common-rule-2026"
+    doi: ""
+    abstract: "This advisory identifies the potential gaps between neurotech device capabilities and existing oversights, contractual frameworks for device makers an"
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/MLS8LGHE"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags: []
   - id: "NMAR3C3X"
     collection: "framework"
     collection_label: "Community Framework"
@@ -7965,6 +8197,31 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     tags: []
+  - id: "YSVZLQF8"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Layout and Consolidation of the Adopted Neurotechnology Recommendation for certified copy signature - UNESCO-RECOMMENDATION-on-the-Ethics-of-Neurotechnology-11.11.2025.pdf"
+    authors: ""
+    year: ""
+    venue: ""
+    type_label: "Attachment"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/document.svg"
+    url: "https://bioethics.jhu.edu/wp-content/uploads/2026/03/UNESCO-RECOMMENDATION-on-the-Ethics-of-Neurotechnology-11.11.2025.pdf"
+    doi: ""
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/YSVZLQF8"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags: []
   - id: "P7IEBF23"
     collection: "framework"
     collection_label: "Community Framework"
@@ -8064,6 +8321,31 @@ items:
     featured: false
     sections: ["democratization"]
     section_titles: ["Democratization"]
+    tags: []
+  - id: "93MZBGFZ"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Neural Data Privacy Regulation: What Laws Exist and What Is Anticipated? | Advisories"
+    authors: ""
+    year: ""
+    venue: "Arnold & Porter"
+    type_label: "Webpage"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/webpage.svg"
+    url: "https://www.arnoldporter.com/en/perspectives/advisories/2025/07/neural-data-privacy-regulation"
+    doi: ""
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/93MZBGFZ"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
     tags: []
   - id: "YAUNP22L"
     collection: "framework"
