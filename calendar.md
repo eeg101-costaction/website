@@ -12,6 +12,13 @@ permalink: /calendar/
   <button class="btn btn-outline-primary btn-sm" id="cal-next" type="button">Next &#8594;</button>
 </div>
 
+<div class="cal-toolbar">
+  <label class="cal-tz" for="cal-tz">Times in
+    <select class="cal-tz__select" id="cal-tz"><option value="auto">Your time zone</option></select>
+  </label>
+  <a class="events-view-switch__link" href="{{ '/events/' | relative_url }}">List view &rarr;</a>
+</div>
+
 <div class="cal-legend" aria-hidden="true">
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--online"></span>Online</span>
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--in-person"></span>In person</span>
@@ -19,7 +26,6 @@ permalink: /calendar/
   {% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
   <span class="cal-legend__item cal-legend__item--internal" id="cal-legend-internal" hidden><span class="cal-legend__swatch cal-legend__swatch--internal"></span>Internal</span>
   {% endif %}
-  <a class="events-view-switch__link cal-legend__link" href="{{ '/events/' | relative_url }}">List view &rarr;</a>
 </div>
 
 {% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
@@ -67,23 +73,138 @@ permalink: /calendar/
     return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10));
   }
 
+  /* ---- Time zones -------------------------------------------------------
+     Event times are stored as a wall clock plus an IANA zone ("10:00" in
+     Europe/Brussels). To show them anywhere else we need the instant they
+     describe, which the browser's own time-zone database can give us: no
+     library, and no request to an IP-geolocation service either, since
+     Intl already knows where the reader is. An event is only converted when
+     its time is a bare HH:MM and it carries a zone; anything else (a
+     free-text time, a conference with no time at all) is shown as written. */
+
+  var DEFAULT_ZONE = "Europe/London";       // what the booking form assumes too
+  var TZ_KEY = "eeg101-calendar-tz";
+  var HHMM = /^([01]?\d|2[0-3]):([0-5]\d)$/;
+
+  var AUTO_ZONE = (function () {
+    try { return Intl.DateTimeFormat().resolvedOptions().timeZone || ""; } catch (e) { return ""; }
+  }());
+  var tzMode = "auto";                       // "auto" | "event" | an IANA name
+
+  function zoneFor(ev) {
+    if (tzMode === "event") return ev.timezone || DEFAULT_ZONE;
+    if (tzMode === "auto")  return AUTO_ZONE || ev.timezone || DEFAULT_ZONE;
+    return tzMode;
+  }
+
+  function zoneParts(ts, zone, opts) {
+    var out = {};
+    try {
+      new Intl.DateTimeFormat("en-GB", Object.assign({ timeZone: zone }, opts))
+        .formatToParts(new Date(ts))
+        .forEach(function (part) { out[part.type] = part.value; });
+    } catch (e) { return null; }
+    return out;
+  }
+
+  /* How far ahead of UTC the zone is at that instant. */
+  function zoneOffset(ts, zone) {
+    var p = zoneParts(ts, zone, { hour12: false, year: "numeric", month: "2-digit",
+                                  day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    if (!p) return 0;
+    return Date.UTC(+p.year, +p.month - 1, +p.day, (+p.hour) % 24, +p.minute, +p.second) - ts;
+  }
+
+  /* The instant a wall clock describes in a given zone. Two passes, so a time
+     that falls near a daylight-saving change still lands on the right side. */
+  function instantOf(dateStr, timeStr, zone) {
+    var d = parseLocalDate(dateStr);
+    var m = HHMM.exec(String(timeStr || "").trim());
+    if (!d || !m || !zone) return null;
+    var naive = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), +m[1], +m[2]);
+    var ts = naive;
+    for (var i = 0; i < 2; i++) ts = naive - zoneOffset(ts, zone);
+    return ts;
+  }
+
+  function dayKey(ts, zone) {
+    var p = zoneParts(ts, zone, { year: "numeric", month: "2-digit", day: "2-digit" });
+    return p ? p.year + "-" + p.month + "-" + p.day : null;
+  }
+  function clockIn(ts, zone) {
+    var p = zoneParts(ts, zone, { hour12: false, hour: "2-digit", minute: "2-digit" });
+    return p ? (p.hour % 24 < 10 ? "0" : "") + (p.hour % 24) + ":" + p.minute : "";
+  }
+  function abbrevIn(ts, zone) {
+    var p = zoneParts(ts, zone, { timeZoneName: "short" });
+    return p && p.timeZoneName ? p.timeZoneName : "";
+  }
+  function addDays(dateStr, days) {
+    var d = parseLocalDate(dateStr);
+    if (!d) return dateStr;
+    d.setDate(d.getDate() + days);
+    var mm = d.getMonth() + 1, dd = d.getDate();
+    return d.getFullYear() + "-" + (mm < 10 ? "0" : "") + mm + "-" + (dd < 10 ? "0" : "") + dd;
+  }
+  function daysBetween(a, b) {
+    var x = parseLocalDate(a), y = parseLocalDate(b);
+    return x && y ? Math.round((x.getTime() - y.getTime()) / 86400000) : 0;
+  }
+
+  /* What this event looks like in the chosen zone. Attached to the event once
+     per render so the 42 cells of a month do not each recompute it. */
+  function describe(ev) {
+    var stated = ev.timezone || (HHMM.test(String(ev.time || "").trim()) ? DEFAULT_ZONE : "");
+    var startTs = instantOf(ev.start_date, ev.time, stated);
+    if (startTs === null) {
+      return { start: ev.start_date, end: ev.end_date || ev.start_date,
+               time: ev.time || "", endTime: ev.end_time || "",
+               label: ev.timezone_label || "", converted: false };
+    }
+    var zone = zoneFor(ev);
+    var endTs = instantOf(ev.end_date || ev.start_date, ev.end_time, stated);
+    var start = dayKey(startTs, zone) || ev.start_date;
+    /* A zone can move an event onto the day before or after. When only the
+       start has a clock, the rest of the span moves with it. */
+    var end = endTs !== null ? (dayKey(endTs, zone) || start)
+                             : addDays(ev.end_date || ev.start_date, daysBetween(start, ev.start_date));
+    /* An end that lands exactly on midnight belongs to the day that just
+       finished: 08:00-09:00 in Brussels is 23:00-00:00 in Los Angeles, which
+       is one evening, not two days. */
+    if (endTs !== null && clockIn(endTs, zone) === "00:00" && daysBetween(end, start) > 0) end = addDays(end, -1);
+    if (daysBetween(end, start) < 0) end = start;
+    return {
+      start: start, end: end,
+      time: clockIn(startTs, zone),
+      endTime: endTs !== null ? clockIn(endTs, zone) : "",
+      label: abbrevIn(startTs, zone),
+      converted: true
+    };
+  }
+
+  function describeAll() {
+    EVENTS.concat(INTERNAL).forEach(function (ev) { ev.shown = describe(ev); });
+  }
+
   // A multi-day event belongs on every square it runs across, not only the one
   // it starts on, so a conference week reads as a week.
   function eventsOnDay(year, month, day) {
     var cell = new Date(year, month, day).getTime();
     return EVENTS.concat(INTERNAL).filter(function (ev) {
-      var start = parseLocalDate(ev.start_date);
+      var shown = ev.shown || describe(ev);
+      var start = parseLocalDate(shown.start);
       if (!start) return false;
-      var end = parseLocalDate(ev.end_date) || start;
+      var end = parseLocalDate(shown.end) || start;
       if (end < start) end = start;
       return cell >= start.getTime() && cell <= end.getTime();
     });
   }
 
   function formatRange(ev) {
-    var start = parseLocalDate(ev.start_date);
-    var end   = parseLocalDate(ev.end_date);
-    if (!start) return ev.start_date || "";
+    var shown = ev.shown || describe(ev);
+    var start = parseLocalDate(shown.start);
+    var end   = parseLocalDate(shown.end);
+    if (!start) return shown.start || "";
     var opts  = { day: "numeric", month: "long", year: "numeric" };
     var first = start.toLocaleDateString("en-GB", opts);
     if (!end || end <= start) return first;
@@ -106,7 +227,8 @@ permalink: /calendar/
     btn.className = ev.internal === true
       ? "cal-event-chip cal-event-chip--internal"
       : "cal-event-chip cal-event-chip--" + fmt;
-    btn.textContent = ev.title;
+    var shown = ev.shown || describe(ev);
+    btn.textContent = shown.converted && shown.time ? shown.time + " " + ev.title : ev.title;
     btn.addEventListener("click", function (e) {
       e.stopPropagation();
       showPopover(ev);
@@ -137,6 +259,7 @@ permalink: /calendar/
   }
 
   function render() {
+    describeAll();
     titleEl.textContent = MONTHS[curMonth] + " " + curYear;
 
     // Remove day cells but keep the 7 fixed header cells
@@ -177,8 +300,9 @@ permalink: /calendar/
   function showPopover(ev) {
     var fmt      = (ev.format || "online").toLowerCase();
     var fmtLabel = { "online": "Online", "in-person": "In Person", "hybrid": "Hybrid" }[fmt] || fmt;
+    var shown    = ev.shown || describe(ev);
     var dateLine = esc(formatRange(ev));
-    if (ev.time)     dateLine += " &middot; " + esc(ev.time) + (ev.end_time ? "&ndash;" + esc(ev.end_time) : "") + (ev.timezone_label ? " " + esc(ev.timezone_label) : "");
+    if (shown.time)  dateLine += " &middot; " + esc(shown.time) + (shown.endTime ? "&ndash;" + esc(shown.endTime) : "") + (shown.label ? " " + esc(shown.label) : "");
     if (ev.location) dateLine += "<br>" + esc(ev.location);
 
     if (ev.internal === true) {
@@ -341,6 +465,57 @@ permalink: /calendar/
       var data = e.data || {};
       if (data.type !== "eeg101-internal-calendar") return;
       if (data.ok === true && Array.isArray(data.events)) unlock(data.events);
+    });
+  }());
+
+  /* The picker. "Your time zone" is whatever the browser reports, which comes
+     from the reader's own clock settings rather than a lookup of their IP, so
+     it is both more accurate and nobody's address is sent anywhere. */
+  (function timeZonePicker() {
+    var select = document.getElementById("cal-tz");
+    if (!select) return;
+
+    var COMMON = ["UTC", "Europe/London", "Europe/Brussels", "Europe/Athens", "Europe/Istanbul",
+                  "Europe/Moscow", "America/New_York", "America/Chicago", "America/Los_Angeles",
+                  "America/Sao_Paulo", "Africa/Lagos", "Africa/Johannesburg", "Asia/Jerusalem",
+                  "Asia/Kolkata", "Asia/Shanghai", "Asia/Tokyo", "Australia/Sydney",
+                  "Pacific/Auckland"];
+    var every = [];
+    try { every = Intl.supportedValuesOf("timeZone") || []; } catch (e) { every = []; }
+
+    function option(value, text) {
+      var o = document.createElement("option");
+      o.value = value;
+      o.textContent = text;
+      return o;
+    }
+    function group(label, zones) {
+      var g = document.createElement("optgroup");
+      g.label = label;
+      zones.forEach(function (z) { g.appendChild(option(z, z.replace(/_/g, " "))); });
+      return g;
+    }
+
+    select.innerHTML = "";
+    select.appendChild(option("auto", AUTO_ZONE ? "Your time zone — " + AUTO_ZONE.replace(/_/g, " ") : "Your time zone"));
+    select.appendChild(option("event", "The event's own time zone"));
+    select.appendChild(group("Common", COMMON));
+    if (every.length) select.appendChild(group("All time zones", every));
+
+    var saved = null;
+    try { saved = window.localStorage.getItem(TZ_KEY); } catch (e) {}
+    if (saved && (saved === "auto" || saved === "event" ||
+                  Array.prototype.some.call(select.options, function (o) { return o.value === saved; }))) {
+      tzMode = saved;
+    }
+    select.value = tzMode;
+    if (select.value !== tzMode) { tzMode = "auto"; select.value = "auto"; }
+
+    select.addEventListener("change", function () {
+      tzMode = select.value;
+      try { window.localStorage.setItem(TZ_KEY, tzMode); } catch (e) {}
+      popover.hidden = true;
+      render();
     });
   }());
 

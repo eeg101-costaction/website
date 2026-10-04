@@ -48,44 +48,130 @@ the month grid. Ask if you would prefer that trade.
 
 ## Setting it up
 
-1. **Create or choose the Google Calendar** holding internal events. In Google
-   Calendar, open **Settings → <your calendar> → Integrate calendar** and copy
-   the **Calendar ID**. If the calendar belongs to someone else, share it with
-   the account that will run the script, with at least "See all event details".
+Allow about twenty minutes. Steps 1–7 are done in Google; step 8 is the only
+change to this repository, and I can make it for you once you have the URL from
+step 7.
 
-2. **Create the Apps Script project** at [script.google.com](https://script.google.com),
-   under an account that can see that calendar. Replace the contents of `Code.gs`
-   with the repository file `scripts/google-apps-script/internal-calendar.gs`.
-   Keep this separate from the event-booking project: a separate project means a
-   calendar change can never disturb event registrations.
+You need a Google account that can see the internal calendar. It does not have
+to be your own — a shared coordination account is often better, because the web
+app keeps running as whoever deployed it, so it should not be an account that
+might be closed when someone leaves.
 
-3. **Add two Script Properties** (**Project Settings → Script Properties**):
+### 1. Decide which calendar holds the internal events
+
+Either use an existing Google Calendar or make one (**Other calendars → + →
+Create new calendar**, name it something like "EEG101 internal"). Everything on
+this calendar becomes visible to anyone with the passphrase, so do not point it
+at a personal calendar.
+
+### 2. Copy the Calendar ID
+
+1. Open [calendar.google.com](https://calendar.google.com) on a computer.
+2. In the left sidebar, hover the calendar's name, click the **⋮** that appears,
+   and choose **Settings and sharing**.
+3. Scroll to **Integrate calendar**.
+4. Copy **Calendar ID**. It looks like
+   `c_a1b2c3d4e5f6@group.calendar.google.com`, or simply your email address if
+   it is your main calendar.
+
+Keep this on the clipboard or in a scratch note — it is needed in step 5.
+
+> If the calendar belongs to somebody else, they must share it with the account
+> you are about to deploy from: same **Settings and sharing** page, **Share with
+> specific people or groups → Add people**, permission **See all event
+> details**. Without this, step 6 fails with "calendar could not be opened".
+
+### 3. Create the Apps Script project
+
+1. Go to [script.google.com](https://script.google.com), signed in as the
+   deploying account.
+2. Click **New project** (top left).
+3. Click the project name, "Untitled project", and rename it
+   **EEG101 internal calendar**.
+
+Make this a **new project**. Do not add it to the event-booking script: they
+need different Google permissions, and a change to one should never be able to
+disturb the other.
+
+### 4. Paste in the code
+
+1. In the editor, select everything in `Code.gs` and delete it.
+2. Open `scripts/google-apps-script/internal-calendar.gs` from this repository,
+   copy the whole file, and paste it in.
+3. Press **Ctrl/Cmd + S**.
+
+### 5. Add the two Script Properties
+
+1. Click the **⚙ Project Settings** cog in the left sidebar.
+2. Scroll to **Script Properties** and click **Edit script properties**.
+3. **Add script property** twice:
 
    | Property | Value |
    | --- | --- |
-   | `EEG101_INTERNAL_CALENDAR_ID` | the Calendar ID from step 1 |
-   | `EEG101_CALENDAR_PASSPHRASE` | the shared passphrase |
+   | `EEG101_INTERNAL_CALENDAR_ID` | the Calendar ID from step 2 |
+   | `EEG101_CALENDAR_PASSPHRASE` | the passphrase the committee will use |
 
-   Neither is ever committed or published. Choose a passphrase of at least four
-   unrelated words.
+4. Click **Save script properties**.
 
-4. **Deploy** with **Deploy → New deployment → Web app**, **Execute as: Me**,
-   **Who has access: Anyone**. "Anyone" is correct here: the passphrase, not the
-   deployment setting, is what gates the data. Run `unlockInternalCalendar` once
-   from the editor first to grant the Calendar authorisation.
+Spelling matters, including the capitals. For the passphrase use four or more
+unrelated words — length beats punctuation, and people have to type it on
+phones. Neither value is ever committed to this repository or sent to the
+website.
 
-5. **Publish the web-app URL** in `_data/site.yml`:
+### 6. Authorise it once
 
-   ```yaml
-   internal_calendar_endpoint: "https://script.google.com/macros/s/…/exec"
-   ```
+Google will not let a script read a calendar until a human has approved it.
 
-   This URL is public and contains no credential. While it is empty, the Calendar
-   page shows public events only and no unlock control appears at all, so the
-   feature is invisible until it is ready.
+1. Go back to the **Editor** (`< >` in the sidebar).
+2. In the function dropdown at the top, choose **unlockInternalCalendar**.
+3. Click **Run**.
+4. **Review permissions → choose the account → Advanced → Go to EEG101 internal
+   calendar (unsafe) → Allow.** The "unsafe" wording is what Google shows for
+   any script that has not been through its review process; it is your own code.
+5. The run then fails with **"That passphrase was not recognised."** in the
+   execution log. **That is the correct result** — it was called with no
+   passphrase. What matters is that it got far enough to be refused, which means
+   the authorisation went through.
 
-6. **Tell the committee the passphrase** through a channel that is not the
-   website — e-COST, or the usual coordination mailing list.
+If instead it says the calendar could not be opened, the Calendar ID is wrong or
+the calendar is not shared with this account: revisit steps 2 and 5.
+
+### 7. Deploy it as a web app
+
+1. **Deploy → New deployment**.
+2. Click the gear next to "Select type" and pick **Web app**.
+3. Fill in:
+   - **Description**: anything, e.g. "v1".
+   - **Execute as**: **Me (your address)**.
+   - **Who has access**: **Anyone**.
+4. **Deploy**, then **Authorize access** if prompted.
+5. Copy the **Web app URL**. It ends in `/exec`.
+
+**"Anyone" is correct and is not the hole it looks like.** It means anyone may
+*call* the script; it does not mean anyone may read the calendar. The script
+returns nothing at all until it has been given the passphrase. If you set this
+to "Anyone with a Google account" instead, Google puts a sign-in page in front
+of it — and Google's sign-in page refuses to load inside an iframe, so the
+calendar would stop appearing on the page.
+
+### 8. Tell the website where it is
+
+In `_data/site.yml`:
+
+```yaml
+internal_calendar_endpoint: "https://script.google.com/macros/s/AKfy…/exec"
+```
+
+Commit and push to `main`; GitHub Pages rebuilds in a minute or two. This URL is
+public and holds no secret — the passphrase is what gates the data.
+
+While this line is empty, the Calendar page shows public events only and the
+unlock control is not rendered at all, so nothing half-built is ever on display.
+
+### 9. Give the committee the passphrase
+
+Send it through e-COST or the coordination mailing list — not on the website,
+and not in this repository.
 
 ## Changing it later
 
@@ -111,6 +197,9 @@ With the endpoint configured, open `/calendar/`:
 * **Hide internal events** removes them, and reloading the page asks again.
 * An internal event's popover shows its title, dates, location and description,
   and no Register or Share controls.
+* Internal events follow the **Times in** picker like public ones: the script
+  sends each event's own time zone along with its wall-clock time, so changing
+  the picker re-times them, and an all-day entry stays put.
 
 To confirm nothing leaks into the built site, search the published page:
 

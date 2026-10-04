@@ -93,6 +93,7 @@ function readInternalEvents() {
       end_date: Utilities.formatDate(end < start ? start : end, zone, 'yyyy-MM-dd'),
       time: allDay ? '' : Utilities.formatDate(start, zone, 'HH:mm'),
       end_time: allDay ? '' : Utilities.formatDate(event.getEndTime(), zone, 'HH:mm'),
+      timezone: zone,
       timezone_label: allDay ? '' : Utilities.formatDate(start, zone, 'zzz'),
       all_day: allDay,
       location: event.getLocation() || '',
