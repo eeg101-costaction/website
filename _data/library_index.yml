@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-03"
-total: 333
+generated: "2026-10-04"
+total: 343
 curated_count: 12
-framework_count: 321
+framework_count: 331
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 321
+    count: 331
 
 sections:
   - slug: "educational"
@@ -24,13 +24,13 @@ sections:
     count: 17
   - slug: "validity"
     name: "Validity and Research integrity"
-    count: 111
+    count: 116
   - slug: "publishing"
     name: "Publishing"
     count: 23
   - slug: "democratization"
     name: "Democratization"
-    count: 83
+    count: 89
   - slug: "responsibility"
     name: "Responsibility"
     count: 112
@@ -40,11 +40,11 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 192
+    count: 203
   - name: "Webpage"
     count: 79
   - name: "Preprint"
-    count: 19
+    count: 18
   - name: "Blog Post"
     count: 12
   - name: "Book"
@@ -70,11 +70,11 @@ types:
 
 languages:
   - name: "English"
-    count: 221
+    count: 229
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 106
+    count: 108
 
 items:
   - id: "skoric-2026-cmpb"
@@ -666,6 +666,39 @@ items:
       - "Biomarkers"
       - "Computational neuroscience"
       - "Dementia"
+  - id: "K36S7F6F"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Inclusive mobile brain-body imaging achieves equivalent EEG data quality across racial groups"
+    authors: "Sodiq Fakorede, Ke Liao, KathleenMae Rogers, Kai Cheng, Lydia Pemberton, Laura E. Martin, Hannes Devos"
+    year: "2026"
+    venue: "PLOS Digital Health"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://journals.plos.org/digitalhealth/article?id=10.1371/journal.pdig.0001638"
+    doi: "10.1371/journal.pdig.0001638"
+    abstract: "Electroencephalography (EEG) research systematically excludes participants with textured hair, limiting generalizability. While inclusive hardware offers a solution, it remains unvalidated in dynamic settings. This study bridges this ecological gap by determining if equitable data quality is achievable across racial groups during a complex Mobile Brain/Body Imaging (MoBI) paradigm. We recruited 17 older adults from racially and ethnically underrepresented groups (REUG) and 17 age-and-sex-matched White older adults. Participants completed an auditory oddball task while sitting and during active standing. EEG was recorded using a dry-brush-electrode system paired with culturally sensitive procedures. The primary outcome was event-related potential (ERP) data quality, quantified using the Standardized Measurement Error (SME) for P3 amplitude and latency. Total data loss was comparable between White (8.29%) and REUG participants (9.88%), with no group differences (p = 0.91) or group×condition interactions (p = 0.82). We found no significant main effects of group or group-by-condition interactions on any SME measure (all p > 0.05), and equivalence testing confirmed that SME for P3 amplitude and latency was statistically equivalent in 16 of 18 stimulus × postural comparisons. A sensitivity analysis restricting the REUG group to participants with textured hair (REUG-T, n = 9) yielded a near-identical pattern (15 of 18 comparisons). Signal‑to‑noise ratio at Fz for frequent stimuli increased from sitting to standing (F = 10.33, p = 0.002, adjusted p = 0.036). Behavioral performance was similar across groups. This study provides the first evidence that equitable ERP data quality is achievable across racial groups during active MoBI by combining inclusive hardware with culturally sensitive protocols. These findings confirm that the technological incompatibility underlying historical underrepresentation is surmountable when paired with culturally sensitive protocols, enabling more inclusive and generalizable cognitive neuroscience."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/K36S7F6F"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags:
+      - "Behavior"
+      - "Culture"
+      - "Electroencephalography"
+      - "Event-related potentials"
+      - "Hair"
+      - "Scalp"
+      - "Signal to noise ratio"
+      - "Statistical data"
   - id: "DY8ISJNG"
     collection: "framework"
     collection_label: "Community Framework"
@@ -971,6 +1004,31 @@ items:
     sections: ["publishing"]
     section_titles: ["Publishing"]
     tags: []
+  - id: "EMN3JSV3"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "A call for psychological and behavioural science on degrowth"
+    authors: "Dario Krpan, Frédéric Basso, Dallas O’Dell, Jason E. Hickel, Giorgos Kallis"
+    year: "2025"
+    venue: "Nature Human Behaviour"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.nature.com/articles/s41562-025-02211-8"
+    doi: "10.1038/s41562-025-02211-8"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/EMN3JSV3"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags: []
   - id: "6IPMLNPH"
     collection: "framework"
     collection_label: "Community Framework"
@@ -1228,6 +1286,31 @@ items:
       - "Guidelines"
       - "Policy and regulation"
       - "Research integrity"
+  - id: "8NDSFN3V"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Cycling on the Freeway: The perilous state of open-source neuroscience software"
+    authors: "Britta U. Westner, Daniel R. McCloy, Eric Larson, Alexandre Gramfort, Daniel S. Katz, Arfon M. Smith, Arnaud Delorme, Vladimir Litvak, Scott Makeig, Robert Oostenveld, Jan-Matthijs Schoffelen, Tim M. Tierney"
+    year: "2025"
+    venue: "Imaging Neuroscience"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://doi.org/10.1162/imag_a_00554"
+    doi: "10.1162/imag_a_00554"
+    abstract: "Most scientists need software to perform their research (Barker et al., 2020; Carver et al., 2022; Hettrick, 2014; Hettrick et al., 2014; Switters &amp; Osimo, 2019), and neuroscientists are no exception. Whether we work with reaction times, electrophysiological signals, or magnetic resonance imaging data, we rely on software to acquire, analyze, and statistically evaluate the raw data we obtain—or to generate such data if we work with simulations. In recent years, there has been a shift toward relying on free, open-source scientific software (FOSSS) for neuroscience data analysis (Poldrack et al., 2019), in line with the broader open science movement in academia (McKiernan et al., 2016) and wider industry trends (Eghbal, 2016). Importantly, FOSSS is typically developed by working scientists (not professional software developers), which sets up a precarious situation given the nature of the typical academic workplace wherein academics, especially in their early careers, are on short- and fixed-term contracts. In this paper, we argue that the existing ecosystem of neuroscientific open-source software is brittle, and discuss why and how the neuroscience community needs to come together to ensure a healthy software ecosystem to the benefit of all."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/8NDSFN3V"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags: []
   - id: "E47BYWZA"
     collection: "framework"
     collection_label: "Community Framework"
@@ -1496,8 +1579,8 @@ items:
     pdf: ""
     theme: ""
     featured: false
-    sections: ["responsibility"]
-    section_titles: ["Responsibility"]
+    sections: ["democratization", "responsibility"]
+    section_titles: ["Democratization", "Responsibility"]
     tags: []
   - id: "EE6X2TY3"
     collection: "framework"
@@ -1812,6 +1895,39 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     tags: []
+  - id: "L79CCG58"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "An analysis of the effects of sharing research data, code, and preprints on citations"
+    authors: "Giovanni Colavizza, Lauren Cadwallader, Marcel LaFlamme, Grégory Dozot, Stéphane Lecorney, Daniel Rappo, Iain Hrynaszkiewicz"
+    year: "2024"
+    venue: "PLOS ONE"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0311493"
+    doi: "10.1371/journal.pone.0311493"
+    abstract: "Calls to make scientific research more open have gained traction with a range of societal stakeholders. Open Science practices include but are not limited to the early sharing of results via preprints and openly sharing outputs such as data and code to make research more reproducible and extensible. Existing evidence shows that adopting Open Science practices has effects in several domains. In this study, we investigate whether adopting one or more Open Science practices leads to significantly higher citations for an associated publication, which is one form of academic impact. We use a novel dataset known as Open Science Indicators, produced by PLOS and DataSeer, which includes all PLOS publications from 2018 to 2023 as well as a comparison group sampled from the PMC Open Access Subset. In total, we analyze circa 122’000 publications. We calculate publication and author-level citation indicators and use a broad set of control variables to isolate the effect of Open Science Indicators on received citations. We show that Open Science practices are adopted to different degrees across scientific disciplines. We find that the early release of a publication as a preprint correlates with a significant positive citation advantage of about 20.2% (±.7) on average. We also find that sharing data in an online repository correlates with a smaller yet still positive citation advantage of 4.3% (±.8) on average. However, we do not find a significant citation advantage for sharing code. Further research is needed on additional or alternative measures of impact beyond citations. Our results are likely to be of interest to researchers, as well as publishers, research funders, and policymakers."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/L79CCG58"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags:
+      - "Bibliometrics"
+      - "Careers"
+      - "Citation analysis"
+      - "Linear regression analysis"
+      - "Open science"
+      - "Reproducibility"
+      - "Research assessment"
+      - "Science policy"
   - id: "MFHLT6AZ"
     collection: "framework"
     collection_label: "Community Framework"
@@ -2043,32 +2159,6 @@ items:
     tags:
       - "academic practice"
       - "climate activism"
-  - id: "HZ7M5CKZ"
-    collection: "framework"
-    collection_label: "Community Framework"
-    title: "Cycling on the Freeway: The Perilous State of Open Source Neuroscience Software"
-    authors: "Britta U. Westner, Daniel R. McCloy, Eric Larson, Alexandre Gramfort, Daniel S. Katz, Arfon M. Smith, invited co-signees"
-    year: "2024"
-    venue: "arXiv"
-    type_label: "Preprint"
-    language: "Not specified"
-    image: ""
-    placeholder: "/assets/images/library/preprint.svg"
-    url: "http://arxiv.org/abs/2403.19394"
-    doi: "10.48550/arXiv.2403.19394"
-    abstract: "Most scientists need software to perform their research (Barker et al., 2020; Carver et al., 2022; Hettrick, 2014; Hettrick et al., 2014; Switters and Osimo, 2019), and neuroscientists are no exception. Whether we work with reaction times, electrophysiological signals, or magnetic resonance imaging data, we rely on software to acquire, analyze, and statistically evaluate the raw data we obtain - or to generate such data if we work with simulations. In recent years there has been a shift toward relying on free, open-source scientific software (FOSSS) for neuroscience data analysis (Poldrack et al., 2019), in line with the broader open science movement in academia (McKiernan et al., 2016) and wider industry trends (Eghbal, 2016). Importantly, FOSSS is typically developed by working scientists (not professional software developers) which sets up a precarious situation given the nature of the typical academic workplace (wherein academics, especially in their early careers, are on short and fixed term contracts). In this paper, we will argue that the existing ecosystem of neuroscientific open source software is brittle, and discuss why and how the neuroscience community needs to come together to ensure a healthy growth of our software landscape to the benefit of all."
-    oa_url: ""
-    oa_label: ""
-    source_url: "https://www.zotero.org/groups/5794905/items/HZ7M5CKZ"
-    source_label: "Zotero record"
-    access_version: ""
-    pdf: ""
-    theme: ""
-    featured: false
-    sections: ["validity"]
-    section_titles: ["Validity and Research integrity"]
-    tags:
-      - "Quantitative Biology - Other Quantitative Biology"
   - id: "R7KWAK47"
     collection: "framework"
     collection_label: "Community Framework"
@@ -3569,6 +3659,31 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     tags: []
+  - id: "VHZRALW4"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Structural racism in neuroimaging: perspectives and solutions"
+    authors: "Termara C. Parker, Jocelyn A. Ricard"
+    year: "2022"
+    venue: "The Lancet Psychiatry"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.thelancet.com/journals/lanpsy/article/PIIS2215-0366(22)00079-7/fulltext"
+    doi: "10.1016/S2215-0366(22)00079-7"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/VHZRALW4"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags: []
   - id: "BM244WVB"
     collection: "framework"
     collection_label: "Community Framework"
@@ -3738,6 +3853,35 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     tags: []
+  - id: "ERH4GMV3"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "The effects of diversity on creativity: A literature review and synthesis"
+    authors: "Andreas Hundschell, Stefan Razinskas, Julia Backmann, Martin Hoegl"
+    year: "2022"
+    venue: "Applied Psychology"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://onlinelibrary.wiley.com/doi/abs/10.1111/apps.12365"
+    doi: "10.1111/apps.12365"
+    abstract: "In today's complex business world, the diversities within organizations, within teams, and of individual employees have emerged as a source of competitive advantage that can enhance creativity at multiple levels of analysis. However, the relationship between diversity and creativity at and across the individual, team, and organizational levels remains a topic of debate, despite ongoing scholarly interest. In this article, we address this debate by conducting a comprehensive multilevel review of 119 empirical studies that explores the effects of diversity on creativity. To structure this body of literature, we review studies based on their levels of analysis as well as the degrees of job-relatedness and the observability of diversity attributes they investigate. This approach helps to enable the discussion of the differential effects that numerous diversity attributes can have on creativity at the individual, team, and organizational levels, thus uncovering promising avenues for future research. Our multilevel perspective particularly points toward the heightened need for more cross-level and dynamic research designs and for extending conceptual ideas well known at one level of analysis to phenomena less understood at other levels of analysis. These approaches should improve the understanding of the complex, and therefore still puzzling, role of diversity for creativity."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/ERH4GMV3"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags:
+      - "creativity"
+      - "diversity"
+      - "literature review"
+      - "multilevel"
   - id: "F9SCHZDH"
     collection: "framework"
     collection_label: "Community Framework"
@@ -3937,6 +4081,34 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     tags: []
+  - id: "THYSE6BW"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Discrimination still plagues science"
+    authors: "Chris Woolston"
+    year: "2021"
+    venue: "Nature"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.nature.com/articles/d41586-021-03043-y"
+    doi: "10.1038/d41586-021-03043-y"
+    abstract: "Employers need to do more to improve workplace diversity, equity and inclusion, a Nature survey finds."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/THYSE6BW"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags:
+      - "Careers"
+      - "Institutions"
+      - "Lab life"
   - id: "5C8AKWA2"
     collection: "framework"
     collection_label: "Community Framework"
@@ -5154,6 +5326,36 @@ items:
       - "citations"
       - "preprints"
       - "scientific publishing"
+  - id: "WLTMYTEC"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead"
+    authors: "Cynthia Rudin"
+    year: "2019"
+    venue: "Nature Machine Intelligence"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.nature.com/articles/s42256-019-0048-x"
+    doi: "10.1038/s42256-019-0048-x"
+    abstract: "Black box machine learning models are currently being used for high-stakes decision making throughout society, causing problems in healthcare, criminal justice and other domains. Some people hope that creating methods for explaining these black box models will alleviate some of the problems, but trying to explain black box models, rather than creating models that are interpretable in the first place, is likely to perpetuate bad practice and can potentially cause great harm to society. The way forward is to design models that are inherently interpretable. This Perspective clarifies the chasm between explaining black boxes and using inherently interpretable models, outlines several key reasons why explainable black boxes should be avoided in high-stakes decisions, identifies challenges to interpretable machine learning, and provides several example applications where interpretable models could potentially replace black box models in criminal justice, healthcare and computer vision."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/WLTMYTEC"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags:
+      - "Computer science"
+      - "Criminology"
+      - "Science"
+      - "Statistics"
+      - "technology and society"
   - id: "2JM5JDI2"
     collection: "framework"
     collection_label: "Community Framework"
@@ -5503,6 +5705,31 @@ items:
     oa_url: ""
     oa_label: ""
     source_url: "https://www.zotero.org/groups/5794905/items/3MA8HRIQ"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags: []
+  - id: "Y5PPMRMY"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Choosing prediction over explanation in psychology: Lessons from machine learning"
+    authors: "Tal Yarkoni, Jacob Westfall"
+    year: "2017"
+    venue: "Perspectives on psychological science : a journal of the Association for Psychological Science"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6603289/"
+    doi: "10.1177/1745691617693393"
+    abstract: "Psychology has historically been concerned, first and foremost, with explaining the causal mechanisms that give rise to behavior. Randomized, tightly controlled experiments are enshrined as the gold standard of psychological research, and there are endless investigations of the various mediating and moderating variables that govern various behaviors. We argue that psychology’s near-total focus on explaining the causes of behavior has led much of the field to be populated by research programs that provide intricate theories of psychological mechanism, but that have little (or unknown) ability to predict future behaviors with any appreciable accuracy. We propose that principles and techniques from the field of machine learning can help psychology become a more predictive science. We review some of the fundamental concepts and tools of machine learning and point out examples where these concepts have been used to conduct interesting and important psychological research that focuses on predictive research questions. We suggest that an increased focus on prediction, rather than explanation, can ultimately lead us to greater understanding of behavior."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/Y5PPMRMY"
     source_label: "Zotero record"
     access_version: ""
     pdf: ""
@@ -6199,6 +6426,45 @@ items:
     section_titles: ["Educational"]
     tags:
       - "Psychology / Neuropsychology"
+  - id: "GJ5JUDE5"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "On the interpretation of weight vectors of linear models in multivariate neuroimaging"
+    authors: "Stefan Haufe, Frank Meinecke, Kai Görgen, Sven Dähne, John-Dylan Haynes, Benjamin Blankertz, Felix Bießmann"
+    year: "2014"
+    venue: "NeuroImage"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "http://www.sciencedirect.com/science/article/pii/S1053811913010914"
+    doi: "10.1016/j.neuroimage.2013.10.067"
+    abstract: "The increase in spatiotemporal resolution of neuroimaging devices is accompanied by a trend towards more powerful multivariate analysis methods. Often it is desired to interpret the outcome of these methods with respect to the cognitive processes under study. Here we discuss which methods allow for such interpretations, and provide guidelines for choosing an appropriate analysis for a given experimental goal: For a surgeon who needs to decide where to remove brain tissue it is most important to determine the origin of cognitive functions and associated neural processes. In contrast, when communicating with paralyzed or comatose patients via brain–computer interfaces, it is most important to accurately extract the neural processes specific to a certain mental state. These equally important but complementary objectives require different analysis methods. Determining the origin of neural processes in time or space from the parameters of a data-driven model requires what we call a forward model of the data; such a model explains how the measured data was generated from the neural sources. Examples are general linear models (GLMs). Methods for the extraction of neural information from data can be considered as backward models, as they attempt to reverse the data generating process. Examples are multivariate classifiers. Here we demonstrate that the parameters of forward models are neurophysiologically interpretable in the sense that significant nonzero weights are only observed at channels the activity of which is related to the brain process under study. In contrast, the interpretation of backward model parameters can lead to wrong conclusions regarding the spatial or temporal origin of the neural signals of interest, since significant nonzero weights may also be observed at channels the activity of which is statistically independent of the brain process under study. As a remedy for the linear case, we propose a procedure for transforming backward models into forward models. This procedure enables the neurophysiological interpretation of the parameters of linear backward models. We hope that this work raises awareness for an often encountered problem and provides a theoretical basis for conducting better interpretable multivariate neuroimaging analyses."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/GJ5JUDE5"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags:
+      - "Activation patterns"
+      - "Decoding"
+      - "EEG"
+      - "Encoding"
+      - "Extraction filters"
+      - "fMRI"
+      - "Forward/backward models"
+      - "Generative/discriminative models"
+      - "Interpretability"
+      - "Multivariate"
+      - "Neuroimaging"
+      - "Regularization"
+      - "Sparsity"
+      - "Univariate"
   - id: "69PWBLBH"
     collection: "framework"
     collection_label: "Community Framework"
@@ -8621,6 +8887,31 @@ items:
     featured: false
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
+    tags: []
+  - id: "HRRWB6K6"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Sanity Checks for Saliency Maps"
+    authors: "Julius Adebayo, Justin Gilmer, Michael Muelly, Ian Goodfellow, Moritz Hardt, Been Kim"
+    year: ""
+    venue: ""
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.zotero.org/groups/5794905/items/HRRWB6K6"
+    doi: ""
+    abstract: "Saliency methods have emerged as a popular tool to highlight features in an input deemed relevant for the prediction of a learned model. Several saliency methods have been proposed, often guided by visual appeal on image data. In this work, we propose an actionable methodology to evaluate what kinds of explanations a given method can and cannot provide. We ﬁnd that reliance, solely, on visual assessment can be misleading. Through extensive experiments we show that some existing saliency methods are independent both of the model and of the data generating process. Consequently, methods that fail the proposed tests are inadequate for tasks that are sensitive to either data or model, such as, ﬁnding outliers in the data, explaining the relationship between inputs and outputs that the model learned, and debugging the model. We interpret our ﬁndings through an analogy with edge detection in images, a technique that requires neither training data nor model. Theory in the case of a linear model and a single-layer convolutional neural network supports our experimental ﬁndings2."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/HRRWB6K6"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
     tags: []
   - id: "D4NRFC6V"
     collection: "framework"
