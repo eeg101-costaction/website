@@ -67,6 +67,53 @@ const EVENT_EXTRA_QUESTIONS = {
   }
 };
 
+// Programmes written into the calendar file (.ics) that registrants receive, so the running order is in
+// their calendar and not only on a PDF. Plain text, one array entry per line; '' leaves a blank line.
+// It is keyed by event ID and kept here rather than in events.yml because the booking form passes event
+// details in a URL, which a full programme would overflow. Times are stated in the event's own zone.
+const EVENT_PROGRAMMES = {
+  'diversity-eeg-populations-2026-11': [
+    'PROGRAMME (all times CET, UTC+1)',
+    '',
+    '12:00 Welcome',
+    'Alexandra Corneyllie, Maximilien Chaumon, Birgit Mathes',
+    'Introduction to the event and the EEG101 Community Framework',
+    '',
+    '12:05 Part 1: Motivation to Increase Diversity in EEG Research',
+    'Dr. Annika Wienke, University of Bremen, Germany',
+    'Families’ Social Status, Spontaneous EEG and Event-Related Brain Responses in Infants',
+    'Findings from the German BRISE study reveal early disparities in infant vigilance and attention associated with socioeconomic and sociocultural disadvantages.',
+    '',
+    '12:25 Part 2: Strategies to Increase Diversity in EEG Research',
+    'Prof. Dr. Emilie Caspar, Ghent University, Belgium',
+    'Beyond the Western Brain: Building a More Inclusive EEG Science',
+    'Drawing on EEG research in Rwanda and Cambodia, this talk promotes truly generalizable human brain models; and shares practical lessons for cross-cultural research.',
+    '',
+    'Prof. Dr. Mahnaz Arvaneh, University of Sheffield, UK',
+    'Towards More Inclusive EEG Research: Understanding Barriers to Participation in Minority Ethnic Communities',
+    'Neurotech4All’s work with Sheffield’s Somali and Congolese communities offers insights about barriers to participation in EEG research and the importance of trust, awareness, accessibility, cultural considerations, and inclusive study design.',
+    '',
+    'Prof. Dr. Birgit Mathes, University of Bremen, Germany',
+    'Including Underrepresented Families in EEG Research: Recruitment and Retention Strategies',
+    'Recruitment and retention findings from a longitudinal developmental study highlight the role of community partners, trust, tolerance, and reducing participation burdens.',
+    '',
+    '13:30 Part 3: Documenting Participants’ Social Backgrounds',
+    'Prof. Dr. Jana Vietze, Erasmus University Rotterdam, Netherlands',
+    'Choosing Meaningful Labels to Select, Describe, and Analyse Minoritized Groups in Your Data',
+    'Guideline to avoid harmful labels and selecting respectful, analytically useful terminology.',
+    '',
+    '13:50 Panel Discussion',
+    'Participants are invited to suggest discussion topics during registration.',
+    '',
+    '14:25 Outlook'
+  ]
+};
+
+function programmeFor(eventId) {
+  const lines = EVENT_PROGRAMMES[String(eventId || '')];
+  return lines && lines.length ? lines.join('\n') : '';
+}
+
 function extraQuestionsFor(eventId) { return EVENT_EXTRA_QUESTIONS[String(eventId || '')] || null; }
 
 function doGet(e) {
@@ -605,10 +652,20 @@ function icsText(value) {
   return String(value || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
 }
 
+// RFC 5545 limits a line to 75 octets, not characters. En dashes, curly quotes and accented names are
+// 2-3 octets each, so folding by character count overruns on exactly the text a programme is made of.
+// Continuation lines begin with a space, which counts toward the 75.
 function icsFold(line) {
+  const octets = code => code < 0x80 ? 1 : code < 0x800 ? 2 : 3;
   const parts = [];
-  while (line.length > 74) { parts.push(line.slice(0, 74)); line = ' ' + line.slice(74); }
-  parts.push(line);
+  let current = '', size = 0;
+  for (const char of Array.from(String(line))) {
+    const width = char.length > 1 ? 4 : octets(char.charCodeAt(0));
+    if (size + width > 75) { parts.push(current); current = ' '; size = 1; }
+    current += char;
+    size += width;
+  }
+  parts.push(current);
   return parts.join('\r\n');
 }
 
@@ -631,10 +688,10 @@ function makeCalendar(event) {
     end = 'DTEND;VALUE=DATE:' + Utilities.formatDate(new Date(lastDay.getTime() + 24 * 60 * 60 * 1000), 'UTC', 'yyyyMMdd');
   }
   return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//EEG101//Event Hub//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
-    `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), 'SEQUENCE:' + (event.joining_link ? 1 : 0), start, end,
+    `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), 'SEQUENCE:' + ((event.joining_link ? 1 : 0) + (programmeFor(event.id) ? 1 : 0)), start, end,
     icsFold('SUMMARY:' + icsText(event.title)), icsFold('LOCATION:' + icsText(event.joining_link || event.location || 'EEG101'))]
     .concat(event.joining_link ? [icsFold('URL:' + event.joining_link)] : [])
-    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/events/')),
+    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + (programmeFor(event.id) ? programmeFor(event.id) + '\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/events/')),
     'END:VEVENT', 'END:VCALENDAR']).join('\r\n');
 }
 

@@ -28,6 +28,7 @@ Outstanding at the time of writing:
 | --- | --- |
 | The Community Framework prompt now links to `https://www.eeg101.eu/framework/` instead of `https://sign-cf.eeg101.eu/` | The Framework moved onto the main site; the old microsite is being retired. The prompt is shown only for events with `communityFrameworkPrompt: true` in `EVENT_EXTRA_QUESTIONS`, currently just `diversity-eeg-populations-2026-11`. |
 | The inclusive gender options are now the standard set for every event | They were added for the diversity seminar only, so every other form offered Male / Female / Prefer not to say. The per-event `genderExtended` flag is gone and `GENDER_OPTIONS` is the single list. |
+| The diversity seminar's programme is written into its calendar file, and `.ics` lines are now folded by bytes | See *Putting a programme in an event's calendar file* below. Existing registrants get it when their joining link is next emailed. |
 
 To check what the live deployment is actually serving, request the endpoint
 directly with any event's ID and search the HTML:
@@ -37,6 +38,35 @@ curl -sL "<event_booking_endpoint>?event_id=diversity-eeg-populations-2026-11" |
 ```
 
 `0` means the deployment is current.
+
+## Putting a programme in an event's calendar file
+
+Every calendar file the site produces — the **Add to calendar** download, the
+confirmation email attachment, the waiting-list promotion email and the
+joining-link email — is built by `makeCalendar()` in `event-hub.gs`. To put a
+running order in the invite's description, add the event to `EVENT_PROGRAMMES`
+in that file: one array entry per line, `''` for a blank line, times stated in
+the event's own zone. It is keyed by event ID, so a typo in the ID silently does
+nothing; check by generating the file (see below).
+
+Why it lives in the script rather than `events.yml`: the booking form receives
+event details in a URL, which a full programme would overflow.
+
+* The description reads: joining link (or "will be emailed"), then the
+  programme, then the standard footer.
+* A programme raises the file's `SEQUENCE` by one, so a calendar treats the
+  version that has it as newer than one that does not. Link plus programme is 2.
+* Lines are folded at 75 **bytes**, as RFC 5545 requires. En dashes, curly quotes
+  and accented names are 2–3 bytes each, so folding by character count overruns
+  on exactly this kind of text.
+* **People who registered earlier do not get a new file automatically.** They
+  receive one when the joining link is next emailed to them (which happens on its
+  own within the hour of a link being added or changed), and anyone registering
+  from now on gets it straight away.
+
+The diversity seminar's programme is `diversity-eeg-populations-2026-11` and
+comes from `EEG101_Diversity_Seminar_Programme_for_261120_final.pdf`. If that PDF
+is revised, edit the array to match.
 
 ## Add an event with booking
 
