@@ -13,6 +13,16 @@ permalink: /events/
 
 <!-- Filter Section -->
 <div class="news-filter-section mb-5">
+  <!-- Source Filters: EEG101's own events by default; external ones on request -->
+  <div class="mb-3">
+    <label class="text-muted small text-uppercase fw-bold mb-2 d-block">Source</label>
+    <div class="news-filter d-flex flex-wrap gap-2" id="sourceFilters">
+      <button class="news-filter__btn active" data-filter-type="source" data-filter-val="own">EEG101</button>
+      <button class="news-filter__btn" data-filter-type="source" data-filter-val="external">External events</button>
+      <button class="news-filter__btn" data-filter-type="source" data-filter-val="all">All</button>
+    </div>
+  </div>
+
   <!-- Status Filters -->
   <div class="mb-3">
     <div class="events-view-switch">
@@ -123,7 +133,7 @@ permalink: /events/
       {% assign status = "past" %}
     {% endif %}
 
-    <div class="col-12 col-md-6 col-lg-4 grid-item" data-status="{{ status }}" data-topic="{{ topic }}">
+    <div class="col-12 col-md-6 col-lg-4 grid-item" data-status="{{ status }}" data-topic="{{ topic }}" data-external="{% if is_event and item.external == true %}true{% else %}false{% endif %}">
       {% if is_event %}
         {% include event-card.html event=item computed_status=status %}
       {% else %}
@@ -144,13 +154,18 @@ permalink: /events/
 (function(){
   var statusBtns = document.querySelectorAll('#statusFilters .news-filter__btn');
   var topicBtns = document.querySelectorAll('#topicFilters .news-filter__btn');
+  var sourceBtns = document.querySelectorAll('#sourceFilters .news-filter__btn');
   var gridItems = document.querySelectorAll('#unifiedGrid .grid-item');
   var noItemsMsg = document.getElementById('noItemsMessage');
   var resetBtn = document.getElementById('resetFilters');
 
+  // EEG101's own items by default; events run by other organisations are one
+  // click away under "External events" or "All".
+  var DEFAULT_SOURCE = 'own';
   var currentFilters = {
     status: 'all',
-    topic: 'all'
+    topic: 'all',
+    source: DEFAULT_SOURCE
   };
 
   function updateDisplay() {
@@ -170,7 +185,11 @@ permalink: /events/
 
       var topicMatch = (currentFilters.topic === 'all' || topic === currentFilters.topic);
 
-      var isVisible = statusMatch && topicMatch;
+      var isExternal = item.dataset.external === 'true';
+      var sourceMatch = currentFilters.source === 'all' ||
+                        (currentFilters.source === 'external' ? isExternal : !isExternal);
+
+      var isVisible = statusMatch && topicMatch && sourceMatch;
       item.style.display = isVisible ? '' : 'none';
       if (isVisible) visibleCount++;
     });
@@ -191,16 +210,40 @@ permalink: /events/
 
   handleFilterClick(statusBtns, 'status');
   handleFilterClick(topicBtns, 'topic');
+  handleFilterClick(sourceBtns, 'source');
+
+  function setSource(value) {
+    currentFilters.source = value;
+    sourceBtns.forEach(function (b) { b.classList.toggle('active', b.dataset.filterVal === value); });
+  }
 
   resetBtn.addEventListener('click', function() {
     statusBtns.forEach(function(b) { b.classList.remove('active'); if(b.dataset.filterVal === 'all') b.classList.add('active'); });
     topicBtns.forEach(function(b) { b.classList.remove('active'); if(b.dataset.filterVal === 'all') b.classList.add('active'); });
     currentFilters.status = 'all';
     currentFilters.topic = 'all';
+    setSource(DEFAULT_SOURCE);
     updateDisplay();
   });
 
   updateDisplay();
+
+  // A shared link (/events/#event-...) can name an external event that the
+  // default view hides. Open the view up to it rather than landing on nothing.
+  function revealHashTarget() {
+    var id = decodeURIComponent((window.location.hash || '').replace(/^#/, ''));
+    if (!id) return;
+    var target = document.getElementById(id);
+    var holder = target && target.closest('.grid-item');
+    if (!holder) return;
+    if (holder.style.display === 'none') {
+      setSource('all');
+      updateDisplay();
+    }
+    if (holder.style.display !== 'none') target.scrollIntoView({ block: 'center' });
+  }
+  revealHashTarget();
+  window.addEventListener('hashchange', revealHashTarget);
 
   // Share button: on devices with the Web Share API (mainly phones and tablets)
   // this hands off straight to the native share sheet, which already lists
