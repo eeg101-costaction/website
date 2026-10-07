@@ -4,7 +4,7 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-06"
+generated: "2026-10-07"
 source: "https://sign-cf.eeg101.eu/signatories/"
 total: 149
 public_count: 124

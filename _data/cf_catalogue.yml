@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-06"
+generated: "2026-10-07"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 331
+item_count: 335
 
 sections:
   - slug: "educational"
@@ -18,22 +18,22 @@ sections:
     title: "Validity and Research integrity"
     anchor: "cf-validity"
     part: 1
-    count: 116
+    count: 115
   - slug: "publishing"
     title: "Publishing"
     anchor: "cf-validity"
     part: 1
-    count: 23
+    count: 24
   - slug: "democratization"
     title: "Democratization"
     anchor: "cf-democratization"
     part: 2
-    count: 89
+    count: 86
   - slug: "responsibility"
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 112
+    count: 119
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,13 +42,13 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 191
+    count: 195
   - name: "Webpage"
-    count: 79
+    count: 80
   - name: "Preprint"
-    count: 18
+    count: 19
   - name: "Blog Post"
-    count: 12
+    count: 11
   - name: "Book"
     count: 7
   - name: "Computer Program"
@@ -67,8 +67,6 @@ types:
     count: 1
   - name: "Manuscript"
     count: 1
-  - name: "Attachment"
-    count: 1
 
 languages:
   - name: "English"
@@ -76,12 +74,12 @@ languages:
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 108
+    count: 112
 
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 229
+    count: 234
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -90,7 +88,7 @@ families:
     count: 6
   - slug: "webpage"
     label: "Web page"
-    count: 92
+    count: 91
 
 items:
   - id: "RSIXFCMH"
@@ -157,6 +155,7 @@ items:
       - "Coverage - gap"
       - "EEG"
       - "Neurologists"
+      - "cf-paper"
   - id: "N33577ZX"
     title: "EEGLAB"
     type: "computerProgram"
@@ -196,6 +195,28 @@ items:
       - "octave"
       - "source-localization"
       - "spectral-analysis"
+  - id: "MAR4XXV3"
+    title: "Electricity Demand and Grid Impacts of AI Data Centers: Challenges and Prospects"
+    type: "preprint"
+    type_label: "Preprint"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Xin Chen, Xiaoyang Wang, Ana Colacelli, Matt Lee, Le Xie"
+    year: "2026"
+    language: "Unknown"
+    publication: "arXiv"
+    url: "http://arxiv.org/abs/2509.07218"
+    extra_url: ""
+    doi: "10.48550/arXiv.2509.07218"
+    abstract: "The rapid growth of artificial intelligence (AI) is driving an unprecedented increase in the electricity demand of AI data centers, raising emerging challenges for electric power grids. Understanding the characteristics of AI data center loads and their interactions with the grid is therefore critical for ensuring both reliable power system operation and sustainable AI development. This paper provides a comprehensive review and vision of this evolving landscape. Specifically, this paper (i) presents an overview of AI data center infrastructure and its key components, (ii) examines the key characteristics and patterns of electricity demand across the stages of model preparation, training, fine-tuning, and inference, (iii) analyzes the critical challenges that AI data center loads pose to power systems across three interrelated timescales, including long-term planning and interconnection, short-term operation and electricity markets, and real-time dynamics and stability, and (iv) discusses potential solutions from the perspectives of the grid, AI data centers, and AI end-users to address these challenges. By synthesizing current knowledge and outlining future directions, this review aims to guide research and development in support of the joint advancement of AI data centers and power systems toward reliable, efficient, and sustainable operation."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/MAR4XXV3"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "Electrical Engineering and Systems Science - Systems and Control"
+      - "cf-paper"
   - id: "JMZ5I6CI"
     title: "Environmental impacts of laboratory and scientific equipment: Focus on equipment operation and procurement"
     type: "journalArticle"
@@ -224,6 +245,7 @@ items:
       - "Laboratory equipment"
       - "Life cycles"
       - "Scanning electron microscopes"
+      - "cf-paper"
   - id: "CKWZVUPB"
     title: "Equitable Research Capacity Towards the Sustainable Development Goals: The Case for Open Science Hardware"
     type: "journalArticle"
@@ -243,7 +265,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "LUAVGNCL"
     title: "FieldTrip"
     type: "computerProgram"
@@ -315,6 +338,7 @@ items:
       - "Scalp"
       - "Signal to noise ratio"
       - "Statistical data"
+      - "cf-paper"
   - id: "DY8ISJNG"
     title: "Latest research"
     type: "webpage"
@@ -358,6 +382,7 @@ items:
       - "Climate change"
       - "Scientific community"
       - "Social sciences"
+      - "cf-paper"
   - id: "DI5F2DTK"
     title: "Many Pipelines, One Dataset: Analytic Flexibility and Its Impact in EEG Research"
     type: "preprint"
@@ -383,6 +408,7 @@ items:
       - "EEGManyPipelines"
       - "ERP"
       - "Neuroimaging"
+      - "cf-paper"
       - "many-analyst"
       - "metascience"
   - id: "C26PD8NT"
@@ -444,7 +470,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "5S2KASVF"
     title: "Ten Simple Rules for Running a ReproducibiliTea Journal Club"
     type: "preprint"
@@ -584,7 +611,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "6IPMLNPH"
     title: "A comparative study of AI and human programming on environmental sustainability"
     type: "journalArticle"
@@ -674,6 +702,7 @@ items:
     parts: [1]
     tags:
       - "ARTEM-IS"
+      - "cf-paper"
       - "event-related potentials"
       - "good scientific practice"
       - "open science"
@@ -728,7 +757,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "B8EL43P2"
     title: "Comparing the carbon footprint of fMRI data processing and analysis approaches"
     type: "journalArticle"
@@ -748,7 +778,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "AP3IUWAF"
     title: "Considering the interconnected nature of social identities in neuroimaging research"
     type: "journalArticle"
@@ -772,6 +803,7 @@ items:
       - "Medical research"
       - "Neuroscience"
       - "Research data"
+      - "cf-paper"
   - id: "6Y72RCPU"
     title: "Core principles of responsible generative AI usage in research"
     type: "journalArticle"
@@ -816,7 +848,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "E47BYWZA"
     title: "Does GenAI Rewrite How We Write? An Empirical Study on Two-Million Preprints"
     type: "preprint"
@@ -841,34 +874,7 @@ items:
       - "Computer Science - Computation and Language"
       - "Computer Science - Computers and Society"
       - "Computer Science - Digital Libraries"
-  - id: "ZYIVNZSE"
-    title: "Doing conferences differently: A decentralised multi-hub approach for ecological and social sustainability"
-    type: "journalArticle"
-    type_label: "Journal Article"
-    family: "bibliographic"
-    family_label: "Bibliographic"
-    creators: "Alexandra Corneyllie, Trudie Walters, Anne-Sophie Dubarry, Xun He, Thomas Hinault, Vanja Ković, Takfarinas Medani, Annalisa Pascarella, Svetlana Pinet, Manuela Ruzzoli, Natalie Schaworonkow, Anđela Šoškić, Katarina Stekić, Konstantinos Tsilimparis, José Luis Ulloa, Ruijie Wang, Maximilien Chaumon"
-    year: "2025"
-    language: "English"
-    publication: "PLOS Sustainability and Transformation"
-    url: "https://journals.plos.org/sustainabilitytransformation/article?id=10.1371/journal.pstr.0000177"
-    extra_url: ""
-    doi: "10.1371/journal.pstr.0000177"
-    abstract: "Conferences are invaluable for career progression, offering unique opportunities for networking, collaboration, and learning. However, there are challenges associated with the traditional in-person conference format. For example, there is a significant ecological impact from attendees’ travel behaviour, and there are social inequities in conference attendance, with historically marginalised groups commonly facing barriers to participation. Innovative practices that enable academic conferences to be ‘done differently’ are crucial for addressing these ecological and social sustainability challenges. However, while some such practices have emerged in recent years, largely due to the COVID-19 pandemic, little research has been done on their effectiveness. Our study addresses this gap using a mixed methods approach to analyse a real-world decentralised multi-hub conference held in 2023, comparing it to traditional in-person conference and fully online conference scenarios. The decentralised multi-hub format consists of local in-person hubs in different locations around the world, each with a unique local programme developed around a shared core global programme; there is no single centralised point of control. We calculated the CO2 emissions from transport for each scenario and found the decentralised multi-hub conference had significantly lower emissions than a traditional in-person conference, but higher emissions than a fully online conference. We also interviewed 14 local hub organisers and attendees to gain their perspectives about the ecological and social sustainability benefits of the decentralised multi-hub format. We found that the more accessible and inclusive format attracted a more diverse range of attendees, meaning that the benefits attributed to conference attendance were able to be shared more equitably. These findings demonstrate the ecological and social sustainability benefits of doing conferences differently, and can be used as further evidence in the argument to help transition conferences to a more desirable state in terms of ecological and social sustainability."
-    video_id: ""
-    zotero_url: "https://www.zotero.org/groups/5794905/items/ZYIVNZSE"
-    sections: ["democratization", "responsibility"]
-    section_titles: ["Democratization", "Responsibility"]
-    parts: [2, 3]
-    tags:
-      - "Carbon dioxide"
-      - "Careers"
-      - "Community ecology"
-      - "Computer networks"
-      - "Personal computers"
-      - "Surveys"
-      - "Sustainability science"
-      - "Transportation"
+      - "cf-paper"
   - id: "AVJUP5G6"
     title: "Doing conferences differently: A decentralised multi-hub approach for ecological and social sustainability"
     type: "journalArticle"
@@ -885,9 +891,9 @@ items:
     abstract: "Conferences are invaluable for career progression, offering unique opportunities for networking, collaboration, and learning. However, there are challenges associated with the traditional in-person conference format. For example, there is a significant ecological impact from attendees’ travel behaviour, and there are social inequities in conference attendance, with historically marginalised groups commonly facing barriers to participation. Innovative practices that enable academic conferences to be ‘done differently’ are crucial for addressing these ecological and social sustainability challenges. However, while some such practices have emerged in recent years, largely due to the COVID-19 pandemic, little research has been done on their effectiveness. Our study addresses this gap using a mixed methods approach to analyse a real-world decentralised multi-hub conference held in 2023, comparing it to traditional in-person conference and fully online conference scenarios. The decentralised multi-hub format consists of local in-person hubs in different locations around the world, each with a unique local programme developed around a shared core global programme; there is no single centralised point of control. We calculated the CO2 emissions from transport for each scenario and found the decentralised multi-hub conference had significantly lower emissions than a traditional in-person conference, but higher emissions than a fully online conference. We also interviewed 14 local hub organisers and attendees to gain their perspectives about the ecological and social sustainability benefits of the decentralised multi-hub format. We found that the more accessible and inclusive format attracted a more diverse range of attendees, meaning that the benefits attributed to conference attendance were able to be shared more equitably. These findings demonstrate the ecological and social sustainability benefits of doing conferences differently, and can be used as further evidence in the argument to help transition conferences to a more desirable state in terms of ecological and social sustainability."
     video_id: ""
     zotero_url: "https://www.zotero.org/groups/5794905/items/AVJUP5G6"
-    sections: ["democratization"]
-    section_titles: ["Democratization"]
-    parts: [2]
+    sections: ["democratization", "responsibility"]
+    section_titles: ["Democratization", "Responsibility"]
+    parts: [2, 3]
     tags:
       - "Carbon dioxide"
       - "Careers"
@@ -897,6 +903,7 @@ items:
       - "Surveys"
       - "Sustainability science"
       - "Transportation"
+      - "cf-paper"
   - id: "PPDG6Z2B"
     title: "Doughnut of social and planetary boundaries monitors a world out of balance"
     type: "journalArticle"
@@ -959,6 +966,7 @@ items:
     tags:
       - "EEG Curricula"
       - "EEG training"
+      - "cf-paper"
       - "non-epilepsy specialists"
       - "paediatric"
       - "safe practice"
@@ -1041,7 +1049,8 @@ items:
     sections: ["democratization", "responsibility"]
     section_titles: ["Democratization", "Responsibility"]
     parts: [2, 3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "EE6X2TY3"
     title: "PURSUE"
     type: "webpage"
@@ -1062,6 +1071,27 @@ items:
     section_titles: ["Educational"]
     parts: []
     tags: []
+  - id: "B6ZMHCVS"
+    title: "Recommendation on the Ethics of Neurotechnology - Legal Affairs"
+    type: "webpage"
+    type_label: "Webpage"
+    family: "webpage"
+    family_label: "Web page"
+    creators: "UNESCO"
+    year: "2025"
+    language: "English"
+    publication: ""
+    url: "https://www.unesco.org/en/legal-affairs/recommendation-ethics-neurotechnology"
+    extra_url: ""
+    doi: ""
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/B6ZMHCVS"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "cf-paper"
   - id: "WI3QQ8GK"
     title: "Revolutionizing Peer Review: A Comparative Analysis of ChatGPT and Human Review Reports in Scientific Publishing"
     type: "preprint"
@@ -1107,6 +1137,7 @@ items:
       - "Artificial Intelligence"
       - "Power"
       - "Sustainable AI"
+      - "cf-paper"
   - id: "JG94Q77X"
     title: "The Brain Imaging Data Structure (BIDS) Specification"
     type: "standard"
@@ -1217,7 +1248,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "ZKUULW2A"
     title: "Watt-hour meter | electricity consumption, energy measurement, power monitoring | Britannica"
     type: "webpage"
@@ -1277,7 +1309,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "PEV5ZN3V"
     title: "A short guide to addressing accessibility at scientific conferences"
     type: "journalArticle"
@@ -1326,6 +1359,7 @@ items:
       - "Reproducibility"
       - "Research assessment"
       - "Science policy"
+      - "cf-paper"
   - id: "MFHLT6AZ"
     title: "Applied human neuroscience: Fostering and designing inclusive environments with the 3E-Cognition perspective"
     type: "journalArticle"
@@ -1354,6 +1388,7 @@ items:
       - "Humans"
       - "Neurosciences"
       - "applied neuroscience"
+      - "cf-paper"
       - "mobile brain/body imaging"
       - "neurodiversity"
   - id: "975C888S"
@@ -1446,6 +1481,7 @@ items:
       - "Neuroethics"
       - "Neurolaw"
       - "Neuroscience"
+      - "cf-paper"
       - "neurorights"
       - "neurotechnology"
   - id: "NYTSM4HB"
@@ -1469,6 +1505,7 @@ items:
     parts: [3]
     tags:
       - "biometrics"
+      - "cf-paper"
       - "cognitive biometrics"
       - "edge computing"
       - "end-to-end encryption"
@@ -1517,6 +1554,7 @@ items:
     parts: [3]
     tags:
       - "academic practice"
+      - "cf-paper"
       - "climate activism"
   - id: "R7KWAK47"
     title: "Decarbonizing research laboratories? The tensions associated with the commensurability of carbon and how it opens up the boundaries of responsibility attribution"
@@ -1562,7 +1600,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "7MTACVSJ"
     title: "Flight quotas outperform focused mitigation strategies in reducing the carbon footprint of academic travel"
     type: "journalArticle"
@@ -1582,7 +1621,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "WFAYFKYW"
     title: "Guidance on the responsible use of quantitative indicators in research assessment"
     type: "report"
@@ -1606,6 +1646,7 @@ items:
       - "Journal Impact Factor"
       - "altmetrics"
       - "assessment"
+      - "cf-paper"
       - "citations"
       - "h-index"
       - "metrics"
@@ -1629,7 +1670,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "ZUKXBLMH"
     title: "HeuDiConv — flexible DICOM conversion into structureddirectory layouts"
     type: "journalArticle"
@@ -1700,6 +1742,7 @@ items:
       - "Cognitive neuroscience"
       - "Human behaviour"
       - "Scientific community"
+      - "cf-paper"
   - id: "XFJCDFFH"
     title: "Open access: a diamond in the rough?"
     type: "webpage"
@@ -1750,7 +1793,7 @@ items:
     type_label: "Journal Article"
     family: "bibliographic"
     family_label: "Bibliographic"
-    creators: "Marianne De Paepe, Laurent Jeanneau, Jerôme Mariette, Olivier Aumont, André Estevez-Torres"
+    creators: "Marianne de Paepe, Laurent Jeanneau, Jerôme Mariette, Olivier Aumont, André Estevez-Torres"
     year: "2024"
     language: "English"
     publication: "PLOS Sustainability and Transformation"
@@ -1772,6 +1815,7 @@ items:
       - "Research laboratories"
       - "Social sciences"
       - "Transportation"
+      - "cf-paper"
   - id: "232ANLD3"
     title: "Reducing the efforts to create reproducible analysis code with FieldTrip"
     type: "journalArticle"
@@ -1791,7 +1835,29 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
+  - id: "XLSVYD5F"
+    title: "Replicating the ‘seductive allure of neuroscience explanations’ effect in a classroom experiment and an online study"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Pearl Amber Väth, Jakob von Petersdorff, Christof Neumann, Roger Mundry, Julia Fischer"
+    year: "2024"
+    language: "Unknown"
+    publication: "Royal Society Open Science"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11972428/"
+    extra_url: ""
+    doi: "10.1098/rsos.241120"
+    abstract: "The ‘seductive allure of neuroscience explanations’ effect refers to the observation that superfluous neuroscience information (SNI) added to an explanation can bias judgements of information quality. We report the results of a classroom experiment to sensitize undergraduate students to that issue. In contrast to previous studies, students rated good explanations without SNI the highest. Inspired by these observations, we set out to conceptually replicate the original study using an online experiment that allowed us to directly assess the statistical interactions between explanation quality, the presence of SNI and expertise levels. In this preregistered study, participants (n = 430) with varying levels of expertise rated the quality of good and bad explanations, with or without SNI. Irrespective of the presence of SNI, participants across all expertise levels rated good explanations more favourably than bad ones. Still, the differences were surprisingly small, and the variation in rating was high. We also found a statistically significant interaction between the impact of SNI and expertise, with SNI boosting ratings mostly in participants with less expertise (p < 0.001), corroborating previous findings. Developing a curriculum that trains students to distinguish between actual explanations and ‘crap’ would ultimately also sensitize teachers and experts that produce and review scientific information."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/XLSVYD5F"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "cf-paper"
   - id: "8K4A4FQF"
     title: "SCRAPE: Side-Channel Attack to Reveal Alphanumeric Passwords from EEG Signals"
     type: "conferencePaper"
@@ -1881,6 +1947,7 @@ items:
     parts: [1]
     tags:
       - "Registered Reports"
+      - "cf-paper"
       - "preregistration"
       - "publication bias"
       - "selective reporting"
@@ -1932,6 +1999,7 @@ items:
       - "Employers' rights"
       - "GDPR"
       - "Mental data"
+      - "cf-paper"
       - "neurosurveillance"
   - id: "Q8GQCFPI"
     title: "The Dark Side of Dataset Scaling: Evaluating Racial Classification in Multimodal Models"
@@ -1952,7 +2020,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "42EF556J"
     title: "The future of data analysis is now: Integrating generative AI in neuroimaging methods development"
     type: "journalArticle"
@@ -2017,7 +2086,8 @@ items:
     sections: ["publishing"]
     section_titles: ["Publishing"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "L9AYBUXM"
     title: "An adversarial collaboration to critically evaluate theories of consciousness"
     type: "preprint"
@@ -2102,6 +2172,7 @@ items:
       - "Neuroimaging"
       - "Neurosciences"
       - "Research Design"
+      - "cf-paper"
   - id: "JVJZI7IC"
     title: "Convergence of Artificial Intelligence and Neuroscience towards the Diagnosis of Neurological Disorders-A Scoping Review"
     type: "journalArticle"
@@ -2181,6 +2252,7 @@ items:
     parts: [1]
     tags:
       - "Publishing"
+      - "cf-paper"
   - id: "PWNLKALI"
     title: "How research can steer academia towards a low-carbon future"
     type: "journalArticle"
@@ -2202,6 +2274,27 @@ items:
     parts: [3]
     tags:
       - "Environmental impact"
+  - id: "3S45N4E3"
+    title: "How unpredictable is research impact? Evidence from the UK’s Research Excellence Framework"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Ohid Yaqub, Dmitry Malkov, Josh Siepel"
+    year: "2023"
+    language: "Unknown"
+    publication: "Research Evaluation"
+    url: "https://doi.org/10.1093/reseval/rvad019"
+    extra_url: ""
+    doi: "10.1093/reseval/rvad019"
+    abstract: "Although ex post evaluation of impact is increasingly common, the extent to which research impacts emerge largely as anticipated by researchers, or as the result of serendipitous and unpredictable processes, is not well understood. In this article, we explore whether predictions of impact made at the funding stage align with realized impact, using data from the UK’s Research Excellence Framework (REF). We exploit REF impact cases traced back to research funding applications, as a dataset of 2,194 case–grant pairs, to compare impact topics with funder remits. For 209 of those pairs, we directly compare their descriptions of ex ante and ex post impact. We find that impact claims in these case–grant pairs are often congruent with each other, with 76% showing alignment between anticipated impact at funding stage and the eventual claimed impact in the REF. Co-production of research, often perceived as a model for impactful research, was a feature of just over half of our cases. Our results show that, contrary to other preliminary studies of the REF, impact appears to be broadly predictable, although unpredictability remains important. We suggest that co-production is a reasonably good mechanism for addressing the balance of predictable and unpredictable impact outcomes."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/3S45N4E3"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "cf-paper"
   - id: "RMIUY8JZ"
     title: "Impact of artificial intelligence on human loss in decision making, laziness and safety in education"
     type: "journalArticle"
@@ -2290,6 +2383,7 @@ items:
     parts: [3]
     tags:
       - "activism"
+      - "cf-paper"
       - "climate change"
       - "point of view"
       - "research culture"
@@ -2333,7 +2427,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "V3DWWMFR"
     title: "The replication crisis has led to positive structural, procedural, and community changes"
     type: "journalArticle"
@@ -2357,6 +2452,7 @@ items:
       - "Psychology"
       - "Publication characteristics"
       - "Scientific community"
+      - "cf-paper"
   - id: "NIY4UG8I"
     title: "Using life cycle assessments to guide reduction in the carbon footprint of single-use lab consumables"
     type: "journalArticle"
@@ -2385,6 +2481,7 @@ items:
       - "Polymers"
       - "Raw materials"
       - "Respirators"
+      - "cf-paper"
   - id: "4WUIWA64"
     title: "Why every lab needs a handbook"
     type: "journalArticle"
@@ -2511,6 +2608,7 @@ items:
       - "Electroencephalography"
       - "Humans"
       - "Racism"
+      - "cf-paper"
   - id: "SWCDWRTL"
     title: "Addressing the opportunity gap in the Latin American neuroscience community"
     type: "journalArticle"
@@ -2578,6 +2676,7 @@ items:
       - "Open Scholarship"
       - "Open Science"
       - "Preregistration"
+      - "cf-paper"
   - id: "ZABP4KQN"
     title: "Ensuring an Accurate Scientific Record in an Era of Pre-print Servers"
     type: "journalArticle"
@@ -2597,7 +2696,8 @@ items:
     sections: ["publishing"]
     section_titles: ["Publishing"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "5QK4PK87"
     title: "Equity, diversity, and inclusion in developmental neuroscience: Practical lessons from community-based participatory research"
     type: "journalArticle"
@@ -2618,11 +2718,36 @@ items:
     section_titles: ["Democratization"]
     parts: [2]
     tags:
+      - "cf-paper"
       - "community advisory board (CAB)"
       - "community-based participatory research (CBPR)"
       - "community-engaged research"
       - "developmental neuroscience"
       - "latino/a/x families"
+  - id: "KAN6HF2B"
+    title: "Estimate of the carbon footprint of astronomical research infrastructures"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Jürgen Knödlseder, Sylvie Brau-Nogué, Mickael Coriat, Philippe Garnier, Annie Hughes, Pierrick Martin, Luigi Tibaldo"
+    year: "2022"
+    language: "English"
+    publication: "Nature Astronomy"
+    url: "https://www.nature.com/articles/s41550-022-01612-3"
+    extra_url: ""
+    doi: "10.1038/s41550-022-01612-3"
+    abstract: "The carbon footprint of astronomical research is an increasingly topical issue with first estimates of research institute and national community footprints having recently been published. As these assessments have typically excluded the contribution of astronomical research infrastructures, we complement these studies by providing an estimate of the contribution of astronomical space missions and ground-based observatories using greenhouse gas emission factors that relates cost and payload mass to carbon footprint. We find that worldwide active astronomical research infrastructures currently have a carbon footprint of 20.3 ± 3.3 MtCO2 equivalent (CO2e) and an annual emission of 1,169 ± 249 ktCO2e yr−1 corresponding to a footprint of 36.6 ± 14.0 tCO2e per year per astronomer. Compared with contributions from other aspects of astronomy research activity, our results suggest that research infrastructures make the single largest contribution to the carbon footprint of an astronomer. We discuss the limitations and uncertainties of our method and explore measures that can bring greenhouse gas emissions from astronomical research infrastructures towards a sustainable level."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/KAN6HF2B"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "Astronomy and astrophysics"
+      - "Planetary science"
+      - "Space physics"
+      - "cf-paper"
   - id: "XGGZUB5U"
     title: "Good scientific practice in EEG and MEG research: Progress and perspectives"
     type: "journalArticle"
@@ -2667,7 +2792,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "HDJHNM3C"
     title: "Introduction to the Special Issue on the Exposome-Understanding Environmental Impacts on Brain Development and Risk for Psychopathology"
     type: "journalArticle"
@@ -2707,7 +2833,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "GHGTPV4R"
     title: "Open and reproducible neuroimaging: From study inception to publication"
     type: "journalArticle"
@@ -2754,7 +2881,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "VHZRALW4"
     title: "Structural racism in neuroimaging: perspectives and solutions"
     type: "journalArticle"
@@ -2774,7 +2902,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "BM244WVB"
     title: "Systemic Racism in EEG Research: Considerations and Potential Solutions"
     type: "journalArticle"
@@ -2799,6 +2928,7 @@ items:
       - "Minority samples"
       - "Neuroscience"
       - "Systemic racism"
+      - "cf-paper"
   - id: "B2AWXRZF"
     title: "The 'Problematic Paper Screener' automatically selects suspect publications for post-publication (re)assessment"
     type: "preprint"
@@ -2874,6 +3004,7 @@ items:
     tags:
       - "activism"
       - "biodiversity crisis"
+      - "cf-paper"
       - "civil resistance"
       - "climate breakdown"
       - "ecology"
@@ -2897,7 +3028,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "FXD4MYF3"
     title: "The Cruel Optimism of Anthropocene Technologies: Suspicion and Fascination of Technology in Okja, What Happened to Monday, and Geostorm"
     type: "journalArticle"
@@ -2938,6 +3070,7 @@ items:
     section_titles: ["Democratization"]
     parts: [2]
     tags:
+      - "cf-paper"
       - "creativity"
       - "diversity"
       - "literature review"
@@ -2970,6 +3103,7 @@ items:
       - "Scientific Rigor"
       - "Statistical Data"
       - "Statistical Inference"
+      - "cf-paper"
   - id: "T65XPUHM"
     title: "Theory as adversarial collaboration"
     type: "journalArticle"
@@ -3016,6 +3150,7 @@ items:
       - "Coma"
       - "Electroencephalography"
       - "Malaria"
+      - "cf-paper"
   - id: "KXLVLD7U"
     title: "#EEGManyLabs: Investigating the replicability of influential EEG experiments"
     type: "journalArticle"
@@ -3042,6 +3177,7 @@ items:
       - "Many labs"
       - "Open science"
       - "Replication"
+      - "cf-paper"
   - id: "A3R84GWW"
     title: "Bayesian Analysis Reporting Guidelines"
     type: "journalArticle"
@@ -3129,6 +3265,7 @@ items:
       - "Careers"
       - "Institutions"
       - "Lab life"
+      - "cf-paper"
   - id: "5C8AKWA2"
     title: "Embracing diversity and inclusivity in an academic setting: Insights from the Organization for Human Brain Mapping"
     type: "journalArticle"
@@ -3158,6 +3295,7 @@ items:
       - "Persons with Disabilities"
       - "Prejudice"
       - "Societies, Scientific"
+      - "cf-paper"
   - id: "GAJ6BVQT"
     title: "ERP CORE: An open resource for human event-related potential research"
     type: "journalArticle"
@@ -3183,6 +3321,7 @@ items:
       - "Event-related potentials"
       - "Open science"
       - "Reproducibility"
+      - "cf-paper"
   - id: "KY69NSVH"
     title: "Ethics Dumping – How not to do research in resource-poor settings"
     type: "journalArticle"
@@ -3208,6 +3347,7 @@ items:
       - "Ethics Dumping"
       - "Exploitation"
       - "Research Ethics"
+      - "cf-paper"
   - id: "IW324AWN"
     title: "Green Algorithms: Quantifying the Carbon Footprint of Computation"
     type: "journalArticle"
@@ -3228,6 +3368,7 @@ items:
     section_titles: ["Responsibility"]
     parts: [3]
     tags:
+      - "cf-paper"
       - "climate change"
       - "computational research"
       - "green computing"
@@ -3341,6 +3482,7 @@ items:
       - "ERP"
       - "Open science"
       - "Preregistration"
+      - "cf-paper"
   - id: "BLSSE9F2"
     title: "Network analysis of multivariate data in psychological science"
     type: "journalArticle"
@@ -3363,6 +3505,7 @@ items:
     tags:
       - "Scientific data"
       - "Statistics"
+      - "cf-paper"
   - id: "SX29RGXE"
     title: "Patient engagement in preclinical laboratory research: A scoping review"
     type: "journalArticle"
@@ -3457,7 +3600,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "LEFM4ESD"
     title: "The OpenNeuro resource for sharing of neuroscience data"
     type: "journalArticle"
@@ -3481,6 +3625,7 @@ items:
       - "EEG"
       - "MEG"
       - "MRI"
+      - "cf-paper"
       - "data sharing"
       - "neuroimaging"
       - "open science"
@@ -3503,7 +3648,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "F5MTBVZ7"
     title: "The theory crisis in psychology: How to move forward"
     type: "journalArticle"
@@ -3531,6 +3677,7 @@ items:
       - "Psychologists"
       - "Psychology"
       - "Theories"
+      - "cf-paper"
   - id: "ZPJ4NEG4"
     title: "Tortured phrases: A dubious writing style emerging in science. Evidence of critical issues affecting established journals"
     type: "preprint"
@@ -3574,7 +3721,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "IS93MHTM"
     title: "Towards ARTEM-IS: Design guidelines for evidence-based EEG methodology reporting tools"
     type: "journalArticle"
@@ -3601,6 +3749,7 @@ items:
       - "International standards"
       - "Methodology"
       - "Neuroscience"
+      - "cf-paper"
   - id: "SJXBYI2I"
     title: "48-hour video-EEG monitoring for epilepsy presurgical evaluation is cost-effective and safe in resource-limited setting"
     type: "journalArticle"
@@ -3620,7 +3769,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "5EFDTL6P"
     title: "Achieving diversity in Research"
     type: "webpage"
@@ -3701,7 +3851,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "ZV5CK99Y"
     title: "FAIR Data Maturity Model. Specification and Guidelines"
     type: "journalArticle"
@@ -3769,7 +3920,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "FTBPJEX5"
     title: "Individual identification and individual variability analysis based on cortical folding features in developing infant singletons and twins"
     type: "journalArticle"
@@ -3850,6 +4002,7 @@ items:
       - "Magnetoencephalography"
       - "Neuroscience"
       - "Publishing"
+      - "cf-paper"
   - id: "ZW7VWS2M"
     title: "Recalibrating global data center energy-use estimates"
     type: "journalArticle"
@@ -3869,7 +4022,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "Y4CYV5A5"
     title: "Reuse, Reduce, Recycle"
     type: "bookSection"
@@ -3889,7 +4043,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "KS66XJR4"
     title: "Seven quick tips for analysis scripts in neuroimaging"
     type: "journalArticle"
@@ -3965,7 +4120,8 @@ items:
     sections: ["democratization", "responsibility"]
     section_titles: ["Democratization", "Responsibility"]
     parts: [2, 3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "J73RNM3E"
     title: "The importance of diversity in cognitive neuroscience"
     type: "journalArticle"
@@ -4031,6 +4187,7 @@ items:
     parts: [2]
     tags:
       - "History"
+      - "cf-paper"
   - id: "9GIM6R96"
     title: "Thinking avant la lettre: A Review of 4E Cognition"
     type: "journalArticle"
@@ -4070,7 +4227,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "U2YCSAU3"
     title: "Identifying Criteria for the Evaluation of the Implications of Brain Reading for Mental Privacy"
     type: "journalArticle"
@@ -4097,6 +4255,36 @@ items:
       - "Neuroethics"
       - "Neuroimaging"
       - "Societal implications"
+      - "cf-paper"
+  - id: "SIV4L2FU"
+    title: "Mind-Reading or Misleading? Assessing Direct-to-Consumer Electroencephalography (EEG) Devices Marketed for Wellness and Their Ethical and Regulatory Implications"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Anna Wexler, Robert Thibault"
+    year: "2019"
+    language: "English"
+    publication: "Journal of Cognitive Enhancement"
+    url: "https://doi.org/10.1007/s41465-018-0091-2"
+    extra_url: ""
+    doi: "10.1007/s41465-018-0091-2"
+    abstract: "The market for direct-to-consumer brain health products—including brain-training games, neurostimulation devices, and consumer electroencephalography (EEG) devices—is expected to top $3 billion by 2020. While many direct-to-consumer neurotechnology products have come under scrutiny from scientists and regulators, one set of products—consumer EEG devices—have largely escaped scholarly and regulatory critique. While these products do not present overt safety risks, by claiming to provide individuals with “snapshots” of their own mental states, they present a subtle, and arguably more complex, set of ethical issues. In addition, consumer EEG companies often explicitly or implicitly rely on studies conducted in the field of neurofeedback, a domain in which almost all adequately controlled studies point to little more than an interesting placebo effect. This paper presents an initial critique of consumer EEG devices, focusing only on devices that are marketed directly to consumers for improving their well-being. We categorize the behavioral and wellness-related marketing claims made by consumer EEG companies, analyze the evidence base for such claims, and argue that the ethical and legal issues wrought by these devices deserve greater attention."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/SIV4L2FU"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "Brain health"
+      - "Cognitive enhancement"
+      - "Direct-to-consumer neurotechnology"
+      - "EEG"
+      - "Electroencephalography"
+      - "Neuroethics"
+      - "Neurofeedback"
+      - "Regulation of neurotechnology"
+      - "cf-paper"
   - id: "9SD6T56V"
     title: "Owning Ethical Innovation: Claims about Commercial Wearable Brain Technologies"
     type: "journalArticle"
@@ -4116,7 +4304,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "FVRZ2UM7"
     title: "Releasing a preprint is associated with more attention and citations for the peer-reviewed article"
     type: "journalArticle"
@@ -4164,6 +4353,7 @@ items:
       - "Criminology"
       - "Science"
       - "Statistics"
+      - "cf-paper"
       - "technology and society"
   - id: "2JM5JDI2"
     title: "The Equal Earth map projection"
@@ -4190,6 +4380,32 @@ items:
       - "Robinson projection"
       - "pseudocylindrical projection"
       - "world map projection"
+  - id: "29R77QU6"
+    title: "Use of the Journal Impact Factor in academic review, promotion, and tenure evaluations"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Erin C McKiernan, Lesley A Schimanski, Carol Muñoz Nieves, Lisa Matthias, Meredith T Niles, Juan P Alperin, Emma Pewsey, Peter Rodgers, Björn Brembs"
+    year: "2019"
+    language: "Unknown"
+    publication: "eLife"
+    url: "https://doi.org/10.7554/eLife.47338"
+    extra_url: ""
+    doi: "10.7554/eLife.47338"
+    abstract: "We analyzed how often and in what ways the Journal Impact Factor (JIF) is currently used in review, promotion, and tenure (RPT) documents of a representative sample of universities from the United States and Canada. 40% of research-intensive institutions and 18% of master’s institutions mentioned the JIF, or closely related terms. Of the institutions that mentioned the JIF, 87% supported its use in at least one of their RPT documents, 13% expressed caution about its use, and none heavily criticized it or prohibited its use. Furthermore, 63% of institutions that mentioned the JIF associated the metric with quality, 40% with impact, importance, or significance, and 20% with prestige, reputation, or status. We conclude that use of the JIF is encouraged in RPT evaluations, especially at research-intensive universities, and that there is work to be done to avoid the potential misuse of metrics like the JIF."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/29R77QU6"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "academic careers"
+      - "cf-paper"
+      - "higher education"
+      - "impact factor"
+      - "institutional policy"
+      - "scholarly communications"
   - id: "PGDV42WS"
     title: "4E Cognition: Historical Roots, Key Concepts, and Central Issues"
     type: "bookSection"
@@ -4254,7 +4470,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "I5DZAA5T"
     title: "Haves and have nots must find a better way: The case for open scientific hardware"
     type: "journalArticle"
@@ -4283,6 +4500,7 @@ items:
       - "Open source software"
       - "Scanning electron microscopy"
       - "Scanning probe microscopy"
+      - "cf-paper"
   - id: "2KQQLFK9"
     title: "Neuroimaging Field Methods Using Functional Near Infrared Spectroscopy (NIRS) Neuroimaging to Study Global Child Development: Rural Sub-Saharan Africa"
     type: "journalArticle"
@@ -4355,27 +4573,7 @@ items:
       - "Electroencephalography (EEGs)"
       - "Privacy"
       - "Security"
-  - id: "LDKCWFW4"
-    title: "The TRUST code -A Global Code of Conduct for Equitable Research Partnerships"
-    type: "preprint"
-    type_label: "Preprint"
-    family: "bibliographic"
-    family_label: "Bibliographic"
-    creators: "TRUST, Doris Schroeder"
-    year: "2018"
-    language: "English"
-    publication: "TRUST"
-    url: "https://www.globalcodeofconduct.org/"
-    extra_url: ""
-    doi: "10.48508/GCC/2018.05"
-    abstract: ""
-    video_id: ""
-    zotero_url: "https://www.zotero.org/groups/5794905/items/LDKCWFW4"
-    sections: ["democratization"]
-    section_titles: ["Democratization"]
-    parts: [2]
-    tags:
-      - "FOS: Other humanities"
+      - "cf-paper"
   - id: "2P5G4YA6"
     title: "These labs are remarkably diverse — here’s why they’re winning at science"
     type: "journalArticle"
@@ -4437,7 +4635,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "3MA8HRIQ"
     title: "Big data and the industrialization of neuroscience: A safe roadmap for understanding the brain?"
     type: "journalArticle"
@@ -4457,7 +4656,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "Y5PPMRMY"
     title: "Choosing prediction over explanation in psychology: Lessons from machine learning"
     type: "journalArticle"
@@ -4477,7 +4677,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "6MZ78XEQ"
     title: "Constraints on Generality (COG): A Proposed Addition to All Empirical Papers"
     type: "journalArticle"
@@ -4520,6 +4721,7 @@ items:
     tags:
       - "Ethics"
       - "Neuroscience"
+      - "cf-paper"
   - id: "ULS5XKUH"
     title: "How to get statistically significant effects in any ERP experiment (and why you shouldn't)"
     type: "journalArticle"
@@ -4567,6 +4769,7 @@ items:
       - "Human Factors Engineering"
       - "Physiology"
       - "Technology"
+      - "cf-paper"
   - id: "ZIDCJC62"
     title: "Reliability of EEG Measures of Interaction: A Paradigm Shift Is Needed to Fight the Reproducibility Crisis"
     type: "journalArticle"
@@ -4607,6 +4810,7 @@ items:
     section_titles: ["Democratization"]
     parts: [2]
     tags:
+      - "cf-paper"
       - "data analysis"
       - "jargon"
       - "metascience"
@@ -4637,6 +4841,28 @@ items:
       - "Rome Statute"
       - "Transcranial Direct Current Stimulation"
       - "Transcranial Magnetic Stimulation"
+      - "cf-paper"
+  - id: "36R3RPE7"
+    title: "A simple proposal for the publication of journal citation distributions"
+    type: "preprint"
+    type_label: "Preprint"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Vincent Larivière, Véronique Kiermer, Catriona J. MacCallum, Marcia McNutt, Mark Patterson, Bernd Pulverer, Sowmya Swaminathan, Stuart Taylor, Stephen Curry"
+    year: "2016"
+    language: "English"
+    publication: "bioRxiv"
+    url: "https://www.biorxiv.org/content/10.1101/062109v2"
+    extra_url: ""
+    doi: "10.1101/062109"
+    abstract: "Although the Journal Impact Factor (JIF) is widely acknowledged to be a poor indicator of the quality of individual papers, it is used routinely to evaluate research and researchers. Here, we present a simple method for generating the citation distributions that underlie JIFs. Application of this straightforward protocol reveals the full extent of the skew of these distributions and the variation in citations received by published papers that is characteristic of all scientific journals. Although there are differences among journals across the spectrum of JIFs, the citation distributions overlap extensively, demonstrating that the citation performance of individual papers cannot be inferred from the JIF. We propose that this methodology be adopted by all journals as a move to greater transparency, one that should help to refocus attention on individual pieces of work and counter the inappropriate usage of JIFs during the process of research assessment."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/36R3RPE7"
+    sections: ["publishing"]
+    section_titles: ["Publishing"]
+    parts: [1]
+    tags:
+      - "cf-paper"
   - id: "4U7ZSZWW"
     title: "Collaborative Irrationality, Akrasia, and Groupthink: Social Disruptions of Emotion Regulation"
     type: "journalArticle"
@@ -4724,7 +4950,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "RE9YF7DM"
     title: "Local Interpretable Model-Agnostic Explanations (LIME): An Introduction"
     type: "webpage"
@@ -4767,6 +4994,7 @@ items:
     tags:
       - "Computer Science - Machine Learning"
       - "Statistics - Machine Learning"
+      - "cf-paper"
   - id: "3YIEEQYB"
     title: "Neuroadaptive technology enables implicit cursor control based on medial prefrontal cortex activity"
     type: "journalArticle"
@@ -4786,7 +5014,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "M9NEITSV"
     title: "The brain imaging data structure, a format for organizing and describing outputs of neuroimaging experiments"
     type: "journalArticle"
@@ -4806,7 +5035,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "86BCNKUU"
     title: "The FAIR Guiding Principles for scientific data management and stewardship"
     type: "journalArticle"
@@ -4829,6 +5059,7 @@ items:
     tags:
       - "Publication characteristics"
       - "Research data"
+      - "cf-paper"
   - id: "2TNMNVP7"
     title: "The Global Burden of Journal Peer Review in the Biomedical Literature: Strong Imbalance in the Collective Enterprise"
     type: "journalArticle"
@@ -4857,6 +5088,30 @@ items:
       - "Scientists"
       - "Supply and demand"
       - "Sustainability science"
+  - id: "XE9NJJ4I"
+    title: "The seductive allure is a reductive allure: People prefer scientific explanations that contain logically irrelevant reductive information"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Emily J. Hopkins, Deena Skolnick Weisberg, Jordan C. V. Taylor"
+    year: "2016"
+    language: "Unknown"
+    publication: "Cognition"
+    url: "https://www.sciencedirect.com/science/article/pii/S0010027716301585"
+    extra_url: ""
+    doi: "10.1016/j.cognition.2016.06.011"
+    abstract: "Previous work has found that people feel significantly more satisfied with explanations of psychological phenomena when those explanations contain neuroscience information—even when this information is entirely irrelevant to the logic of the explanations. This seductive allure effect was first demonstrated by Weisberg, Keil, Goodstein, Rawson, and Gray (2008), and has since been replicated several times (Fernandez-Duque, Evans, Christian, & Hodges, 2015; Minahan & Siedlecki, 2016; Rhodes, Rodriguez, & Shah, 2014; Weisberg, Taylor, & Hopkins, 2015). However, these studies only examined psychological phenomena. The current study thus investigated the generality of this effect and found that it occurs across several scientific disciplines whenever the explanations include reductive information: reference to smaller components or more fundamental processes. These data suggest that people have a general preference for reductive information, even when it is irrelevant to the logic of an explanation."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/XE9NJJ4I"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "Decision making"
+      - "Explanations"
+      - "Seductive allure"
+      - "cf-paper"
   - id: "H3K627H3"
     title: "Bibliometrics: The Leiden Manifesto for research metrics"
     type: "journalArticle"
@@ -4928,6 +5183,7 @@ items:
       - "Open source software"
       - "Schools"
       - "Software tools"
+      - "cf-paper"
   - id: "PPK7CWWK"
     title: "The Oligopoly of Academic Publishers in the Digital Era"
     type: "journalArticle"
@@ -4978,6 +5234,7 @@ items:
     tags:
       - "Africa"
       - "EEG"
+      - "cf-paper"
       - "handbook"
       - "pediatric training"
       - "resource-limited settings"
@@ -5000,7 +5257,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "QH3B3VF9"
     title: "A Systematic Review of Barriers and Facilitators to Minority Research Participation Among African Americans, Latinos, Asian Americans, and Pacific Islanders"
     type: "journalArticle"
@@ -5076,6 +5334,7 @@ items:
       - "Regularization"
       - "Sparsity"
       - "Univariate"
+      - "cf-paper"
       - "fMRI"
   - id: "69PWBLBH"
     title: "The role of expectations, hype and ethics in neuroimaging and neuromodulation futures"
@@ -5100,6 +5359,7 @@ items:
       - "Ethics"
       - "Neuroimaging"
       - "brain augmentation"
+      - "cf-paper"
       - "deception"
       - "expectations"
       - "hype"
@@ -5193,6 +5453,7 @@ items:
     parts: [1]
     tags:
       - "Molecular neuroscience"
+      - "cf-paper"
   - id: "2EHKBVJG"
     title: "A 21 Word Solution"
     type: "preprint"
@@ -5244,6 +5505,7 @@ items:
       - "Event-related potential"
       - "P300"
       - "P300-MERMER"
+      - "cf-paper"
   - id: "E7LW7EJ9"
     title: "On the Feasibility of Side-Channel Attacks with Brain-Computer Interfaces"
     type: "conferencePaper"
@@ -5304,6 +5566,7 @@ items:
     section_titles: ["Validity and Research integrity"]
     parts: [1]
     tags:
+      - "cf-paper"
       - "false positives"
       - "incentives"
       - "methodology"
@@ -5328,7 +5591,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "FSK26QRC"
     title: "Theory and Simulation in Neuroscience"
     type: "journalArticle"
@@ -5348,7 +5612,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "LHZWSSY8"
     title: "A tutorial on a practical Bayesian alternative to null-hypothesis significance testing"
     type: "journalArticle"
@@ -5372,6 +5637,7 @@ items:
       - "Bayesian analysis"
       - "Cognitive Psychology"
       - "Null-hypothesis significance testing"
+      - "cf-paper"
   - id: "28L6R46H"
     title: "Brainstorm: a user-friendly application for MEG/EEG analysis"
     type: "computerProgram"
@@ -5411,7 +5677,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "GDUD365K"
     title: "Cruel Optimism"
     type: "book"
@@ -5431,7 +5698,8 @@ items:
     sections: ["societal"]
     section_titles: ["Societal and technological responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "PXZ2MD92"
     title: "False-Positive Psychology"
     type: "journalArticle"
@@ -5451,7 +5719,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "K86YPR3X"
     title: "FieldTrip: Open Source Software for Advanced Analysis of MEG, EEG, and Invasive Electrophysiological Data"
     type: "journalArticle"
@@ -5491,7 +5760,8 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "BRPE3J4J"
     title: "Is the Pain Worth the Gain? The Advantages and Liabilities of Agreeing With Socially Distinct Newcomers"
     type: "journalArticle"
@@ -5620,7 +5890,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "PLK58LXG"
     title: "The sociology of expectations in science and technology"
     type: "journalArticle"
@@ -5640,7 +5911,8 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "I2QQ4CAA"
     title: "'Brain fingerprinting': A critical analysis"
     type: "journalArticle"
@@ -5667,6 +5939,7 @@ items:
       - "Internet"
       - "Psychophysiology"
       - "Technology"
+      - "cf-paper"
   - id: "JNUD7T58"
     title: "Why Most Published Research Findings Are False"
     type: "journalArticle"
@@ -5788,6 +6061,7 @@ items:
       - "Statistical Probability"
       - "Statistical Tests"
       - "Type I Errors"
+      - "cf-paper"
   - id: "8XA89ZEV"
     title: "THE INVERSE CARE LAW"
     type: "journalArticle"
@@ -5807,7 +6081,8 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
-    tags: []
+    tags:
+      - "cf-paper"
   - id: "2T6JMWEW"
     title: "The human condition"
     type: "book"
@@ -6690,26 +6965,6 @@ items:
     section_titles: ["Responsibility"]
     parts: [3]
     tags: []
-  - id: "YSVZLQF8"
-    title: "Layout and Consolidation of the Adopted Neurotechnology Recommendation for certified copy signature - UNESCO-RECOMMENDATION-on-the-Ethics-of-Neurotechnology-11.11.2025.pdf"
-    type: "attachment"
-    type_label: "Attachment"
-    family: "webpage"
-    family_label: "Web page"
-    creators: ""
-    year: ""
-    language: "Unknown"
-    publication: ""
-    url: "https://bioethics.jhu.edu/wp-content/uploads/2026/03/UNESCO-RECOMMENDATION-on-the-Ethics-of-Neurotechnology-11.11.2025.pdf"
-    extra_url: ""
-    doi: ""
-    abstract: ""
-    video_id: ""
-    zotero_url: "https://www.zotero.org/groups/5794905/items/YSVZLQF8"
-    sections: ["responsibility"]
-    section_titles: ["Responsibility"]
-    parts: [3]
-    tags: []
   - id: "P7IEBF23"
     title: "Learning EEG"
     type: "webpage"
@@ -7030,26 +7285,6 @@ items:
     section_titles: ["Responsibility"]
     parts: [3]
     tags: []
-  - id: "HRRWB6K6"
-    title: "Sanity Checks for Saliency Maps"
-    type: "journalArticle"
-    type_label: "Journal Article"
-    family: "bibliographic"
-    family_label: "Bibliographic"
-    creators: "Julius Adebayo, Justin Gilmer, Michael Muelly, Ian Goodfellow, Moritz Hardt, Been Kim"
-    year: ""
-    language: "English"
-    publication: ""
-    url: ""
-    extra_url: ""
-    doi: ""
-    abstract: "Saliency methods have emerged as a popular tool to highlight features in an input deemed relevant for the prediction of a learned model. Several saliency methods have been proposed, often guided by visual appeal on image data. In this work, we propose an actionable methodology to evaluate what kinds of explanations a given method can and cannot provide. We ﬁnd that reliance, solely, on visual assessment can be misleading. Through extensive experiments we show that some existing saliency methods are independent both of the model and of the data generating process. Consequently, methods that fail the proposed tests are inadequate for tasks that are sensitive to either data or model, such as, ﬁnding outliers in the data, explaining the relationship between inputs and outputs that the model learned, and debugging the model. We interpret our ﬁndings through an analogy with edge detection in images, a technique that requires neither training data nor model. Theory in the case of a linear model and a single-layer convolutional neural network supports our experimental ﬁndings2."
-    video_id: ""
-    zotero_url: "https://www.zotero.org/groups/5794905/items/HRRWB6K6"
-    sections: ["validity"]
-    section_titles: ["Validity and Research integrity"]
-    parts: [1]
-    tags: []
   - id: "D4NRFC6V"
     title: "Scimago Journal & Country Rank"
     type: "webpage"
@@ -7289,26 +7524,6 @@ items:
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
-    tags: []
-  - id: "54H3SLQC"
-    title: "TRUST Code – TRUST Code"
-    type: "blogPost"
-    type_label: "Blog Post"
-    family: "webpage"
-    family_label: "Web page"
-    creators: ""
-    year: ""
-    language: "English"
-    publication: ""
-    url: "https://www.globalcodeofconduct.org/trust-code/"
-    extra_url: ""
-    doi: ""
-    abstract: ""
-    video_id: ""
-    zotero_url: "https://www.zotero.org/groups/5794905/items/54H3SLQC"
-    sections: ["democratization"]
-    section_titles: ["Democratization"]
-    parts: [2]
     tags: []
   - id: "PDZTQ9LQ"
     title: "Utilities for Electroencephalographic (EEG) Analysis"
