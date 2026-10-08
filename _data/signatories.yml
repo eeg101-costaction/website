@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-07"
+generated: "2026-10-08"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 149
-public_count: 124
+total: 150
+public_count: 125
 
 people:
   - name: "Enes Abanoz"
@@ -52,6 +52,8 @@ people:
     affiliation: "Health Sciences University, Izmir Faculty of Medicine"
   - name: "Arnaud Delorme"
     affiliation: "UCSD"
+  - name: "Omer Faruk DEMIR"
+    affiliation: "KUTAHYA HEALTH SCIENCE UNIVERSITY"
   - name: "Anya Dietrich"
     affiliation: "MEG lab, CoBIC, Goethe University"
   - name: "FATMA NUR DOLU"
