@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-08"
+generated: "2026-10-09"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 150
-public_count: 125
+total: 154
+public_count: 127
 
 people:
   - name: "Enes Abanoz"
@@ -44,6 +44,8 @@ people:
     affiliation: "Department of Basic Psychology, School of Psychology, University of Minho"
   - name: "Maximilien Chaumon"
     affiliation: "CNRS"
+  - name: "Lucía Lemes Coitinho"
+    affiliation: "Universidad de la República"
   - name: "Alexandra Corneyllie"
     affiliation: "CNRS"
   - name: "Damian Cruse"
@@ -100,6 +102,8 @@ people:
     affiliation: "Vrije Universiteit Brussel"
   - name: "Xun He"
     affiliation: "Bournemouth University"
+  - name: "Arild Hestvik"
+    affiliation: "University of Delaware"
   - name: "Nicolás Hinrichs"
     affiliation: "Max Planck Institute for Human Cognitive and Brain Sciences & Okinawa Institute of Science and Technology"
   - name: "Aylin Toplu Hocaoğlu"

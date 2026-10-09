@@ -5,7 +5,7 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-08"
+generated: "2026-10-09"
 total: 347
 curated_count: 12
 framework_count: 335
