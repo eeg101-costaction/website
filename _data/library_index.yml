@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-10"
-total: 347
+generated: "2026-10-11"
+total: 348
 curated_count: 12
-framework_count: 335
+framework_count: 336
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 335
+    count: 336
 
 sections:
   - slug: "educational"
@@ -33,14 +33,14 @@ sections:
     count: 86
   - slug: "responsibility"
     name: "Responsibility"
-    count: 119
+    count: 120
   - slug: "societal"
     name: "Societal and technological responsibility"
     count: 2
 
 types:
   - name: "Journal Article"
-    count: 207
+    count: 208
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 229
+    count: 230
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -1011,6 +1011,37 @@ items:
       - "Laboratories"
       - "Platform"
       - "Transition"
+  - id: "WK8CFU6G"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "When minds become data: brain–computer interfaces and the future of mental privacy"
+    authors: "Kiley Seymour, Marcello Ienca, Roger Koenig-Robert"
+    year: "2026"
+    venue: "Trends in Neurosciences"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.cell.com/trends/neurosciences/abstract/S0166-2236(26)00185-2"
+    doi: "10.1016/j.tins.2026.09.003"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/WK8CFU6G"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    tags:
+      - "artificial intelligence"
+      - "brain data"
+      - "cognitive biometrics"
+      - "neuro-AI"
+      - "neuroethics"
+      - "neurotechnology"
   - id: "J2WIYJSD"
     collection: "framework"
     collection_label: "Community Framework"

@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-10"
+generated: "2026-10-11"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 335
+item_count: 336
 
 sections:
   - slug: "educational"
@@ -33,7 +33,7 @@ sections:
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 119
+    count: 120
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 195
+    count: 196
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 217
+    count: 218
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 234
+    count: 235
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -572,6 +572,32 @@ items:
       - "Laboratories"
       - "Platform"
       - "Transition"
+  - id: "WK8CFU6G"
+    title: "When minds become data: brain–computer interfaces and the future of mental privacy"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Kiley Seymour, Marcello Ienca, Roger Koenig-Robert"
+    year: "2026"
+    language: "English"
+    publication: "Trends in Neurosciences"
+    url: "https://www.cell.com/trends/neurosciences/abstract/S0166-2236(26)00185-2"
+    extra_url: ""
+    doi: "10.1016/j.tins.2026.09.003"
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/WK8CFU6G"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "artificial intelligence"
+      - "brain data"
+      - "cognitive biometrics"
+      - "neuro-AI"
+      - "neuroethics"
+      - "neurotechnology"
   - id: "J2WIYJSD"
     title: "Where To Publish"
     type: "computerProgram"
