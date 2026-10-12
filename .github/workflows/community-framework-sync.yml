@@ -32,8 +32,15 @@ jobs:
       SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
     steps:
+      # Always the current main, not the commit that triggered the run. A scheduled
+      # run that was queued behind another one (GitHub occasionally fires a cron
+      # twice) would otherwise check out the commit from when it was *triggered*,
+      # regenerate from that stale base, and have its push rejected after the first
+      # run had already pushed. That is what failed on 12 October.
       - name: Check out the website
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -95,4 +102,6 @@ jobs:
           git config user.email "eeg101costaction@gmail.com"
           git add _data/signatories.yml _data/cf_catalogue.yml _data/library_index.yml
           git commit -m "Refresh Community Framework signatories and catalogue"
-          git push origin HEAD:main
+          # main can still move during the run (the eCOST sync, a person); this
+          # rebases and retries instead of failing. See the script for the rules.
+          bash scripts/push_to_main.sh

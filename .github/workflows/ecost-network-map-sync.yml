@@ -24,9 +24,14 @@ jobs:
       ACTION_ID: CA24148
       UPDATE_BRANCH: automation/ecost-network-map-sync
     steps:
+      # Always the current main, not the commit that triggered the run: the sync
+      # merges into the existing network-map.json, so a stale checkout would merge
+      # against stale data and then fail to push. See the Framework sync for the
+      # run that showed this.
       - name: Check out the website
         uses: actions/checkout@v4
         with:
+          ref: main
           fetch-depth: 0
 
       - name: Set up Python
@@ -94,7 +99,8 @@ jobs:
           git config user.email "eeg101costaction@gmail.com"
           git add assets/data/
           git commit -m "Synchronise Network Map from eCOST export"
-          git push origin main
+          # main can move during the run; rebase and retry rather than fail.
+          bash scripts/push_to_main.sh
 
       - name: Record no-change outcome
         if: steps.map_sync.outputs.changed == 'false'
