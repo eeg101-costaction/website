@@ -14,10 +14,17 @@
 #   * A rejection only counts as a race if the remote has commits we lack. If it
 #     does not (bad credentials, a protected branch, a network fault) it fails at
 #     once with git's own message, rather than retrying something that cannot work.
-#   * If the rebase conflicts, somebody else changed the same generated file while
-#     we were running, so their copy is at least as fresh as ours. We drop our
-#     commit and stand down with a warning; tomorrow's run reconciles. The other
-#     writer is never overwritten.
+#   * If the rebase hits a genuine content conflict (unmerged paths), somebody else
+#     changed the same generated file while we were running, so their copy is at
+#     least as fresh as ours. We drop our commit and stand down with a warning;
+#     tomorrow's run reconciles. The other writer is never overwritten. A rebase
+#     that fails for any OTHER reason (a stray local edit, a missing committer
+#     identity, an untracked-file collision) is a bug in the job, not a race: it
+#     fails, and nothing local is discarded.
+#   * If the branch was rewritten while we ran (the tip we started from is no longer
+#     in its history, e.g. a deliberate rollback), it is not a race either. Replaying
+#     our commits onto rewritten history could put rolled-back content back, so it
+#     fails and leaves the decision to a person.
 #   * It gives up after MAX_ATTEMPTS, loudly, so a persistent problem still shows.
 #
 # Expects to run inside a checkout with the commit already made and git's
@@ -37,6 +44,10 @@ say()  { echo "push_to_main: $*"; }
 warn() { echo "::warning::push_to_main: $*"; }
 fail() { echo "::error::push_to_main: $*"; exit 1; }
 
+# Where the remote was when this job began. Empty if there is no tracking ref,
+# which just disables the rewritten-history check.
+base=$(git rev-parse --verify --quiet "refs/remotes/$REMOTE/$BRANCH" || true)
+
 attempt=1
 while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   if output=$(git push "$REMOTE" "HEAD:$BRANCH" 2>&1); then
@@ -49,17 +60,28 @@ while [ "$attempt" -le "$MAX_ATTEMPTS" ]; do
   git fetch --quiet "$REMOTE" "$BRANCH" || fail "could not fetch $REMOTE/$BRANCH to see why the push was rejected."
   tip=$(git rev-parse FETCH_HEAD)
 
+  # Not a race: main was rewritten, so the tip we started from is gone from it.
+  if [ -n "$base" ] && ! git merge-base --is-ancestor "$base" "$tip"; then
+    fail "$BRANCH was rewritten while this job ran (${tip:0:7} no longer contains ${base:0:7}). Not rebasing onto rewritten history, in case that re-publishes something that was rolled back."
+  fi
+
   # Not a race: the remote has nothing we lack, so the rejection has another cause.
   if git merge-base --is-ancestor "$tip" HEAD; then
     fail "push rejected although $REMOTE/$BRANCH has no commits we lack, so this is not a race (see git's message above)."
   fi
 
   say "attempt $attempt lost a race: $BRANCH moved to ${tip:0:7}. Rebasing onto it."
-  if ! git rebase --quiet "$tip"; then
+  if ! rebase_output=$(git rebase --quiet "$tip" 2>&1); then
+    # Unmerged index entries exist only in the middle of a content conflict.
+    if [ -n "$(git ls-files -u)" ]; then
+      git rebase --abort >/dev/null 2>&1 || true
+      git reset --quiet --hard "$tip"
+      warn "our changes conflict with ${tip:0:7}, which already updated the same files, so theirs is at least as fresh. Nothing was pushed; the next scheduled run will reconcile."
+      exit 0
+    fi
     git rebase --abort >/dev/null 2>&1 || true
-    git reset --quiet --hard "$tip"
-    warn "our changes conflict with ${tip:0:7}, which already updated the same files, so theirs is at least as fresh. Nothing was pushed; the next scheduled run will reconcile."
-    exit 0
+    echo "$rebase_output"
+    fail "rebasing onto ${tip:0:7} failed for a reason other than a conflict (git's message is above). Leaving the working tree as it was."
   fi
 
   # Rebasing can leave nothing to push (the other writer already made our change).

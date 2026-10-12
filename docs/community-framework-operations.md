@@ -244,7 +244,23 @@ These were found while porting and are worth fixing in `sign-cf` too:
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
 | `.github/workflows/pages.yml` | push to `main` | Runs `scripts/check_framework.py`, then builds and deploys |
-| `.github/workflows/community-framework-sync.yml` | nightly 02:41 UTC, or manually | Refreshes the catalogue and the signatory list, validates, commits if anything changed |
+| `.github/workflows/community-framework-sync.yml` | daily 05:41 UTC, or manually | Refreshes the catalogue and the signatory list, validates, commits if anything changed |
+
+GitHub starts scheduled workflows late under load (this one has run anywhere from
+05:41 to mid-afternoon UTC) and occasionally fires one twice a few seconds apart.
+The second copy waits for the first, then checks out the current `main` rather
+than the commit that triggered it, so it finds nothing to change and ends green.
+(Before 12 October it checked out the triggering commit instead, regenerated from
+that stale base and failed to push, which is what the "failed push" alert email
+looked like. Nothing had gone wrong; the first run had already published.)
+
+If `main` moves while a run is in progress, the job pushes through
+`scripts/push_to_main.sh`, which rebases and retries. A **green** run carrying a
+`push_to_main` **warning** means another writer had already updated the same file,
+so this run's refresh was discarded in favour of theirs and the next daily run
+reconciles it. A **red** run is a real problem: read the message above the error.
+The eCOST sync uses the same script, and the full table of outcomes is in
+`docs/ecost-network-map-sync.md`.
 
 `scripts/check_framework.py` is the guard that matters. The form field names are
 a contract with the database: rename one and the signature is still accepted

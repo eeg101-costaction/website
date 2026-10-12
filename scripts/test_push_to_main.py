@@ -140,6 +140,73 @@ class PushToMain(unittest.TestCase):
 
     # -- failing loudly ---------------------------------------------------
 
+    def test_a_rebase_that_fails_for_a_reason_other_than_a_conflict_is_not_swallowed(self):
+        """An unstaged edit to a tracked file makes git refuse to rebase. That is a bug
+        in the job, not a race, so it must fail and must not discard the edit."""
+        self.commit(self.other, "README.md", "hello\n", "someone else lands first")
+        git(self.other, "push", "origin", "HEAD:main")
+        self.commit(self.worker, "signatories.yml", "count: 2\n", "sync")
+        (self.worker / "catalogue.yml").write_text("items: 999\n")  # modified, never staged
+        r = self.run_script()
+        self.assertEqual(r.returncode, 1, "must not report success: " + r.stdout + r.stderr)
+        self.assertIn("other than a conflict", r.stdout)
+        self.assertNotIn("conflict with", r.stdout.replace("other than a conflict", ""),
+                         "must not blame another writer for a local problem")
+        self.assertEqual((self.worker / "catalogue.yml").read_text(), "items: 999\n", "stray edit must survive")
+        self.assertEqual(self.remote_subjects(), ["someone else lands first", "seed"], "nothing pushed")
+
+    def test_an_untracked_file_in_the_way_is_not_reported_as_a_conflict(self):
+        self.commit(self.other, "new-file.txt", "theirs\n", "someone adds a file")
+        git(self.other, "push", "origin", "HEAD:main")
+        self.commit(self.worker, "signatories.yml", "count: 2\n", "sync")
+        (self.worker / "new-file.txt").write_text("ours, untracked\n")
+        r = self.run_script()
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertEqual((self.worker / "new-file.txt").read_text(), "ours, untracked\n")
+        self.assertEqual(self.remote_subjects(), ["someone adds a file", "seed"])
+
+    def test_it_will_not_rebase_onto_rewritten_history(self):
+        """If main is rolled back mid-run, replaying our commits could re-publish what
+        was deliberately removed. That must fail, not look like an ordinary race."""
+        self.commit(self.worker, "signatories.yml", "count: 2\n", "sync")
+        # Someone rewrites the very commit this job started from, then force-pushes.
+        (self.other / "network.json").write_text('{"rolled": "back"}\n')
+        git(self.other, "add", "-A")
+        git(self.other, "commit", "--amend", "-m", "seed, rewritten")
+        git(self.other, "push", "--force", "origin", "HEAD:main")
+        r = self.run_script()
+        self.assertEqual(r.returncode, 1, r.stdout + r.stderr)
+        self.assertIn("rewritten", r.stdout)
+        self.assertEqual(self.remote_subjects(), ["seed, rewritten"], "the rewrite stands; we pushed nothing")
+
+    # -- the Framework workflow checks out with the default depth of 1 ----
+
+    def shallow_worker(self):
+        path = self.root / "shallow"
+        git(self.root, "clone", "--depth", "1", f"file://{self.remote}", str(path))
+        self.identify(path)
+        self.worker = path
+
+    def test_a_race_is_resolved_from_a_depth_one_clone(self):
+        self.shallow_worker()
+        self.commit(self.other, "README.md", "hello\n", "someone else lands first")
+        git(self.other, "push", "origin", "HEAD:main")
+        self.commit(self.worker, "signatories.yml", "count: 2\n", "sync")
+        self.assertEqual(git(self.worker, "rev-parse", "--is-shallow-repository").stdout.strip(), "true")
+        r = self.run_script()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(self.remote_subjects(), ["sync", "someone else lands first", "seed"])
+
+    def test_a_conflict_is_still_recognised_from_a_depth_one_clone(self):
+        self.shallow_worker()
+        self.commit(self.other, "signatories.yml", "count: 5\n", "fresher data")
+        git(self.other, "push", "origin", "HEAD:main")
+        self.commit(self.worker, "signatories.yml", "count: 3\n", "stale data")
+        r = self.run_script()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("::warning::", r.stdout)
+        self.assertEqual(git(self.remote, "show", "main:signatories.yml").stdout, "count: 5\n")
+
     def test_a_rejection_that_is_not_a_race_fails_at_once(self):
         hook = self.remote / "hooks" / "pre-receive"
         hook.write_text("#!/bin/sh\necho 'protected branch' >&2\nexit 1\n")
