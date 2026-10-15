@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-14"
-total: 348
+generated: "2026-10-15"
+total: 349
 curated_count: 12
-framework_count: 336
+framework_count: 337
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 336
+    count: 337
 
 sections:
   - slug: "educational"
@@ -30,7 +30,7 @@ sections:
     count: 24
   - slug: "democratization"
     name: "Democratization"
-    count: 86
+    count: 87
   - slug: "responsibility"
     name: "Responsibility"
     count: 120
@@ -40,7 +40,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 208
+    count: 209
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 230
+    count: 231
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -815,6 +815,33 @@ items:
       - "many-analyst"
       - "metascience"
       - "Neuroimaging"
+  - id: "I7ZNJGNL"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Nature Mental Health Earth–Brain–Health Commission"
+    authors: "Gunter Schumann, Jürg Luterbacher, Andre Marquand, Cornelius Gross, Xanthe Hunt, Bernd Stahl, Lasse Brandt, Bin Chen, Dinakaran Damodharan, John S. Ji, Tianye Jia, Sebastian Karl, Felicia Lazaridou, Lauren Salminen, Mei Tian, Rosa Barciela, Vivek Benegal, Amy Bernard, Sylvane Desrivières, Jianfeng Feng, Peng Gong, Andreas Heinz, Jin Li, Andreas Meyer-Lindenberg, Kate Pickett, Arleen Salles, Jerome Salomon, Shravya Shetty, Paul Thompson"
+    year: "2026"
+    venue: "Nature Mental Health"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.nature.com/articles/s44220-026-00737-y"
+    doi: "10.1038/s44220-026-00737-y"
+    abstract: "Environmental change is altering the conditions in which brains develop and minds are sustained. Heat, air and noise pollution, extreme weather, urbanization and loss of green space are associated with depression, anxiety and cognitive decline, although evidence strength and causal clarity vary. Exposures rarely occur singly and fall hardest on low- and middle-income countries, Small Island Developing States, children, older adults, people with disabilities and marginalised groups, who are least represented in research. Effects arise through interacting biological (neuroinflammation, endocrine and circadian disruption, epigenetic change), psychological (loss of agency and meaning) and social (displacement, isolation) pathways and are most consequential during sensitive developmental periods, when they may be partly irreversible. The Earth–Brain–Health Commission (EBHC) concludes that the principal obstacles to action are organizational and financial: cohorts, Earth-observation systems, federated analytics and governance instruments already exist but are rarely connected. Its eight recommendations pursue anticipatory life-course prevention, environments designed for mental health and fairer distribution of exposure, voice and progress, enabled by trustworthy artificial intelligence, data governance and international research funding. The Commission recommends that within a decade no major environmental, climate or urban intervention be planned or evaluated without brain and mental health as outcomes, a change within reach of existing policy."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/I7ZNJGNL"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags:
+      - "Epidemiology"
+      - "Health policy"
   - id: "C26PD8NT"
     collection: "framework"
     collection_label: "Community Framework"

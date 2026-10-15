@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-14"
+generated: "2026-10-15"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 336
+item_count: 337
 
 sections:
   - slug: "educational"
@@ -28,7 +28,7 @@ sections:
     title: "Democratization"
     anchor: "cf-democratization"
     part: 2
-    count: 86
+    count: 87
   - slug: "responsibility"
     title: "Responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 196
+    count: 197
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 218
+    count: 219
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 235
+    count: 236
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -411,6 +411,28 @@ items:
       - "cf-paper"
       - "many-analyst"
       - "metascience"
+  - id: "I7ZNJGNL"
+    title: "Nature Mental Health Earth–Brain–Health Commission"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Gunter Schumann, Jürg Luterbacher, Andre Marquand, Cornelius Gross, Xanthe Hunt, Bernd Stahl, Lasse Brandt, Bin Chen, Dinakaran Damodharan, John S. Ji, Tianye Jia, Sebastian Karl, Felicia Lazaridou, Lauren Salminen, Mei Tian, Rosa Barciela, Vivek Benegal, Amy Bernard, Sylvane Desrivières, Jianfeng Feng, Peng Gong, Andreas Heinz, Jin Li, Andreas Meyer-Lindenberg, Kate Pickett, Arleen Salles, Jerome Salomon, Shravya Shetty, Paul Thompson"
+    year: "2026"
+    language: "English"
+    publication: "Nature Mental Health"
+    url: "https://www.nature.com/articles/s44220-026-00737-y"
+    extra_url: ""
+    doi: "10.1038/s44220-026-00737-y"
+    abstract: "Environmental change is altering the conditions in which brains develop and minds are sustained. Heat, air and noise pollution, extreme weather, urbanization and loss of green space are associated with depression, anxiety and cognitive decline, although evidence strength and causal clarity vary. Exposures rarely occur singly and fall hardest on low- and middle-income countries, Small Island Developing States, children, older adults, people with disabilities and marginalised groups, who are least represented in research. Effects arise through interacting biological (neuroinflammation, endocrine and circadian disruption, epigenetic change), psychological (loss of agency and meaning) and social (displacement, isolation) pathways and are most consequential during sensitive developmental periods, when they may be partly irreversible. The Earth–Brain–Health Commission (EBHC) concludes that the principal obstacles to action are organizational and financial: cohorts, Earth-observation systems, federated analytics and governance instruments already exist but are rarely connected. Its eight recommendations pursue anticipatory life-course prevention, environments designed for mental health and fairer distribution of exposure, voice and progress, enabled by trustworthy artificial intelligence, data governance and international research funding. The Commission recommends that within a decade no major environmental, climate or urban intervention be planned or evaluated without brain and mental health as outcomes, a change within reach of existing policy."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/I7ZNJGNL"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags:
+      - "Epidemiology"
+      - "Health policy"
   - id: "C26PD8NT"
     title: "Neuroelectromagnetic Data Archive and Repository: Open-source platform analysis"
     type: "journalArticle"

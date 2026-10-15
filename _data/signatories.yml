@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-14"
+generated: "2026-10-15"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 155
-public_count: 127
+total: 156
+public_count: 128
 
 people:
   - name: "Enes Abanoz"
@@ -18,6 +18,8 @@ people:
     affiliation: "Bogazici University"
   - name: "Amin Alvani"
     affiliation: "Urbino Carlo Bo University"
+  - name: "FATIMA ALVAREZ"
+    affiliation: "UNIVERSIDAD PONTIFICIA COMILLAS"
   - name: "João Amaro"
     affiliation: "University of Lisbon"
   - name: "Markos Apostolakis"
