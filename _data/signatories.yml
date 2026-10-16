@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-15"
+generated: "2026-10-16"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 156
-public_count: 128
+total: 159
+public_count: 131
 
 people:
   - name: "Enes Abanoz"
@@ -168,6 +168,8 @@ people:
     affiliation: "University of Birmingham"
   - name: "Manish Mohapatra"
     affiliation: "Student"
+  - name: "Denise Monkau"
+    affiliation: "Neuroscience Academy Denmark"
   - name: "Quentin Moreau"
     affiliation: "Institut des Sciences Cognitives Marc Jeannerod"
   - name: "Daniel Morillo-Cuadrado"
@@ -176,6 +178,8 @@ people:
     affiliation: "KIRIKKALE UNIVERSITY"
   - name: "Faisal Mushtaq"
     affiliation: "University of Leeds"
+  - name: "Trinh Nguyen"
+    affiliation: "Heidelberg University"
   - name: "Guiomar Niso"
     affiliation: "Instituto Cajal, CSIC"
   - name: "Sebastian Ocklenburg"
@@ -222,6 +226,8 @@ people:
     affiliation: "Cognitive Neuroscience Department, Research and Development Institute \"Life Activities Advancement Institute\", Belgrade, Serbia"
   - name: "havva nur taş"
     affiliation: "Bartın University"
+  - name: "Sema Nur Albayrak Taştemir"
+    affiliation: "Fatih Sultan Mehmet Vakıf Üniversitesi"
   - name: "Luca Tonin"
     affiliation: "Università di Padova"
   - name: "Marta Topor"

@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-15"
-total: 349
+generated: "2026-10-16"
+total: 350
 curated_count: 12
-framework_count: 337
+framework_count: 338
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 337
+    count: 338
 
 sections:
   - slug: "educational"
@@ -30,7 +30,7 @@ sections:
     count: 24
   - slug: "democratization"
     name: "Democratization"
-    count: 87
+    count: 88
   - slug: "responsibility"
     name: "Responsibility"
     count: 120
@@ -40,7 +40,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 209
+    count: 210
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 231
+    count: 232
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -694,6 +694,31 @@ items:
       - "Biomarkers"
       - "Computational neuroscience"
       - "Dementia"
+  - id: "P254MB4L"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Inclusive electroencephalography practices for Black and Muslim participation in a White non-Muslim-majority country: A co-produced tutorial"
+    authors: "Damian Cruse, Ilham Razaie, Nyamesumpa Abbey, Natasha Bradbury, Yasmin Darawil, Hana Eldessoky, Fatima Farooq, Olivia Francis, Romy Froemer, Dorinda Lokko, Esther Nwakor, Amaliah-Saffron Odutola, Andrew Quinn, Nishita Sujan, Malaika Zabair"
+    year: "2026"
+    venue: "Behavior Research Methods"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://link.springer.com/article/10.3758/s13428-026-03203-w"
+    doi: "10.3758/s13428-026-03203-w"
+    abstract: "Abstract Most electroencephalography (EEG) research is conducted in White-majority Western countries by White researchers. EEG practices therefore often explicitly and implicitly exclude minoritised groups, leading to low diversity in EEG data samples that deepens biases in interpretation and clinical utility. Because EEG electrodes must contact the scalp, Black people and Muslim women who wear a hijab (or, Hijabis) are two systematically excluded groups. As a group of EEG researchers, Black people, and Hijabis, here we describe co-produced practical approaches to overcoming EEG participation barriers, from recruitment to data collection, and provide co-produced text, photographs, and videos designed to break down these barriers. These approaches provide further tools for the EEG community to tackle systemic exclusion and foster better, more representative neuroscience."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/P254MB4L"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags: []
   - id: "K36S7F6F"
     collection: "framework"
     collection_label: "Community Framework"

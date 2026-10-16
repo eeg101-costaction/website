@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-15"
+generated: "2026-10-16"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 337
+item_count: 338
 
 sections:
   - slug: "educational"
@@ -28,7 +28,7 @@ sections:
     title: "Democratization"
     anchor: "cf-democratization"
     part: 2
-    count: 87
+    count: 88
   - slug: "responsibility"
     title: "Responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 197
+    count: 198
   - name: "Webpage"
     count: 80
   - name: "Preprint"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 219
+    count: 220
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 236
+    count: 237
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -310,6 +310,26 @@ items:
       - "Biomarkers"
       - "Computational neuroscience"
       - "Dementia"
+  - id: "P254MB4L"
+    title: "Inclusive electroencephalography practices for Black and Muslim participation in a White non-Muslim-majority country: A co-produced tutorial"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Damian Cruse, Ilham Razaie, Nyamesumpa Abbey, Natasha Bradbury, Yasmin Darawil, Hana Eldessoky, Fatima Farooq, Olivia Francis, Romy Froemer, Dorinda Lokko, Esther Nwakor, Amaliah-Saffron Odutola, Andrew Quinn, Nishita Sujan, Malaika Zabair"
+    year: "2026"
+    language: "English"
+    publication: "Behavior Research Methods"
+    url: "https://link.springer.com/article/10.3758/s13428-026-03203-w"
+    extra_url: ""
+    doi: "10.3758/s13428-026-03203-w"
+    abstract: "Abstract Most electroencephalography (EEG) research is conducted in White-majority Western countries by White researchers. EEG practices therefore often explicitly and implicitly exclude minoritised groups, leading to low diversity in EEG data samples that deepens biases in interpretation and clinical utility. Because EEG electrodes must contact the scalp, Black people and Muslim women who wear a hijab (or, Hijabis) are two systematically excluded groups. As a group of EEG researchers, Black people, and Hijabis, here we describe co-produced practical approaches to overcoming EEG participation barriers, from recruitment to data collection, and provide co-produced text, photographs, and videos designed to break down these barriers. These approaches provide further tools for the EEG community to tackle systemic exclusion and foster better, more representative neuroscience."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/P254MB4L"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags: []
   - id: "K36S7F6F"
     title: "Inclusive mobile brain-body imaging achieves equivalent EEG data quality across racial groups"
     type: "journalArticle"
