@@ -1,0 +1,21 @@
+{%- comment -%}
+  Print include.url if it is a web address (http:// or https://) or a page on
+  this site (/...) with no spaces, quotes or angle brackets, and nothing
+  otherwise, so a javascript: or other address saved by mistake in the editor
+  is never made into a link (scripts/validate_event_booking.py SAFE_URL is the
+  same rule). Use with capture.
+{%- endcomment -%}
+{%- assign __url = include.url | strip -%}
+{%- assign __url_https = __url | slice: 0, 8 | downcase -%}
+{%- assign __url_http = __url | slice: 0, 7 | downcase -%}
+{%- assign __url_two = __url | slice: 0, 2 -%}
+{%- assign __url_one = __url | slice: 0, 1 -%}
+{%- if __url_https == "https://" or __url_http == "http://" -%}
+{%- assign __url_ok = true -%}
+{%- elsif __url_one == "/" and __url_two != "//" -%}
+{%- assign __url_ok = true -%}
+{%- else -%}
+{%- assign __url_ok = false -%}
+{%- endif -%}
+{%- if __url contains " " or __url contains '"' or __url contains "'" or __url contains "<" or __url contains ">" or __url contains "`" -%}{%- assign __url_ok = false -%}{%- endif -%}
+{%- if __url_ok -%}{{ __url }}{%- endif -%}

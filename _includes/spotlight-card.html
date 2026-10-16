@@ -1,19 +1,19 @@
 {% assign card_title = include.item.card_title | default: include.item.title %}
 <article class="spotlight-card{% if include.featured %} spotlight-card--featured{% endif %}">
-  <a class="spotlight-card__image-link" href="{{ include.item.url | relative_url }}" aria-label="Read Spotlight: {{ card_title }}">
-    <img class="spotlight-card__image" src="{{ include.item.image | relative_url }}" alt="{{ include.item.image_alt }}" loading="lazy">
+  <a class="spotlight-card__image-link" href="{{ include.item.url | relative_url }}" aria-label="Read Spotlight: {{ card_title | escape }}">
+    <img class="spotlight-card__image" src="{{ include.item.image | relative_url | escape }}" alt="{{ include.item.image_alt | escape }}" loading="lazy">
   </a>
   <div class="spotlight-card__body">
     <div class="spotlight-card__meta">
-      <span class="spotlight-card__type">{{ include.item.type }}</span>
-      <span class="spotlight-card__status">{{ include.item.status }}</span>
+      <span class="spotlight-card__type">{{ include.item.type | escape }}</span>
+      {% if include.item.status and include.item.status != "" %}<span class="spotlight-card__status">{{ include.item.status | escape }}</span>{% endif %}
     </div>
-    <p class="spotlight-card__date">{{ include.item.date_range }}</p>
-    <h3 class="spotlight-card__title"><a href="{{ include.item.url | relative_url }}">{{ card_title }}</a></h3>
-    <p class="spotlight-card__summary">{{ include.item.summary }}</p>
+    <p class="spotlight-card__date">{{ include.item.date_range | escape }}</p>
+    <h3 class="spotlight-card__title"><a href="{{ include.item.url | relative_url }}">{{ card_title | escape }}</a></h3>
+    <p class="spotlight-card__summary">{{ include.item.summary | escape }}</p>
     <div class="spotlight-card__tags" aria-label="Related topics">
-      {% for tag in include.item.working_groups %}<span class="spotlight-card__tag">{{ tag }}</span>{% endfor %}
-      {% for tag in include.item.tags %}<span class="spotlight-card__tag">{{ tag }}</span>{% endfor %}
+      {% for tag in include.item.working_groups %}<span class="spotlight-card__tag">{{ tag | escape }}</span>{% endfor %}
+      {% for tag in include.item.tags %}<span class="spotlight-card__tag">{{ tag | escape }}</span>{% endfor %}
     </div>
     <a class="spotlight-card__link" href="{{ include.item.url | relative_url }}">Read the Spotlight <span aria-hidden="true">→</span></a>
   </div>

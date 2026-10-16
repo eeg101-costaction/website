@@ -83,9 +83,14 @@ It is easiest to open an existing Spotlight to see how one is filled in.
 
 ## Pictures
 
-- Click the picture field and **Upload**. Any normal photo is fine: large phone
-  photos are shrunk automatically a minute after you save, turned the right way
-  up, and stripped of hidden location data.
+- Click the picture field and **Upload**. JPG, PNG and WebP pictures are
+  accepted. Large phone photos are shrunk automatically a minute after you
+  save, turned the right way up, and stripped of hidden location data.
+- **Before uploading a photo taken on a phone, remove its location** (on an
+  iPhone: Share → Options → turn off Location; on Android: in the photo's
+  details, remove the location), or turn off location in the camera settings.
+  The automatic clean-up only fixes the copy on the website; the original you
+  uploaded stays in the site's public history.
 - Landscape (wide) pictures work best for events and Spotlights.
 - Always fill in **Picture description**: one sentence describing the picture,
   for people who cannot see it.

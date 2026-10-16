@@ -103,10 +103,26 @@ def load_items(directory: Path) -> tuple[list[dict], list[str]]:
                 data[key] = clock(data[key])
         items.append({**data, "id": item_id})
     return items, errors
+
+# A one-day event has no end date (it defaults to the start) and a blank capacity
+# means no limit, so neither is required: the editor tells staff to leave them empty.
 REQUIRED_BOOKING_FIELDS = {
-    "id", "title", "start_date", "end_date", "time", "end_time", "timezone",
-    "location", "format", "category", "summary", "capacity", "booking_enabled", "booking_status",
+    "id", "title", "start_date", "time", "end_time", "timezone",
+    "location", "format", "category", "summary", "booking_enabled", "booking_status",
 }
+URL_FIELDS = ("registration_url", "programme_url", "recording_url", "slides_url")
+# A web address, or a page on this site ("/grants/" but not "//elsewhere.org").
+SAFE_URL = re.compile(r"^(https?://|/(?!/))[^\s\"'<>`]*$", re.I)
+SCRIPT_URL = re.compile(r"javascript:|vbscript:|data:text/html", re.I)
+
+
+def url_problem(value: object) -> str:
+    """Why a link field cannot be used, or "" if it is fine (or empty)."""
+    url = str(value or "").strip()
+    if url and not SAFE_URL.match(url):
+        return "must be a web address (https://...) or a page on this site (/...), with no spaces"
+    return ""
+
 
 
 def string_date(value: object) -> str:
@@ -122,7 +138,7 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
     today = today or dt.date.today()
 
     for index, event in enumerate(events, start=1):
-        label = f"event #{index} ({event.get('title', 'untitled')!r})"
+        label = f"event {event.get('id') or '#' + str(index)!r} ({event.get('title', 'untitled')!r})"
         event_id = str(event.get("id", "")).strip()
         if not event_id:
             errors.append(f"{label}: id is required.")
@@ -142,15 +158,27 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
         booking_status = event.get("booking_status")
         # Time zone and end time are not booking-only: the Calendar uses them to show any
         # event's time in the reader's own zone, so only these three count here.
-        booking_fields_present = any(filled(event.get(key)) for key in ("booking_status", "capacity"))
+        # Turning bookings off in the editor leaves the status and places filled in;
+        # the site ignores them, so that is not an error (see advisories).
+        try:
+            start_date = dt.date.fromisoformat(string_date(event.get("start_date")))
+            if filled(event.get("end_date")) and dt.date.fromisoformat(string_date(event.get("end_date"))) < start_date:
+                errors.append(f"{label}: the last day is before the first day.")
+        except ValueError:
+            errors.append(f"{label}: start_date and end_date must be valid dates (YYYY-MM-DD).")
+        for key in ("time", "end_time"):
+            if filled(event.get(key)) and not CLOCK.match(str(event[key]).strip()):
+                errors.append(f"{label}: {key} must be a time like 14:00.")
+        for key in URL_FIELDS:
+            problem = url_problem(event.get(key))
+            if problem:
+                errors.append(f"{label}: {key} {problem}.")
 
-        if booking_fields_present and not booking_enabled:
-            errors.append(f"{label}: booking fields are present but booking_enabled is not true. Remove them or enable booking explicitly.")
         if not booking_enabled:
             continue
 
         has_bookable_event = True
-        missing = sorted(key for key in REQUIRED_BOOKING_FIELDS if event.get(key) in (None, ""))
+        missing = sorted(key for key in REQUIRED_BOOKING_FIELDS if not filled(event.get(key)) and event.get(key) is not False)
         if missing:
             errors.append(f"{label}: bookable events require {', '.join(missing)}.")
         if booking_status not in {"open", "closed"}:
@@ -168,17 +196,10 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
         if event.get("registration_url"):
             errors.append(f"{label}: registration_url must be empty because booking is handled directly from the event entry.")
         try:
-            if int(event.get("capacity", 0)) < 0:
+            if int(event.get("capacity") or 0) < 0:
                 errors.append(f"{label}: capacity cannot be negative.")
         except (TypeError, ValueError):
-            errors.append(f"{label}: capacity must be a whole number, with 0 meaning open attendance.")
-        try:
-            start_date = dt.date.fromisoformat(string_date(event.get("start_date")))
-            end_date = dt.date.fromisoformat(string_date(event.get("end_date")))
-            if end_date < start_date:
-                errors.append(f"{label}: end_date must not be earlier than start_date.")
-        except ValueError:
-            errors.append(f"{label}: start_date and end_date must use valid ISO dates.")
+            errors.append(f"{label}: capacity must be a whole number, with 0 or empty meaning no limit.")
 
     if has_bookable_event and not str(site.get("event_booking_endpoint", "")).strip():
         errors.append("_data/site.yml: event_booking_endpoint is required whenever an event has booking_enabled: true.")
@@ -198,6 +219,8 @@ def advisories(events: list[dict], today: dt.date | None = None) -> list[str]:
                     notes.append(f"{event.get('id')}: the event has passed but booking is still 'open'; set it to 'closed'.")
             except ValueError:
                 pass
+        if event.get("booking_enabled") is not True and any(filled(event.get(k)) for k in ("booking_status", "capacity")):
+            notes.append(f"{event.get('id')}: bookings are off, so its booking status and places are ignored.")
     return notes
 
 
@@ -219,9 +242,9 @@ def validate_dates(dates: list[dict]) -> list[str]:
                 errors.append(f"{label}: {key} must be a time like 14:00.")
         if filled(item.get("end_time")) and not filled(item.get("time")):
             errors.append(f"{label}: an end time needs a start time.")
-        link = str(item.get("link") or "").strip()
-        if link and not (link.startswith(("https://", "http://", "/")) and " " not in link):
-            errors.append(f"{label}: the link must be a web address (https://...) or a page on this site (/...).")
+        problem = url_problem(item.get("link"))
+        if problem:
+            errors.append(f"{label}: the link {problem}.")
     return errors
 
 
@@ -240,6 +263,15 @@ def validate_spotlights(spotlights: list[dict]) -> list[str]:
         for link in item.get("links") or []:
             if not isinstance(link, dict) or not filled(link.get("label")) or not filled(link.get("url")):
                 errors.append(f"{label}: every link needs both a label and a web address.")
+            elif url_problem(link.get("url")):
+                errors.append(f"{label}: the link {link.get('label')!r} {url_problem(link.get('url'))}.")
+        for figure in item.get("figures") or []:
+            if isinstance(figure, dict) and not filled(figure.get("image")):
+                errors.append(f"{label}: every extra picture needs a picture (remove the empty one).")
+        for section in ("why", "enabled", "whats_next"):
+            text = (item.get(section) or {}).get("text") if isinstance(item.get(section), dict) else None
+            if text and SCRIPT_URL.search(str(text)):
+                errors.append(f"{label}: a link in the {section} text is not a web address.")
     return errors
 
 

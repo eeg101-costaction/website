@@ -4,7 +4,9 @@ start_date: "2026-04-03"
 end_date: "2026-04-03"
 location: e-COST Platform
 format: online
-time: Closed 17:00 CET
+time: "17:00"
+timezone: Europe/Brussels
+time_display: Closed 17:00 CET
 category: Announcement
 summary: The application window for Funding Round 1 has closed. The coordination team is reviewing applications for STSMs, VMGs, and Conference Grants.
 image: /assets/images/events/funding-round-1-closed.jpg

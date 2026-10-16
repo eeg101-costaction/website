@@ -7,9 +7,9 @@ layout: default
     <div class="page-hero__inner">
       {% assign hero_category = page.category %}
       {% if page.collection == "spotlights" and hero_category == nil %}{% capture hero_category %}{{ page.type }}{% if page.working_groups.size > 0 %} · {{ page.working_groups | array_to_sentence_string }}{% endif %}{% endcapture %}{% endif %}
-      {% if hero_category and hero_category != "" %}<span class="page-hero__category">{{ hero_category }}</span>{% endif %}
-      <h1 class="page-hero__title">{{ page.title }}</h1>
-      {% if page.subtitle %}<p class="page-hero__subtitle">{{ page.subtitle }}</p>{% endif %}
+      {% if hero_category and hero_category != "" %}<span class="page-hero__category">{% if page.collection == "spotlights" %}{{ hero_category | escape }}{% else %}{{ hero_category }}{% endif %}</span>{% endif %}
+      <h1 class="page-hero__title">{% if page.collection == "spotlights" %}{{ page.title | escape }}{% else %}{{ page.title }}{% endif %}</h1>
+      {% if page.subtitle and page.subtitle != "" %}<p class="page-hero__subtitle">{% if page.collection == "spotlights" %}{{ page.subtitle | escape }}{% else %}{{ page.subtitle }}{% endif %}</p>{% endif %}
     </div>
   </div>
   <div class="page-hero__wave" aria-hidden="true"></div>

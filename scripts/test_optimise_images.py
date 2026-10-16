@@ -82,5 +82,33 @@ class OptimiseImages(unittest.TestCase):
         self.assertIsNone(OPT.optimise(self.dir / "missing.jpg"))
 
 
+    def test_phone_mpo_jpeg_is_cleaned_and_saved_as_plain_jpeg(self):
+        """Many phones save JPEGs with a second picture inside (Pillow calls them MPO)."""
+        p = self.dir / "phone.jpg"
+        exif = Image.Exif(); exif[0x8825] = {1: "N", 2: (53.0, 48.0, 0.0)}
+        Image.new("RGB", (800, 600), "red").save(p, "MPO", save_all=True,
+                                                append_images=[Image.new("RGB", (800, 600))], exif=exif)
+        self.assertIsNotNone(OPT.optimise(p))
+        with Image.open(p) as img:
+            self.assertEqual((img.format, len(img.getexif())), ("JPEG", 0))
+
+    def test_location_in_xmp_is_removed_and_colour_profile_kept(self):
+        from PIL import ImageCms
+        icc = ImageCms.ImageCmsProfile(ImageCms.createProfile("sRGB")).tobytes()
+        xmp = b'<x:xmpmeta xmlns:x="adobe:ns:meta/"><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"><rdf:Description xmlns:exif="http://ns.adobe.com/exif/1.0/" exif:GPSLatitude="53,48.5N"/></rdf:RDF></x:xmpmeta>'
+        p = self.dir / "xmp.jpg"
+        Image.new("RGB", (800, 600), "red").save(p, "JPEG", xmp=xmp, icc_profile=icc)
+        self.assertIn("location", OPT.optimise(p))
+        self.assertNotIn(b"GPS", p.read_bytes())
+        with Image.open(p) as img:
+            self.assertEqual(img.info.get("icc_profile"), icc)
+
+    def test_an_unreadable_file_does_not_stop_the_others(self):
+        bad = self.dir / "bad.jpg"; bad.write_bytes(b"not a picture")
+        good = photo(self.dir / "good.jpg", gps=True, size=(400, 300))
+        self.assertEqual(OPT.main([str(bad), str(good)]), 0)
+        with Image.open(good) as img:
+            self.assertEqual(len(img.getexif()), 0)
+
 if __name__ == "__main__":
     unittest.main()

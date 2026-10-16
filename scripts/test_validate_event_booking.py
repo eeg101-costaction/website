@@ -46,9 +46,31 @@ class EventBookingValidationTests(unittest.TestCase):
         self.assertTrue(any("end_time" in error for error in errors))
         self.assertTrue(any("registration_url" in error for error in errors))
 
-    def test_non_bookable_event_cannot_carry_booking_state(self):
-        errors = VALIDATOR.validate([event(booking_enabled=False)], self.site, self.today)
-        self.assertTrue(any("booking fields are present" in error for error in errors))
+    def test_booking_left_filled_after_turning_bookings_off_is_only_a_warning(self):
+        """Unticking "Take bookings" in the editor leaves the status and places behind."""
+        off = event(booking_enabled=False)
+        self.assertEqual(VALIDATOR.validate([off], self.site, self.today), [])
+        self.assertTrue(any("bookings are off" in n for n in VALIDATOR.advisories([off], self.today)))
+
+    def test_one_day_bookable_event_needs_no_last_day_or_places(self):
+        """The editor says to leave the last day empty for one day; blank places means no limit."""
+        one_day = event()
+        del one_day["end_date"], one_day["capacity"]
+        self.assertEqual(VALIDATOR.validate([one_day], self.site, self.today), [])
+        self.assertEqual(VALIDATOR.validate([event(end_date="", capacity=None)], self.site, self.today), [])
+
+    def test_any_event_ending_before_it_starts_is_rejected(self):
+        errors = VALIDATOR.validate([event(booking_enabled=False, booking_status="", capacity=0,
+                                           end_date="2026-10-01")], self.site, self.today)
+        self.assertTrue(any("before the first day" in error for error in errors))
+
+    def test_links_must_be_web_addresses_or_site_pages(self):
+        plain = dict(booking_enabled=False, booking_status="", capacity=0)
+        for good in ("https://example.org/a?b=1", "/video-hub/", ""):
+            self.assertEqual(VALIDATOR.validate([event(**plain, programme_url=good)], self.site, self.today), [], good)
+        for bad in ("javascript:alert(1)", "zenodo.org/records/1", "//evil.example", "/a b", 'https://x.org/"onmouseover="x'):
+            errors = VALIDATOR.validate([event(**plain, recording_url=bad)], self.site, self.today)
+            self.assertTrue(any("recording_url" in e for e in errors), bad)
 
 
     # -- Pages CMS writes every field, blank or not --------------------------------
@@ -86,6 +108,10 @@ class EventBookingValidationTests(unittest.TestCase):
         self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "image_alt": ""}]))
         self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "date": ""}]))
         self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "links": [{"label": "L", "url": ""}]}]))
+        self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "links": [{"label": "L", "url": "javascript:alert(1)"}]}]))
+        self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "figures": [{"heading": "H", "image": ""}]}]))
+        self.assertTrue(VALIDATOR.validate_spotlights([{**ok, "why": {"text": "[x](JavaScript:alert(1))"}}]))
+        self.assertTrue(VALIDATOR.validate_dates([{"id": "d", "title": "T", "start_date": "2026-11-30", "link": "/\"onmouseover=\"x"}]))
 
     # -- files ---------------------------------------------------------------------------
 

@@ -6,15 +6,16 @@ name: Check content saved in the website editor
 # admins in plain English, and fix the one thing staff cannot be expected to:
 # oversized, sideways, location-tagged photos.
 #
-#   1. What this save changed is tidied and committed back: front matter is
-#      rewritten so Jekyll reads times and yes/no words as typed
-#      (scripts/normalise_front_matter.cjs), and pictures are shrunk, turned
-#      upright and stripped of metadata (scripts/optimise_images.py). Existing
-#      pictures are never touched.
+#   1. Saved content is tidied and committed back: front matter is rewritten
+#      so Jekyll reads times and yes/no words as typed
+#      (scripts/normalise_front_matter.cjs), and pictures added since the last
+#      tidy-up (tag content-tidied) are shrunk, turned upright and stripped of
+#      metadata (scripts/optimise_images.py). Pictures from before this was set
+#      up are never touched.
 #   2. The content is checked (scripts/validate_event_booking.py) and the editor
 #      config is checked against it (scripts/check_cms_config.py).
 #   3. The site is built with the same builder GitHub Pages uses.
-#   4. If 2 or 3 fails, an issue labelled "content-check" is opened (or updated)
+#   4. If any of these fails, an issue labelled "content-check" is opened (or updated)
 #      for the admins; when a later save passes, it is closed automatically.
 #
 # See docs/pages-cms-setup.md.
@@ -67,33 +68,51 @@ jobs:
           echo "NODE_PATH=$RUNNER_TEMP/yaml/node_modules" >> "$GITHUB_ENV"
 
       - name: Tidy what was saved (time formats, picture sizes)
+        id: tidy
+        continue-on-error: true
         env:
           BEFORE: ${{ github.event.before }}
         run: |
           set -euo pipefail
-          # Only files changed by this push. A manual run has no "before", so it
-          # tidies every content file but leaves existing pictures alone.
-          if [ -z "${BEFORE:-}" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
-            mapfile -t pages < <(git ls-files '_events/*.md' '_dates/*.md' '_spotlights/*.md')
-            pictures=()
-          else
-            mapfile -t pages < <(git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- _events _dates _spotlights)
-            mapfile -t pictures < <(git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- assets/images/events assets/images/spotlights)
+          start=$(git rev-parse HEAD)
+          # Front matter: every content file, every time. It is quick, and a file
+          # already in the right form is left alone, so nothing is ever missed.
+          mapfile -d '' -t pages < <(git ls-files -z -- '_events/*.md' '_dates/*.md' '_spotlights/*.md')
+          # Pictures: everything added or changed since the last tidied commit, so
+          # a save whose own run was dropped from the queue (GitHub keeps only the
+          # newest waiting run) is still covered. Without that marker, only this
+          # push; a manual run with neither leaves pictures alone.
+          git fetch --quiet --force origin 'refs/tags/content-tidied:refs/tags/content-tidied' 2>/dev/null || true
+          base=""
+          if git rev-parse --verify --quiet 'refs/tags/content-tidied^{commit}' >/dev/null && git merge-base --is-ancestor refs/tags/content-tidied HEAD; then
+            base=$(git rev-parse 'refs/tags/content-tidied^{commit}')
+          elif [ -n "${BEFORE:-}" ] && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            base=$BEFORE
+          fi
+          pictures=()
+          if [ -n "$base" ]; then
+            mapfile -d '' -t pictures < <(git diff -z --name-only --diff-filter=AMR "$base" HEAD -- assets/images/events assets/images/spotlights)
           fi
           : > tidied.txt
           # Pages CMS writes YAML 1.2; Jekyll reads 1.1, where 09:00 is a number and
           # "no" is false. Rewrite the front matter so Jekyll reads what was typed.
           if [ "${#pages[@]}" -gt 0 ]; then node scripts/normalise_front_matter.cjs "${pages[@]}" | tee -a tidied.txt; fi
           if [ "${#pictures[@]}" -gt 0 ]; then python3 scripts/optimise_images.py "${pictures[@]}" | tee -a tidied.txt; fi
-          if git diff --quiet; then echo "Nothing needed tidying."; exit 0; fi
-          git config user.name "EEG101 content check"
-          git config user.email "eeg101costaction@gmail.com"
-          git add -u _events _dates _spotlights assets/images/events assets/images/spotlights
-          git commit -m "Tidy content saved through the website editor" -m "$(cat tidied.txt)"
-          bash scripts/push_to_main.sh
+          if ! git diff --quiet; then
+            git config user.name "EEG101 content check"
+            git config user.email "eeg101costaction@gmail.com"
+            git add -u -- _events _dates _spotlights assets/images/events assets/images/spotlights
+            git commit -m "Tidy content saved through the website editor" -m "$(grep -v '^::' tidied.txt || true)"
+            bash scripts/push_to_main.sh
+          else
+            echo "Nothing needed tidying."
+          fi
+          # Everything up to the commit this run started from has now been tidied.
+          git push --quiet --force origin "$start:refs/tags/content-tidied"
 
       - name: Check the content
         id: validate
+        if: always()
         continue-on-error: true
         run: |
           set -o pipefail
@@ -101,6 +120,7 @@ jobs:
 
       - name: Build the site exactly as GitHub Pages does
         id: build
+        if: always()
         continue-on-error: true
         uses: actions/jekyll-build-pages@v1
         with:
@@ -111,19 +131,21 @@ jobs:
         if: always()
         uses: actions/github-script@v7
         env:
+          TIDY: ${{ steps.tidy.outcome }}
           VALIDATE: ${{ steps.validate.outcome }}
           BUILD: ${{ steps.build.outcome }}
         with:
           script: |
             const fs = require('fs');
             const label = 'content-check';
+            const tidyOk = process.env.TIDY === 'success';
             const validateOk = process.env.VALIDATE === 'success';
             const buildOk = process.env.BUILD === 'success';
             const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
             const commit = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}`;
             const open = (await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: label })).data;
 
-            if (validateOk && buildOk) {
+            if (tidyOk && validateOk && buildOk) {
               for (const issue of open) {
                 await github.rest.issues.createComment({ ...context.repo, issue_number: issue.number,
                   body: `Fixed: the content saved in [${context.sha.slice(0, 7)}](${commit}) passes every check and the site builds. Closing.` });
@@ -141,6 +163,7 @@ jobs:
               '',
               validateOk ? '' : '### What is wrong\n\n' + (problems || '```\n' + detail.slice(0, 3000) + '\n```'),
               buildOk ? '' : '### The build failed\n\nThe details are in the log of the run below (look for the red step).',
+              tidyOk ? '' : '### The automatic tidy-up failed\n\nTimes and pictures saved recently may not have been tidied (see the "Tidy what was saved" step in the log below). Re-running this check from the Actions tab retries it.',
               '',
               '### How to fix it',
               '',

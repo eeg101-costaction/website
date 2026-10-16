@@ -10,20 +10,28 @@ two can drift apart without anyone noticing:
     id...), which the site would silently ignore;
   * a dropdown that does not offer a value already in use, so editing that item
     would show the field blank;
-  * media folders, collection paths and components that do not exist.
+  * an existing item the editor would refuse to save (a value that fails its
+    field's pattern or length limit, or a required field left empty), so staff
+    opening it to change something else would be stuck;
+  * media folders, collection paths and components that do not exist, or media
+    that accept files other than the picture types the site tidies up.
 """
 
 from __future__ import annotations
 
+import re
 import sys
 from pathlib import Path
 
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from validate_event_booking import RESERVED_FIELDS, load_items  # noqa: E402
+from validate_event_booking import RESERVED_FIELDS, filled, load_items  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
+
+# Picture types scripts/optimise_images.py can shrink and strip of location data.
+PICTURE_EXTENSIONS = {"jpg", "jpeg", "png", "webp"}
 
 # Fields kept in existing files but deliberately not offered in the editor
 # because nothing on the site displays them.
@@ -42,6 +50,8 @@ def main() -> int:
             problems.append(f"media {name!r}: folder {m['input']} does not exist.")
         if "/" + m["input"].strip("/") != m["output"].rstrip("/"):
             problems.append(f"media {name!r}: output {m['output']} does not match input {m['input']}.")
+        if not m.get("extensions") or set(m["extensions"]) - PICTURE_EXTENSIONS:
+            problems.append(f"media {name!r}: extensions must be limited to {sorted(PICTURE_EXTENSIONS)}.")
 
     components = config.get("components", {})
     if config.get("settings", {}).get("content", {}).get("merge") is not True:
@@ -81,6 +91,21 @@ def main() -> int:
                 for v in (value if isinstance(value, list) else [value]):
                     if v not in (None, "") and v not in allowed:
                         problems.append(f"{name}/{item['id']}: {key} is {v!r}, which the editor's dropdown does not offer.")
+
+        for key, spec in fields.items():
+            pattern = spec.get("pattern")
+            regex = pattern.get("regex") if isinstance(pattern, dict) else pattern
+            maxlength = (spec.get("options") or {}).get("maxlength")
+            for item in items:
+                value = item.get(key)
+                if spec.get("required") and not filled(value) and value is not False:
+                    problems.append(f"{name}/{item['id']}: {key} is required in the editor but empty, so the item cannot be saved there.")
+                if not isinstance(value, str) or spec.get("list"):
+                    continue
+                if regex and not re.search(regex, value):
+                    problems.append(f"{name}/{item['id']}: {key} is {value!r}, which the editor would reject, so the item cannot be saved there.")
+                if maxlength and len(value) > maxlength:
+                    problems.append(f"{name}/{item['id']}: {key} is longer than the editor allows ({maxlength}).")
 
     if problems:
         print("Pages CMS config check failed:")

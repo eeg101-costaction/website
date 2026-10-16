@@ -8,8 +8,11 @@ on the command line this:
   * turns it the right way up (phones record rotation as a tag, which browsers
     that ignore it display sideways);
   * shrinks it so its longest side is at most MAX_SIDE pixels;
-  * removes embedded metadata, including location;
+  * removes embedded metadata (EXIF and XMP), including location, but keeps the
+    colour profile so colours do not shift;
   * keeps the format, so every page that already refers to the file still works.
+    (Many phone JPEGs are "MPO", a JPEG with a second picture inside; they are
+    saved as plain JPEG.)
 
 It only rewrites a file when that is needed (too large, rotated, or carrying
 metadata), and only keeps the result when it is no bigger than the original, so
@@ -17,7 +20,8 @@ running it twice changes nothing. The content-check workflow passes it only the
 pictures changed in that save, never the existing ones.
 
 Usage: python3 scripts/optimise_images.py FILE [FILE...]
-Prints one line per file it changed; exit status 0 either way.
+Prints one line per file it changed. A file it cannot read is reported as a
+warning and skipped, so one bad upload does not stop the rest; exit status 0.
 """
 
 from __future__ import annotations
@@ -32,6 +36,12 @@ MAX_SIDE = 1920
 MAX_BYTES = 600_000          # above this, re-encode even if the dimensions are fine
 JPEG_QUALITY = 82
 SUFFIXES = {".jpg", ".jpeg", ".png", ".webp"}
+# A 200-megapixel phone photo is a real upload, not an attack; allow it.
+Image.MAX_IMAGE_PIXELS = 300_000_000
+
+
+def xmp_of(img: Image.Image) -> bytes | str:
+    return img.info.get("xmp") or img.info.get("XML:com.adobe.xmp") or b""
 
 
 def needs_work(img: Image.Image, size: int) -> list[str]:
@@ -43,8 +53,10 @@ def needs_work(img: Image.Image, size: int) -> list[str]:
     exif = img.getexif()
     if exif and exif.get(0x0112, 1) != 1:
         reasons.append("rotated")
-    if exif and (0x8825 in exif or len(exif) > 0):
-        reasons.append("metadata" + (" incl. location" if 0x8825 in exif else ""))
+    xmp = xmp_of(img)
+    xmp_gps = b"GPS" in (xmp if isinstance(xmp, bytes) else xmp.encode("utf-8", "ignore"))
+    if exif or xmp:
+        reasons.append("metadata" + (" incl. location" if 0x8825 in exif or xmp_gps else ""))
     return reasons
 
 
@@ -57,16 +69,22 @@ def optimise(path: Path) -> str | None:
         if not reasons:
             return None
         fmt = img.format
+        icc = img.info.get("icc_profile")
         out = ImageOps.exif_transpose(img)            # right way up, rotation tag dropped
+        out.info.pop("xmp", None)
+        out.info.pop("XML:com.adobe.xmp", None)
+        keep = {"icc_profile": icc} if icc else {}
         if max(out.size) > MAX_SIDE:
             out.thumbnail((MAX_SIDE, MAX_SIDE), Image.LANCZOS)
         buffer = io.BytesIO()
-        if fmt == "JPEG":
-            out.convert("RGB").save(buffer, "JPEG", quality=JPEG_QUALITY, optimize=True, progressive=True)
+        if fmt in ("JPEG", "MPO"):
+            rgb = out.convert("RGB")
+            rgb.info.pop("xmp", None)
+            rgb.save(buffer, "JPEG", quality=JPEG_QUALITY, optimize=True, progressive=True, **keep)
         elif fmt == "PNG":
-            out.save(buffer, "PNG", optimize=True)
+            out.save(buffer, "PNG", optimize=True, **keep)
         elif fmt == "WEBP":
-            out.save(buffer, "WEBP", quality=JPEG_QUALITY, method=6)
+            out.save(buffer, "WEBP", quality=JPEG_QUALITY, method=6, **keep)
         else:
             return None
     data = buffer.getvalue()
@@ -80,7 +98,11 @@ def optimise(path: Path) -> str | None:
 
 def main(argv: list[str]) -> int:
     for name in argv:
-        message = optimise(Path(name))
+        try:
+            message = optimise(Path(name))
+        except Exception as error:  # one unreadable upload must not stop the rest
+            print(f"::warning::{name}: could not be processed ({type(error).__name__}: {error}); left as it is.")
+            continue
         if message:
             print(message)
     return 0

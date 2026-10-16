@@ -24,13 +24,15 @@ media:
     label: Event pictures
     input: assets/images/events
     output: /assets/images/events
-    categories: [image]
+    # Only the picture types the post-save check can shrink and strip of location data.
+    extensions: [jpg, jpeg, png, webp]
     rename: safe
   - name: spotlights
     label: Spotlight pictures
     input: assets/images/spotlights
     output: /assets/images/spotlights
-    categories: [image]
+    # Only the picture types the post-save check can shrink and strip of location data.
+    extensions: [jpg, jpeg, png, webp]
     rename: safe
 
 components:
@@ -39,6 +41,11 @@ components:
     pattern:
       regex: "^(([01]?[0-9]|2[0-3]):[0-5][0-9])?$"
       message: "Use the 24-hour clock, like 09:30 or 14:00, or leave it empty."
+  link:
+    type: string
+    pattern:
+      regex: '^((https?://|/(?!/))[^\s"''<>`]*)?$'
+      message: "Use a full web address starting with https://, or a page on this site starting with / (e.g. /grants/), with no spaces."
   zone:
     type: select
     options:
@@ -79,6 +86,9 @@ content:
         label: Title
         type: string
         required: true
+        pattern:
+          regex: "[A-Za-z0-9]"
+          message: "Include at least one letter A-Z or number: the title also becomes the item's web address."
         options: { maxlength: 120 }
       - name: category
         label: What kind of item is this?
@@ -116,6 +126,11 @@ content:
         label: Time zone of those times
         component: zone
         description: "Needed whenever you give a time: the Calendar uses it to show the time in each visitor's own zone."
+      - name: time_display
+        label: Time as written on the card (optional)
+        type: string
+        description: "Usually leave empty: the card shows the times above. Fill in only to word it differently, e.g. \"Closed 17:00 CET\". The Calendar always uses the times above."
+        options: { maxlength: 80 }
       - name: timezone_label
         label: Time zone abbreviation shown on the card
         type: string
@@ -144,7 +159,7 @@ content:
         label: Picture
         type: image
         description: "A landscape picture works best (16:9, e.g. 1600 x 900). Large photos are shrunk automatically after you save."
-        options: { media: events }
+        options: { media: events, extensions: [jpg, jpeg, png, webp] }
       - name: alt
         label: Picture description
         type: string
@@ -182,20 +197,23 @@ content:
       - name: joining_link
         label: Online joining link (Zoom, Teams...)
         type: string
+        pattern:
+          regex: '^(https://[^\s"''<>`]*)?$'
+          message: "A single web address starting with https://, or leave it empty."
         description: "WARNING: anything here is public. It is also emailed automatically, within the hour, to everyone booked. For a link that must stay private, leave this empty and add it in the registration workbook instead."
       - name: registration_url
         label: Registration page elsewhere
-        type: string
+        component: link
         description: "Only for events where people register on another website. Leave empty if bookings are taken here."
       - name: programme_url
         label: Programme link
-        type: string
+        component: link
       - name: recording_url
         label: Recording link
-        type: string
+        component: link
       - name: slides_url
         label: Slides link
-        type: string
+        component: link
       - name: related_wg
         label: Related Working Group
         type: select
@@ -234,6 +252,9 @@ content:
         type: string
         required: true
         description: "These appear on the Calendar only (not the Events page): deadlines, calls, and other dates people should know about. Everything here is public: internal meetings belong in the internal Google Calendar."
+        pattern:
+          regex: "[A-Za-z0-9]"
+          message: "Include at least one letter A-Z or number: the title also becomes the item's id."
         options: { maxlength: 120 }
       - name: kind
         label: Kind
@@ -271,7 +292,7 @@ content:
         options: { maxlength: 400 }
       - name: link
         label: Link
-        type: string
+        component: link
         description: "Optional: a web address (https://...) or a page on this site (e.g. /grants/)."
       - name: link_label
         label: Link button text
@@ -304,6 +325,9 @@ content:
         label: Page title
         type: string
         required: true
+        pattern:
+          regex: "[A-Za-z0-9]"
+          message: "Include at least one letter A-Z or number: the title also becomes the page's web address."
         options: { maxlength: 140 }
       - name: card_title
         label: Title on the card (optional)
@@ -359,7 +383,7 @@ content:
         label: Main picture
         type: image
         required: true
-        options: { media: spotlights }
+        options: { media: spotlights, extensions: [jpg, jpeg, png, webp] }
       - name: image_alt
         label: Picture description
         type: string
@@ -402,7 +426,7 @@ content:
             summary: "{heading}"
         fields:
           - { name: heading, label: Heading, type: string }
-          - { name: image, label: Picture, type: image, options: { media: spotlights } }
+          - { name: image, label: Picture, type: image, required: true, options: { media: spotlights, extensions: [jpg, jpeg, png, webp] } }
           - { name: alt, label: Picture description, type: string }
           - { name: caption, label: Caption, type: string }
       - name: figures_label
@@ -440,7 +464,7 @@ content:
             summary: "{label}"
         fields:
           - { name: label, label: Button text, type: string, required: true }
-          - { name: url, label: "Web address (https://...) or page on this site (/video-hub/)", type: string, required: true }
+          - { name: url, label: "Web address (https://...) or page on this site (/video-hub/)", component: link, required: true }
       - name: acknowledgement
         label: Funding acknowledgement
         type: text

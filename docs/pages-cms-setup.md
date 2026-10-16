@@ -17,12 +17,15 @@ in a GitHub repository. The staff guide is [`staff-guide.md`](staff-guide.md).
   1. tidies what was saved and commits it back: rewrites the front matter so
      Jekyll reads times and yes/no words exactly as typed (the editor writes
      YAML 1.2, Jekyll reads 1.1, where an unquoted `09:00` is the number 540),
-     and shrinks, rotates and strips metadata from the pictures uploaded in
-     that save (existing pictures are never touched);
+     and shrinks, rotates and strips metadata (EXIF and XMP, keeping the colour
+     profile) from pictures added since the last tidy-up. "Since the last
+     tidy-up" is the tag `content-tidied`, which the workflow moves forward, so
+     a save whose own run was dropped from GitHub's queue is still covered.
+     Pictures already on the site before this was set up are never touched;
   2. checks the content (`scripts/validate_event_booking.py`) and the editor
      config (`scripts/check_cms_config.py`);
   3. builds the site with the exact builder GitHub Pages uses;
-  4. if 2 or 3 fails, opens an issue labelled **content-check** explaining what
+  4. if any of 1-3 fails, opens an issue labelled **content-check** explaining what
      is wrong in plain English. It closes the issue automatically when a later
      save passes.
 
@@ -89,5 +92,8 @@ person.
 - **Everything saved is public**, including in the repository history, even if
   later deleted. That is why internal calendar items stay in the internal Google
   Calendar.
-- **Picture uploads** are committed to the repository. Very large originals are
-  shrunk after saving, but the original stays in the history.
+- **Picture uploads** are committed to the repository as uploaded, and only
+  then cleaned up. The original, including any location data in it, stays in
+  the public history; the staff guide asks people to remove location before
+  uploading. Removing it from history needs a history rewrite. Uploads are
+  limited to JPG, PNG and WebP, the types the clean-up handles.

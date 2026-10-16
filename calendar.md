@@ -221,7 +221,16 @@ permalink: /calendar/
     return String(str || "")
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  // Only web addresses and pages on this site are ever made into links: a
+  // javascript: or other address saved by mistake is left out, not made clickable.
+  function safeUrl(url) {
+    url = String(url || "").trim();
+    return /^(https?:\/\/|\/(?!\/))[^\s"'<>`]*$/i.test(url) ? url : "";
   }
 
   function makeChip(ev) {
@@ -324,10 +333,11 @@ permalink: /calendar/
     }
 
     if (ev.date_item === true) {
-      var link = ev.link
-        ? "<a href=\"" + esc(ev.link) + "\" class=\"btn btn-primary btn-sm mt-2\"" +
-          (/^https?:/.test(ev.link) ? " target=\"_blank\" rel=\"noopener\"" : "") + ">" +
-          esc(ev.link_label || "More information") + (/^https?:/.test(ev.link) ? " &#8599;" : "") + "</a>"
+      var linkUrl = safeUrl(ev.link);
+      var link = linkUrl
+        ? "<a href=\"" + esc(linkUrl) + "\" class=\"btn btn-primary btn-sm mt-2\"" +
+          (/^https?:/i.test(linkUrl) ? " target=\"_blank\" rel=\"noopener\"" : "") + ">" +
+          esc(ev.link_label || "More information") + (/^https?:/i.test(linkUrl) ? " &#8599;" : "") + "</a>"
         : "";
       popover.innerHTML =
         "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
@@ -352,8 +362,8 @@ permalink: /calendar/
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">How to attend</button>"
       : ev.booking_enabled === true && ev.booking_status === "open"
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">Register</button>"
-      : ev.registration_url
-      ? "<a href=\"" + esc(ev.registration_url) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
+      : safeUrl(ev.registration_url)
+      ? "<a href=\"" + esc(safeUrl(ev.registration_url)) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
       : "";
     var shareUrl = "{{ site.url }}{{ '/events/' | relative_url }}#event-" + ev.id;
     var shareText = ev.title + " — EEG101 COST Action event";

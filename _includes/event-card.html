@@ -2,10 +2,14 @@
 {% comment %}An event's id is its filename; on a collection item `id` is its path.{% endcomment %}
 {% assign event_id = event.slug | default: event.id %}
 {% assign status = include.computed_status | default: event.status %}
+{% comment %}Links are only made from web addresses and pages on this site (safe-url.html).{% endcomment %}
+{% capture registration_url %}{% include safe-url.html url=event.registration_url %}{% endcapture %}
+{% capture programme_url %}{% include safe-url.html url=event.programme_url %}{% endcapture %}
+{% capture recording_url %}{% include safe-url.html url=event.recording_url %}{% endcapture %}
 <article class="event-card event-card--{{ status }}" id="event-{{ event_id }}">
   <div class="event-card__img-wrap">
     {% if event.image and event.image != "" %}
-      <img src="{{ event.image | relative_url }}" alt="{{ event.alt }}" class="event-card__img" loading="lazy" width="800" height="450">
+      <img src="{{ event.image | relative_url | escape }}" alt="{{ event.alt | escape }}" class="event-card__img" loading="lazy" width="800" height="450">
     {% else %}
       <img src="{{ '/assets/images/placeholders/default-placeholder.png' | relative_url }}" alt="EEG101 Event Placeholder" class="event-card__img" loading="lazy" width="800" height="450">
     {% endif %}
@@ -13,7 +17,7 @@
   <div class="event-card__body">
     <div class="event-card__meta">
       {% if event.category and event.category != "" %}
-        <span class="event-card__category">{{ event.category }}</span>
+        <span class="event-card__category">{{ event.category | escape }}</span>
       {% endif %}
       <span class="event-card__format event-card__format--{{ event.format }}">{% if event.format == "online" %}Online{% elsif event.format == "hybrid" %}Hybrid{% else %}In-person{% endif %}</span>
       {% if event.audience == "members" %}
@@ -30,33 +34,35 @@
         <span class="event-card__upcoming-badge">Upcoming</span>
       {% endif %}
     </div>
-    <time class="event-card__date" datetime="{{ event.start_date | date: '%Y-%m-%d' }}">{{ event.start_date | date: "%-d %B %Y" }}{% if event.end_date and event.end_date != event.start_date %} – {{ event.end_date | date: "%-d %B %Y" }}{% endif %}</time>
-    <h3 class="event-card__title" style="margin-top: 0.1rem;">{{ event.title }}</h3>
-    <p class="event-card__location">📍 {{ event.location }}</p>
-    {% if event.time and event.time != "" %}
-    <p class="event-card__time">🕑 {% include clock.html value=event.time %}{% if event.end_time and event.end_time != "" %}–{% include clock.html value=event.end_time %}{% endif %}{% if event.timezone_label and event.timezone_label != "" %} {{ event.timezone_label }}{% endif %}</p>
+    <time class="event-card__date" datetime="{{ event.start_date | date: '%Y-%m-%d' }}">{{ event.start_date | date: "%-d %B %Y" }}{% if event.end_date and event.end_date != "" and event.end_date != event.start_date %} – {{ event.end_date | date: "%-d %B %Y" }}{% endif %}</time>
+    <h3 class="event-card__title" style="margin-top: 0.1rem;">{{ event.title | escape }}</h3>
+    <p class="event-card__location">📍 {{ event.location | escape }}</p>
+    {% if event.time_display and event.time_display != "" %}
+    <p class="event-card__time">🕑 {{ event.time_display | escape }}</p>
+    {% elsif event.time and event.time != "" %}
+    <p class="event-card__time">🕑 {% include clock.html value=event.time %}{% if event.end_time and event.end_time != "" %}–{% include clock.html value=event.end_time %}{% endif %}{% if event.timezone_label and event.timezone_label != "" %} {{ event.timezone_label | escape }}{% endif %}</p>
     {% endif %}
-    <p class="event-card__summary">{{ event.summary }}</p>
+    <p class="event-card__summary">{{ event.summary | escape }}</p>
     <div class="event-card__links">
       {% if event.audience == "members" and status == "upcoming" %}
       <button type="button" class="btn btn-primary btn-sm" data-event-members="{{ event_id }}">How to attend</button>
       {% elsif event.booking_enabled == true and event.booking_status == "open" and status == "upcoming" %}
       <button type="button" class="btn btn-primary btn-sm" data-event-booking="{{ event_id }}">Register</button>
-      {% elsif event.registration_url and event.registration_url != "" and status == "upcoming" %}
-      <a href="{{ event.registration_url }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Register ↗</a>
+      {% elsif registration_url != "" and status == "upcoming" %}
+      <a href="{{ registration_url | escape }}" class="btn btn-primary btn-sm" target="_blank" rel="noopener">Register ↗</a>
       {% endif %}
-      {% if event.programme_url and event.programme_url != "" %}
-      <a href="{{ event.programme_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Programme</a>
+      {% if programme_url != "" %}
+      <a href="{{ programme_url | escape }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Programme</a>
       {% endif %}
-      {% if event.recording_url and event.recording_url != "" %}
+      {% if recording_url != "" %}
       {% comment %}
         recording_url can point at our own Video Hub or at an external host, so
         only send the visitor off-site when the link actually leaves the site.
       {% endcomment %}
-      {% if event.recording_url contains "://" %}
-      <a href="{{ event.recording_url }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Watch recording ↗</a>
+      {% if recording_url contains "://" %}
+      <a href="{{ recording_url | escape }}" class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener">Watch recording ↗</a>
       {% else %}
-      <a href="{{ event.recording_url | relative_url }}" class="btn btn-outline-primary btn-sm">Recordings</a>
+      <a href="{{ recording_url | relative_url | escape }}" class="btn btn-outline-primary btn-sm">Recordings</a>
       {% endif %}
       {% endif %}
       {% if status == "upcoming" %}
