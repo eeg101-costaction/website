@@ -2,7 +2,7 @@
 
 ## Operating model
 
-The existing **Events** feed is the only public list of EEG101 events. It already draws every event from `_data/events.yml`. A booking-enabled event displays a **Register** button directly on its Events card and in its calendar popover. There is no separate event list or Event Hub page to maintain.
+The existing **Events** feed is the only public list of EEG101 events. It draws every event from `_events/`, one file per event, which staff edit in the website editor (Pages CMS). A booking-enabled event displays a **Register** button directly on its Events card and in its calendar popover. There is no separate event list or Event Hub page to maintain.
 
 GitHub Pages serves the public event information only. The booking action opens the Google Apps Script registration form inside the existing EEG101 page, avoiding a cross-origin request that could not reliably report success or failure. The script writes the registration to the private EEG101 workbook and sends the confirmation email. The private spreadsheet and the Apps Script editor provide the organiser-only administration environment. This keeps attendee information out of the public repository and prevents a publicly accessible website route from exposing the registration ledger.
 
@@ -49,7 +49,7 @@ in that file: one array entry per line, `''` for a blank line, times stated in
 the event's own zone. It is keyed by event ID, so a typo in the ID silently does
 nothing; check by generating the file (see below).
 
-Why it lives in the script rather than `events.yml`: the booking form receives
+Why it lives in the script rather than in the event's file: the booking form receives
 event details in a URL, which a full programme would overflow.
 
 * The description reads: joining link (or "will be emailed"), then the
@@ -70,7 +70,7 @@ is revised, edit the array to match.
 
 ## Add an event with booking
 
-Add the event once to `_data/events.yml` using the established event fields and include the booking fields below. The `id` must be unique and should remain stable because it links the Events card, calendar popover, registration, calendar invitation, and Sheet records.
+Add the event once, in the website editor or as a file in `_events/`, and include the booking fields below. The event's id is its filename: it must be unique and should remain stable because it links the Events card, calendar popover, registration, calendar invitation, and Sheet records.
 
 ```yaml
 - id: wg2-training-october-2026
@@ -135,7 +135,7 @@ Set `audience` on each event. `audience: "open"` (the default) is a public event
 
 A joining link can be added in either of two places.
 
-**On the website (simplest).** Add `joining_link: "https://..."` to the event in `_data/events.yml` and push to `main`. Within the hour, the booking system reads the link from the published site, emails it with an updated calendar invitation to every confirmed attendee who has not yet received it, and includes it in every later confirmation. If the link is changed later, the new link is sent to all confirmed attendees. The event data is public, so anyone viewing the page source or the repository can see a link added this way.
+**On the website (simplest).** Fill in **Online joining link** on the event in the website editor (or add `joining_link: "https://..."` to its file in `_events/`) and save. Within the hour, the booking system reads the link from the published site, emails it with an updated calendar invitation to every confirmed attendee who has not yet received it, and includes it in every later confirmation. If the link is changed later, the new link is sent to all confirmed attendees. The event data is public, so anyone viewing the page source or the repository can see a link added this way.
 
 **Privately in the registration workbook.** For a link that must not be public, leave `joining_link` empty and paste the link into the **Joining link (private)** column of the **Joining links** tab. Then open the event's tab and choose **EEG101 Event Booking → Email the joining link to everyone booked**. A private link takes precedence over a website link.
 

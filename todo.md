@@ -1,6 +1,6 @@
 # EEG101 Website TODO
 
-- [x] Make `_data/events.yml` the single source of truth for event information and booking settings
+- [x] Make the event data (now `_events/`, one file per event) the single source of truth for event information and booking settings
 - [x] Add a booking action directly to eligible Events cards
 - [x] Add the same booking action to eligible calendar popovers
 - [x] Reuse one registration modal and one private Apps Script configuration across all bookable events

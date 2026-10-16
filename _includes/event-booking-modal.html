@@ -31,7 +31,7 @@
 
 <script>
 (function () {
-  var events = {{ site.data.events | jsonify }};
+  var events = {% include collection-json.html items=site.events fields="title,short_name,external,audience,start_date,end_date,time,end_time,timezone,timezone_label,location,format,category,summary,image,alt,registration_url,programme_url,recording_url,slides_url,related_wg,tags,joining_link,booking_enabled,booking_status,capacity" %};
   var endpoint = {{ site.data.site.event_booking_endpoint | default: "" | jsonify }};
   var dialog = document.getElementById('eventBookingDialog');
   var message = document.getElementById('eventBookingFormMessage');

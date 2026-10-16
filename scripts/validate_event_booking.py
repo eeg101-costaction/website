@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Validate the single-source event and booking data before publishing the EEG101 site."""
+"""Validate the content staff edit in Pages CMS before it is trusted on the EEG101 site.
+
+Events (_events/*.md), other calendar dates (_dates/*.md) and Spotlights
+(_spotlights/*.md) are one file each. An item's id is its filename, because the
+booking form, its registration-workbook tab and shared links all depend on it.
+
+Pages CMS writes every field it knows about into every file, with empty values
+for the ones left blank. So a field counts as "filled in" only when it has a
+value: an empty booking_status or a capacity of 0 is the same as leaving it out.
+"""
 
 from __future__ import annotations
 
@@ -8,11 +17,92 @@ import argparse
 import sys
 from pathlib import Path
 
+import re
+
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-EVENTS_PATH = ROOT / "_data" / "events.yml"
+EVENTS_DIR = ROOT / "_events"
+DATES_DIR = ROOT / "_dates"
+SPOTLIGHTS_DIR = ROOT / "_spotlights"
 SITE_PATH = ROOT / "_data" / "site.yml"
+
+# An id is the filename: lowercase words joined by hyphens. It must not start with a
+# date, because Jekyll reads a leading YYYY-MM-DD- as a date and drops it from the id.
+ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+DATE_PREFIX = re.compile(r"^\d{2,4}-\d{1,2}-\d{1,2}-")
+CLOCK = re.compile(r"^([01]?\d|2[0-3]):[0-5]\d$")
+
+# Names Jekyll reserves on a collection item (Jekyll::Drops::DocumentDrop.invokable_methods
+# in 3.10, the version GitHub Pages runs). A front-matter field with one of these names is
+# silently shadowed: `url` gives the item's own address, `next` the next item, `id` its path.
+RESERVED_FIELDS = {"collection", "content", "count", "excerpt", "fetch", "first", "keys", "max",
+                   "merge", "min", "next", "output", "path", "previous", "relative_path", "sort", "url"}
+
+
+def filled(value: object) -> bool:
+    """True for a value someone actually entered; False for the editor's blank defaults."""
+    if value is None or value is False:
+        return False
+    if isinstance(value, str):
+        return value.strip() != ""
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return value != 0
+    if isinstance(value, (list, dict)):
+        return len(value) > 0
+    return True
+
+
+def clock(value: object) -> object:
+    """A time Jekyll read as a number (09:00 is 540 minutes, 09:00:00 is 32400 seconds) as HH:MM.
+
+    YAML 1.1 reads an unquoted 09:00 as base-60, and Jekyll and PyYAML both read 1.1.
+    The content check rewrites saved files so this should not happen, but a file
+    pushed before that ran still means the time that was typed. Anything else is
+    returned unchanged.
+    """
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or value < 0:
+        return value
+    minutes = int(value)
+    if minutes >= 1440:
+        minutes //= 60
+    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+
+def read_front_matter(path: Path) -> dict:
+    text = path.read_text(encoding="utf-8")
+    match = re.match(r"---\s*\n(.*?)\n---\s*(?:\n|$)", text, re.S)
+    if not match:
+        raise ValueError(f"{path.name}: the file must start with a --- front-matter block.")
+    data = yaml.safe_load(match.group(1)) or {}
+    if not isinstance(data, dict):
+        raise ValueError(f"{path.name}: the front matter must be a set of fields.")
+    return data
+
+
+def load_items(directory: Path) -> tuple[list[dict], list[str]]:
+    """Every *.md in a collection, with its id taken from the filename."""
+    items, errors = [], []
+    for path in sorted(directory.glob("*.md")):
+        try:
+            data = read_front_matter(path)
+        except (ValueError, yaml.YAMLError) as error:
+            errors.append(f"{directory.name}/{path.name}: could not be read ({error}).")
+            continue
+        item_id = path.stem
+        if not ID_PATTERN.match(item_id):
+            errors.append(f"{directory.name}/{path.name}: the filename must be lowercase words joined by hyphens.")
+        elif DATE_PREFIX.match(item_id):
+            errors.append(f"{directory.name}/{path.name}: the filename must not start with a date.")
+        if "id" in data and str(data["id"]) != item_id:
+            errors.append(f"{directory.name}/{path.name}: has id {data['id']!r}, but an item's id is its filename ({item_id!r}). Remove the id field.")
+        for key in sorted(set(data) & RESERVED_FIELDS):
+            errors.append(f"{directory.name}/{path.name}: the field name {key!r} is reserved by Jekyll and would be silently ignored. Rename it.")
+        for key in ("time", "end_time"):
+            if key in data:
+                data[key] = clock(data[key])
+        items.append({**data, "id": item_id})
+    return items, errors
 REQUIRED_BOOKING_FIELDS = {
     "id", "title", "start_date", "end_date", "time", "end_time", "timezone",
     "location", "format", "category", "summary", "capacity", "booking_enabled", "booking_status",
@@ -50,8 +140,9 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
                 errors.append(f"{label}: members-only events must not have a public joining_link; details are shared through e-COST.")
         booking_enabled = event.get("booking_enabled") is True
         booking_status = event.get("booking_status")
-        booking_keys = ("booking_enabled", "booking_status", "capacity") if event.get("audience") == "members" else ("booking_enabled", "booking_status", "capacity", "end_time", "timezone")
-        booking_fields_present = any(key in event for key in booking_keys)
+        # Time zone and end time are not booking-only: the Calendar uses them to show any
+        # event's time in the reader's own zone, so only these three count here.
+        booking_fields_present = any(filled(event.get(key)) for key in ("booking_status", "capacity"))
 
         if booking_fields_present and not booking_enabled:
             errors.append(f"{label}: booking fields are present but booking_enabled is not true. Remove them or enable booking explicitly.")
@@ -86,8 +177,6 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
             end_date = dt.date.fromisoformat(string_date(event.get("end_date")))
             if end_date < start_date:
                 errors.append(f"{label}: end_date must not be earlier than start_date.")
-            if booking_status == "open" and start_date < today:
-                errors.append(f"{label}: a past event cannot have booking_status 'open'.")
         except ValueError:
             errors.append(f"{label}: start_date and end_date must use valid ISO dates.")
 
@@ -97,19 +186,82 @@ def validate(events: list[dict], site: dict, today: dt.date | None = None) -> li
     return errors
 
 
+def advisories(events: list[dict], today: dt.date | None = None) -> list[str]:
+    """Worth fixing, but not wrong enough to fail on. The site already hides Register
+    once an event has passed, so a booking left open afterwards does no harm."""
+    today = today or dt.date.today()
+    notes = []
+    for event in events:
+        if event.get("booking_enabled") is True and event.get("booking_status") == "open":
+            try:
+                if dt.date.fromisoformat(string_date(event.get("end_date") or event.get("start_date"))) < today:
+                    notes.append(f"{event.get('id')}: the event has passed but booking is still 'open'; set it to 'closed'.")
+            except ValueError:
+                pass
+    return notes
+
+
+def validate_dates(dates: list[dict]) -> list[str]:
+    """Other calendar dates: deadlines, calls and so on. They only appear on the Calendar."""
+    errors = []
+    for item in dates:
+        label = f"date {item['id']!r}"
+        if not filled(item.get("title")):
+            errors.append(f"{label}: a title is required.")
+        try:
+            start = dt.date.fromisoformat(string_date(item.get("start_date")))
+            if filled(item.get("end_date")) and dt.date.fromisoformat(string_date(item.get("end_date"))) < start:
+                errors.append(f"{label}: the end date is before the start date.")
+        except ValueError:
+            errors.append(f"{label}: start_date and end_date must be valid dates.")
+        for key in ("time", "end_time"):
+            if filled(item.get(key)) and not CLOCK.match(str(item[key]).strip()):
+                errors.append(f"{label}: {key} must be a time like 14:00.")
+        if filled(item.get("end_time")) and not filled(item.get("time")):
+            errors.append(f"{label}: an end time needs a start time.")
+        link = str(item.get("link") or "").strip()
+        if link and not (link.startswith(("https://", "http://", "/")) and " " not in link):
+            errors.append(f"{label}: the link must be a web address (https://...) or a page on this site (/...).")
+    return errors
+
+
+def validate_spotlights(spotlights: list[dict]) -> list[str]:
+    errors = []
+    for item in spotlights:
+        label = f"Spotlight {item['id']!r}"
+        for key, name in (("title", "a title"), ("type", "a type"), ("summary", "a summary"),
+                          ("image", "an image"), ("image_alt", "an image description")):
+            if not filled(item.get(key)):
+                errors.append(f"{label}: needs {name}.")
+        try:
+            dt.date.fromisoformat(string_date(item.get("date")))
+        except ValueError:
+            errors.append(f"{label}: needs a valid finish date (it orders the Spotlight list).")
+        for link in item.get("links") or []:
+            if not isinstance(link, dict) or not filled(link.get("label")) or not filled(link.get("url")):
+                errors.append(f"{label}: every link needs both a label and a web address.")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--events", type=Path, default=EVENTS_PATH)
-    parser.add_argument("--site", type=Path, default=SITE_PATH)
+    parser.add_argument("--root", type=Path, default=ROOT, help="repository root (for tests)")
     args = parser.parse_args()
-    events = yaml.safe_load(args.events.read_text()) or []
-    site = yaml.safe_load(args.site.read_text()) or {}
-    errors = validate(events, site)
+    site = yaml.safe_load((args.root / "_data" / "site.yml").read_text()) or {}
+    events, errors = load_items(args.root / "_events")
+    dates, date_errors = load_items(args.root / "_dates")
+    spotlights, spot_errors = load_items(args.root / "_spotlights")
+    errors += date_errors + spot_errors
+    errors += validate(events, site)
+    errors += validate_dates(dates)
+    errors += validate_spotlights(spotlights)
+    for note in advisories(events):
+        print(f"::warning::{note}")
     if errors:
-        print("Event booking validation failed:")
+        print("Content validation failed:")
         print("\n".join(f"- {error}" for error in errors))
         return 1
-    print("Event booking validation passed.")
+    print(f"Content validation passed: {len(events)} events, {len(dates)} other dates, {len(spotlights)} Spotlights.")
     return 0
 
 

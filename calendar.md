@@ -23,6 +23,7 @@ permalink: /calendar/
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--online"></span>Online</span>
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--in-person"></span>In person</span>
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--hybrid"></span>Hybrid</span>
+  {% if site.dates.size > 0 %}<span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--date"></span>Key date</span>{% endif %}
   {% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
   <span class="cal-legend__item cal-legend__item--internal" id="cal-legend-internal" hidden><span class="cal-legend__swatch cal-legend__swatch--internal"></span>Internal</span>
   {% endif %}
@@ -56,7 +57,10 @@ permalink: /calendar/
 
 <script>
 (function () {
-  var EVENTS = {{ site.data.events | jsonify }};
+  var EVENTS = {% include collection-json.html items=site.events fields="title,short_name,external,audience,start_date,end_date,time,end_time,timezone,timezone_label,location,format,category,summary,image,alt,registration_url,programme_url,recording_url,slides_url,related_wg,tags,joining_link,booking_enabled,booking_status,capacity" %};
+  // Other calendar dates (deadlines, calls...): on the Calendar only, never the Events page.
+  var DATES = {% include collection-json.html items=site.dates fields="title,kind,start_date,end_date,time,end_time,timezone,timezone_label,location,summary,link,link_label" %};
+  DATES.forEach(function (d) { d.date_item = true; });
   var INTERNAL = [];
   var MONTHS = ["January","February","March","April","May","June",
                 "July","August","September","October","November","December"];
@@ -183,14 +187,14 @@ permalink: /calendar/
   }
 
   function describeAll() {
-    EVENTS.concat(INTERNAL).forEach(function (ev) { ev.shown = describe(ev); });
+    EVENTS.concat(DATES, INTERNAL).forEach(function (ev) { ev.shown = describe(ev); });
   }
 
   // A multi-day event belongs on every square it runs across, not only the one
   // it starts on, so a conference week reads as a week.
   function eventsOnDay(year, month, day) {
     var cell = new Date(year, month, day).getTime();
-    return EVENTS.concat(INTERNAL).filter(function (ev) {
+    return EVENTS.concat(DATES, INTERNAL).filter(function (ev) {
       var shown = ev.shown || describe(ev);
       var start = parseLocalDate(shown.start);
       if (!start) return false;
@@ -226,6 +230,8 @@ permalink: /calendar/
     btn.type = "button";
     btn.className = ev.internal === true
       ? "cal-event-chip cal-event-chip--internal"
+      : ev.date_item === true
+      ? "cal-event-chip cal-event-chip--date"
       : "cal-event-chip cal-event-chip--" + fmt;
     var shown = ev.shown || describe(ev);
     btn.textContent = shown.converted && shown.time ? shown.time + " " + ev.title : ev.title;
@@ -317,17 +323,38 @@ permalink: /calendar/
       return;
     }
 
+    if (ev.date_item === true) {
+      var link = ev.link
+        ? "<a href=\"" + esc(ev.link) + "\" class=\"btn btn-primary btn-sm mt-2\"" +
+          (/^https?:/.test(ev.link) ? " target=\"_blank\" rel=\"noopener\"" : "") + ">" +
+          esc(ev.link_label || "More information") + (/^https?:/.test(ev.link) ? " &#8599;" : "") + "</a>"
+        : "";
+      popover.innerHTML =
+        "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
+        "<span class=\"cal-popover__badge cal-popover__badge--date\">" + esc(ev.kind || "Key date") + "</span>" +
+        "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
+        "<p class=\"cal-popover__meta\">" + dateLine + "</p>" +
+        (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "") +
+        link;
+      popover.hidden = false;
+      popover.querySelector(".cal-popover__close").addEventListener("click", function () { popover.hidden = true; });
+      return;
+    }
+
+    // Booking is only offered for events still to come, as on the Events page:
+    // a booking left open after the day must not let people register for the past.
+    var eventDate = parseLocalDate(ev.start_date);
+    var todayDate = new Date();
+    var isUpcoming = eventDate && eventDate >= new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
     var membersOnly = ev.audience === "members";
-    var bookingAction = membersOnly
+    var bookingAction = !isUpcoming ? ""
+      : membersOnly
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">How to attend</button>"
       : ev.booking_enabled === true && ev.booking_status === "open"
       ? "<button type=\"button\" class=\"btn btn-primary btn-sm mt-2\" id=\"calendar-booking-action\">Register</button>"
       : ev.registration_url
       ? "<a href=\"" + esc(ev.registration_url) + "\" class=\"btn btn-primary btn-sm mt-2\" target=\"_blank\" rel=\"noopener\">Register &#8599;</a>"
       : "";
-    var eventDate = parseLocalDate(ev.start_date);
-    var todayDate = new Date();
-    var isUpcoming = eventDate && eventDate >= new Date(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate());
     var shareUrl = "{{ site.url }}{{ '/events/' | relative_url }}#event-" + ev.id;
     var shareText = ev.title + " — EEG101 COST Action event";
     var shareAction = isUpcoming

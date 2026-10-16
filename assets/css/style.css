@@ -1363,6 +1363,7 @@ strong { font-weight: 600; }
 .cal-legend__swatch--in-person { background: #dcfce7; }
 .cal-legend__swatch--hybrid    { background: #fef3c7; }
 .cal-legend__swatch--internal  { background: var(--color-primary-light); border: 1px solid var(--color-primary); }
+.cal-legend__swatch--date      { background: #ede9fe; }
 
 /* The internal calendar is read live from Google, so this bar is the only trace
    of it in the built site. */
@@ -1393,6 +1394,10 @@ strong { font-weight: 600; }
   border-radius: var(--radius);
   background: var(--color-bg);
 }
+
+/* Other calendar dates (deadlines, calls...), edited in Pages CMS. */
+.cal-event-chip--date { background: #ede9fe; color: #5b21b6; }
+.cal-popover__badge--date { color: #5b21b6; background: #ede9fe; }
 
 .cal-event-chip--internal {
   background: var(--color-primary-light);

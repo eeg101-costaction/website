@@ -81,7 +81,7 @@ layout: default
   </div>
 </section>
 
-{% assign featured_spotlight = site.data.spotlights | where: "featured", true | first %}
+{% assign featured_spotlight = site.spotlights | where: "featured", true | sort: "date" | reverse | first %}
 {% if featured_spotlight %}
 <!-- Featured Spotlight -->
 <section class="section" id="spotlight">

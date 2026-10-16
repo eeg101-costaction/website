@@ -1,0 +1,8 @@
+{%- comment -%}
+  A JSON array of a collection's items for the page scripts: "id" (the item's
+  filename, which is its stable id) plus the named front-matter fields, null when
+  absent. Times go through clock.html (see there).
+  Usage: {% include collection-json.html items=site.events fields="title,start_date" %}
+{%- endcomment -%}
+{%- assign __fields = include.fields | split: "," -%}
+[{%- for __item in include.items -%}{"id":{{ __item.slug | jsonify }}{%- for __f in __fields -%}{%- assign __key = __f | strip -%}{%- assign __v = __item[__key] -%}{%- if __v != nil and __key == "time" or __v != nil and __key == "end_time" -%}{%- capture __c -%}{%- include clock.html value=__v -%}{%- endcapture -%}{%- assign __v = __c -%}{%- endif -%},{{ __key | jsonify }}:{{ __v | jsonify }}{%- endfor -%}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]

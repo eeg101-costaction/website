@@ -1,7 +1,7 @@
 # The internal calendar on the Calendar page
 
 The [Calendar](https://www.eeg101.eu/calendar/) page draws every public event
-from `_data/events.yml` automatically — the same source the Events page uses, so
+from `_events/` (and other dates from `_dates/`) automatically — the same source the Events page uses, so
 anything added there appears in both places with no extra step. A multi-day
 event fills every square it runs across.
 

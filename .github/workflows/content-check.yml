@@ -1,0 +1,164 @@
+name: Check content saved in the website editor
+
+# Runs after anything is saved through Pages CMS (or pushed by hand) to the
+# content staff edit. GitHub Pages publishes main as it is, so this cannot stop a
+# save from going live; what it does is catch problems quickly and tell the
+# admins in plain English, and fix the one thing staff cannot be expected to:
+# oversized, sideways, location-tagged photos.
+#
+#   1. What this save changed is tidied and committed back: front matter is
+#      rewritten so Jekyll reads times and yes/no words as typed
+#      (scripts/normalise_front_matter.cjs), and pictures are shrunk, turned
+#      upright and stripped of metadata (scripts/optimise_images.py). Existing
+#      pictures are never touched.
+#   2. The content is checked (scripts/validate_event_booking.py) and the editor
+#      config is checked against it (scripts/check_cms_config.py).
+#   3. The site is built with the same builder GitHub Pages uses.
+#   4. If 2 or 3 fails, an issue labelled "content-check" is opened (or updated)
+#      for the admins; when a later save passes, it is closed automatically.
+#
+# See docs/pages-cms-setup.md.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "_events/**"
+      - "_dates/**"
+      - "_spotlights/**"
+      - "assets/images/events/**"
+      - "assets/images/spotlights/**"
+      - ".pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: content-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip pyyaml pillow
+          # The same YAML library (and major version) Pages CMS writes with.
+          npm install --no-save --no-package-lock --prefix "$RUNNER_TEMP/yaml" yaml@2.9.1
+          echo "NODE_PATH=$RUNNER_TEMP/yaml/node_modules" >> "$GITHUB_ENV"
+
+      - name: Tidy what was saved (time formats, picture sizes)
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          # Only files changed by this push. A manual run has no "before", so it
+          # tidies every content file but leaves existing pictures alone.
+          if [ -z "${BEFORE:-}" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            mapfile -t pages < <(git ls-files '_events/*.md' '_dates/*.md' '_spotlights/*.md')
+            pictures=()
+          else
+            mapfile -t pages < <(git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- _events _dates _spotlights)
+            mapfile -t pictures < <(git diff --name-only --diff-filter=AM "$BEFORE" HEAD -- assets/images/events assets/images/spotlights)
+          fi
+          : > tidied.txt
+          # Pages CMS writes YAML 1.2; Jekyll reads 1.1, where 09:00 is a number and
+          # "no" is false. Rewrite the front matter so Jekyll reads what was typed.
+          if [ "${#pages[@]}" -gt 0 ]; then node scripts/normalise_front_matter.cjs "${pages[@]}" | tee -a tidied.txt; fi
+          if [ "${#pictures[@]}" -gt 0 ]; then python3 scripts/optimise_images.py "${pictures[@]}" | tee -a tidied.txt; fi
+          if git diff --quiet; then echo "Nothing needed tidying."; exit 0; fi
+          git config user.name "EEG101 content check"
+          git config user.email "eeg101costaction@gmail.com"
+          git add -u _events _dates _spotlights assets/images/events assets/images/spotlights
+          git commit -m "Tidy content saved through the website editor" -m "$(cat tidied.txt)"
+          bash scripts/push_to_main.sh
+
+      - name: Check the content
+        id: validate
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          { python3 scripts/validate_event_booking.py && python3 scripts/check_cms_config.py; } 2>&1 | tee validation.txt
+
+      - name: Build the site exactly as GitHub Pages does
+        id: build
+        continue-on-error: true
+        uses: actions/jekyll-build-pages@v1
+        with:
+          source: ./
+          destination: ./_site_check
+
+      - name: Tell the admins
+        if: always()
+        uses: actions/github-script@v7
+        env:
+          VALIDATE: ${{ steps.validate.outcome }}
+          BUILD: ${{ steps.build.outcome }}
+        with:
+          script: |
+            const fs = require('fs');
+            const label = 'content-check';
+            const validateOk = process.env.VALIDATE === 'success';
+            const buildOk = process.env.BUILD === 'success';
+            const run = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const commit = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}`;
+            const open = (await github.rest.issues.listForRepo({ ...context.repo, state: 'open', labels: label })).data;
+
+            if (validateOk && buildOk) {
+              for (const issue of open) {
+                await github.rest.issues.createComment({ ...context.repo, issue_number: issue.number,
+                  body: `Fixed: the content saved in [${context.sha.slice(0, 7)}](${commit}) passes every check and the site builds. Closing.` });
+                await github.rest.issues.update({ ...context.repo, issue_number: issue.number, state: 'closed', state_reason: 'completed' });
+              }
+              return;
+            }
+
+            const detail = fs.existsSync('validation.txt') ? fs.readFileSync('validation.txt', 'utf8').trim() : '';
+            const problems = detail.split('\n').filter(l => l.startsWith('- ')).join('\n');
+            const lines = [
+              buildOk
+                ? '**The website is up, but something just saved needs fixing.** It is already live, so please fix it soon.'
+                : '**The website could not be rebuilt after the last save.** Visitors still see the previous version, so nothing is broken for them, but nothing new will appear until this is fixed.',
+              '',
+              validateOk ? '' : '### What is wrong\n\n' + (problems || '```\n' + detail.slice(0, 3000) + '\n```'),
+              buildOk ? '' : '### The build failed\n\nThe details are in the log of the run below (look for the red step).',
+              '',
+              '### How to fix it',
+              '',
+              '- Open the item in the website editor (https://app.pagescms.org), correct it as described above, and save again. This issue closes by itself once a save passes.',
+              '- If you cannot tell what to change, an admin can undo the save from the commit link below ("Revert").',
+              '',
+              `Save: [${context.sha.slice(0, 7)}](${commit}) · Full log: ${run}`,
+            ].filter((l, i, a) => !(l === '' && a[i - 1] === ''));
+            const body = lines.join('\n');
+
+            try { await github.rest.issues.getLabel({ ...context.repo, name: label }); }
+            catch { await github.rest.issues.createLabel({ ...context.repo, name: label, color: 'd73a4a', description: 'A save in the website editor needs fixing' }); }
+
+            if (open.length) {
+              await github.rest.issues.createComment({ ...context.repo, issue_number: open[0].number, body: '**Still failing after another save.**\n\n' + body });
+            } else {
+              await github.rest.issues.create({ ...context.repo, labels: [label],
+                title: buildOk ? 'Website editor: a saved item needs fixing' : 'Website editor: the site could not be rebuilt after a save',
+                body });
+            }
+            core.setFailed('Content check failed; an issue has been opened for the admins.');

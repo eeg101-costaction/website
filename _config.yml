@@ -32,6 +32,41 @@ defaults:
       path: "index.md"
     values:
       layout: home
+  # Content edited in Pages CMS (.pages.yml) lives in three collections, one file
+  # per item. The path-wide default above would otherwise give an event or date
+  # with no picture the social-sharing image instead of the card placeholder.
+  - scope:
+      path: ""
+      type: events
+    values:
+      image: ""
+  - scope:
+      path: ""
+      type: dates
+    values:
+      image: ""
+  - scope:
+      path: ""
+      type: spotlights
+    values:
+      layout: spotlight
+
+# A Spotlight's date is when the story finishes, which can be ahead of today for
+# one still running. GitHub Pages leaves future-dated items out of the site
+# entirely unless this is on; nothing else here is dated.
+future: true
+
+# One file per item, so staff get a list with "Add new" in the editor rather than
+# one long form. An item's filename is its id: the booking form, its workbook tab
+# and shared links all depend on it, so the editor does not allow renaming.
+collections:
+  events:
+    output: false
+  dates:
+    output: false
+  spotlights:
+    output: true
+    permalink: /spotlights/:name/
 
 exclude:
   - Gemfile

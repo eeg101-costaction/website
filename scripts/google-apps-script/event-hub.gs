@@ -13,7 +13,7 @@
  *
  * Online joining links can be entered in either of two places. A private link
  * on the "Joining links" tab of the workbook, or a public `joining_link` in the
- * website's _data/events.yml, which the hourly trigger reads from the published
+ * website's event files (_events/, one per event), which the hourly trigger reads from the published
  * site and emails automatically to everyone already booked. A private link takes
  * precedence. When a link is present it is included in confirmation emails and
  * calendar files; otherwise attendees are told it will follow.
@@ -69,7 +69,7 @@ const EVENT_EXTRA_QUESTIONS = {
 
 // Programmes written into the calendar file (.ics) that registrants receive, so the running order is in
 // their calendar and not only on a PDF. Plain text, one array entry per line; '' leaves a blank line.
-// It is keyed by event ID and kept here rather than in events.yml because the booking form passes event
+// It is keyed by event ID and kept here rather than in the event's file because the booking form passes event
 // details in a URL, which a full programme would overflow. Times are stated in the event's own zone.
 const EVENT_PROGRAMMES = {
   'diversity-eeg-populations-2026-11': [

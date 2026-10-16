@@ -1,0 +1,18 @@
+{%- comment -%}
+  Print a time as HH:MM. Jekyll reads an unquoted 09:00 as the number 540
+  (minutes) and 09:00:00 as 32400 (seconds); the content check rewrites saved
+  files so this should not happen, but for the minute between a save and that
+  fix this turns the number back into the time that was typed. Anything else
+  (text, blank) is printed as it is.
+{%- endcomment -%}
+{%- assign __clock_s = include.value | append: "" -%}
+{%- assign __clock_rest = __clock_s | remove: "0" | remove: "1" | remove: "2" | remove: "3" | remove: "4" | remove: "5" | remove: "6" | remove: "7" | remove: "8" | remove: "9" | remove: "." -%}
+{%- if __clock_s != "" and __clock_rest == "" -%}
+{%- assign __clock_n = include.value | floor -%}
+{%- if __clock_n >= 1440 -%}{%- assign __clock_n = __clock_n | divided_by: 60 -%}{%- endif -%}
+{%- assign __clock_h = __clock_n | divided_by: 60 | prepend: "0" | slice: -2, 2 -%}
+{%- assign __clock_m = __clock_n | modulo: 60 | prepend: "0" | slice: -2, 2 -%}
+{{- __clock_h -}}:{{- __clock_m -}}
+{%- else -%}
+{{- include.value -}}
+{%- endif -%}

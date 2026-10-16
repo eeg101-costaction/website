@@ -150,102 +150,59 @@ News items appear on the [Events](https://www.eeg101.eu/events/) page. Add a new
 
 ## Add or edit an event
 
-**File to edit:** `_data/events.yml`
+**The easy way:** use the website editor. Sign in at [app.pagescms.org](https://app.pagescms.org), open **Events**, and press **Add an entry** (or pick an event to change it). Fill in the form and press **Save**: the site updates within a couple of minutes. Each field explains itself. The staff guide is [`docs/staff-guide.md`](docs/staff-guide.md); admin setup is [`docs/pages-cms-setup.md`](docs/pages-cms-setup.md).
 
-**Image folder:** `assets/images/events/`
+Events appear on both the [Events](https://www.eeg101.eu/events/) page and the [Calendar](https://www.eeg101.eu/calendar/) page. They are sorted into **Upcoming**, **Recent** (last 30 days) and **Past** automatically from their dates.
 
-Events appear on both the [Events](https://www.eeg101.eu/events/) page and the [Calendar](https://www.eeg101.eu/calendar/) page. The website automatically sorts events into **Upcoming**, **Recent** (last 30 days), and **Past** based on the date. You do not need to set a status field.
+Dates that are not events (deadlines, calls) go under **Other calendar dates** in the editor. They appear on the Calendar only.
+
+**By hand (for maintainers).** Each event is one file in `_events/`. **The filename is the event's id** (e.g. `_events/mc2-lisbon-2027.md` has id `mc2-lisbon-2027`). The booking form, the event's tab in the registration workbook and shared links all depend on it, so never rename a file once people may have booked. The id must be lowercase words joined by hyphens and must not start with a date. The file is front matter only:
 
 ```yaml
-- id: your-event-id
-  title: "Your Event Title"
-  start_date: 2026-11-15
-  end_date: 2026-11-16
-  location: "City, Country"
-  format: "in-person"
-  category: "Events"
-  summary: >
-    A short description of the event.
-  image: "/assets/images/events/your-image.jpg"
-  alt: "Descriptive alt text"
-  registration_url: ""
-  programme_url: ""
-  recording_url: ""
-  slides_url: ""
-  related_wg: ""
-  tags:
-    - community
-    - in-person
+---
+title: "MC2 meeting, Lisbon"
+category: Events               # Events | Announcement | Grants
+start_date: 2027-03-10
+end_date: 2027-03-11           # leave empty for a one-day event
+time: "09:00"                  # 24-hour clock; leave empty for all-day
+end_time: "17:00"
+timezone: Europe/Lisbon        # a full time-zone name, not an abbreviation
+timezone_label: WET            # optional, shown on the card
+location: "Lisbon, Portugal"
+format: in-person              # in-person | online | hybrid
+summary: "One to three sentences shown on the card."
+image: /assets/images/events/mc2-lisbon-2027.jpg   # 16:9; empty for a placeholder
+alt: "Descriptive alt text"
+external: false                # true for events run by another organisation
+tags: [community, in-person]
+---
 ```
 
-| Field | What to put | Required? |
-|-------|-------------|-----------|
-| `id` | A unique lowercase identifier with dashes, e.g. `mc2-lisbon-2027` | Yes |
-| `title` | Event name in quotes | Yes |
-| `start_date` | Start date as YYYY-MM-DD | Yes |
-| `end_date` | End date as YYYY-MM-DD (same as start for single-day events) | Yes |
-| `location` | Where it takes place, or `"Online"` | Yes |
-| `format` | One of: `in-person`, `online`, `hybrid` | Yes |
-| `category` | One of: `Events`, `Announcement`, `Grants` | Yes |
-| `time` | Optional time string, e.g. `"14:00-17:00 CET"` | No |
-| `summary` | A short description. Use `>` then indent | Yes |
-| `image` | Path to an image (800x450px). Leave as `""` for a placeholder | No |
-| `alt` | Image description for accessibility | Yes |
-| `registration_url` | External registration link, or `""` | No |
-| `programme_url` | Link to the programme, or `""` | No |
-| `recording_url` | Link to recordings after the event, or `""` | No |
-| `slides_url` | Link to slides, or `""` | No |
-| `related_wg` | Working group ID if relevant, e.g. `wg2`, or `""` | No |
-| `tags` | A list of tags | No |
+Never add an `id`, `url` or `next` field: on these files Jekyll reserves those names (and a few others) and would silently ignore them. `python3 scripts/validate_event_booking.py` checks all of this.
 
 ---
 
 ## Enable event booking (registration)
 
-If you want people to register for an event directly on the website (rather than linking to an external registration page), add these extra fields to the event entry in `_data/events.yml`:
+In the editor, tick **Take bookings on this website**, set **Bookings are** to **Open**, and give a start time, end time and time zone. **Places available** is the capacity (0 means no limit; beyond it people join a waiting list).
 
-```yaml
-- id: your-bookable-event
-  title: "Your Bookable Event"
-  start_date: 2026-11-15
-  end_date: 2026-11-15
-  location: "Online"
-  format: "online"
-  category: "Events"
-  time: "14:00-16:00 CET"
-  summary: >
-    Description of the event.
-  image: ""
-  alt: "Event image"
-  booking_enabled: true
-  booking_status: "open"
-  capacity: 50
-  timezone: "CET"
-  end_time: "16:00"
-  registration_url: ""
-  programme_url: ""
-  recording_url: ""
-  slides_url: ""
-  related_wg: ""
-  tags:
-    - online
-```
+By hand, the same fields are:
 
-| Booking field | What to put | Required for booking? |
-|---------------|-------------|----------------------|
-| `booking_enabled` | `true` to activate the Register button on this event | Yes |
-| `booking_status` | `"open"` to accept registrations, `"closed"` to stop | Yes |
-| `capacity` | Maximum number of registrants (integer). Excess registrations go on a waiting list | Yes |
-| `timezone` | Timezone abbreviation, e.g. `"CET"`, `"BST"` | Yes |
-| `end_time` | End time as `"HH:MM"` for the calendar invitation | Yes |
+| Field | What to put |
+|-------|-------------|
+| `booking_enabled` | `true` shows the Register button |
+| `booking_status` | `open` to accept registrations, `closed` to stop |
+| `capacity` | Maximum registrants; `0` for no limit |
+| `time`, `end_time` | `"HH:MM"`, used for the calendar invitation |
+| `timezone` | A full time-zone name, e.g. `Europe/Brussels` |
+| `audience` | `open` (default) or `members` (COST members only: no booking here, invitations go through e-COST) |
+| `joining_link` | Optional online meeting link. **Public**, and emailed within the hour to everyone booked |
 
-**Important:** Do not set `registration_url` on the same event. The website will show an error if both an external registration link and internal booking are active on the same event.
+Leave `registration_url` empty on a bookable event: it is for events whose registration happens on another website.
 
-**To close registration:** Change `booking_status` from `"open"` to `"closed"`. The event stays visible but the Register button disappears.
+**To close registration:** set **Bookings are** to **Closed**. Once an event has passed, the Register button disappears by itself, but please still close it.
 
-**To remove booking entirely:** Delete the five booking fields or set `booking_enabled: false`.
-
-> **Note:** The booking system requires a configured Google Apps Script endpoint. See `docs/event-hub-operations.md` for the one-time setup. Without it, the registration form will not submit, but the rest of the website works normally.
+> The booking system needs the Google Apps Script described in `docs/event-hub-operations.md`. Without it, the form will not submit, but the rest of the site works normally.
 
 ---
 
@@ -365,104 +322,16 @@ that folder is publicly downloadable by anyone with the link.
 
 ## Add a Spotlight story
 
-Spotlights highlight people and their work supported by EEG101 funding (STSMs, Virtual Mobility Grants, Conference Grants). Each Spotlight has a data entry and a detail page.
+**The easy way:** in the website editor ([app.pagescms.org](https://app.pagescms.org)) open **Spotlights** and press **Add an entry**. The form follows the page from top to bottom:
+- the main picture;
+- the summary and facts;
+- three sections: why it mattered, what it enabled, and what comes next, each with an optional heading and text;
+- key outcomes, extra pictures, and people and places;
+- the buttons at the end.
 
-### Step 1: Add the data entry
+Press **Save** and the page appears at `/spotlights/<name>/` within a couple of minutes. Tick **Show on the home page** to feature it: the most recent featured Spotlight is the one shown there.
 
-**File to edit:** `_data/spotlights.yml`
-
-Add a new block. The archive page automatically sorts entries from newest to oldest using the `sort_date` field.
-
-```yaml
-- slug: stsm-2027-firstname-lastname
-  featured: true
-  title: "A descriptive title for this Spotlight"
-  short_title: "Short version for cards"
-  type: "Mobility and exchange"
-  status: "Completed"
-  date_range: "1-15 March 2027"
-  sort_date: "2027-03-15"
-  year: 2027
-  working_groups:
-    - "WG2"
-  tags:
-    - "Data harmonisation"
-    - "Open Science"
-  lead: "First Last"
-  lead_role: "EEG101 STSM grantee"
-  host_institution: "University of Example"
-  location: "City, Country"
-  image: "/assets/images/spotlights/lastname-stsm-2027.jpg"
-  image_alt: "Description of the image"
-  summary: "A 2-3 sentence summary of what happened and why it mattered."
-  impact: "A sentence about the broader impact."
-  collaborators:
-    - "Person A, Institution"
-    - "Person B, Institution"
-  outcomes:
-    - "First key outcome"
-    - "Second key outcome"
-  follow_up:
-    - "Planned next step"
-  links:
-    - label: "Related page"
-      url: "/working-groups/#wg2"
-  url: "/spotlights/stsm-2027-firstname-lastname/"
-```
-
-| Field | What to put | Required? |
-|-------|-------------|-----------|
-| `slug` | URL-safe identifier: `{type}-{year}-{firstname}-{lastname}`, e.g. `stsm-2027-jane-smith` or `virtual-mobility-2027-john-doe` | Yes |
-| `type` | The grant type: `"Mobility and exchange"` for STSMs, `"Virtual Mobility"` for VMGs, `"Conference Grant"` for conference grants | Yes |
-| `sort_date` | The end date as YYYY-MM-DD. Used to order the archive (newest first) | Yes |
-| `date_range` | Human-readable date range, e.g. `"1-15 March 2027"` or `"May-August 2027"` | Yes |
-| `url` | Must match the permalink in the detail page: `/spotlights/{slug}/` | Yes |
-| All other fields | See the example above. Copy an existing entry and change the values | Yes |
-
-### Step 2: Add the photo
-
-Upload the person's photo to `assets/images/spotlights/`. Name it descriptively, e.g. `lastname-stsm-2027.jpg`.
-
-### Step 3: Create the detail page
-
-Create a new file in the `spotlights/` folder. Name it to match the slug, e.g. `spotlights/stsm-2027-firstname-lastname.html`.
-
-The easiest approach is to copy an existing Spotlight detail page (e.g. `spotlights/stsm-2026-anne-sophie-dubarry.html`) and change:
-
-1. The `title`, `subtitle`, `category`, and `permalink` in the front matter at the top
-2. The `slug` value in the `assign` line (line 9)
-3. The section headings and descriptive paragraphs to match the new story
-4. The acknowledgement line at the bottom to match the grant type
-
-The detail page pulls all structured data (outcomes, collaborators, follow-up, links) from the YAML entry automatically. You only need to write the narrative paragraphs.
-
-### Step 4 (optional): Add a workflow diagram or infographic
-
-If the grantee provides a workflow diagram, poster panel, or other supplementary image, you can embed it in the detail page.
-
-1. Save the image to `assets/images/spotlights/` with a descriptive name, e.g. `lastname-vm-2027-workflow.png`
-2. Open the detail page you created in Step 3
-3. Find the section where you want the image to appear (typically after the "Key outcomes" list)
-4. Insert this HTML block:
-
-```html
-<figure class="spotlight-detail__figure spotlight-detail__figure--wide">
-  <img src="{{ '/assets/images/spotlights/lastname-vm-2027-workflow.png' | relative_url }}" alt="Describe what the diagram shows in plain language.">
-  <figcaption>A short caption explaining the diagram.</figcaption>
-</figure>
-```
-
-**Tips for the image:**
-
-| Guideline | Detail |
-|-----------|--------|
-| Format | PNG or JPEG. PNG is better for diagrams with text; JPEG for photographs |
-| Size | Any width works. The page will scale it to fit. Keep file size under 2MB |
-| Alt text | Write a genuine description of the diagram content for accessibility. Do not leave it empty |
-| Caption | A single sentence explaining what the reader is looking at |
-| Placement | Insert the `<figure>` block between two existing `<section>` blocks, or inside a section before its closing `</section>` tag |
-
-You can add multiple images to the same Spotlight page by repeating the `<figure>` block in different positions.
+**By hand (for maintainers).** Each Spotlight is one file in `_spotlights/`. The filename becomes its web address, so do not rename it once published. The page is laid out by `_layouts/spotlight.html` from the file's fields; there is no HTML to write. Copy an existing file (e.g. `_spotlights/stsm-2026-anne-sophie-dubarry.md`) and change the values. Pictures go in `assets/images/spotlights/`. The finish date (`date`) orders the list, newest first.
 
 ---
 
@@ -558,9 +427,9 @@ Each page on the site corresponds to a Markdown (`.md`) or HTML (`.html`) file i
 | Members | `members.html` | Map and directory. Data from `assets/data/network-map.json` |
 | Working Groups | `working-groups.md` | Pulls from `_data/working_groups.yml` |
 | Grants | `grants.md` | Pulls from `_data/grants.yml` |
-| Events | `events.md` | Merges `_data/events.yml` and `_data/news.yml` |
-| Calendar | `calendar.md` | Pulls from `_data/events.yml`; multi-day events fill their whole span. Core group and MC members can also add an internal Google Calendar behind a passphrase — see `docs/internal-calendar.md` |
-| Spotlight | `spotlight.html` | Pulls from `_data/spotlights.yml` |
+| Events | `events.md` | Merges `_events/` (one file per event) and `_data/news.yml` |
+| Calendar | `calendar.md` | Pulls from `_events/` and `_dates/` (other calendar dates); multi-day events fill their whole span. Core group and MC members can also add an internal Google Calendar behind a passphrase — see `docs/internal-calendar.md` |
+| Spotlight | `spotlight.html` | Pulls from `_spotlights/`; each page is laid out by `_layouts/spotlight.html` |
 | Resources | `resources.md` | Plain Markdown with resource cards |
 | Library | `library.md` | Pulls from `_data/library.yml` |
 | Video Hub | `video-hub.md` | Pulls from `_data/video_hub.yml` |
@@ -624,7 +493,7 @@ If the site does not update after you push, the build may have failed. Here is h
 | Error | Cause | Fix |
 |-------|-------|-----|
 | YAML syntax error with a line number | A formatting mistake in a `.yml` file | Open the file, go to the line number, check for missing quotes, wrong indentation, or tabs |
-| Event booking validation failed | A bookable event has incomplete fields | Check `_data/events.yml` for any event with `booking_enabled: true` and make sure `booking_status`, `capacity`, `timezone`, and `end_time` are all present |
+| Content validation failed | An event, date or Spotlight has a problem | The message names the file and the field. An issue labelled `content-check` is also opened automatically after an editor save |
 | Liquid syntax error | A template file has a formatting issue | This usually means an `.html` file was edited incorrectly. Revert the change or fix the Liquid tag |
 
 If you cannot fix the error, revert your last commit on GitHub (or ask someone with Git experience to help). The previous version of the site remains live until a successful build replaces it.
@@ -643,23 +512,27 @@ _data/                         # All editable content as YAML files
   working_groups.yml            #   Working Group descriptions
   grants.yml                   #   Grant scheme details
   news.yml                     #   News items
-  events.yml                   #   Events (with optional booking fields)
   video_hub.yml                #   YouTube videos for the Video Hub
   library.yml                  #   Papers for the Library
-  spotlights.yml               #   Spotlight stories for funded activities
   resources.yml                #   Resource cards
   partners.yml                 #   Partner organisations
+_events/                       # One file per event (edited in Pages CMS; filename = event id)
+_dates/                        # One file per other calendar date: deadlines, calls (Pages CMS)
+_spotlights/                   # One file per Spotlight story (Pages CMS)
+.pages.yml                     # The website editor's forms (Pages CMS); see docs/pages-cms-setup.md
 _includes/                     #   Reusable HTML components (cards, modals, navigation)
-_layouts/                      #   Page templates (home, page, default)
+_layouts/                      #   Page templates (home, page, default, spotlight)
 assets/
   css/style.css                #   All visual styling
   js/network-map.js            #   Members map and directory JavaScript
   data/network-map.json        #   Generated member data (do not edit directly)
   images/                      #   All images, organised by type
   video/                       #   Hero video
-spotlights/                    #   Individual Spotlight detail pages
 scripts/                       #   Automation and validation scripts
-  validate_event_booking.py    #     Runs on every build to check event data
+  validate_event_booking.py    #     Checks events, other dates and Spotlights
+  check_cms_config.py          #     Checks the editor config (.pages.yml) still matches the content
+  optimise_images.py           #     Shrinks and tidies pictures uploaded through the editor
+  normalise_front_matter.cjs   #     Rewrites editor-saved front matter so Jekyll reads it as typed
   sync_network_map.py          #     Converts eCOST export to map data
   google-apps-script/          #     Apps Script source for booking and Members publishing
 docs/                          #   Internal documentation and validation records

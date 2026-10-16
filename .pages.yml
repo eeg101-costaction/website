@@ -1,0 +1,447 @@
+# Pages CMS: the editor EEG101 staff use at https://app.pagescms.org
+#
+# Staff sign in with an emailed code (no GitHub account needed) and edit Events,
+# other calendar dates and Spotlights through the forms below. Pressing Save
+# publishes: the change is committed to main and the site rebuilds in a minute
+# or two. Setup, inviting people, and what to do when a check fails are in
+# docs/pages-cms-setup.md; the staff guide is docs/staff-guide.md.
+#
+# Every description below is shown under its field in the editor, so it is
+# written for the person filling the form in, not for developers.
+
+settings:
+  content:
+    # Keep any field this form does not list. Without this, saving an item would
+    # delete fields the editor does not know about.
+    merge: true
+  commit:
+    # Commits are made by the Pages CMS app. "user" would write each editor's
+    # email address into the public history of this repository.
+    identity: app
+
+media:
+  - name: events
+    label: Event pictures
+    input: assets/images/events
+    output: /assets/images/events
+    categories: [image]
+    rename: safe
+  - name: spotlights
+    label: Spotlight pictures
+    input: assets/images/spotlights
+    output: /assets/images/spotlights
+    categories: [image]
+    rename: safe
+
+components:
+  clock:
+    type: string
+    pattern:
+      regex: "^(([01]?[0-9]|2[0-3]):[0-5][0-9])?$"
+      message: "Use the 24-hour clock, like 09:30 or 14:00, or leave it empty."
+  zone:
+    type: select
+    options:
+      values:
+        - { name: Europe/Brussels, label: "Central European Time (Brussels, Paris, Berlin, Rome...)" }
+        - { name: Europe/London, label: "UK and Ireland (London, Dublin)" }
+        - { name: Europe/Lisbon, label: "Portugal (Lisbon)" }
+        - { name: Europe/Athens, label: "Eastern European Time (Athens, Helsinki, Bucharest...)" }
+        - { name: Europe/Istanbul, label: "Türkiye (Istanbul)" }
+        - { name: UTC, label: "UTC" }
+        - { name: America/New_York, label: "US Eastern (New York)" }
+        - { name: America/Los_Angeles, label: "US Pacific (Los Angeles)" }
+
+content:
+  # ---------------------------------------------------------------------------
+  - name: events
+    label: Events
+    type: collection
+    path: _events
+    format: yaml-frontmatter
+    # The filename is the event's id, which the booking form and its registration
+    # sheet depend on, so it is made once from the title and date and never renamed.
+    filename:
+      template: "{fields.title}-{fields.start_date}.md"
+      field: false
+    operations:
+      rename: false
+    view:
+      fields: [title, start_date, category]
+      primary: title
+      sort: [start_date, title]
+      search: [title, location, summary]
+      default:
+        sort: start_date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+        options: { maxlength: 120 }
+      - name: category
+        label: What kind of item is this?
+        type: select
+        required: true
+        description: "Most things are Events. Announcements and Grants news also appear on the Events page, under their own filters."
+        options:
+          values:
+            - { name: Events, label: "Event (meeting, talk, workshop, conference...)" }
+            - { name: Announcement, label: Announcement }
+            - { name: Grants, label: Grants news }
+      - name: external
+        label: Run by another organisation
+        type: boolean
+        description: "Tick for events EEG101 is not organising (e.g. a conference we are attending). They get an \"External event\" badge and are hidden until people choose to see external events."
+      - name: start_date
+        label: Date (or first day)
+        type: date
+        required: true
+        options: { format: yyyy-MM-dd }
+      - name: end_date
+        label: Last day
+        type: date
+        default: ""
+        description: "Only for events running over several days. Leave empty for a one-day event."
+        options: { format: yyyy-MM-dd }
+      - name: time
+        label: Start time
+        component: clock
+        description: "24-hour clock, e.g. 14:00. Leave empty for all-day or multi-day events."
+      - name: end_time
+        label: End time
+        component: clock
+      - name: timezone
+        label: Time zone of those times
+        component: zone
+        description: "Needed whenever you give a time: the Calendar uses it to show the time in each visitor's own zone."
+      - name: timezone_label
+        label: Time zone abbreviation shown on the card
+        type: string
+        description: "e.g. CET in winter, CEST in summer. Optional."
+        options: { maxlength: 10 }
+      - name: location
+        label: Where
+        type: string
+        description: "\"Online\", or the city and venue."
+      - name: format
+        label: Format
+        type: select
+        required: true
+        options:
+          values:
+            - { name: online, label: Online }
+            - { name: in-person, label: In person }
+            - { name: hybrid, label: Hybrid }
+      - name: summary
+        label: Short description
+        type: text
+        required: true
+        description: "One to three sentences, shown on the card."
+        options: { maxlength: 600 }
+      - name: image
+        label: Picture
+        type: image
+        description: "A landscape picture works best (16:9, e.g. 1600 x 900). Large photos are shrunk automatically after you save."
+        options: { media: events }
+      - name: alt
+        label: Picture description
+        type: string
+        description: "Describe the picture in a sentence for people who cannot see it."
+      - name: audience
+        label: Who can attend?
+        type: select
+        options:
+          values:
+            - { name: open, label: "Everyone (open)" }
+            - { name: members, label: "EEG101 COST members only (invited through e-COST)" }
+        description: "For members-only events, leave the booking settings below off and the joining link empty: invitations go out through e-COST."
+      - name: booking_enabled
+        label: Take bookings on this website
+        type: boolean
+        description: "Shows a Register button that opens the EEG101 booking form. Needs a start time, end time and time zone."
+      - name: booking_status
+        label: Bookings are
+        type: select
+        options:
+          values:
+            - { name: open, label: Open }
+            - { name: closed, label: Closed }
+        description: "Only used when bookings are on. Set to Closed when you want to stop taking bookings."
+      - name: capacity
+        label: Places available
+        type: number
+        description: "Only used when bookings are on. 0 means no limit; once it is full, people join a waiting list."
+        options: { min: 0 }
+      - name: short_name
+        label: Short name for the booking sheet
+        type: string
+        description: "Optional. Names this event's tab in the private registration workbook."
+        options: { maxlength: 60 }
+      - name: joining_link
+        label: Online joining link (Zoom, Teams...)
+        type: string
+        description: "WARNING: anything here is public. It is also emailed automatically, within the hour, to everyone booked. For a link that must stay private, leave this empty and add it in the registration workbook instead."
+      - name: registration_url
+        label: Registration page elsewhere
+        type: string
+        description: "Only for events where people register on another website. Leave empty if bookings are taken here."
+      - name: programme_url
+        label: Programme link
+        type: string
+      - name: recording_url
+        label: Recording link
+        type: string
+      - name: slides_url
+        label: Slides link
+        type: string
+      - name: related_wg
+        label: Related Working Group
+        type: select
+        options:
+          values:
+            - { name: wg1, label: "WG1 Reporting Standards" }
+            - { name: wg2, label: "WG2 Curation and Harmonisation" }
+            - { name: wg3, label: "WG3 EEG Community Framework" }
+            - { name: wg4, label: "WG4 Mobile EEG Harmonisation" }
+      - name: tags
+        label: Tags
+        type: string
+        list: true
+
+  # ---------------------------------------------------------------------------
+  - name: dates
+    label: Other calendar dates
+    type: collection
+    path: _dates
+    format: yaml-frontmatter
+    filename:
+      template: "{fields.title}-{fields.start_date}.md"
+      field: false
+    operations:
+      rename: false
+    view:
+      fields: [title, kind, start_date]
+      primary: title
+      sort: [start_date, title]
+      default:
+        sort: start_date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+        description: "These appear on the Calendar only (not the Events page): deadlines, calls, and other dates people should know about. Everything here is public: internal meetings belong in the internal Google Calendar."
+        options: { maxlength: 120 }
+      - name: kind
+        label: Kind
+        type: select
+        required: true
+        options:
+          values: [Deadline, Call, Meeting, Holiday, Other]
+      - name: start_date
+        label: Date (or first day)
+        type: date
+        required: true
+        options: { format: yyyy-MM-dd }
+      - name: end_date
+        label: Last day
+        type: date
+        default: ""
+        description: "Only if it runs over several days."
+        options: { format: yyyy-MM-dd }
+      - name: time
+        label: Time
+        component: clock
+        description: "Optional, e.g. 17:00 for a deadline at five o'clock."
+      - name: end_time
+        label: End time
+        component: clock
+      - name: timezone
+        label: Time zone of those times
+        component: zone
+      - name: location
+        label: Where
+        type: string
+      - name: summary
+        label: Short description
+        type: text
+        options: { maxlength: 400 }
+      - name: link
+        label: Link
+        type: string
+        description: "Optional: a web address (https://...) or a page on this site (e.g. /grants/)."
+      - name: link_label
+        label: Link button text
+        type: string
+        description: "e.g. \"Grant details\". Defaults to \"More information\"."
+
+  # ---------------------------------------------------------------------------
+  - name: spotlights
+    label: Spotlights
+    type: collection
+    path: _spotlights
+    format: yaml-frontmatter
+    # The filename becomes the page's web address, so it is made once from the
+    # title and never renamed: shared links keep working.
+    filename:
+      template: "{fields.title}.md"
+      field: false
+    operations:
+      rename: false
+    view:
+      fields: [title, date, featured]
+      primary: title
+      sort: [date, title]
+      search: [title, card_title, summary]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Page title
+        type: string
+        required: true
+        options: { maxlength: 140 }
+      - name: card_title
+        label: Title on the card (optional)
+        type: string
+        description: "Only if the card in the Spotlight list should use a different title from the page."
+      - name: subtitle
+        label: Subtitle
+        type: string
+        description: "One line under the page title, e.g. \"Jo Smith's Virtual Mobility with researchers in Cork\"."
+      - name: featured
+        label: Show on the home page
+        type: boolean
+        description: "The most recent Spotlight with this ticked appears on the home page."
+      - name: type
+        label: Type
+        type: select
+        required: true
+        options:
+          values: [Mobility and exchange, Virtual Mobility, Conference Grant, Training School, Dissemination, Other]
+      - name: status
+        label: Status
+        type: select
+        options:
+          values: [Completed, In progress, Upcoming]
+      - name: date_range
+        label: When (as shown)
+        type: string
+        required: true
+        description: "Written out, e.g. \"12–18 April 2026\" or \"May–August 2026\"."
+      - name: date
+        label: Finish date
+        type: date
+        required: true
+        description: "Puts the Spotlights in order, newest first."
+        options: { format: yyyy-MM-dd }
+      - name: working_groups
+        label: Working Groups
+        type: select
+        options:
+          multiple: true
+          values: [WG1, WG2, WG3, WG4]
+      - name: tags
+        label: Topics
+        type: string
+        list: true
+      - name: location
+        label: Where
+        type: string
+      - name: host_institution
+        label: Host institution
+        type: string
+      - name: image
+        label: Main picture
+        type: image
+        required: true
+        options: { media: spotlights }
+      - name: image_alt
+        label: Picture description
+        type: string
+        required: true
+        description: "Describe the picture in a sentence for people who cannot see it."
+      - name: image_caption
+        label: Picture caption
+        type: string
+      - name: summary
+        label: Summary
+        type: text
+        required: true
+        description: "Two or three sentences, shown on the card and at the top of the page."
+        options: { maxlength: 600 }
+      - name: why
+        label: "Section 1: why it mattered"
+        type: object
+        fields:
+          - { name: label, label: Small heading, type: string, default: "Why this mattered" }
+          - { name: heading, label: Heading, type: string }
+          - { name: text, label: Text, type: rich-text, options: { format: markdown, switcher: false, media: false } }
+      - name: enabled
+        label: "Section 2: what it enabled"
+        type: object
+        description: "The key outcomes list below appears in this section. Text here is optional: without it, the section shows the outcomes and the people side by side."
+        fields:
+          - { name: label, label: Small heading, type: string, default: "What it enabled" }
+          - { name: heading, label: Heading, type: string }
+          - { name: text, label: Text, type: rich-text, options: { format: markdown, switcher: false, media: false } }
+      - name: outcomes
+        label: Key outcomes
+        type: string
+        list: true
+      - name: figures
+        label: Extra pictures or diagrams (optional)
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{heading}"
+        fields:
+          - { name: heading, label: Heading, type: string }
+          - { name: image, label: Picture, type: image, options: { media: spotlights } }
+          - { name: alt, label: Picture description, type: string }
+          - { name: caption, label: Caption, type: string }
+      - name: figures_label
+        label: Small heading above extra pictures
+        type: string
+      - name: collaborators
+        label: People and places
+        type: string
+        list: true
+      - name: people_heading
+        label: Heading for people and places
+        type: string
+        default: "People and places"
+      - name: people_label
+        label: Small heading for people and places
+        type: string
+        description: "Only used when Section 2 has text, which moves people and places into a section of their own."
+      - name: whats_next
+        label: "Section 3: what comes next"
+        type: object
+        fields:
+          - { name: label, label: Small heading, type: string, default: "What comes next" }
+          - { name: heading, label: Heading, type: string }
+          - { name: text, label: Text, type: rich-text, options: { format: markdown, switcher: false, media: false } }
+      - name: follow_up
+        label: Next steps
+        type: string
+        list: true
+      - name: links
+        label: Buttons at the end
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{label}"
+        fields:
+          - { name: label, label: Button text, type: string, required: true }
+          - { name: url, label: "Web address (https://...) or page on this site (/video-hub/)", type: string, required: true }
+      - name: acknowledgement
+        label: Funding acknowledgement
+        type: text
+        default: "This activity was supported through an EEG101 grant under COST Action CA24148."

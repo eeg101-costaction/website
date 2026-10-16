@@ -57,7 +57,7 @@ permalink: /events/
   {% endcomment %}
   {% assign combined_items = "" | split: "," %}
 
-  {% for event in site.data.events %}
+  {% for event in site.events %}
     {% assign event_with_sort = event %}
     {% assign combined_items = combined_items | push: event %}
   {% endfor %}
@@ -103,7 +103,15 @@ permalink: /events/
       {% assign sort_key = item.date %}
     {% endif %}
     {% assign epoch = sort_key | date: "%s" %}
-    {% assign tag = epoch | append: "|" | append: idx %}
+    {% comment %}
+      Ties on the same date: news before events (in the newest-first order shown),
+      then by position, zero-padded so it compares as a number rather than as
+      text ("10" would otherwise sort before "5"). Events come from one file each,
+      so their order in the list carries no meaning and must not decide anything.
+    {% endcomment %}
+    {% if item.start_date %}{% assign kind = "0" %}{% else %}{% assign kind = "1" %}{% endif %}
+    {% assign padded_idx = idx | prepend: "0000" | slice: -4, 4 %}
+    {% assign tag = epoch | append: "|" | append: kind | append: "|" | append: padded_idx %}
     {% assign tagged = tagged | push: tag %}
     {% assign idx = idx | plus: 1 %}
   {% endfor %}
@@ -112,7 +120,7 @@ permalink: /events/
 
   {% for tag in sorted_tags %}
     {% assign parts = tag | split: "|" %}
-    {% assign item_idx = parts[1] | plus: 0 %}
+    {% assign item_idx = parts[2] | plus: 0 %}
     {% assign item = combined_items[item_idx] %}
 
     {% if item.start_date %}
