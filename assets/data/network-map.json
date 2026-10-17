@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 541,
+  "member_count": 542,
   "site_count": 315,
   "country_count": 58,
   "countries": [
@@ -277,7 +277,7 @@
     {
       "name": "Türkiye",
       "site_count": 58,
-      "member_count": 99
+      "member_count": 100
     },
     {
       "name": "United Kingdom",
@@ -11125,6 +11125,17 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "BURAK YILMAZ",
+          "affiliation": "Konya Technical University",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "byilmaz [at] ktun [dot] edu [dot] tr",
+          "homepage": "https://www.researchgate.net/profile/Burak-Yilmaz-6",
+          "orcid": "0000-0001-5549-8385"
+        },
+        {
           "name": "Gamze Turun",
           "affiliation": "Yildiz Technical University",
           "working_groups": [
@@ -11149,7 +11160,7 @@
           "orcid": "0000-0002-7008-2721"
         }
       ],
-      "member_count": 2,
+      "member_count": 3,
       "working_groups": [
         "WG1",
         "WG2",
