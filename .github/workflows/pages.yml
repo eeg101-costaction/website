@@ -104,6 +104,40 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      # A save in the website editor is followed a minute later by the content
+      # check's tidy-up commit, which GitHub Pages starts publishing at once. If
+      # that has already happened, this (older) build must not be published over
+      # it, and GitHub refuses anyway ("in progress deployment"). So publish only
+      # while main is still at this commit, and treat a refusal caused by a newer
+      # commit as superseded, not failed.
+      - name: Check this is still the newest commit on main
+        id: newest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh api "repos/${{ github.repository }}/commits/main" --jq .sha)
+          if [ "$latest" = "$GITHUB_SHA" ]; then
+            echo "current=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "current=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::main has moved on to ${latest:0:7}, which is published on its own, so this older build is not deployed."
+          fi
+
       - name: Deploy to GitHub Pages
         id: deployment
+        if: steps.newest.outputs.current == 'true'
+        continue-on-error: true
         uses: actions/deploy-pages@v4
+
+      - name: Fail only if the deployment really failed
+        if: steps.newest.outputs.current == 'true' && steps.deployment.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest=$(gh api "repos/${{ github.repository }}/commits/main" --jq .sha)
+          if [ "$latest" != "$GITHUB_SHA" ]; then
+            echo "::notice::Superseded: main moved on to ${latest:0:7} while this was deploying, and that commit is published instead."
+            exit 0
+          fi
+          echo "::error::Publishing to GitHub Pages failed for the newest commit on main; see the Deploy step above."
+          exit 1
