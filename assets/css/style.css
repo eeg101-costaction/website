@@ -3313,6 +3313,10 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
   margin: 0;
   color: var(--color-dark);
 }
+.podcast-episode__blurb {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
 .podcast-episode__link {
   font-family: var(--font-ui);
   font-size: 0.9rem;

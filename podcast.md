@@ -23,6 +23,7 @@ noindex: true
     <div class="section-header">
       <span class="section-label">Podcast series</span>
       <h2 class="section-heading">Episodes</h2>
+      <p class="section-lead">The EEG101 Podcast introduces the people behind the EEG101 COST Action in their own words. In each episode we sit down online with a member of the network to talk about their research, how they came to work with EEG, and what they hope EEG101 can achieve: shared standards, open data and tools, and a more connected and inclusive EEG community across Europe and beyond.</p>
     </div>
 
     <div class="podcast-episodes">
@@ -37,6 +38,7 @@ noindex: true
         <div class="podcast-episode__info">
           <p class="video-series">Episode {{ forloop.index }}</p>
           <h3 class="podcast-episode__title">{{ ep.title | escape }}</h3>
+          {% if ep.blurb %}<p class="podcast-episode__blurb">{{ ep.blurb | escape }}</p>{% endif %}
           <a class="podcast-episode__link" href="https://www.youtube.com/watch?v={{ ep.id }}" target="_blank" rel="noopener">Watch on YouTube ↗</a>
         </div>
       </article>
