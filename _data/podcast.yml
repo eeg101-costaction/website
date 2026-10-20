@@ -1,0 +1,10 @@
+# EEG101 Podcast series, shown at /podcast/ in this order (episode 1 first).
+# id is the YouTube video id (the part after watch?v=).
+
+- id: 3bHjB-facPE
+  title: "Online Interview with Inga Griškova-Bulanova"
+  alt: "Still from the online interview with Inga Griškova-Bulanova"
+
+- id: C4AhgSg3nL4
+  title: "Online Interview with Evgenia Charikleia Lazari"
+  alt: "Still from the online interview with Evgenia Charikleia Lazari"

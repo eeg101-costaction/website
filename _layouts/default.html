@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} — {{ site.data.site.title }}{% else %}{{ site.data.site.title }}: {{ site.data.site.tagline }}{% endif %}</title>
-  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.site.description }}{% endif %}">
+  <meta name="description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.data.site.description }}{% endif %}">{% if page.noindex %}
+  <meta name="robots" content="noindex">{% endif %}
 
   <!-- Open Graph -->
   <meta property="og:title" content="{% if page.title %}{{ page.title }}{% else %}{{ site.data.site.title }}{% endif %}">
