@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-19T10:47:15+00:00",
-  "member_count": 545,
+  "generated_at": "2026-10-20T10:05:20+00:00",
+  "member_count": 547,
   "columns_used": {
     "gender": "gender",
     "itc": "itc",
@@ -18,7 +18,7 @@
         },
         {
           "label": "Female",
-          "count": 270
+          "count": 272
         },
         {
           "label": "Prefer not to say",
@@ -33,11 +33,11 @@
       "bars": [
         {
           "label": "ITC member",
-          "count": 219
+          "count": 220
         },
         {
           "label": "Non-ITC member",
-          "count": 326
+          "count": 327
         }
       ]
     },
@@ -48,11 +48,11 @@
       "bars": [
         {
           "label": "Young Researcher / Innovator",
-          "count": 358
+          "count": 359
         },
         {
           "label": "Standard member",
-          "count": 187
+          "count": 188
         }
       ]
     }
