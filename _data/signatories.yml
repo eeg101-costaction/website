@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-16"
+generated: "2026-10-20"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 159
-public_count: 131
+total: 166
+public_count: 134
 
 people:
   - name: "Enes Abanoz"
@@ -62,6 +62,8 @@ people:
     affiliation: "MEG lab, CoBIC, Goethe University"
   - name: "FATMA NUR DOLU"
     affiliation: "BILKENT UNIVERSITY | KONYA FOOD AND AGRICULTURE UNIVERSITY"
+  - name: "Sarshar Dorosti"
+    affiliation: "Ulster University"
   - name: "Anne-Sophie Dubarry"
     affiliation: "Aix Marseille Univ, CNRS, CRPN, Aix-en-Provence, France"
   - name: "Benedikt Ehinger"
@@ -234,6 +236,10 @@ people:
     affiliation: "Linköping University"
   - name: "Maarika Traat"
     affiliation: "University of Tartu"
+  - name: "Carlos Trenado"
+    affiliation: "Institute of Clinical Neuroscience and Medical Psychology, Heinrich Heine University Düsseldorf"
+  - name: "Anastasiia Tsei"
+    affiliation: "Alanus University"
   - name: "Gamze Turun"
     affiliation: "Research Asisstant"
   - name: "Beyza Ustun-Elayan"
