@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-19"
+generated: "2026-10-20"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 165
-public_count: 133
+total: 166
+public_count: 134
 
 people:
   - name: "Enes Abanoz"
@@ -238,6 +238,8 @@ people:
     affiliation: "University of Tartu"
   - name: "Carlos Trenado"
     affiliation: "Institute of Clinical Neuroscience and Medical Psychology, Heinrich Heine University Düsseldorf"
+  - name: "Anastasiia Tsei"
+    affiliation: "Alanus University"
   - name: "Gamze Turun"
     affiliation: "Research Asisstant"
   - name: "Beyza Ustun-Elayan"
