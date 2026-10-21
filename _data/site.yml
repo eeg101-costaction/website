@@ -34,10 +34,10 @@ hero_video: "/assets/video/hero.mp4"
 hero_fallback: "/assets/images/hero-fallback.jpg"
 
 # Website drafts: when an Event, calendar date or Spotlight is marked "Ready for
-# review" in the editor, the content check opens a GitHub issue asking these
-# people to review it (see docs/staff-guide.md, "Drafts and review"). GitHub
-# emails someone it @mentions, so fill in each reviewer's GitHub username; until
-# then only people watching the repository's issues are emailed.
+# review" in the editor, the content check opens a GitHub issue naming these
+# people, and the booking Apps Script emails them (their addresses are kept in
+# that script's settings, never here: see docs/pages-cms-setup.md). A GitHub
+# username is optional; with one, GitHub also notifies them about the issue.
 content_reviewers:
   - name: "Marie-Constance Corsi"
     github: ""

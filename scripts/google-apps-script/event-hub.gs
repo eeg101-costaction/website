@@ -166,8 +166,104 @@ function submitRegistration(payload) {
 }
 
 function doPost(e) {
-  try { return jsonResponse(submitRegistration(JSON.parse(e.postData.contents || '{}'))); }
+  try {
+    const payload = JSON.parse(e.postData.contents || '{}');
+    if (payload.action === 'review_request') return jsonResponse(sendReviewRequest(payload));
+    return jsonResponse(submitRegistration(payload));
+  }
   catch (error) { return jsonResponse({ ok: false, error: String(error) }); }
+}
+
+/*
+ * Website drafts: "Ready for review" emails.
+ *
+ * When an Event, calendar date or Spotlight is marked "Ready for review" in the
+ * website editor, the website's content check (scripts/review_requests.cjs)
+ * posts here and this emails the reviewers; when the item is published it posts
+ * again and they get a short "now live" note.
+ *
+ * Set up once, in Project Settings -> Script properties:
+ *   EEG101_REVIEWER_EMAILS  the reviewers' addresses, separated by commas. Kept
+ *                           here so they never appear in the public website code.
+ *   EEG101_REVIEW_TOKEN     a long random secret; the same value is stored as the
+ *                           EEG101_REVIEW_TOKEN Actions secret of the website
+ *                           repository. Requests without it are refused.
+ * Links in a request must point at the EEG101 site or its editor, and at most
+ * REVIEW_MAX_PER_DAY emails are sent a day, so even a leaked secret cannot turn
+ * this into a way of sending arbitrary mail.
+ */
+const REVIEW_MAX_PER_DAY = 30;
+const REVIEW_LINK_PREFIXES = ['https://www.eeg101.eu/', 'https://app.pagescms.org/eeg101-costaction/website/'];
+const REVIEW_KIND = { events: 'Event', dates: 'Calendar date', spotlights: 'Spotlight' };
+
+function sendReviewRequest(payload) {
+  const props = PropertiesService.getScriptProperties();
+  const expected = String(props.getProperty('EEG101_REVIEW_TOKEN') || '');
+  if (expected.length < 20 || !sameSecret(String(payload.token || ''), expected)) return { ok: false, error: 'Not authorised.' };
+  const recipients = String(props.getProperty('EEG101_REVIEWER_EMAILS') || '').split(',').map(s => s.trim()).filter(s => EMAIL_PATTERN.test(s));
+  if (!recipients.length) return { ok: false, error: 'No reviewer email addresses are set (script property EEG101_REVIEWER_EMAILS).' };
+
+  const kind = payload.kind === 'published' ? 'published' : 'ready';
+  const title = String(payload.title || '').replace(/[\r\n]+/g, ' ').slice(0, 200);
+  const links = ['preview_url', 'edit_url', 'live_url'].reduce((all, key) => {
+    const url = String(payload[key] || '');
+    all[key] = REVIEW_LINK_PREFIXES.some(prefix => url.indexOf(prefix) === 0) && !/[\s"'<>]/.test(url) ? url : '';
+    return all;
+  }, {});
+  if (!title || (kind === 'ready' && (!links.preview_url || !links.edit_url))) return { ok: false, error: 'Incomplete request.' };
+
+  const today = Utilities.formatDate(new Date(), 'Etc/UTC', 'yyyy-MM-dd');
+  const countKey = 'EEG101_REVIEW_SENT_' + today;
+  const sentToday = Number(props.getProperty(countKey) || 0);
+  if (sentToday >= REVIEW_MAX_PER_DAY) return { ok: false, error: 'Daily limit for review emails reached.' };
+  if (MailApp.getRemainingDailyQuota() < recipients.length) return { ok: false, error: 'Email quota used up for today.' };
+
+  const what = REVIEW_KIND[payload.collection] || 'Item';
+  const message = kind === 'ready'
+    ? {
+        subject: 'Ready for review: ' + title,
+        lines: [
+          'A draft on the EEG101 website is ready for your review.',
+          what + ': ' + title,
+          ['Read it on the drafts page', links.preview_url],
+          ['Open it in the website editor', links.edit_url],
+          'If it is ready, tick "Published on the website" and save: it goes live a minute or two later. If it needs changes, untick "Ready for review", save, and let the author know what to change.'
+        ]
+      }
+    : {
+        subject: 'Published: ' + title,
+        lines: [what + ' "' + title + '" has been published and is now on the EEG101 website. Thank you for reviewing it.'].concat(links.live_url ? [['See it on the website', links.live_url]] : [])
+      };
+  const text = message.lines.map(l => Array.isArray(l) ? l[0] + ': ' + l[1] : l).join('\n\n');
+  const html = '<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#1a1a2e">' +
+    message.lines.map(l => Array.isArray(l)
+      ? '<p><a href="' + escapeHtml(l[1]) + '" style="color:#000099;font-weight:bold">' + escapeHtml(l[0]) + '</a></p>'
+      : '<p>' + escapeHtml(l) + '</p>').join('') +
+    '<p style="color:#5a5a7a;font-size:13px">Sent automatically by the EEG101 website.</p></div>';
+  MailApp.sendEmail({ to: recipients.join(','), subject: message.subject, body: text, htmlBody: html, replyTo: EEG101_EVENT_BOOKING.replyTo, name: 'EEG101 website' });
+  props.setProperty(countKey, String(sentToday + 1));
+  props.getKeys().filter(k => k.indexOf('EEG101_REVIEW_SENT_') === 0 && k !== countKey).forEach(k => props.deleteProperty(k));
+  return { ok: true, sent: recipients.length };
+}
+
+// Run once from the Apps Script editor (select it in the function list, press Run):
+// creates the review-email secret, stores it in Script properties and shows it in
+// the execution log, ready to paste into the website repository as the
+// EEG101_REVIEW_TOKEN Actions secret. Running it again replaces the secret, so the
+// GitHub copy must then be updated too.
+function createReviewToken() {
+  const token = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '');
+  PropertiesService.getScriptProperties().setProperty('EEG101_REVIEW_TOKEN', token);
+  console.log('Copy this into GitHub as the EEG101_REVIEW_TOKEN secret:\n' + token);
+}
+
+// Compares two secrets without stopping at the first difference.
+function sameSecret(given, expected) {
+  const a = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, given);
+  const b = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, expected);
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a[i] ^ b[i];
+  return diff === 0;
 }
 
 function onOpen() {

@@ -77,11 +77,36 @@ person.
   `_data/drafts.yml` after every save (`scripts/export_drafts.py`); the page
   renders them with the live templates.
 - Ticking **Ready for review** opens a GitHub issue labelled
-  **ready-for-review** (`scripts/review_requests.cjs`) that @mentions the people
-  in `content_reviewers` in `_data/site.yml`. GitHub emails people it mentions,
-  so each reviewer needs a (free) GitHub account and their username filled in
-  there. Publishing the item, unticking Ready for review or deleting it closes
-  the issue.
+  **ready-for-review** (`scripts/review_requests.cjs`) naming the people in
+  `content_reviewers` in `_data/site.yml`, and **emails the reviewers** through
+  the booking Apps Script (`sendReviewRequest` in
+  `scripts/google-apps-script/event-hub.gs`, sent from the account that deployed
+  it). When the item is published they get a short "now live" note. Publishing
+  the item, unticking Ready for review or deleting it closes the issue.
+
+### Setting up the review emails (once)
+
+The reviewers' addresses are stored only in the Apps Script's settings, never
+in this public repository.
+
+1. Open the booking Apps Script project (the one whose web-app URL is
+   `event_booking_endpoint` in `_data/site.yml`). Replace its code with
+   `scripts/google-apps-script/event-hub.gs` from this repository and save.
+2. **Deploy → Manage deployments → ✏️ (edit) → Version: New version → Deploy.**
+   Editing the existing deployment keeps the same web-app URL.
+3. **Project Settings (⚙️) → Script properties → Add script property:**
+   `EEG101_REVIEWER_EMAILS` = the reviewers' addresses, separated by commas.
+4. In the editor, choose **createReviewToken** in the function list and press
+   **Run**. Copy the long code it prints in the execution log.
+5. On GitHub: **Settings → Secrets and variables → Actions → New repository
+   secret**, name `EEG101_REVIEW_TOKEN`, paste the code, **Add secret**.
+
+To test: tick Ready for review on a draft and save. Within a few minutes the
+reviewers get an email from "EEG101 website", and the issue is opened. If the
+email could not be sent, the issue says why (most often a missing secret or
+property). To change reviewers, edit `EEG101_REVIEWER_EMAILS` (and the names in
+`_data/site.yml`). At most 30 review emails are sent a day, and only with links
+to the EEG101 site and editor, so a leaked secret cannot be misused for spam.
 - Limits: the editor has no roles, so anyone invited can publish; review is a
   team rule. Drafts are public in the repository.
 

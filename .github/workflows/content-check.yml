@@ -143,6 +143,9 @@ jobs:
         if: always()
         continue-on-error: true
         uses: actions/github-script@v7
+        env:
+          # Lets the booking Apps Script email the reviewers (docs/pages-cms-setup.md).
+          REVIEW_EMAIL_TOKEN: ${{ secrets.EEG101_REVIEW_TOKEN }}
         with:
           script: |
             const run = require(`${process.env.GITHUB_WORKSPACE}/scripts/review_requests.cjs`);

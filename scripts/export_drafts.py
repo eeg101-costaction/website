@@ -101,7 +101,9 @@ def main() -> int:
         site = yaml.safe_load((args.root / "_data" / "site.yml").read_text(encoding="utf-8")) or {}
         reviewers = [{"name": str(r.get("name") or ""), "github": str(r.get("github") or "").lstrip("@").strip()}
                      for r in site.get("content_reviewers") or [] if isinstance(r, dict)]
-        args.review_json.write_text(json.dumps({"reviewers": reviewers, "items": review}, indent=1, default=str),
+        endpoint = str(site.get("event_booking_endpoint") or "").strip()
+        args.review_json.write_text(json.dumps({"reviewers": reviewers, "email_endpoint": endpoint, "items": review},
+                                               indent=1, default=str),
                                     encoding="utf-8")
     return 0
 

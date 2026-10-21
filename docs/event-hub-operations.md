@@ -29,6 +29,7 @@ Outstanding at the time of writing:
 | The Community Framework prompt now links to `https://www.eeg101.eu/framework/` instead of `https://sign-cf.eeg101.eu/` | The Framework moved onto the main site; the old microsite is being retired. The prompt is shown only for events with `communityFrameworkPrompt: true` in `EVENT_EXTRA_QUESTIONS`, currently just `diversity-eeg-populations-2026-11`. |
 | The inclusive gender options are now the standard set for every event | They were added for the diversity seminar only, so every other form offered Male / Female / Prefer not to say. The per-event `genderExtended` flag is gone and `GENDER_OPTIONS` is the single list. |
 | The diversity seminar's programme is written into its calendar file, and `.ics` lines are now folded by bytes | See *Putting a programme in an event's calendar file* below. Existing registrants get it when their joining link is next emailed. |
+| "Ready for review" emails for website drafts (`sendReviewRequest`, `createReviewToken`) | The website editor's drafts. After deploying, set the `EEG101_REVIEWER_EMAILS` script property and the review secret: see *Setting up the review emails* in `docs/pages-cms-setup.md`. Bookings are unaffected. |
 
 To check what the live deployment is actually serving, request the endpoint
 directly with any event's ID and search the HTML:

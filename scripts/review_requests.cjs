@@ -15,6 +15,13 @@
  *
  * Each issue carries a hidden marker naming its item, so this is safe to run
  * any number of times. Nothing here can publish or change content.
+ *
+ * Email: when a request is opened, and when the item is then published, the
+ * reviewers are also emailed through the booking Apps Script (event_booking_endpoint
+ * in _data/site.yml, function sendReviewRequest), which keeps their addresses
+ * private. It needs the EEG101_REVIEW_TOKEN Actions secret (passed in as
+ * REVIEW_EMAIL_TOKEN); without it, or if sending fails, the issue still opens
+ * and says so.
  */
 const fs = require('fs');
 
@@ -42,10 +49,34 @@ function requestBody(item, reviewers) {
   ].filter((line, i, all) => !(line === '' && all[i - 1] === '')).join('\n');
 }
 
-module.exports = async function run({ github, context, core, file = 'review.json' }) {
+async function email(endpoint, token, kind, item, fetchImpl) {
+  if (!endpoint || !token) return { ok: false, error: 'email is not set up (no EEG101_REVIEW_TOKEN secret)' };
+  try {
+    const response = await fetchImpl(endpoint, {
+      method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, redirect: 'follow',
+      body: JSON.stringify({ action: 'review_request', token, kind, collection: item.collection, title: item.title,
+        preview_url: item.preview_url, edit_url: item.edit_url, live_url: item.live_url }),
+    });
+    const text = await response.text();
+    try { return JSON.parse(text); } catch { return { ok: false, error: `unexpected reply (HTTP ${response.status})` }; }
+  } catch (error) {
+    return { ok: false, error: String(error && error.message || error) };
+  }
+}
+
+module.exports = async function run({ github, context, core, file = 'review.json', token = process.env.REVIEW_EMAIL_TOKEN, fetchImpl = globalThis.fetch }) {
   if (!fs.existsSync(file)) { core.info('No review list; nothing to do.'); return; }
-  const { reviewers = [], items = [] } = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const { reviewers = [], items = [], email_endpoint: endpoint = '' } = JSON.parse(fs.readFileSync(file, 'utf8'));
   const repo = context.repo;
+  const notify = async (kind, item, issueNumber) => {
+    const result = await email(endpoint, token, kind, item, fetchImpl);
+    if (result.ok) { core.info(`Emailed reviewers (${kind}) for ${item.key}`); return; }
+    core.warning(`Review email (${kind}) for ${item.key} not sent: ${result.error}`);
+    if (kind === 'ready' && issueNumber) {
+      await github.rest.issues.createComment({ ...repo, issue_number: issueNumber,
+        body: `The reviewers could not be emailed automatically (${result.error}). Please let them know about this draft.` });
+    }
+  };
 
   try { await github.rest.issues.getLabel({ ...repo, name: LABEL }); }
   catch { await github.rest.issues.createLabel({ ...repo, name: LABEL, color: '0e8a16', description: 'A website draft waiting for review' }); }
@@ -67,8 +98,10 @@ module.exports = async function run({ github, context, core, file = 'review.json
       const created = await github.rest.issues.create({ ...repo, labels: [LABEL],
         title: `Ready for review: ${item.title}`, body: requestBody(item, reviewers) });
       core.info(`Opened #${created.data.number} for ${item.key}`);
+      await notify('ready', item, created.data.number);
     } else if (issue && item.published) {
       await close(issue, `Published: this is now live${item.live_url ? ` (${item.live_url})` : ''}. Closing.`, 'completed');
+      await notify('published', item);
     } else if (issue && !item.ready) {
       await close(issue, 'Moved back to draft ("Ready for review" was unticked). A new request will be opened when it is marked ready again.', 'not_planned');
     }
@@ -79,3 +112,4 @@ module.exports = async function run({ github, context, core, file = 'review.json
 };
 
 module.exports.requestBody = requestBody;
+module.exports.email = email;
