@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-20"
+generated: "2026-10-21"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 338
+item_count: 340
 
 sections:
   - slug: "educational"
@@ -33,7 +33,7 @@ sections:
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 120
+    count: 122
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,9 +42,9 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 198
+    count: 199
   - name: "Webpage"
-    count: 80
+    count: 81
   - name: "Preprint"
     count: 19
   - name: "Blog Post"
@@ -74,12 +74,12 @@ languages:
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 112
+    count: 114
 
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 237
+    count: 238
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -88,7 +88,7 @@ families:
     count: 6
   - slug: "webpage"
     label: "Web page"
-    count: 91
+    count: 92
 
 items:
   - id: "RSIXFCMH"
@@ -286,6 +286,26 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     parts: [1]
+    tags: []
+  - id: "GUWVDDRQ"
+    title: "Forum: The Passports They Carry: Global South Scholars and the Global Academic Mobility Divide"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Ezgi Yildiz, Mert Cangönül, Yixian Sun, Juanita Uribe, Samer Sharani, Lembe Tiky, Kelebogile Zvobgo"
+    year: "2026"
+    language: "Unknown"
+    publication: "International Studies Perspectives"
+    url: "https://doi.org/10.1093/isp/ekag007"
+    extra_url: ""
+    doi: "10.1093/isp/ekag007"
+    abstract: "Passport inequality is more than a simple logistical inconvenience; it is a fundamental injustice that undermines the ideals of fairness and equality that academia claims to support. Scholars from countries in the Global South often require visas for short-term research trips and conference travel in Global North countries where academic resources are concentrated. However, obtaining these visas means facing high hurdles that involve administratively complex, exclusionary, and expensive application processes. In addition to rejection decisions that can appear arbitrary, this process itself can deter many scholars. Mobility barriers and visa challenges impede an individual’s academic endeavors. But beyond that, this epistemic exclusion (in)visibly shapes the academic community, determining whose voices are heard and what kind of knowledge is shared and taken seriously. We conceptualize this pattern, which has received scant attention in International Relations (IR), as a “global academic mobility divide.” We explain this divide’s systemic and institutional drivers as well as its personal effects by drawing on our own experiences with mobility barriers. In so doing, we call for a reflexive approach in IR to counteract apathy and the illusory sense of equality in academic practices and offer policy solutions to promote a more inclusive and equitable academic community."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/GUWVDDRQ"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
     tags: []
   - id: "GSYPSEG7"
     title: "Genetic–exposome interactions and aging clocks in dementia: the ReDLat2 initiative"
@@ -6432,6 +6452,26 @@ items:
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
+    tags: []
+  - id: "9Q9RG5SZ"
+    title: "Citizenship privilege harms science"
+    type: "webpage"
+    type_label: "Webpage"
+    family: "webpage"
+    family_label: "Web page"
+    creators: ""
+    year: ""
+    language: "Unknown"
+    publication: ""
+    url: "https://www.nature.com/articles/d41586-024-01080-x"
+    extra_url: ""
+    doi: ""
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/9Q9RG5SZ"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
     tags: []
   - id: "U67VXK8Y"
     title: "CoARA – Coalition for Advancing Research Assessment"

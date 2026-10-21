@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-20"
+generated: "2026-10-21"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 166
-public_count: 134
+total: 167
+public_count: 135
 
 people:
   - name: "Enes Abanoz"
@@ -202,6 +202,8 @@ people:
     affiliation: "Aristotle University of Thessaloniki"
   - name: "Gilles Pourtois"
     affiliation: "CAPLAB - Ghent University"
+  - name: "Valter Prpic"
+    affiliation: "eCampus University"
   - name: "Rodrigo Cáceres Robles"
     affiliation: "Universidad Nacional Mayor de San Marcos"
   - name: "Mary Anne Ryan"

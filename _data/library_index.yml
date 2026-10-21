@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-20"
-total: 350
+generated: "2026-10-21"
+total: 352
 curated_count: 12
-framework_count: 338
+framework_count: 340
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 338
+    count: 340
 
 sections:
   - slug: "educational"
@@ -33,16 +33,16 @@ sections:
     count: 88
   - slug: "responsibility"
     name: "Responsibility"
-    count: 120
+    count: 122
   - slug: "societal"
     name: "Societal and technological responsibility"
     count: 2
 
 types:
   - name: "Journal Article"
-    count: 210
+    count: 211
   - name: "Webpage"
-    count: 80
+    count: 81
   - name: "Preprint"
     count: 19
   - name: "Blog Post"
@@ -72,7 +72,7 @@ languages:
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 112
+    count: 114
 
 items:
   - id: "skoric-2026-cmpb"
@@ -665,6 +665,31 @@ items:
     featured: false
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
+    tags: []
+  - id: "GUWVDDRQ"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Forum: The Passports They Carry: Global South Scholars and the Global Academic Mobility Divide"
+    authors: "Ezgi Yildiz, Mert Cangönül, Yixian Sun, Juanita Uribe, Samer Sharani, Lembe Tiky, Kelebogile Zvobgo"
+    year: "2026"
+    venue: "International Studies Perspectives"
+    type_label: "Journal Article"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://doi.org/10.1093/isp/ekag007"
+    doi: "10.1093/isp/ekag007"
+    abstract: "Passport inequality is more than a simple logistical inconvenience; it is a fundamental injustice that undermines the ideals of fairness and equality that academia claims to support. Scholars from countries in the Global South often require visas for short-term research trips and conference travel in Global North countries where academic resources are concentrated. However, obtaining these visas means facing high hurdles that involve administratively complex, exclusionary, and expensive application processes. In addition to rejection decisions that can appear arbitrary, this process itself can deter many scholars. Mobility barriers and visa challenges impede an individual’s academic endeavors. But beyond that, this epistemic exclusion (in)visibly shapes the academic community, determining whose voices are heard and what kind of knowledge is shared and taken seriously. We conceptualize this pattern, which has received scant attention in International Relations (IR), as a “global academic mobility divide.” We explain this divide’s systemic and institutional drivers as well as its personal effects by drawing on our own experiences with mobility barriers. In so doing, we call for a reflexive approach in IR to counteract apathy and the illusory sense of equality in academic practices and offer policy solutions to promote a more inclusive and equitable academic community."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/GUWVDDRQ"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
     tags: []
   - id: "GSYPSEG7"
     collection: "framework"
@@ -8106,6 +8131,31 @@ items:
     featured: false
     sections: ["democratization"]
     section_titles: ["Democratization"]
+    tags: []
+  - id: "9Q9RG5SZ"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Citizenship privilege harms science"
+    authors: ""
+    year: ""
+    venue: ""
+    type_label: "Webpage"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/webpage.svg"
+    url: "https://www.nature.com/articles/d41586-024-01080-x"
+    doi: ""
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/9Q9RG5SZ"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
     tags: []
   - id: "U67VXK8Y"
     collection: "framework"
