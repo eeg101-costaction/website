@@ -1,4 +1,5 @@
 ---
+published: true
 title: Harmonising neonatal EEG preprocessing through an EEG101 Virtual Mobility
 card_title: Towards harmonised neonatal EEG preprocessing across clinical settings
 subtitle: Jovana Kljajic’s collaboration with neonatal EEG researchers in Novi Sad and Cork

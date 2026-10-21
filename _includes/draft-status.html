@@ -1,0 +1,5 @@
+{%- comment -%}The status line above each item on the drafts page (drafts.md).{%- endcomment -%}
+<div class="drafts__status">
+  {% if include.item.ready_for_review %}<span class="drafts__badge drafts__badge--review">Ready for review</span>{% else %}<span class="drafts__badge">Draft</span>{% endif %}
+  <a class="btn btn-outline-primary btn-sm" href="{{ include.item.edit_url | escape }}" target="_blank" rel="noopener">Open in the editor ↗</a>
+</div>

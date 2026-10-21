@@ -1,4 +1,5 @@
 ---
+published: true
 title: MC1 Meeting — Brussels
 start_date: "2025-09-24"
 end_date: "2025-09-24"

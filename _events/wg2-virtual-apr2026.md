@@ -1,4 +1,5 @@
 ---
+published: true
 title: First EEG101 WG2 Virtual Meeting
 start_date: "2026-04-13"
 end_date: "2026-04-13"

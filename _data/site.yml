@@ -33,6 +33,17 @@ logo_alt: "EEG101 COST Action logo"
 hero_video: "/assets/video/hero.mp4"
 hero_fallback: "/assets/images/hero-fallback.jpg"
 
+# Website drafts: when an Event, calendar date or Spotlight is marked "Ready for
+# review" in the editor, the content check opens a GitHub issue asking these
+# people to review it (see docs/staff-guide.md, "Drafts and review"). GitHub
+# emails someone it @mentions, so fill in each reviewer's GitHub username; until
+# then only people watching the repository's issues are emailed.
+content_reviewers:
+  - name: "Marie-Constance Corsi"
+    github: ""
+  - name: "Annalisa Pascarella"
+    github: ""
+
 # Google Analytics GA4
 ga_measurement_id: "G-CNKHMEVHS4"
 

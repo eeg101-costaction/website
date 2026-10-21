@@ -27,6 +27,7 @@ on:
       - "_events/**"
       - "_dates/**"
       - "_spotlights/**"
+      - "_data/site.yml"
       - "assets/images/events/**"
       - "assets/images/spotlights/**"
       - ".pages.yml"
@@ -98,10 +99,13 @@ jobs:
           # "no" is false. Rewrite the front matter so Jekyll reads what was typed.
           if [ "${#pages[@]}" -gt 0 ]; then node scripts/normalise_front_matter.cjs "${pages[@]}" | tee -a tidied.txt; fi
           if [ "${#pictures[@]}" -gt 0 ]; then python3 scripts/optimise_images.py "${pictures[@]}" | tee -a tidied.txt; fi
-          if ! git diff --quiet; then
+          # Drafts are left out of the site, so the drafts page reads copies of them.
+          python3 scripts/export_drafts.py | tee -a tidied.txt
+          if [ -n "$(git status --porcelain -- _events _dates _spotlights assets/images/events assets/images/spotlights _data/drafts.yml)" ]; then
             git config user.name "EEG101 content check"
             git config user.email "eeg101costaction@gmail.com"
             git add -u -- _events _dates _spotlights assets/images/events assets/images/spotlights
+            git add -- _data/drafts.yml
             git commit -m "Tidy content saved through the website editor" -m "$(grep -v '^::' tidied.txt || true)"
             bash scripts/push_to_main.sh
           else
@@ -126,6 +130,23 @@ jobs:
         with:
           source: ./
           destination: ./_site_check
+
+      - name: List drafts waiting for review
+        if: always()
+        continue-on-error: true
+        run: python3 scripts/export_drafts.py --review-json review.json
+
+      # Marking a draft "Ready for review" opens an issue that @mentions the
+      # reviewers in _data/site.yml (GitHub emails them); publishing it, unticking
+      # "Ready for review" or deleting it closes the issue.
+      - name: Open or close review requests
+        if: always()
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const run = require(`${process.env.GITHUB_WORKSPACE}/scripts/review_requests.cjs`);
+            await run({ github, context, core, file: 'review.json' });
 
       - name: Tell the admins
         if: always()

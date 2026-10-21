@@ -149,6 +149,11 @@ class EventBookingValidationTests(unittest.TestCase):
         self.assertEqual(VALIDATOR.clock("14:00"), "14:00")
         self.assertEqual(VALIDATOR.clock(""), "")
 
+    def test_only_an_explicit_tick_is_live(self):
+        """_config.yml makes every item a draft unless it says published: true."""
+        live, drafts = VALIDATOR.split_drafts([{"id": "a", "published": True}, {"id": "b", "published": False}, {"id": "c"}])
+        self.assertEqual(([i["id"] for i in live], [i["id"] for i in drafts]), (["a"], ["b", "c"]))
+
 
 if __name__ == "__main__":
     unittest.main()

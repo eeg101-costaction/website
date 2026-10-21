@@ -13,6 +13,8 @@ two can drift apart without anyone noticing:
   * an existing item the editor would refuse to save (a value that fails its
     field's pattern or length limit, or a required field left empty), so staff
     opening it to change something else would be stuck;
+  * a collection without the "Published on the website" tick, or one where new
+    items would start out published instead of as drafts;
   * media folders, collection paths and components that do not exist, or media
     that accept files other than the picture types the site tidies up.
 """
@@ -57,8 +59,14 @@ def main() -> int:
     if config.get("settings", {}).get("content", {}).get("merge") is not True:
         problems.append("settings.content.merge must be true, or saving would delete undeclared fields.")
 
+    site_config = yaml.safe_load((ROOT / "_config.yml").read_text())
+    draft_by_default = {d["scope"].get("type") for d in site_config.get("defaults", [])
+                        if (d.get("values") or {}).get("published") is False}
+
     for entry in config["content"]:
         name = entry["name"]
+        if name not in draft_by_default:
+            problems.append(f"{name}: _config.yml must default these items to published: false, so a file without the tick stays a draft.")
         directory = ROOT / entry["path"]
         if not directory.is_dir():
             problems.append(f"{name}: collection folder {entry['path']} does not exist.")
@@ -75,6 +83,12 @@ def main() -> int:
             if spec.get("type") == "image" and (spec.get("options") or {}).get("media") not in media:
                 problems.append(f"{name}.{spec['name']}: image field without a known media source.")
             fields[spec["name"]] = spec
+
+        # Drafts: an item is live only with published: true (see _config.yml), so
+        # the editor must offer that tick and start every new item unticked.
+        pub = fields.get("published")
+        if not pub or pub.get("type") != "boolean" or pub.get("default") is not False:
+            problems.append(f"{name}: must offer 'published' as a tick box that starts unticked (default: false), so new items begin as drafts.")
 
         items, errors = load_items(directory)
         problems += errors

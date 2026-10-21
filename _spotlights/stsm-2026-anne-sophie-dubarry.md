@@ -1,4 +1,5 @@
 ---
+published: true
 title: Coordination and data harmonisation through an EEG101 STSM
 card_title: Strengthening coordination and data harmonisation through an EEG101 STSM
 subtitle: Anne-Sophie Dubarry’s Short-Term Scientific Mission at the University of Leeds

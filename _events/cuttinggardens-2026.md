@@ -1,4 +1,5 @@
 ---
+published: true
 title: CuttingGardens 2026 — EEG and MEG Methods Multi-Hub Meeting
 start_date: "2026-09-21"
 end_date: "2026-09-25"

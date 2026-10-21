@@ -9,7 +9,8 @@ in a GitHub repository. The staff guide is [`staff-guide.md`](staff-guide.md).
 - Content lives in this repository, one file per item: `_events/`, `_dates/`,
   `_spotlights/`. The forms staff see are defined in `.pages.yml`.
 - **Save commits straight to `main`**, and GitHub Pages rebuilds the site within
-  a couple of minutes. There are no drafts.
+  a couple of minutes. An item is on the site only once **Published on the
+  website** is ticked; until then it is a draft (see "Drafts and review" below).
 - Staff do **not** need GitHub accounts. They are invited by email and sign in
   with a 6-digit emailed code. Only admins with GitHub accounts can invite or
   remove people, or change `.pages.yml`.
@@ -62,6 +63,27 @@ person.
 6. **Invite staff:** in Pages CMS open **Collaborators** for the repository and
    add each person's email address. Send them `docs/staff-guide.md`. Remove
    people from the same screen when they leave.
+
+## Drafts and review
+
+- Every item has **Published on the website** (`published`) and **Ready for
+  review** (`ready_for_review`) ticks. `_config.yml` defaults all three
+  collections to `published: false`, so an item is live only when its file says
+  `published: true`: a new item, or a file missing the field, stays a draft.
+  Jekyll leaves drafts out of the site completely (pages, lists, calendar,
+  booking data, sitemap).
+- Drafts are shown at **/drafts/** (`drafts.md`, unlinked, `noindex`). Because
+  Jekyll does not build drafts, the content check copies them into
+  `_data/drafts.yml` after every save (`scripts/export_drafts.py`); the page
+  renders them with the live templates.
+- Ticking **Ready for review** opens a GitHub issue labelled
+  **ready-for-review** (`scripts/review_requests.cjs`) that @mentions the people
+  in `content_reviewers` in `_data/site.yml`. GitHub emails people it mentions,
+  so each reviewer needs a (free) GitHub account and their username filled in
+  there. Publishing the item, unticking Ready for review or deleting it closes
+  the issue.
+- Limits: the editor has no roles, so anyone invited can publish; review is a
+  team rule. Drafts are public in the repository.
 
 ## Day to day
 

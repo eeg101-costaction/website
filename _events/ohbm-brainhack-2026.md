@@ -1,4 +1,5 @@
 ---
+published: true
 title: EEG101 at OHBM Brainhack 2026
 start_date: "2026-06-12"
 end_date: "2026-06-13"

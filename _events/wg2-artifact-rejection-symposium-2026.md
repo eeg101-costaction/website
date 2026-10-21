@@ -1,4 +1,5 @@
 ---
+published: true
 title: Second WG2 Virtual Symposium — EEG Artifact Rejection, Cleaning and Reproducible Preprocessing
 start_date: "2026-09-03"
 end_date: "2026-09-03"

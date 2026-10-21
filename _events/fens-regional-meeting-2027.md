@@ -1,4 +1,5 @@
 ---
+published: true
 external: true
 title: FENS Regional Meeting 2027
 start_date: "2027-05-26"

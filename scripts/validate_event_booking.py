@@ -275,6 +275,15 @@ def validate_spotlights(spotlights: list[dict]) -> list[str]:
     return errors
 
 
+def is_published(item: dict) -> bool:
+    """Only `published: true` is live: _config.yml makes every other item a draft."""
+    return item.get("published") is True
+
+
+def split_drafts(items: list[dict]) -> tuple[list[dict], list[dict]]:
+    return [i for i in items if is_published(i)], [i for i in items if not is_published(i)]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT, help="repository root (for tests)")
@@ -284,16 +293,31 @@ def main() -> int:
     dates, date_errors = load_items(args.root / "_dates")
     spotlights, spot_errors = load_items(args.root / "_spotlights")
     errors += date_errors + spot_errors
-    errors += validate(events, site)
-    errors += validate_dates(dates)
-    errors += validate_spotlights(spotlights)
-    for note in advisories(events):
+    # Drafts are not on the site, so a problem in one is a note for whoever is
+    # writing it, not a failure. Ids must still be unique across drafts and live
+    # items (a draft becomes live under its id), so events are checked together.
+    live_events, draft_events = split_drafts(events)
+    live_dates, draft_dates = split_drafts(dates)
+    live_spotlights, draft_spotlights = split_drafts(spotlights)
+    draft_ids = {e["id"] for e in draft_events}
+    for error in validate(events, site):
+        if any(f"event {i!r}" in error for i in draft_ids):
+            print(f"::warning::Draft (not live yet): {error}")
+        else:
+            errors.append(error)
+    errors += validate_dates(live_dates)
+    errors += validate_spotlights(live_spotlights)
+    for error in validate_dates(draft_dates) + validate_spotlights(draft_spotlights):
+        print(f"::warning::Draft (not live yet): {error}")
+    for note in advisories(live_events):
         print(f"::warning::{note}")
     if errors:
         print("Content validation failed:")
         print("\n".join(f"- {error}" for error in errors))
         return 1
-    print(f"Content validation passed: {len(events)} events, {len(dates)} other dates, {len(spotlights)} Spotlights.")
+    drafts = len(draft_events) + len(draft_dates) + len(draft_spotlights)
+    print(f"Content validation passed: {len(live_events)} events, {len(live_dates)} other dates, "
+          f"{len(live_spotlights)} Spotlights live; {drafts} draft{'s' if drafts != 1 else ''}.")
     return 0
 
 

@@ -2,8 +2,9 @@
 #
 # Staff sign in with an emailed code (no GitHub account needed) and edit Events,
 # other calendar dates and Spotlights through the forms below. Pressing Save
-# publishes: the change is committed to main and the site rebuilds in a minute
-# or two. Setup, inviting people, and what to do when a check fails are in
+# commits the change to main and the site rebuilds in a minute or two; an item
+# is only on the site once "Published on the website" is ticked (drafts are
+# shown at /drafts/ for review). Setup, inviting people, and what to do when a check fails are in
 # docs/pages-cms-setup.md; the staff guide is docs/staff-guide.md.
 #
 # Every description below is shown under its field in the editor, so it is
@@ -36,6 +37,17 @@ media:
     rename: safe
 
 components:
+  # Every item starts as a draft. See docs/staff-guide.md, "Drafts and review".
+  published:
+    type: boolean
+    label: Published on the website
+    default: false
+    description: "Leave unticked while you work on it: it stays a draft, shown only on the drafts page (www.eeg101.eu/drafts/), and you can come back and keep editing. Tick it only once it has been reviewed; saving then puts it live."
+  ready_for_review:
+    type: boolean
+    label: Ready for review
+    default: false
+    description: "Tick when the draft is finished. Marie-Constance and Annalisa are emailed to review it on the drafts page."
   clock:
     type: string
     pattern:
@@ -74,7 +86,7 @@ content:
     operations:
       rename: false
     view:
-      fields: [title, start_date, category]
+      fields: [title, start_date, category, published]
       primary: title
       sort: [start_date, title]
       search: [title, location, summary]
@@ -82,6 +94,8 @@ content:
         sort: start_date
         order: desc
     fields:
+      - { name: published, component: published }
+      - { name: ready_for_review, component: ready_for_review }
       - name: title
         label: Title
         type: string
@@ -240,13 +254,15 @@ content:
     operations:
       rename: false
     view:
-      fields: [title, kind, start_date]
+      fields: [title, kind, start_date, published]
       primary: title
       sort: [start_date, title]
       default:
         sort: start_date
         order: desc
     fields:
+      - { name: published, component: published }
+      - { name: ready_for_review, component: ready_for_review }
       - name: title
         label: Title
         type: string
@@ -313,7 +329,7 @@ content:
     operations:
       rename: false
     view:
-      fields: [title, date, featured]
+      fields: [title, date, featured, published]
       primary: title
       sort: [date, title]
       search: [title, card_title, summary]
@@ -321,6 +337,8 @@ content:
         sort: date
         order: desc
     fields:
+      - { name: published, component: published }
+      - { name: ready_for_review, component: ready_for_review }
       - name: title
         label: Page title
         type: string

@@ -1,0 +1,119 @@
+{%- comment -%}
+  One Spotlight, laid out from the fields edited in Pages CMS (_spotlights/*.md).
+  Used by _layouts/spotlight.html for the page itself (item=page) and by the
+  drafts page to preview a Spotlight that is not live yet.
+  Reproduces the two hand-written pages this replaced: the same sections, classes
+  and order. Section shading alternates, so it is counted rather than hard-coded.
+
+  Everything here is typed by staff in the editor, so plain text is escaped and
+  section text is escaped before markdownify: markdown works, HTML does not.
+{%- endcomment -%}
+{%- assign s = include.item -%}
+{%- assign card_title = s.card_title | default: s.title -%}
+{%- assign has_enabled_text = false -%}{%- if s.enabled.text and s.enabled.text != "" -%}{%- assign has_enabled_text = true -%}{%- endif -%}
+{%- assign has_figures = false -%}{%- if s.figures and s.figures.size > 0 -%}{%- assign has_figures = true -%}{%- endif -%}
+{%- assign has_people = false -%}{%- if s.collaborators and s.collaborators.size > 0 -%}{%- assign has_people = true -%}{%- endif -%}
+{%- assign has_outcomes = false -%}{%- if s.outcomes and s.outcomes.size > 0 -%}{%- assign has_outcomes = true -%}{%- endif -%}
+{%- assign has_why = false -%}{%- if s.why.text and s.why.text != "" -%}{%- assign has_why = true -%}{%- endif -%}
+{%- assign has_next = false -%}{%- if s.whats_next.text and s.whats_next.text != "" -%}{%- assign has_next = true -%}{%- endif -%}{%- if s.follow_up and s.follow_up.size > 0 -%}{%- assign has_next = true -%}{%- endif -%}
+{%- assign has_section2 = false -%}{%- if has_enabled_text or has_outcomes or has_people -%}{%- assign has_section2 = true -%}{%- endif -%}
+{%- assign people_heading = s.people_heading | default: "People and places" | escape -%}
+{%- comment -%}With a narrative under "What it enabled", the people list moves to its own section.{%- endcomment -%}
+{%- assign extra_section = false -%}{%- if has_figures or has_enabled_text and has_people -%}{%- assign extra_section = true -%}{%- endif -%}
+
+<article class="spotlight-detail">
+  <a class="spotlight-detail__back" href="{{ '/spotlight/' | relative_url }}"><span aria-hidden="true">←</span> All Spotlights</a>
+
+  <figure class="spotlight-detail__figure">
+    <img src="{{ s.image | relative_url | escape }}" alt="{{ s.image_alt | escape }}">
+    {% if s.image_caption and s.image_caption != "" %}<figcaption>{{ s.image_caption | escape }}</figcaption>{% endif %}
+  </figure>
+
+  <div class="spotlight-detail__overview">
+    <div>
+      <p class="spotlight-detail__eyebrow">{{ s.type | escape }}</p>
+      <h2>{{ card_title | escape }}</h2>
+      <p class="spotlight-detail__lead">{{ s.summary | escape }}</p>
+    </div>
+    <dl class="spotlight-detail__facts">
+      {% if s.date_range and s.date_range != "" %}<div><dt>When</dt><dd>{{ s.date_range | escape }}</dd></div>{% endif %}
+      {% if s.location and s.location != "" %}<div><dt>Where</dt><dd>{{ s.location | escape }}</dd></div>{% endif %}
+      {% if s.host_institution and s.host_institution != "" %}<div><dt>Host</dt><dd>{{ s.host_institution | escape }}</dd></div>{% endif %}
+      {% if s.working_groups and s.working_groups.size > 0 %}<div><dt>Working Group{% if s.working_groups.size > 1 %}s{% endif %}</dt><dd>{% for wg in s.working_groups %}{{ wg | escape }}{% unless forloop.last %}, {% endunless %}{% endfor %}</dd></div>{% endif %}
+    </dl>
+  </div>
+  {%- comment -%}Sections alternate plain / shaded in the order they appear.{%- endcomment -%}
+  {%- assign section_n = 0 %}
+
+  {% if has_why %}
+  <section class="spotlight-detail__section{% assign section_odd = section_n | modulo: 2 %}{% if section_odd == 1 %} spotlight-detail__section--alt{% endif %}">
+    <p class="spotlight-detail__section-label">{{ s.why.label | default: "Why this mattered" | escape }}</p>
+    {% if s.why.heading and s.why.heading != "" %}<h2>{{ s.why.heading | escape }}</h2>{% endif %}
+    {{ s.why.text | escape | markdownify | replace: 'href="javascript:', 'href="#' }}
+  </section>
+  {% assign section_n = section_n | plus: 1 %}{% endif %}
+
+  {% if has_section2 %}
+  <section class="spotlight-detail__section{% assign section_odd = section_n | modulo: 2 %}{% if section_odd == 1 %} spotlight-detail__section--alt{% endif %}">
+    <p class="spotlight-detail__section-label">{{ s.enabled.label | default: "What it enabled" | escape }}</p>
+    <div class="spotlight-detail__columns">
+      {% if has_enabled_text %}
+      <div>
+        {% if s.enabled.heading and s.enabled.heading != "" %}<h2>{{ s.enabled.heading | escape }}</h2>{% endif %}
+        {{ s.enabled.text | escape | markdownify | replace: 'href="javascript:', 'href="#' }}
+      </div>
+      {% endif %}
+      {% if has_outcomes %}
+      <div>
+        <h2>Key outcomes</h2>
+        <ul>{% for outcome in s.outcomes %}<li>{{ outcome | escape }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+      {% unless has_enabled_text %}{% if has_people %}
+      <div>
+        <h2>{{ people_heading }}</h2>
+        <ul>{% for collaborator in s.collaborators %}<li>{{ collaborator | escape }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}{% endunless %}
+    </div>
+  </section>
+  {% assign section_n = section_n | plus: 1 %}{% endif %}
+
+  {% if extra_section %}
+  <section class="spotlight-detail__section{% assign section_odd = section_n | modulo: 2 %}{% if section_odd == 1 %} spotlight-detail__section--alt{% endif %}">
+    {% if has_figures and s.figures_label and s.figures_label != "" %}<p class="spotlight-detail__section-label">{{ s.figures_label | escape }}</p>{% endif %}
+    {% for figure in s.figures %}
+    {% if figure.heading and figure.heading != "" %}<h2>{{ figure.heading | escape }}</h2>{% endif %}
+    {% if figure.image and figure.image != "" %}
+    <figure class="spotlight-detail__figure spotlight-detail__figure--wide">
+      <img src="{{ figure.image | relative_url | escape }}" alt="{{ figure.alt | escape }}">
+      {% if figure.caption and figure.caption != "" %}<figcaption>{{ figure.caption | escape }}</figcaption>{% endif %}
+    </figure>
+    {% endif %}
+    {% endfor %}
+    {% if has_enabled_text and has_people %}
+    <p class="spotlight-detail__section-label">{{ s.people_label | default: "People and places" | escape }}</p>
+    <h2>{{ people_heading }}</h2>
+    <ul class="spotlight-detail__follow-up">{% for collaborator in s.collaborators %}<li>{{ collaborator | escape }}</li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+  {% assign section_n = section_n | plus: 1 %}{% endif %}
+
+  {% if has_next %}
+  <section class="spotlight-detail__section{% assign section_odd = section_n | modulo: 2 %}{% if section_odd == 1 %} spotlight-detail__section--alt{% endif %}">
+    <p class="spotlight-detail__section-label">{{ s.whats_next.label | default: "What comes next" | escape }}</p>
+    {% if s.whats_next.heading and s.whats_next.heading != "" %}<h2>{{ s.whats_next.heading | escape }}</h2>{% endif %}
+    {{ s.whats_next.text | escape | markdownify | replace: 'href="javascript:', 'href="#' }}
+    <ul class="spotlight-detail__follow-up">{% for item in s.follow_up %}<li>{{ item | escape }}</li>{% endfor %}</ul>
+  </section>
+  {% endif %}
+
+  {% if s.links and s.links.size > 0 %}
+  <section class="spotlight-detail__links" aria-label="Related EEG101 resources">
+    <p class="spotlight-detail__section-label">Explore further</p>
+    <div class="spotlight-detail__link-list">{% for link in s.links %}{% capture link_url %}{% include safe-url.html url=link.url %}{% endcapture %}{% if link_url != "" %}<a class="btn btn-outline-primary" href="{{ link_url | relative_url | escape }}">{{ link.label | escape }} <span aria-hidden="true">→</span></a>{% endif %}{% endfor %}</div>
+  </section>
+  {% endif %}
+
+  {% if s.acknowledgement and s.acknowledgement != "" %}<p class="spotlight-detail__acknowledgement">{{ s.acknowledgement | escape }}</p>{% endif %}
+</article>

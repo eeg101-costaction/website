@@ -1,4 +1,5 @@
 ---
+published: true
 short_name: Diversity in EEG populations
 audience: open
 joining_link: ""

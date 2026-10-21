@@ -1,4 +1,5 @@
 ---
+published: true
 title: New Grant Budget Period
 kind: Call
 start_date: "2026-11-01"

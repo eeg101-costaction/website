@@ -1,4 +1,5 @@
 ---
+published: true
 title: Funding Round 2 Opening Shortly
 start_date: "2026-06-01"
 end_date: "2026-06-01"

@@ -1,4 +1,5 @@
 ---
+published: true
 title: "Funding Round 1: Application Window Closed"
 start_date: "2026-04-03"
 end_date: "2026-04-03"

@@ -1,4 +1,5 @@
 ---
+published: true
 short_name: ARTEM-IS Demo
 audience: open
 joining_link: https://teams.live.com/meet/9310146859214?p=IoPPti3RIwIotDmUiE

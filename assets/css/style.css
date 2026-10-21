@@ -3326,3 +3326,51 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
   align-self: flex-start;
 }
 .podcast-library { border-top: 1px solid var(--color-border); margin-top: 3rem; padding-top: 3rem; }
+
+/* --- Drafts page (/drafts/) --- */
+.drafts__intro {
+  background: var(--color-gold-light);
+  border-left: 4px solid var(--color-gold);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  font-family: var(--font-ui);
+  font-size: 0.95rem;
+}
+.drafts__intro p:last-child { margin-bottom: 0; }
+.drafts__empty { font-family: var(--font-ui); color: var(--color-text-muted); }
+.drafts__heading { margin-top: 2.5rem; }
+.drafts__note { font-family: var(--font-ui); font-size: 0.85rem; color: var(--color-text-muted); margin: 1rem 0 0.5rem; }
+.drafts__item { padding: 1.5rem 0 2rem; border-bottom: 1px solid var(--color-border); }
+.drafts__status { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+.drafts__badge {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--color-bg-alt);
+  color: var(--color-text-muted);
+}
+.drafts__badge--review { background: #dcfce7; color: #15803d; }
+.drafts__date-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  max-width: 28rem;
+}
+.drafts__page {
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  background: var(--color-bg);
+}
+.drafts__page-hero { margin-bottom: 1.5rem; }
+.drafts__page-hero .page-hero__title { font-family: var(--font-heading); font-size: var(--step-4); font-weight: 700; line-height: 1.15; margin: 0.25rem 0 0.5rem; }
+/* Booking and sharing do not work for an event that is not live yet. */
+.drafts [data-event-booking],
+.drafts [data-event-members],
+.drafts .event-share { pointer-events: none; opacity: 0.6; }

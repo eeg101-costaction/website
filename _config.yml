@@ -35,21 +35,29 @@ defaults:
   # Content edited in Pages CMS (.pages.yml) lives in three collections, one file
   # per item. The path-wide default above would otherwise give an event or date
   # with no picture the social-sharing image instead of the card placeholder.
+  #
+  # published: false makes every item a draft unless its file says
+  # `published: true` (the editor's "Published on the website" tick). Drafts are
+  # left out of the site entirely and shown only at /drafts/ for review. Failing
+  # closed matters: a file that somehow lacks the field stays off the site.
   - scope:
       path: ""
       type: events
     values:
       image: ""
+      published: false
   - scope:
       path: ""
       type: dates
     values:
       image: ""
+      published: false
   - scope:
       path: ""
       type: spotlights
     values:
       layout: spotlight
+      published: false
 
 # A Spotlight's date is when the story finishes, which can be ahead of today for
 # one still running. GitHub Pages leaves future-dated items out of the site

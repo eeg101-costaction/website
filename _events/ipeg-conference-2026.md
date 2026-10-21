@@ -1,4 +1,5 @@
 ---
+published: true
 external: true
 title: 2026 International PharmacoEEG (IPEG) Conference
 start_date: "2026-11-16"
