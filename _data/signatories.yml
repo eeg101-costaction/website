@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-22"
+generated: "2026-10-23"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 167
-public_count: 135
+total: 168
+public_count: 136
 
 people:
   - name: "Enes Abanoz"
@@ -228,6 +228,8 @@ people:
     affiliation: "Laboratory for Neurocognition and Applied Cognition, Faculty of Philosophy, University of Belgrade"
   - name: "Misko Subotic"
     affiliation: "Cognitive Neuroscience Department, Research and Development Institute \"Life Activities Advancement Institute\", Belgrade, Serbia"
+  - name: "Sredha S Sunil"
+    affiliation: "BITS Pilani K K Birla Goa Campus"
   - name: "havva nur taş"
     affiliation: "Bartın University"
   - name: "Sema Nur Albayrak Taştemir"

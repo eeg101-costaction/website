@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-22"
-total: 352
+generated: "2026-10-23"
+total: 353
 curated_count: 12
-framework_count: 340
+framework_count: 341
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 340
+    count: 341
 
 sections:
   - slug: "educational"
@@ -30,17 +30,17 @@ sections:
     count: 24
   - slug: "democratization"
     name: "Democratization"
-    count: 88
+    count: 90
   - slug: "responsibility"
     name: "Responsibility"
-    count: 122
+    count: 121
   - slug: "societal"
     name: "Societal and technological responsibility"
     count: 2
 
 types:
   - name: "Journal Article"
-    count: 211
+    count: 212
   - name: "Webpage"
     count: 81
   - name: "Preprint"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 232
+    count: 233
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -688,8 +688,8 @@ items:
     pdf: ""
     theme: ""
     featured: false
-    sections: ["responsibility"]
-    section_titles: ["Responsibility"]
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
     tags: []
   - id: "GSYPSEG7"
     collection: "framework"
@@ -719,6 +719,31 @@ items:
       - "Biomarkers"
       - "Computational neuroscience"
       - "Dementia"
+  - id: "BE4MVW8S"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Higher education predicts global cultural similarity to WEIRD countries"
+    authors: "Cindel J. M. White, Michael Muthukrishna"
+    year: "2026"
+    venue: "Nature Communications"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.nature.com/articles/s41467-026-70404-4"
+    doi: "10.1038/s41467-026-70404-4"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/BE4MVW8S"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags: []
   - id: "P254MB4L"
     collection: "framework"
     collection_label: "Community Framework"

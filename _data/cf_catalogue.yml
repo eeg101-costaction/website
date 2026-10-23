@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-22"
+generated: "2026-10-23"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 340
+item_count: 341
 
 sections:
   - slug: "educational"
@@ -28,12 +28,12 @@ sections:
     title: "Democratization"
     anchor: "cf-democratization"
     part: 2
-    count: 88
+    count: 90
   - slug: "responsibility"
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 122
+    count: 121
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 199
+    count: 200
   - name: "Webpage"
     count: 81
   - name: "Preprint"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 220
+    count: 221
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 238
+    count: 239
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -303,9 +303,9 @@ items:
     abstract: "Passport inequality is more than a simple logistical inconvenience; it is a fundamental injustice that undermines the ideals of fairness and equality that academia claims to support. Scholars from countries in the Global South often require visas for short-term research trips and conference travel in Global North countries where academic resources are concentrated. However, obtaining these visas means facing high hurdles that involve administratively complex, exclusionary, and expensive application processes. In addition to rejection decisions that can appear arbitrary, this process itself can deter many scholars. Mobility barriers and visa challenges impede an individual’s academic endeavors. But beyond that, this epistemic exclusion (in)visibly shapes the academic community, determining whose voices are heard and what kind of knowledge is shared and taken seriously. We conceptualize this pattern, which has received scant attention in International Relations (IR), as a “global academic mobility divide.” We explain this divide’s systemic and institutional drivers as well as its personal effects by drawing on our own experiences with mobility barriers. In so doing, we call for a reflexive approach in IR to counteract apathy and the illusory sense of equality in academic practices and offer policy solutions to promote a more inclusive and equitable academic community."
     video_id: ""
     zotero_url: "https://www.zotero.org/groups/5794905/items/GUWVDDRQ"
-    sections: ["responsibility"]
-    section_titles: ["Responsibility"]
-    parts: [3]
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
     tags: []
   - id: "GSYPSEG7"
     title: "Genetic–exposome interactions and aging clocks in dementia: the ReDLat2 initiative"
@@ -330,6 +330,26 @@ items:
       - "Biomarkers"
       - "Computational neuroscience"
       - "Dementia"
+  - id: "BE4MVW8S"
+    title: "Higher education predicts global cultural similarity to WEIRD countries"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Cindel J. M. White, Michael Muthukrishna"
+    year: "2026"
+    language: "English"
+    publication: "Nature Communications"
+    url: "https://www.nature.com/articles/s41467-026-70404-4"
+    extra_url: ""
+    doi: "10.1038/s41467-026-70404-4"
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/BE4MVW8S"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags: []
   - id: "P254MB4L"
     title: "Inclusive electroencephalography practices for Black and Muslim participation in a White non-Muslim-majority country: A co-produced tutorial"
     type: "journalArticle"
