@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-10-22T10:11:57+00:00",
+  "generated_at": "2026-10-23T10:04:58+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 10,
+  "pending_count": 11,
   "members": [
     {
       "name": "Quynh Trinh Nguyen",
@@ -25,6 +25,19 @@
       "email": "anastasiia.tsei [at] unifr [dot] ch",
       "homepage": "https://www.verein-sonze.de/en/proekti/iz-sonczem-u-kozhnomu-serczi/anastasiya-czej/; https://www.institut-waldorf.de/institut/mitarbeiter-institut/alle-mitarbeiterinnen-und-mitarbeiter/mitarbeiter/show/anastasiia-tsei-m-sc/",
       "orcid": ""
+    },
+    {
+      "name": "Dejan Karadaglic",
+      "affiliation": "Fondacija za promovisanje nauke \"PRONA\"",
+      "country": "Montenegro",
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ],
+      "email": "dejan.karadaglic [at] gmail [dot] com",
+      "homepage": "https://www.ucg.ac.me/radnik/901196-dejan-karadaglic",
+      "orcid": "0000-0002-5549-3055"
     },
     {
       "name": "Zoltan Juhasz",
