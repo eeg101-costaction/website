@@ -7,7 +7,7 @@ featured: false
 type: Mobility and exchange
 status: Completed
 date_range: 12-18 April 2026
-date: 2026-10-25
+date: "2026-10-25"
 image: /assets/images/spotlights/screenshot-2026-10-25-at-114106.png
 image_alt: test
 summary: |-

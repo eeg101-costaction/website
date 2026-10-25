@@ -8,4 +8,32 @@ dates:
   start_date: '2026-10-25'
   id: test-event-draft-2026-10-25
   edit_url: https://app.pagescms.org/eeg101-costaction/website/main/collection/dates/edit/_dates%2Ftest-event-draft-2026-10-25.md
-spotlights: []
+spotlights:
+- ready_for_review: true
+  title: Test spotlight
+  subtitle: Testing CMS
+  featured: false
+  type: Mobility and exchange
+  status: Completed
+  date_range: 12-18 April 2026
+  date: '2026-10-25'
+  image: /assets/images/spotlights/screenshot-2026-10-25-at-114106.png
+  image_alt: test
+  summary: 'gyevs s
+
+
+    sghsjbjkss
+
+
+    s jsbs'
+  why:
+    label: Why this mattered
+  enabled:
+    label: What it enabled
+  people_heading: People and places
+  whats_next:
+    label: What comes next
+  acknowledgement: This activity was supported through an EEG101 grant under COST Action CA24148.
+  id: test-spotlight
+  edit_url: https://app.pagescms.org/eeg101-costaction/website/main/collection/spotlights/edit/_spotlights%2Ftest-spotlight.md
+  url: /drafts/#spotlights-test-spotlight
