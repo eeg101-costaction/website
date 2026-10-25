@@ -250,9 +250,26 @@ def main() -> int:
     try:
         generate_stats(args.input, args.output)
     except Exception as exc:
-        print(f"Stats generation failed: {exc}", file=sys.stderr)
+        # As a GitHub annotation, so the reason shows on the run's summary page
+        # and in the failure email, not only in the downloadable log.
+        print(f"::error::Member statistics failed: {type(exc).__name__}: {exc} ({describe_file(args.input)})", flush=True)
         return 1
     return 0
+
+
+def describe_file(path: Path) -> str:
+    """What the downloaded export actually is, without printing any member data."""
+    import zipfile
+    if not path.exists():
+        return "the export file is missing"
+    size = path.stat().st_size
+    if zipfile.is_zipfile(path):
+        return f"the export is a {size:,}-byte Excel/zip file"
+    head = path.read_bytes()[:200].lstrip()
+    kind = ("an HTML page, probably an eCOST error or login page" if head[:1] == b"<"
+            else "plain text, probably CSV" if b"," in head or b";" in head
+            else "not an Excel file")
+    return f"the export is {size:,} bytes of {kind}"
 
 
 if __name__ == "__main__":
