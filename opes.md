@@ -19,23 +19,22 @@ OPES aims to develop:
 
 ---
 
-**How can you collaborate?**
-{: .fs-4 }
+## How can you collaborate?
 
-## 1: Expert survey
+### 1: Expert survey
 
 {::nomarkdown}
 <div class="row g-3 my-4">
   <div class="col-12 col-md-8">
     <div class="wg-detail-card">
       <p>The first phase gathers researchers’ views on EEG methods and analytical practices. If you are an EEG researcher and have not yet completed the survey, please take part and share it with your network.</p>
-      <a href="https://shorturl.at/ikvFV" class="btn btn-primary" target="_blank" rel="noopener">Complete the expert survey</a>
+      <a href="https://forms.gle/LFfvhA95jjqkJ5z1A" class="btn btn-primary" target="_blank" rel="noopener">Complete the expert survey ↗</a>
     </div>
   </div>
   <div class="col-12 col-md-4">
     <div class="wg-detail-card text-center">
-      <a href="https://shorturl.at/ikvFV" target="_blank" rel="noopener">
-        <img src="{{ '/assets/images/qr_opes.png' | relative_url }}" alt="QR code for the OPES expert survey" width="208" class="img-fluid">
+      <a href="https://forms.gle/LFfvhA95jjqkJ5z1A" target="_blank" rel="noopener" tabindex="-1">
+        <img src="{{ '/assets/images/activities/opes-qr.png' | relative_url }}" alt="QR code for the OPES expert survey" width="208" height="208" class="img-fluid">
       </a>
       <p class="small mt-2 mb-0">OR scan to open the expert survey</p>
     </div>
@@ -45,7 +44,7 @@ OPES aims to develop:
 
 ---
 
-## 2: EEG datasets
+### 2: EEG datasets
 
 The second phase brings together resting-state EEG recordings from healthy adults across laboratories. The datasets will be used to compare procedures at key stages of EEG processing, including:
 
@@ -55,7 +54,7 @@ The second phase brings together resting-state EEG recordings from healthy adult
 - Estimation of cortical source activity and functional connectivity
 - Harmonisation across electrode montages and recording systems
 
-### We are interested in datasets with:
+#### We are interested in datasets with:
 
 - Healthy adults aged 18–60
 - Both sexes represented
@@ -76,5 +75,9 @@ Recordings from different laboratories are welcome.
 
 - [IFCN Special Interest Group on Advanced EEG-MEG Techniques in Clinical Neurophysiology](https://www.ifcn.info/get-involved/special-interest-groups/advanced-eeg-meg-techniques-in-clinical-neurophysiology) — Prof Claudio Babiloni
 - [COST Action EEG101](https://www.cost.eu/actions/CA24148/) — Action Chair Prof Faisal Mushtaq
-- [Latin America and the Caribbean Consortium on Dementia (LAC-CD)](https://lac-cd.org/) — Prof Agustín Ibáñez
+- Latin America and the Caribbean Consortium on Dementia (LAC-CD) — Prof Agustín Ibáñez
 - [Global Brain Consortium](https://globalbrainconsortium.org/) — Chairs Prof Alan Evans and Prof Pedro Valdés-Sosa
+
+{::nomarkdown}
+<p class="mt-5"><a href="{{ '/working-groups/#activities-and-community-programmes' | relative_url }}" class="btn btn-outline-primary">← Back to Our Work</a></p>
+{:/nomarkdown}
