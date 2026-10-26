@@ -3,11 +3,11 @@
 events: []
 dates:
 - ready_for_review: true
-  title: Test Event Draftfrvddc
+  title: Testing
   kind: Deadline
-  start_date: '2026-10-25'
-  id: test-event-draft-2026-10-25
-  edit_url: https://app.pagescms.org/eeg101-costaction/website/main/collection/dates/edit/_dates%2Ftest-event-draft-2026-10-25.md
+  start_date: '2026-10-26'
+  id: testing-2026-10-26
+  edit_url: https://app.pagescms.org/eeg101-costaction/website/main/collection/dates/edit/_dates%2Ftesting-2026-10-26.md
 spotlights:
 - ready_for_review: true
   title: Test spotlight
