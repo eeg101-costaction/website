@@ -21,13 +21,16 @@
  * in _data/site.yml, function sendReviewRequest), which keeps their addresses
  * private. It needs the EEG101_REVIEW_TOKEN Actions secret (passed in as
  * REVIEW_EMAIL_TOKEN); without it, or if sending fails, the issue still opens
- * and says so.
+ * and says so once, and every later run tries the email again until it goes
+ * through (hidden markers in the issue body record what has been sent).
  */
 const fs = require('fs');
 
 const LABEL = 'ready-for-review';
 const marker = key => `<!-- review:${key} -->`;
 const keyOf = body => ((body || '').match(/<!-- review:(\S+) -->/) || [])[1];
+const EMAILED = '<!-- emailed -->';
+const EMAIL_FAILED = '<!-- email-failed -->';
 const KIND = { events: 'Event', dates: 'Calendar date', spotlights: 'Spotlight' };
 
 function requestBody(item, reviewers) {
@@ -68,13 +71,27 @@ module.exports = async function run({ github, context, core, file = 'review.json
   if (!fs.existsSync(file)) { core.info('No review list; nothing to do.'); return; }
   const { reviewers = [], items = [], email_endpoint: endpoint = '' } = JSON.parse(fs.readFileSync(file, 'utf8'));
   const repo = context.repo;
-  const notify = async (kind, item, issueNumber) => {
+  const notify = async (kind, item) => {
     const result = await email(endpoint, token, kind, item, fetchImpl);
-    if (result.ok) { core.info(`Emailed reviewers (${kind}) for ${item.key}`); return; }
-    core.warning(`Review email (${kind}) for ${item.key} not sent: ${result.error}`);
-    if (kind === 'ready' && issueNumber) {
-      await github.rest.issues.createComment({ ...repo, issue_number: issueNumber,
-        body: `The reviewers could not be emailed automatically (${result.error}). Please let them know about this draft.` });
+    if (result.ok) core.info(`Emailed reviewers (${kind}) for ${item.key}`);
+    else core.warning(`Review email (${kind}) for ${item.key} not sent: ${result.error}`);
+    return result;
+  };
+  // The "ready" email for an open request: sent once, retried on every run until it
+  // goes through. A failure is reported on the issue only the first time.
+  const requestEmail = async (issue, item) => {
+    const body = issue.body || '';
+    if (body.includes(EMAILED)) return;
+    const result = await notify('ready', item);
+    if (result.ok) {
+      await github.rest.issues.update({ ...repo, issue_number: issue.number, body: body.replace(EMAIL_FAILED, '') + '\n' + EMAILED });
+      if (body.includes(EMAIL_FAILED) || (issue.comments || 0) > 0) {
+        await github.rest.issues.createComment({ ...repo, issue_number: issue.number, body: 'The reviewers have now been emailed about this draft.' });
+      }
+    } else if (!body.includes(EMAIL_FAILED)) {
+      await github.rest.issues.update({ ...repo, issue_number: issue.number, body: body + '\n' + EMAIL_FAILED });
+      await github.rest.issues.createComment({ ...repo, issue_number: issue.number,
+        body: `The reviewers could not be emailed automatically (${result.error}). It will be tried again after the next save; meanwhile, please let them know about this draft.` });
     }
   };
 
@@ -98,7 +115,9 @@ module.exports = async function run({ github, context, core, file = 'review.json
       const created = await github.rest.issues.create({ ...repo, labels: [LABEL],
         title: `Ready for review: ${item.title}`, body: requestBody(item, reviewers) });
       core.info(`Opened #${created.data.number} for ${item.key}`);
-      await notify('ready', item, created.data.number);
+      await requestEmail(created.data, item);
+    } else if (issue && item.ready && !item.published) {
+      await requestEmail(issue, item);
     } else if (issue && item.published) {
       await close(issue, `Published: this is now live${item.live_url ? ` (${item.live_url})` : ''}. Closing.`, 'completed');
       await notify('published', item);
