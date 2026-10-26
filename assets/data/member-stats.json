@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-10-25T10:23:27+00:00",
-  "member_count": 548,
+  "generated_at": "2026-10-26T11:08:22+00:00",
+  "member_count": 549,
   "columns_used": {
     "gender": "gender",
     "itc": "itc",
@@ -14,7 +14,7 @@
       "bars": [
         {
           "label": "Male",
-          "count": 268
+          "count": 269
         },
         {
           "label": "Female",
@@ -33,7 +33,7 @@
       "bars": [
         {
           "label": "ITC member",
-          "count": 221
+          "count": 222
         },
         {
           "label": "Non-ITC member",
@@ -52,7 +52,7 @@
         },
         {
           "label": "Standard member",
-          "count": 188
+          "count": 189
         }
       ]
     }
