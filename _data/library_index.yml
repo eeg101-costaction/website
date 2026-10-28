@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-27"
-total: 353
+generated: "2026-10-28"
+total: 354
 curated_count: 12
-framework_count: 341
+framework_count: 342
 
 collections:
   - slug: "eeg101"
@@ -16,12 +16,12 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 341
+    count: 342
 
 sections:
   - slug: "educational"
     name: "Educational"
-    count: 17
+    count: 18
   - slug: "validity"
     name: "Validity and Research integrity"
     count: 115
@@ -40,7 +40,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 212
+    count: 213
   - name: "Webpage"
     count: 81
   - name: "Preprint"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 233
+    count: 234
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -5789,6 +5789,31 @@ items:
     featured: false
     sections: ["validity", "responsibility"]
     section_titles: ["Validity and Research integrity", "Responsibility"]
+    tags: []
+  - id: "DXGCSEYD"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Applying dimension reduction to EEG data by Principal Component Analysis reduces the quality of its subsequent Independent Component decomposition"
+    authors: "Fiorenzo Artoni, Arnaud Delorme, Scott Makeig"
+    year: "2018"
+    venue: "NeuroImage"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://linkinghub.elsevier.com/retrieve/pii/S1053811918302143"
+    doi: "10.1016/j.neuroimage.2018.03.016"
+    abstract: "Independent Component Analysis (ICA) has proven to be an effective data driven method for analyzing EEG data, separating signals from temporally and functionally independent brain and non-brain source processes and thereby increasing their deﬁnition. Dimension reduction by Principal Component Analysis (PCA) has often been recommended before ICA decomposition of EEG data, both to minimize the amount of required data and computation time. Here we compared ICA decompositions of fourteen 72-channel single subject EEG data sets obtained (i) after applying preliminary dimension reduction by PCA, (ii) after applying no such dimension reduction, or else (iii) applying PCA only. Reducing the data rank by PCA (even to remove only 1% of data variance) adversely affected both the numbers of dipolar independent components (ICs) and their stability under repeated decomposition. For example, decomposing a principal subspace retaining 95% of original data variance reduced the mean number of recovered ‘dipolar’ ICs from 30 to 10 per data set and reduced median IC stability from 90% to 76%. PCA rank reduction also decreased the numbers of near-equivalent ICs across subjects. For instance, decomposing a principal subspace retaining 95% of data variance reduced the number of subjects represented in an IC cluster accounting for frontal midline theta activity from 11 to 5. PCA rank reduction also increased uncertainty in the equivalent dipole positions and spectra of the IC brain effective sources. These results suggest that when applying ICA decomposition to EEG data, PCA rank reduction should best be avoided."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/DXGCSEYD"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["educational"]
+    section_titles: ["Educational"]
     tags: []
   - id: "995P9R67"
     collection: "framework"

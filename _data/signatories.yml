@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-27"
+generated: "2026-10-28"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 170
-public_count: 136
+total: 173
+public_count: 138
 
 people:
   - name: "Enes Abanoz"
@@ -146,6 +146,8 @@ people:
     affiliation: "Laboratory for Neurocognition and Applied Cognition, Faculty of Philosophy, University of Belgrade, Serbia"
   - name: "Gautam Kumar"
     affiliation: "San Jose State University"
+  - name: "Gianvito Lagravinese"
+    affiliation: "Laboratory of Neuropsychology, Istituti Clinici Scientifici Maugeri IRCCS, Bari Institute, 70124 Bari, Italy"
   - name: "Angela Lombardi"
     affiliation: "Politecnico di Bari"
   - name: "aHMAD LOTFI"
@@ -198,6 +200,8 @@ people:
     affiliation: "University of Bergen"
   - name: "Blake Phillips"
     affiliation: "Mental Health Brand Founder"
+  - name: "Daghan Piskin"
+    affiliation: "Exercise Science & Neuroscience, Paderborn University"
   - name: "Christina Plomariti"
     affiliation: "Aristotle University of Thessaloniki"
   - name: "Gilles Pourtois"
