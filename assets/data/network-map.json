@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 552,
+  "member_count": 553,
   "site_count": 317,
   "country_count": 56,
   "countries": [
@@ -272,7 +272,7 @@
     {
       "name": "United Kingdom",
       "site_count": 21,
-      "member_count": 54
+      "member_count": 55
     },
     {
       "name": "United States",
@@ -9365,6 +9365,17 @@
           "orcid": ""
         },
         {
+          "name": "sarmad ali",
+          "affiliation": "University of Leeds",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "s.a.ali1 [at] leeds [dot] ac [dot] uk",
+          "homepage": "https://www.researchgate.net/profile/Sarmad-Ali-5?ev=hdr_xprf",
+          "orcid": ""
+        },
+        {
           "name": "sarshar dorosti",
           "affiliation": "University Of Ulster",
           "working_groups": [
@@ -9376,7 +9387,7 @@
           "orcid": "0000-0002-5466-2822"
         }
       ],
-      "member_count": 11,
+      "member_count": 12,
       "working_groups": [
         "WG1",
         "WG2",
