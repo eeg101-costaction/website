@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-10-29"
-total: 354
+generated: "2026-10-30"
+total: 355
 curated_count: 12
-framework_count: 342
+framework_count: 343
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 342
+    count: 343
 
 sections:
   - slug: "educational"
@@ -27,7 +27,7 @@ sections:
     count: 115
   - slug: "publishing"
     name: "Publishing"
-    count: 24
+    count: 25
   - slug: "democratization"
     name: "Democratization"
     count: 90
@@ -44,7 +44,7 @@ types:
   - name: "Webpage"
     count: 81
   - name: "Preprint"
-    count: 19
+    count: 20
   - name: "Blog Post"
     count: 11
   - name: "Book"
@@ -72,7 +72,7 @@ languages:
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 114
+    count: 115
 
 items:
   - id: "skoric-2026-cmpb"
@@ -1860,6 +1860,31 @@ items:
       - "brain imaging data structure"
       - "data-standards"
       - "standards"
+  - id: "MASWW8VB"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "The Drain of Scientific Publishing"
+    authors: "Fernanda Beigel, Dan Brockington, Paolo Crosetto, Gemma Derrick, Aileen Fyfe, Pablo Gomez Barreiro, Mark A. Hanson, Stefanie Haustein, Vincent Larivière, Christine Noe, Stephen Pinfield, James Wilsdon"
+    year: "2025"
+    venue: "arXiv"
+    type_label: "Preprint"
+    language: "Not specified"
+    image: ""
+    placeholder: "/assets/images/library/preprint.svg"
+    url: "http://arxiv.org/abs/2511.04820"
+    doi: "10.48550/arXiv.2511.04820"
+    abstract: "The domination of scientific publishing in the Global North by major commercial publishers is harmful to science. We need the most powerful members of the research community, funders, governments and Universities, to lead the drive to re-communalise publishing to serve science not the market."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/MASWW8VB"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["publishing"]
+    section_titles: ["Publishing"]
+    tags: []
   - id: "U8X6TBVC"
     collection: "framework"
     collection_label: "Community Framework"

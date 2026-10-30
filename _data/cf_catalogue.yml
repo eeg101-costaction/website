@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-10-29"
+generated: "2026-10-30"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 342
+item_count: 343
 
 sections:
   - slug: "educational"
@@ -23,7 +23,7 @@ sections:
     title: "Publishing"
     anchor: "cf-validity"
     part: 1
-    count: 24
+    count: 25
   - slug: "democratization"
     title: "Democratization"
     anchor: "cf-democratization"
@@ -46,7 +46,7 @@ types:
   - name: "Webpage"
     count: 81
   - name: "Preprint"
-    count: 19
+    count: 20
   - name: "Blog Post"
     count: 11
   - name: "Book"
@@ -74,12 +74,12 @@ languages:
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 114
+    count: 115
 
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 240
+    count: 241
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -1270,6 +1270,27 @@ items:
       - "brain imaging data structure"
       - "data-standards"
       - "standards"
+  - id: "MASWW8VB"
+    title: "The Drain of Scientific Publishing"
+    type: "preprint"
+    type_label: "Preprint"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Fernanda Beigel, Dan Brockington, Paolo Crosetto, Gemma Derrick, Aileen Fyfe, Pablo Gomez Barreiro, Mark A. Hanson, Stefanie Haustein, Vincent Larivière, Christine Noe, Stephen Pinfield, James Wilsdon"
+    year: "2025"
+    language: "Unknown"
+    publication: "arXiv"
+    url: "http://arxiv.org/abs/2511.04820"
+    extra_url: ""
+    doi: "10.48550/arXiv.2511.04820"
+    abstract: "The domination of scientific publishing in the Global North by major commercial publishers is harmful to science. We need the most powerful members of the research community, funders, governments and Universities, to lead the drive to re-communalise publishing to serve science not the market."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/MASWW8VB"
+    sections: ["publishing"]
+    section_titles: ["Publishing"]
+    parts: [1]
+    tags:
+      - "Computer Science - Digital Libraries"
   - id: "U8X6TBVC"
     title: "The Drain of Scientific Publishing"
     type: "preprint"

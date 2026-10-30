@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-29"
+generated: "2026-10-30"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 173
-public_count: 138
+total: 174
+public_count: 139
 
 people:
   - name: "Enes Abanoz"
@@ -274,6 +274,8 @@ people:
     affiliation: "University of Oldenburg"
   - name: "Franz Wurm"
     affiliation: "Leiden University"
+  - name: "Selen Yaka"
+    affiliation: "Bogazici University"
   - name: "Melek Öyküm Yalçın"
     affiliation: "Institute of Medical Psychology and Cooperative Brain Imaging Center at Goethe University Frankfurt, Germany"
   - name: "Denisa Adina Zamfira"
