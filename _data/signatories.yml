@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-30"
+generated: "2026-10-31"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 174
-public_count: 139
+total: 176
+public_count: 141
 
 people:
   - name: "Enes Abanoz"
@@ -98,6 +98,8 @@ people:
     affiliation: "FEEIT, Ss Cyril and Methodius in Skopje, Macedonia"
   - name: "Klaus Gramann"
     affiliation: "Technische Univeristaet Berlin"
+  - name: "Romain Grandchamp"
+    affiliation: "LPNC - CNRS UMR5105 - Université Grenoble Alpes"
   - name: "Inga Griskova-Bulanova"
     affiliation: "Vilnius Univerity"
   - name: "Dr Ankit Gupta"
@@ -136,6 +138,8 @@ people:
     affiliation: "University of Oslo"
   - name: "Marcin Koculak"
     affiliation: "Jagiellonian University"
+  - name: "Komal Komal"
+    affiliation: "Southeast Technological University, Waterford, Ireland"
   - name: "Onur Erdem Korkmaz"
     affiliation: "Atatürk University"
   - name: "Julian Kosciessa"
