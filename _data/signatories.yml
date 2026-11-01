@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-10-31"
+generated: "2026-11-01"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 176
-public_count: 141
+total: 178
+public_count: 143
 
 people:
   - name: "Enes Abanoz"
@@ -64,8 +64,12 @@ people:
     affiliation: "BILKENT UNIVERSITY | KONYA FOOD AND AGRICULTURE UNIVERSITY"
   - name: "Sarshar Dorosti"
     affiliation: "Ulster University"
+  - name: "Katerina Drakoulaki"
+    affiliation: "National and Kapodistrian University of Athens"
   - name: "Anne-Sophie Dubarry"
     affiliation: "Aix Marseille Univ, CNRS, CRPN, Aix-en-Provence, France"
+  - name: "Duygu Duman"
+    affiliation: "İzmir Katip Celebi University"
   - name: "Benedikt Ehinger"
     affiliation: "University of Stuttgart"
   - name: "Dalia Elnady"
