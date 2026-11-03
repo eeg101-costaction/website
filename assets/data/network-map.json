@@ -1,7 +1,7 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 559,
-  "site_count": 322,
+  "member_count": 561,
+  "site_count": 323,
   "country_count": 57,
   "countries": [
     {
@@ -116,8 +116,8 @@
     },
     {
       "name": "India",
-      "site_count": 4,
-      "member_count": 4
+      "site_count": 5,
+      "member_count": 5
     },
     {
       "name": "International Organisations",
@@ -272,7 +272,7 @@
     {
       "name": "Türkiye",
       "site_count": 62,
-      "member_count": 106
+      "member_count": 107
     },
     {
       "name": "United Kingdom",
@@ -3985,9 +3985,21 @@
           "email": "akan.aydin [at] ieu [dot] edu [dot] tr",
           "homepage": "https://scholar.google.com/citations?hl=tr&user=WSG0eK4AAAAJ&view_op=list_works&sortby=pubdate",
           "orcid": "0000-0001-8894-5794"
+        },
+        {
+          "name": "Uğur Emin Baynal",
+          "affiliation": "Izmir Ekonomi Universitesi",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "ugur.baynal [at] ieu [dot] edu [dot] tr",
+          "homepage": "baynal.uguremin.com",
+          "orcid": ""
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -11345,6 +11357,33 @@
     },
     {
       "id": "site-317",
+      "institution": "Yenepoya (deemed to be University) Mangalore",
+      "city": "",
+      "country": "India",
+      "latitude": 12.8982264,
+      "longitude": 74.824075,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Srikanth Nayak",
+          "affiliation": "Yenepoya (deemed to be University) Mangalore",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "srikanthbaslp [at] gmail [dot] com",
+          "homepage": "https://scholar.google.co.in/citations?user=A0NFh_kAAAAJ&hl=en; https://www.researchgate.net/profile/Srikanth-Nayak?ev=hdr_xprf; https://www.linkedin.com/in/srikanth-nayak-a5368282/",
+          "orcid": "0000-0003-4808-6889"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-318",
       "institution": "Yozgat Bozok University",
       "city": "",
       "country": "Türkiye",
@@ -11371,7 +11410,7 @@
       ]
     },
     {
-      "id": "site-318",
+      "id": "site-319",
       "institution": "Yıldız Technical University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -11434,7 +11473,7 @@
       ]
     },
     {
-      "id": "site-319",
+      "id": "site-320",
       "institution": "Zurich University of Applied Sciences",
       "city": "Winterthur",
       "country": "Switzerland",
@@ -11461,7 +11500,7 @@
       ]
     },
     {
-      "id": "site-320",
+      "id": "site-321",
       "institution": "Çanakkale Onsekiz Mart University",
       "city": "Çanakkale",
       "country": "Türkiye",
@@ -11500,7 +11539,7 @@
       ]
     },
     {
-      "id": "site-321",
+      "id": "site-322",
       "institution": "École Polytechnique Fédérale de Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -11527,7 +11566,7 @@
       ]
     },
     {
-      "id": "site-322",
+      "id": "site-323",
       "institution": "Üsküdar University",
       "city": "Istanbul",
       "country": "Türkiye",
