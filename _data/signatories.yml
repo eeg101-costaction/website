@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-02"
+generated: "2026-11-03"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 178
-public_count: 143
+total: 181
+public_count: 144
 
 people:
   - name: "Enes Abanoz"
@@ -38,6 +38,8 @@ people:
     affiliation: "University of Dundee"
   - name: "esra kınacı biber"
     affiliation: "Duzce University"
+  - name: "Jérémy Brunel"
+    affiliation: "Université de Montréal"
   - name: "Marco Buiatti"
     affiliation: "Center for Mind/Brain Sciences (CIMeC), University of Trento, Italy"
   - name: "Anne Buot"
