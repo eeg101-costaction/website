@@ -5,10 +5,10 @@
 # lists the Library page filters by. Edit library.yml for curated entries,
 # or the Zotero group for Framework entries, then re-run the script.
 
-generated: "2026-11-03"
-total: 355
+generated: "2026-11-04"
+total: 358
 curated_count: 12
-framework_count: 343
+framework_count: 346
 
 collections:
   - slug: "eeg101"
@@ -16,7 +16,7 @@ collections:
     count: 12
   - slug: "framework"
     name: "Community Framework"
-    count: 343
+    count: 346
 
 sections:
   - slug: "educational"
@@ -24,13 +24,13 @@ sections:
     count: 18
   - slug: "validity"
     name: "Validity and Research integrity"
-    count: 115
+    count: 117
   - slug: "publishing"
     name: "Publishing"
     count: 25
   - slug: "democratization"
     name: "Democratization"
-    count: 90
+    count: 91
   - slug: "responsibility"
     name: "Responsibility"
     count: 121
@@ -40,9 +40,9 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 213
+    count: 215
   - name: "Webpage"
-    count: 81
+    count: 82
   - name: "Preprint"
     count: 20
   - name: "Blog Post"
@@ -68,7 +68,7 @@ types:
 
 languages:
   - name: "English"
-    count: 234
+    count: 237
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -1043,6 +1043,34 @@ items:
     sections: ["validity"]
     section_titles: ["Validity and Research integrity"]
     tags: []
+  - id: "8JLKC47H"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "The ongoing urgency of diversity science"
+    authors: "Jordan G. Starck, Anmol Gupta"
+    year: "2026"
+    venue: "Trends in Cognitive Sciences"
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.cell.com/trends/cognitive-sciences/abstract/S1364-6613(26)00216-0"
+    doi: "10.1016/j.tics.2026.09.011"
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/8JLKC47H"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    tags:
+      - "DEI"
+      - "diversity"
+      - "diversity science"
   - id: "HKQBRA9P"
     collection: "framework"
     collection_label: "Community Framework"
@@ -9256,6 +9284,56 @@ items:
     featured: false
     sections: ["publishing"]
     section_titles: ["Publishing"]
+    tags: []
+  - id: "LUB8P87Z"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Open Science Impact Pathways"
+    authors: ""
+    year: ""
+    venue: "PathOS"
+    type_label: "Webpage"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/webpage.svg"
+    url: "https://pathos-project.eu/"
+    doi: ""
+    abstract: "PathOS (Open Science Impact Pathways) was an EU-funded research project, now finished, that studied what open science actually achieves and how to measure it. It was a Horizon Europe project that aimed to collect concrete evidence of Open Science effects and to study the pathways of Open Science practices, from inputs to outputs, outcomes, and impacts, including the consideration of enabling factors and key barriers. It received funding under Horizon Europe grant agreement No. 101058728. pathos-project pathos-project Status: The homepage announces that the project has concluded and points visitors to its Open Science Resources Hub for results. pathos-project Main outputs (the Resources Hub): an Open Science Impact Indicator Handbook, a library of evidence on open science impact, an Open Science Stories Registry, a training corner, case studies and a toolkit, a cost-benefit analysis framework for open science, a set of key impact pathways, and lessons and policy recommendations. Deliverables and publications are also listed, with outputs shared via a Zenodo community. pathos-project Six case studies were used to model the pathways and to test and put open science indicators into practice. They covered Portugal’s RCAAP repository network and industry-academia links, French open access infrastructure and societal uptake, a national social-sciences data repository, artefact reuse in COVID-19 publications, how open access routes affect topic persistence (including gender and climate change angles), and ELIXIR’s bioinformatics resources. pathos-project Closing event: a conference titled “Open Science: Monitoring Progress, Assessing Impact” was held on 7–8 July 2025 at UNESCO Headquarters and online, with UNESCO, OpenAIRE, EOSC Track, PathOS and OSMI among the participants, focused on monitoring and assessing open science’s impact on research, society and the economy. Recordings and materials are on the site. pathos-project Recent news: the latest blog posts date from mid-2025, including a June 2025 piece on who bears the costs and reaps the benefits of open science and how to make informed investment decisions, and a May 2025 “Spotlight” summarizing what the project learned. pathos-project In short, it’s now mainly an archive of research tools, indicators and evidence for anyone assessing open science policy or investment."
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/LUB8P87Z"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
+    tags: []
+  - id: "6PI9PQU4"
+    collection: "framework"
+    collection_label: "Community Framework"
+    title: "Open-source Software and Pipelines for Generalizable and Reproducible EEG Analysis: An Overview"
+    authors: "Takfarinas Medani, Raymundo Cassani"
+    year: ""
+    venue: ""
+    type_label: "Journal Article"
+    language: "English"
+    image: ""
+    placeholder: "/assets/images/library/article.svg"
+    url: "https://www.zotero.org/groups/5794905/items/6PI9PQU4"
+    doi: ""
+    abstract: ""
+    oa_url: ""
+    oa_label: ""
+    source_url: "https://www.zotero.org/groups/5794905/items/6PI9PQU4"
+    source_label: "Zotero record"
+    access_version: ""
+    pdf: ""
+    theme: ""
+    featured: false
+    sections: ["validity"]
+    section_titles: ["Validity and Research integrity"]
     tags: []
   - id: "QH2U9F5E"
     collection: "framework"
