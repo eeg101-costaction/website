@@ -175,6 +175,14 @@ const CRITERIA = [
   { id: 'impact', label: 'Benefit to the applicant and to the network (incl. inclusiveness)' }
 ];
 const RECOMMENDATIONS = ['Fund', 'Fund if budget allows', 'Do not fund'];
+
+// Where a funded grant is, from the funding decision to payment. Chairs and the
+// grants administrator set it by hand on the Funded grants page.
+const GRANT_STATUSES = ['Awaiting e-COST application', 'Grant letter issued', 'Activity under way', 'Report due', 'Report submitted in e-COST', 'Report approved', 'Paid', 'Cancelled'];
+const GRANT_DONE = ['Report submitted in e-COST', 'Report approved', 'Paid', 'Cancelled'];
+const ROLES = ['reviewer', 'chair', 'administrator'];
+const roleOf = text => /chair/i.test(text) ? 'chair' : /admin/i.test(text) ? 'administrator' : 'reviewer';
+const ROLE_NAMES = { reviewer: 'a reviewer', chair: 'a chair', administrator: 'the grants administrator' };
 const DECISIONS = ['', 'Funded', 'Reserve', 'Not funded', 'Withdrawn'];
 
 const GENDER_OPTIONS = ['Male', 'Female', 'Beyond the binary (e.g. non-binary, intersex, agender, genderfluid)', 'Prefer to self-describe', 'Prefer not to say'];
@@ -191,7 +199,8 @@ const APPLICATION_COLUMNS = [
   'Position', 'Country', 'ITC', 'Gender', 'Under 40 (YRI)', 'Early-career (PhD < 8 years or student)', 'Career stage',
   'EEG101 member', 'Working Groups', 'ORCID', 'Start date', 'End date', 'Days', 'Host / collaborator / conference',
   'Requested (€)', 'Eligibility notes', 'Drive folder', 'Application PDF', 'Documents',
-  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Assigned reviewers', 'Data'
+  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Assigned reviewers',
+  'Grant status', 'Grant status updated', 'Grant status by', 'Last reminder', 'Reminders sent', 'Grant notes', 'Data'
 ];
 const REVIEW_COLUMNS = ['Application ID', 'Reviewer', 'Conflict of interest'].concat(CRITERIA.map(c => c.label), ['Mean score', 'Recommendation', 'Comments', 'Updated']);
 const REVIEWER_COLUMNS = ['Email', 'Name', 'Role (reviewer or chair)', 'Personal key', 'Link sent'];
@@ -783,13 +792,13 @@ function reviewLink(sheet, r, renew) {
 
 function sendInvite(sheet, r, renew) {
   const link = reviewLink(sheet, r, renew);
-  const chair = /chair/i.test(String(r['Role (reviewer or chair)'] || ''));
+  const role = roleOf(String(r['Role (reviewer or chair)'] || ''));
   const text = [
     `Dear ${String(r['Name'] || '').trim() || 'colleague'},`,
-    `You have been added as ${chair ? 'a chair' : 'a reviewer'} for EEG101 grant applications. This is your personal link to the grants portal:\n${link}`,
+    `You have been added as ${ROLE_NAMES[role]} for EEG101 grants. This is your personal link to the grants portal:\n${link}`,
     renew ? 'This link replaces any earlier one, which no longer works.' : '',
     'Please keep it to yourself: anyone with the link can act as you. If it is shared by mistake, tell us and we will replace it.',
-    'Before you score an application, check whether you have a conflict of interest with the applicant (the portal lists the situations). If you do, declare it and do not score.',
+    role === 'administrator' ? 'The Funded grants page shows each funded grant, its dates and report deadline, and lets you update its status and send reminders.' : 'Before you score an application, check whether you have a conflict of interest with the applicant (the portal lists the situations). If you do, declare it and do not score.',
     'With thanks,\nThe EEG101 Grants team'
   ].filter(Boolean);
   MailApp.sendEmail({ to: String(r['Email']).trim().toLowerCase(), replyTo: GRANTS.replyTo, name: GRANTS.name, subject: 'Your EEG101 grants portal link', body: text.join('\n\n') });
@@ -817,7 +826,7 @@ function listReviewers(key) {
     const assigned = apps.filter(a => assignedTo(a).indexOf(email) >= 0).map(a => String(a['ID']));
     const mine = Object.keys(reviews).map(id => (reviews[id].filter(x => x.reviewer === email)[0] || null) && { id: id, conflict: reviews[id].filter(x => x.reviewer === email)[0].conflict }).filter(Boolean);
     return {
-      email: email, name: String(r['Name'] || '').trim(), chair: /chair/i.test(String(r['Role (reviewer or chair)'] || '')),
+      email: email, name: String(r['Name'] || '').trim(), role: roleOf(String(r['Role (reviewer or chair)'] || '')), chair: roleOf(String(r['Role (reviewer or chair)'] || '')) === 'chair',
       invited: r['Link sent'] ? formatDateTime(r['Link sent'] instanceof Date ? r['Link sent'] : new Date(r['Link sent'])) : '',
       assigned: assigned.length, scored: mine.filter(x => !x.conflict).length, conflicts: mine.filter(x => x.conflict).length,
       assignedDone: assigned.filter(id => mine.some(x => x.id === id)).length, self: email === me.email
@@ -830,7 +839,7 @@ function saveReviewer(key, input) {
   const me = requireReviewer(key, true);
   const email = clean(input && input.email, 200).toLowerCase();
   const name = clean(input && input.name, 150);
-  const role = input && input.role === 'chair' ? 'chair' : 'reviewer';
+  const role = input && ROLES.indexOf(input.role) >= 0 ? input.role : 'reviewer';
   if (!EMAIL_PATTERN.test(email)) throw new Error('Please enter a valid email address.');
   if (email === me.email && role !== 'chair') throw new Error('You cannot remove your own chair role. Ask another chair to do it.');
   const lock = LockService.getScriptLock();
@@ -894,7 +903,8 @@ const assignedTo = r => String(r['Assigned reviewers'] || '').split(/[,;\s]+/).m
 
 // Reviewers see only the applications a chair has assigned to them. An
 // application with no one assigned is seen by the chairs alone.
-const canAccess = (me, r) => me.chair || assignedTo(r).indexOf(me.email) >= 0;
+// The grants administrator sees funded applications only.
+const canAccess = (me, r) => me.chair || (me.admin ? String(r['Decision']) === 'Funded' : assignedTo(r).indexOf(me.email) >= 0);
 
 function requireAccess(me, r) {
   if (!canAccess(me, r)) throw new Error('This application is not assigned to you.');
@@ -910,7 +920,7 @@ function assignReviewers(key, input) {
   const remove = (input && Array.isArray(input.remove) ? input.remove : []).map(x => String(x).toLowerCase());
   if (!ids.length) throw new Error('Choose at least one application.');
   const people = reviewerList();
-  add.concat(remove).forEach(e => { if (!people.some(p => p.email === e)) throw new Error(`${e} is not on the reviewer list.`); });
+  add.forEach(e => { if (!people.some(p => p.email === e && !p.admin)) throw new Error(`${e} is not on the reviewer list.`); });
   const skipped = [], fresh = {};
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -950,6 +960,111 @@ function assignReviewers(key, input) {
   }
   const out = listApplications(key);
   out.notice = [`Saved.${input.notify ? ` ${notified} reviewer${notified === 1 ? '' : 's'} emailed.` : ''}`].concat(skipped).join(' ');
+  return out;
+}
+
+/* -------------------------------------------------- portal: funded grants */
+
+const addDays = (isoDate, n) => { const d = new Date(Date.UTC(+isoDate.slice(0, 4), +isoDate.slice(5, 7) - 1, +isoDate.slice(8, 10) + n)); return d.toISOString().slice(0, 10); };
+
+// COST: the report is due 30 days after the activity ends, or 15 days after the
+// end of the grant period, whichever comes first.
+function reportDue(end, periodEnd) {
+  if (!DATE_PATTERN.test(end)) return '';
+  const a = addDays(end, 30);
+  return DATE_PATTERN.test(periodEnd) && addDays(periodEnd, 15) < a ? addDays(periodEnd, 15) : a;
+}
+
+// Chairs and the grants administrator: every funded application, with where it
+// is and what is due.
+function listFunded(key) {
+  const me = requireReviewer(key, true, true);
+  const settings = readSettings();
+  const today = Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd');
+  const grants = rowsAsObjects(tab('Applications')).filter(r => String(r['Decision']) === 'Funded').map(r => {
+    const start = iso(r['Start date']), end = iso(r['End date']);
+    const status = String(r['Grant status'] || '') || GRANT_STATUSES[0];
+    const due = reportDue(end, settings.period_end);
+    return {
+      id: String(r['ID']), applicant: `${r['First name']} ${r['Last name']}`, email: String(r['Email']), scheme: String(r['Scheme']), title: String(r['Title']),
+      country: String(r['Country']), awarded: asNumber(r['Awarded (€)']), start: start, end: end, reportDue: due,
+      daysToReport: due ? daysBetween(today, due) - 1 : null, started: !!start && start <= today, ended: !!end && end < today,
+      status: status, done: GRANT_DONE.indexOf(status) >= 0,
+      statusUpdated: r['Grant status updated'] ? formatDateTime(r['Grant status updated'] instanceof Date ? r['Grant status updated'] : new Date(r['Grant status updated'])) : '',
+      statusBy: String(r['Grant status by'] || ''),
+      lastReminder: r['Last reminder'] ? formatDateTime(r['Last reminder'] instanceof Date ? r['Last reminder'] : new Date(r['Last reminder'])) : '',
+      reminders: asNumber(r['Reminders sent']) || 0, notes: String(r['Grant notes'] || '')
+    };
+  }).sort((x, y) => (x.done - y.done) || (x.reportDue < y.reportDue ? -1 : 1));
+  return { me: me, today: today, statuses: GRANT_STATUSES, grants: grants };
+}
+
+// Chairs and the grants administrator: changes = [{ id, status?, notes? }].
+function updateGrants(key, changes) {
+  const me = requireReviewer(key, true, true);
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const sheet = tab('Applications');
+    ensureColumns(sheet, APPLICATION_COLUMNS);
+    const { map } = headerMap(sheet);
+    const rows = rowsAsObjects(sheet);
+    (Array.isArray(changes) ? changes : []).forEach(c => {
+      const r = rows.filter(x => String(x['ID']) === String(c.id) && String(x['Decision']) === 'Funded')[0];
+      if (!r) throw new Error(`${c.id} is not a funded grant.`);
+      const set = (h, v) => sheet.getRange(r._row, map[h] + 1).setValue(v);
+      if (c.status !== undefined) {
+        if (GRANT_STATUSES.indexOf(c.status) < 0) throw new Error('Unknown grant status.');
+        set('Grant status', c.status); set('Grant status updated', new Date()); set('Grant status by', me.email);
+      }
+      if (c.notes !== undefined) set('Grant notes', String(c.notes).slice(0, 2000));
+    });
+  } finally {
+    lock.releaseLock();
+  }
+  return listFunded(key);
+}
+
+// Chairs and the grants administrator: email grantees a reminder of what is
+// next for them: applying in e-COST (until the grant letter is issued), or
+// their report in e-COST. Grants whose report is in, or that are paid or
+// cancelled, are skipped. Copied to the EEG101 address, for the record.
+function sendGrantReminders(key, ids) {
+  requireReviewer(key, true, true);
+  const settings = readSettings();
+  const sheet = tab('Applications');
+  ensureColumns(sheet, APPLICATION_COLUMNS);
+  const { map } = headerMap(sheet);
+  const rows = rowsAsObjects(sheet);
+  let sent = 0; const skipped = [];
+  (Array.isArray(ids) ? ids : []).map(String).forEach(id => {
+    const r = rows.filter(x => String(x['ID']) === id && String(x['Decision']) === 'Funded')[0];
+    if (!r) { skipped.push(`${id} is not a funded grant.`); return; }
+    const status = String(r['Grant status'] || '') || GRANT_STATUSES[0];
+    if (GRANT_DONE.indexOf(status) >= 0) { skipped.push(`${id}: ${status}, so no reminder is needed.`); return; }
+    const due = reportDue(iso(r['End date']), settings.period_end);
+    const ecost = status === 'Awaiting e-COST application';
+    const awarded = asNumber(r['Awarded (€)']) || 0;
+    const text = [
+      `Dear ${r['First name']},`,
+      ecost
+        ? `Congratulations again on your EEG101 ${r['Scheme']} (${id}, "${r['Title']}", €${awarded.toFixed(2)}). To receive the grant, please now apply through COST's online platform, e-COST (https://e-services.cost.eu/), with the same details as your application, and make sure your CV is uploaded to your e-COST profile. COST issues your grant letter once this is approved.`
+        : `This is a reminder about the report for your EEG101 ${r['Scheme']} (${id}, "${r['Title']}", ${formatDate(iso(r['Start date']))} to ${formatDate(iso(r['End date']))}).`,
+      ecost ? '' : `Please submit your report through e-COST (https://e-services.cost.eu/) by ${formatDate(due)}. That is 30 days after the end of your activity, or 15 days after the end of the grant period if sooner. ${String(r['Scheme']).indexOf('Conference') >= 0 ? 'Include your certificate of attendance and the programme or book of abstracts showing your presentation. ' : ''}The grant is paid once your report is approved.`,
+      'If you have already done this, thank you, and please ignore this email. If anything has changed, reply to this email.',
+      'With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148'
+    ].filter(Boolean);
+    MailApp.sendEmail({
+      to: String(r['Email']), cc: GRANTS.cc, replyTo: GRANTS.replyTo, name: GRANTS.name,
+      subject: ecost ? `EEG101 grant ${id}: please apply in e-COST` : `EEG101 grant ${id}: report due ${formatDate(due)}`,
+      body: text.join('\n\n')
+    });
+    sheet.getRange(r._row, map['Last reminder'] + 1).setValue(new Date());
+    sheet.getRange(r._row, map['Reminders sent'] + 1).setValue((asNumber(r['Reminders sent']) || 0) + 1);
+    sent++;
+  });
+  const out = listFunded(key);
+  out.notice = [`${sent} reminder${sent === 1 ? '' : 's'} sent.`].concat(skipped).join(' ');
   return out;
 }
 
@@ -999,7 +1114,8 @@ function reviewerList() {
   return rowsAsObjects(tab('Reviewers')).map(r => ({
     email: String(r['Email'] || '').trim().toLowerCase(),
     name: String(r['Name'] || '').trim(),
-    chair: /chair/i.test(String(r['Role (reviewer or chair)'] || '')),
+    chair: roleOf(String(r['Role (reviewer or chair)'] || '')) === 'chair',
+    admin: roleOf(String(r['Role (reviewer or chair)'] || '')) === 'administrator',
     key: String(r['Personal key'] || '').trim()
   })).filter(r => EMAIL_PATTERN.test(r.email));
 }
@@ -1010,20 +1126,24 @@ function reviewerByKey(key) {
   if (key.length < 32) return null;
   try {
     const r = reviewerList().filter(x => x.key === key)[0];
-    return r ? { email: r.email, name: r.name, chair: r.chair } : null;
+    return r ? { email: r.email, name: r.name, chair: r.chair, admin: r.admin } : null;
   } catch (error) { return null; }
 }
 
-function requireReviewer(key, chairOnly) {
+// chairOnly: chairs only (and the grants administrator, with allowAdmin).
+// Otherwise reviewers and chairs; the grants administrator, who does not
+// review, only where allowAdmin says so.
+function requireReviewer(key, chairOnly, allowAdmin) {
   const me = reviewerByKey(key);
   if (!me) throw new Error('This review link is not valid any more. Ask the grants chair for a new one.');
-  if (chairOnly && !me.chair) throw new Error('Only a grants chair can do this.');
+  if (me.admin && !allowAdmin) throw new Error('As grants administrator you have the Funded grants page, not reviewing.');
+  if (chairOnly && !me.chair && !me.admin) throw new Error('Only a grants chair can do this.');
   return me;
 }
 
 // Reviewers who are not chairs see applications without the applicant's
 // identity, unless the Settings tab says blind_review FALSE. Chairs see everything.
-const isBlind = (me, settings) => !me.chair && String(settings.blind_review).toUpperCase() !== 'FALSE';
+const isBlind = (me, settings) => !me.chair && !me.admin && String(settings.blind_review).toUpperCase() !== 'FALSE';
 
 const asNumber = v => (v === '' || v == null || isNaN(Number(v))) ? null : Number(v);
 const iso = v => v instanceof Date ? Utilities.formatDate(v, GRANTS.timezone, 'yyyy-MM-dd') : String(v || '');
@@ -1098,7 +1218,7 @@ function listApplications(key) {
       mine: mine, others: canSee ? all.filter(x => x.reviewer !== me.email) : []
     };
   });
-  return { me: me, blind: blind, applications: apps, settings: settings, reviewers: me.chair ? people.map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
+  return { me: me, blind: blind, applications: apps, settings: settings, reviewers: me.chair ? people.filter(p => !p.admin).map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
 }
 
 function applicationRecord(id) {
@@ -1110,7 +1230,7 @@ function applicationRecord(id) {
 }
 
 function getApplication(key, id) {
-  const me = requireReviewer(key, false);
+  const me = requireReviewer(key, false, true);
   const blind = isBlind(me, readSettings());
   const { row, data } = applicationRecord(id);
   requireAccess(me, row);
@@ -1122,7 +1242,7 @@ function getApplication(key, id) {
 // A copy of the application PDF (doc "application") or one of its uploaded
 // documents, for people allowed to see the applicant's identity.
 function getDocument(key, id, doc) {
-  const me = requireReviewer(key, false);
+  const me = requireReviewer(key, false, true);
   if (isBlind(me, readSettings())) throw new Error('Documents are not shown in blind review.');
   const { row, data } = applicationRecord(id);
   requireAccess(me, row);
@@ -1182,6 +1302,7 @@ function saveDecisions(key, changes) {
   lock.waitLock(30000);
   try {
     const sheet = tab('Applications');
+    ensureColumns(sheet, APPLICATION_COLUMNS);
     const { map } = headerMap(sheet);
     const rows = rowsAsObjects(sheet);
     const reviews = reviewsByApplication();
@@ -1210,6 +1331,7 @@ function saveDecisions(key, changes) {
       set('Decided by', me.email);
       set('Decided at', new Date());
       set('Status', c.decision || (String(c.r['Status']) === 'Submitted' ? 'Submitted' : 'Under review'));
+      if (c.decision === 'Funded' && !String(c.r['Grant status'] || '')) { set('Grant status', GRANT_STATUSES[0]); set('Grant status updated', new Date()); set('Grant status by', me.email); }
     });
   } finally {
     lock.releaseLock();
@@ -1221,7 +1343,7 @@ function saveDecisions(key, changes) {
 // and country, for everything submitted and for what was funded. Chairs only
 // when review is blind, as the funded list names people.
 function getReport(key) {
-  const me = requireReviewer(key, false);
+  const me = requireReviewer(key, false, true);
   const settings = readSettings();
   if (isBlind(me, settings)) throw new Error('Reports are for chairs while review is blind.');
   const apps = rowsAsObjects(tab('Applications'));

@@ -401,6 +401,63 @@ test('the web app remembers its own address for review links', () => {
   assert.strictEqual(g.readSettings().web_app_url, 'https://script.google.com/macros/s/LIVE/exec');
 });
 
+test('funded grants: tracked to payment by chairs and the grants administrator, with reminders', () => {
+  const g = ready();
+  const a = g.submitApplication(stsm(g)).id;                                                      // ends 14 March 2027
+  const b = g.submitApplication(stsm(g, { email: 'b@example.org', first_name: 'Bea', start_date: '2027-09-01', end_date: '2027-09-20' })).id;
+  const c = g.submitApplication(stsm(g, { email: 'c@example.org' })).id;
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['admin@example.org', 'Grants Admin', 'administrator'], ['r1@example.org', 'Rev One', 'reviewer']]);
+  const chair = keys['chair@example.org'], admin = keys['admin@example.org'], r1 = keys['r1@example.org'];
+  g.saveDecisions(chair, [{ id: a, decision: 'Funded' }, { id: b, decision: 'Funded', awarded: 1500 }, { id: c, decision: 'Not funded' }]);
+
+  // The administrator does not review, and sees only funded grants.
+  throwsLike(() => g.listApplications(admin), /Funded grants page/);
+  throwsLike(() => g.saveReview(admin, { id: a, conflict: true }), /Funded grants page/);
+  throwsLike(() => g.listFunded(r1), /Only a grants chair/);
+  assert.ok(g.getApplication(admin, a).html);
+  throwsLike(() => g.getApplication(admin, c), /not assigned to you/);
+  assert.ok(g.getReport(admin).totals);
+
+  let list = g.listFunded(admin);
+  same(list.grants.map(x => [x.id, x.status, x.reportDue]), [[a, 'Awaiting e-COST application', '2027-04-13'], [b, 'Awaiting e-COST application', '2027-10-15']]);
+  assert.strictEqual(list.grants[1].awarded, 1500);
+  // Report due: 30 days after the end, or 15 days after the grant period, whichever is first.
+  assert.strictEqual(g.reportDue('2027-09-20', '2027-09-30'), '2027-10-15');
+  assert.strictEqual(g.reportDue('2027-03-14', '2027-09-30'), '2027-04-13');
+
+  // Reminders: e-COST application first, then the report.
+  g.state.mail = [];
+  let out = g.sendGrantReminders(admin, [a]);
+  assert.match(out.notice, /1 reminder sent/);
+  assert.match(g.state.mail[0].subject, /please apply in e-COST/);
+  assert.strictEqual(g.state.mail[0].cc, 'eeg101costaction@gmail.com');
+  g.updateGrants(admin, [{ id: a, status: 'Report due', notes: 'Chased by phone' }]);
+  out = g.sendGrantReminders(chair, [a, b, c]);
+  assert.match(g.state.mail[1].subject, new RegExp(`${a}: report due 13 April 2027`));
+  assert.match(g.state.mail[1].body, /submit your report through e-COST/);
+  assert.match(out.notice, /2 reminders sent/);
+  assert.match(out.notice, /is not a funded grant/);
+  list = g.listFunded(chair);
+  const ga = list.grants.filter(x => x.id === a)[0];
+  assert.strictEqual(ga.reminders, 2);
+  assert.strictEqual(ga.notes, 'Chased by phone');
+  assert.strictEqual(ga.statusBy, 'admin@example.org');
+  // Once the report is in, no more reminders, and it moves to the bottom.
+  g.updateGrants(chair, [{ id: a, status: 'Report submitted in e-COST' }]);
+  out = g.sendGrantReminders(chair, [a]);
+  assert.match(out.notice, /0 reminders sent.*no reminder is needed/);
+  assert.strictEqual(out.grants[out.grants.length - 1].id, a);
+  throwsLike(() => g.updateGrants(admin, [{ id: a, status: 'Lost' }]), /Unknown grant status/);
+  throwsLike(() => g.updateGrants(admin, [{ id: c, status: 'Paid' }]), /not a funded grant/);
+  // The administrator can be added from the portal.
+  const people = g.saveReviewer(chair, { email: 'admin2@example.org', name: 'Second Admin', role: 'administrator', invite: true });
+  assert.strictEqual(people.filter(p => p.email === 'admin2@example.org')[0].role, 'administrator');
+  assert.match(g.state.mail.filter(m => m.to === 'admin2@example.org')[0].body, /the grants administrator/);
+  // Administrators are never offered as reviewers.
+  assert.ok(!g.listApplications(chair).reviewers.some(r => r.email === 'admin@example.org'));
+  throwsLike(() => g.assignReviewers(chair, { ids: [c], add: ['admin@example.org'] }), /not on the reviewer list/);
+});
+
 test('the application page is built with its settings and can be framed', () => {
   const g = ready();
   const page = g.doGet({ parameter: { scheme: 'vmg' } });

@@ -121,16 +121,19 @@ from the portal (below).
 ## The grants portal: reviewers, chairs and assignments
 
 Everything is managed in the portal, not the spreadsheet. The spreadsheet
-only stores the data, and is the backup. Chairs see these tabs:
-**Applications**, **Ranking and funding**, **Reviewers**, **Call settings**
-and **Reports**. Reviewers see Applications, plus Reports when review is not
-blind.
+only stores the data, and is the backup. There are three roles:
+- **Chairs** see these tabs: **Applications**, **Ranking and funding**,
+  **Funded grants**, **People**, **Call settings** and **Reports**.
+- **Reviewers** see Applications (only those assigned to them), plus Reports
+  when review is not blind.
+- **The grants administrator** sees **Funded grants** and **Reports** only.
+  They do not review, and see only funded applications.
 
 In most calls the chairs are also the reviewers, so decisions can be quick:
 a chair scores an application and records the decision on the same page.
 
-**Adding people (Reviewers tab).** Enter a name and email, choose
-*Reviewer* or *Chair*, and click **Add**. With "Email them their link now"
+**Adding people (People tab).** Enter a name and email, choose
+*Reviewer*, *Chair* or *Grants administrator*, and click **Add**. With "Email them their link now"
 ticked, they get their **personal link** straight away. No password or
 Google account is needed. The table shows who has been invited and, for
 each person, how many assigned applications they have done, how many they
@@ -202,6 +205,40 @@ application.
   month, gender, ITC, under-40, career stage and country. Also a list of
   funded grants with a CSV download, and **Print or save as PDF**.
 
+## Funded grants: from decision to payment
+
+As soon as a chair marks an application **Funded**, it leaves the
+Applications list and appears on **Funded grants**. Chairs and the grants
+administrator both work here. For each grant the page shows:
+- the grantee and their email;
+- the scheme and the amount awarded;
+- the activity dates, and whether it has started or finished;
+- the **report due date**: 30 days after the activity ends, or 15 days after
+  the end of the grant period if sooner. It is marked "N days overdue" when
+  late.
+
+**Status**, set by hand from a drop-down as the grant moves on: *Awaiting
+e-COST application* (the starting point), *Grant letter issued*, *Activity
+under way*, *Report due*, *Report submitted in e-COST*, *Report approved*,
+*Paid*, *Cancelled*. Each change records who made it and when. The page
+cannot see e-COST itself, so whoever checks e-COST updates the status here.
+There is also a notes box per grant.
+
+**Reminders.** Click **Send reminder** on a grant, or tick several and use
+**Email reminder to selected**. The email depends on the status:
+- *Awaiting e-COST application*: it asks them to apply through e-COST, with
+  their CV in their e-COST profile.
+- Otherwise: it asks them to submit their report in e-COST by the due date
+  (with the certificate and programme for conference grants).
+
+Grants whose report is in, or that are paid or cancelled, are skipped.
+Reminders are copied to the EEG101 address, and the page shows how many have
+been sent and when.
+
+The filter at the top shows the grants still open (the default), reports
+overdue, those awaiting an e-COST application, those done, or all of them.
+The cards count each group.
+
 ## Running a call
 
 All of this is in the portal's **Call settings** tab. No code or
@@ -219,7 +256,8 @@ spreadsheet changes are needed.
 4. Assign reviewers to the applications. After the deadline,
    reviewers score and the chairs record decisions. Then email applicants;
    the platform does not send decision emails. Funded applicants are then
-   asked to apply through e-COST, where the application is approved and the
+   asked to apply through e-COST (track this, and send reminders, on Funded
+   grants), where the application is approved and the
    grant letter issued. Grants are paid after the activity, once the
    grantee's report is approved. The one exception: an STSM grantee may ask
    the Grant Holder for up to 50% in advance once the grant is approved, if
