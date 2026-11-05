@@ -107,6 +107,7 @@ function makeGoogle(opts = {}) {
     SpreadsheetApp: { create: n => new Book(n), openById: id => { const b = state.sheets[id]; if (!b) throw new Error('no sheet'); return b; } },
     DriveApp: { createFolder: n => new Folder(n, null), getFolderById: id => state.folders[id], getFileById: id => { const f = state.files[id]; if (!f) throw new Error('No item with the given ID could be found.'); return f; } },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => state.props[k] ?? null, setProperty: (k, v) => { state.props[k] = String(v); } }) },
+    ContentService: { MimeType: { JSON: 'application/json' }, createTextOutput: t => { const o = { text: t, setMimeType(m) { o.mime = m; return o; }, getContent: () => t }; return o; } },
     LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
     MailApp: { sendEmail: o => state.mail.push(o), getRemainingDailyQuota: () => 100 },
     Session: { getActiveUser: () => ({ getEmail: () => state.activeUser }), getEffectiveUser: () => ({ getEmail: () => state.effectiveUser }) },

@@ -170,11 +170,12 @@ function viewAbout() {
 function viewActivity() {
   const s = scheme();
   let specific = '';
-  if (state.scheme === 'stsm') {
+  if (s.kind === 'stsm') {
     specific = `<h3>Your host</h3>
-    <div class="grid">${field('host_name', 'Host (academic lead)')}${field('host_email', 'Host email', { type: 'email' })}</div>
-    <div class="grid">${field('host_institution', 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries, hint: 'Must be a different country from your own institution\'s.' })}</div>
-    ${radios('host_member', 'Is your host a member of EEG101?', ['Yes', 'No'], 'The academic lead at the host institution must be a member before you apply.')}`;
+    <div class="grid">${field('host_name', s.industry ? 'Host (named lead at the organisation)' : 'Host (academic lead)')}${field('host_email', 'Host email', { type: 'email' })}</div>
+    <div class="grid">${field('host_institution', s.industry ? 'Host company or organisation' : 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries, hint: 'Must be a different country from your own institution\'s.' })}</div>
+    ${s.industry ? field('host_type', 'Type of organisation', { type: 'select', options: CONFIG.industryTypes }) : ''}
+    ${radios('host_member', 'Is your host a member of EEG101?', ['Yes', 'No'], s.industry ? 'The named lead at the host organisation must be a member before you apply.' : 'The academic lead at the host institution must be a member before you apply.')}`;
   } else if (state.scheme === 'vmg') {
     specific = `<h3>Your collaborators</h3>
     ${field('collaborators', 'Who will you collaborate with?', { type: 'textarea', hint: 'Names, roles and institutions, one per line.' })}
@@ -270,8 +271,8 @@ function problems() {
       else if (state.end_date > CONFIG.periodEnd) out.push(`Everything must be finished by ${CONFIG.periodEndText}.`);
       else if (n < s.minDays || n > s.maxDays) out.push(`A ${s.short} lasts ${s.minDays}–${s.maxDays} days; yours is ${n}.`);
     }
-    if (state.scheme === 'stsm') {
-      need(['host_name', 'host_email', 'host_institution', 'host_country'], 'Give your host\'s details.');
+    if (s.kind === 'stsm') {
+      need(['host_name', 'host_email', 'host_institution', 'host_country'].concat(s.industry ? ['host_type'] : []), 'Give your host\'s details.');
       if (state.host_country && state.host_country === state.country) out.push('Your host must be in a different country from your own institution.');
       if (state.host_member !== 'Yes') out.push('Your host must be a member of EEG101 before you apply.');
     } else if (state.scheme === 'vmg') {

@@ -404,7 +404,9 @@ async function renderFunded(state, message) {
 async function renderCall(state, message) {
   if (!state) { main.innerHTML = '<p class="note">Loading…</p>'; state = await call('getCallSettings'); }
   const v = state.values;
-  const input = f => f.type === 'bool'
+  const input = f => f.type === 'schemes'
+    ? `<div style="grid-column:1/-1"><b style="font-size:14px">${esc(f.label)}</b><span class="note" style="display:block">${esc(f.help)}</span><div class="pick">${f.options.map(o => `<label><input type="checkbox" name="${f.key}" value="${esc(o.id)}"${v[f.key].indexOf(o.id) >= 0 ? ' checked' : ''}> ${esc(o.title)}</label>`).join('')}</div></div>`
+    : f.type === 'bool'
     ? `<label><input type="checkbox" name="${f.key}"${v[f.key] ? ' checked' : ''}> ${esc(f.label)}<span class="note">${esc(f.help)}</span></label>`
     : `<label>${esc(f.label)}<input name="${f.key}" type="${f.type === 'datetime' ? 'datetime-local' : f.type === 'date' ? 'date' : f.type === 'money' ? 'number' : 'text'}"${f.type === 'money' ? ' min="0" step="1"' : ''} value="${esc(v[f.key])}"><span class="note">${esc(f.help)}</span></label>`;
   main.innerHTML = `<div class="panel"><h2>Call settings</h2>
@@ -413,12 +415,12 @@ async function renderCall(state, message) {
     <form id="callform"><h3>The call</h3><div class="form-grid">${state.fields.filter(f => !/^budget_/.test(f.key)).map(input).join('')}</div>
     <h3 style="margin-top:18px">Money available per scheme</h3><div class="form-grid">${state.fields.filter(f => /^budget_/.test(f.key)).map(input).join('')}</div>
     <p style="margin-top:16px"><button class="btn" type="submit">Save settings</button> <span id="cmsg" class="msg"></span></p></form>
-    <p class="note">For a new call: change the ID prefix (e.g. G3), the name, the deadline and the end date, then switch "Accepting applications" on. Earlier applications are kept. On the website, also set each open scheme to "open" so the Apply button shows.</p></div>`;
+    <p class="note">For a new call: change the ID prefix (e.g. G3), the name, the deadline and the end date, then switch "Accepting applications" on. Earlier applications are kept. The website's Grants page shows the schemes in this call as open, with an Apply button, while applications are accepted.</p></div>`;
   const form = main.querySelector('#callform');
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const out = {};
-    state.fields.forEach(f => { const el = form.elements[f.key]; out[f.key] = f.type === 'bool' ? el.checked : el.value; });
+    state.fields.forEach(f => { const el = form.elements[f.key]; out[f.key] = f.type === 'schemes' ? Array.from(form.querySelectorAll(`[name=${f.key}]:checked`)).map(x => x.value) : f.type === 'bool' ? el.checked : el.value; });
     const msg = main.querySelector('#cmsg');
     try { msg.className = 'msg'; msg.textContent = 'Saving…'; const s2 = await call('saveCallSettings', out); data = null; renderCall(s2, 'Saved.'); }
     catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }

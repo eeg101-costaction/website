@@ -41,6 +41,7 @@ const GRANTS = {
     deadline: '',
     period_end: '2027-09-30',
     id_prefix: 'G2',
+    call_schemes: 'stsm, vmg, itc_conference, yri_conference, dissemination_conference',
     blind_review: 'TRUE',
     web_app_url: '',
     budget_stsm: '',
@@ -87,6 +88,28 @@ const SCHEMES = {
     ],
     budget: TRAVEL_BUDGET,
     documents: [CV, { id: 'host_letter', label: 'Confirmation from the host institution that it will receive you, with the dates (e-COST has a template)', required: true }]
+  },
+  // A special call: an STSM hosted by a company or other industry organisation.
+  // The same COST rules as any STSM, plus the host's sector.
+  stsm_industry: {
+    kind: 'stsm', industry: true, title: 'Industry STSM', short: 'Industry STSM', max: 4000, minDays: 5, maxDays: 90,
+    blurb: 'A research visit to a company or other industry organisation in another country, for specific work agreed with the host.',
+    who: 'Members at an institution in a COST Full or Cooperating Member country or a Near Neighbour Country, with an industry host.',
+    rules: [
+      'The host must be a company, SME, start-up or other industry organisation, in a different country from your own institution.',
+      'The named lead at the host must be an EEG101 member.',
+      'The grant is normally paid after the visit, once your report is approved. Once it is approved, you can ask the Grant Holder for up to 50% in advance; this depends on funds being available and the Grant Holder agreeing.'
+    ],
+    questions: [
+      { id: 'summary', label: 'Goals of the mission', hint: 'What you want to achieve, in a few sentences.' },
+      { id: 'workplan', label: 'Work to be carried out', hint: 'What you will do at the host, and when.' },
+      { id: 'outcomes', label: 'Expected outcomes', hint: 'Methods, tools, data, products, publications, training, a continuing partnership…' },
+      { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the mission helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' },
+      { id: 'benefit', label: 'Benefit to academia–industry collaboration', hint: 'What you, the host company and the EEG101 community gain, and how the collaboration could continue.' },
+      CONTRIBUTION
+    ],
+    budget: TRAVEL_BUDGET,
+    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host organisation that it will receive you, with the dates (e-COST has a template)', required: true }]
   },
   vmg: {
     kind: 'vmg', title: 'Virtual Mobility Grant (VMG)', short: 'VMG', max: 1500, minDays: 1, maxDays: 90,
@@ -153,6 +176,11 @@ const SCHEMES = {
   }
 };
 const ATTENDANCE = ['Face to face', 'Online'];
+const INDUSTRY_TYPES = ['Large company', 'SME (small or medium-sized company)', 'Start-up', 'Other industry organisation'];
+// The schemes a call offers when nothing else is set: all but the special
+// industry call, which runs on its own.
+const DEFAULT_CALL_SCHEMES = Object.keys(SCHEMES).filter(id => !SCHEMES[id].industry);
+const callSchemes = settings => { const ids = String(settings.call_schemes || '').split(/[,\s]+/).filter(id => SCHEMES[id]); return ids.length ? ids : DEFAULT_CALL_SCHEMES; };
 const maxFor = (s, attendance) => s.maxOnline && attendance === 'Online' ? s.maxOnline : s.max;
 const budgetFor = (s, attendance) => s.budgetOnline && attendance === 'Online' ? s.budgetOnline : s.budget;
 
@@ -219,6 +247,7 @@ const CONFLICT_GUIDANCE = [
 function doGet(e) {
   const params = (e && e.parameter) || {};
   rememberAppUrl();
+  if (params.view === 'status') return ContentService.createTextOutput(JSON.stringify(publicStatus())).setMimeType(ContentService.MimeType.JSON);
   if (params.view === 'review') {
     const me = reviewerByKey(params.key);
     if (!me) {
@@ -234,6 +263,18 @@ function doGet(e) {
   page.boot = JSON.stringify(applyConfig(String(params.scheme || ''))).replace(/</g, '\\u003c');
   return page.evaluate().setTitle('Apply for EEG101 funding').addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+// What the website's Grants page shows: whether the call is open, until when,
+// and which schemes it offers. Nothing private.
+function publicStatus() {
+  const settings = readSettings();
+  const open = isCallOpen(settings);
+  return {
+    open: open, callName: settings.call_name, schemes: open ? callSchemes(settings) : [],
+    deadline: settings.deadline, deadlineText: settings.deadline ? formatDateTime(parseDeadline(settings.deadline)) : '',
+    periodEndText: formatDate(settings.period_end)
+  };
 }
 
 function schemeSummaries() {
@@ -252,8 +293,9 @@ function applyConfig(preselect) {
     periodEnd: settings.period_end,
     periodEndText: formatDate(settings.period_end),
     today: Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd'),
-    preselect: SCHEMES[preselect] ? preselect : '',
-    schemes: SCHEMES,
+    preselect: callSchemes(settings).indexOf(preselect) >= 0 ? preselect : '',
+    schemes: callSchemes(settings).reduce((o, id) => { o[id] = SCHEMES[id]; return o; }, {}),
+    industryTypes: INDUSTRY_TYPES,
     itc: ITC_COUNTRIES,
     nnc: NNC_COUNTRIES,
     costMembers: COST_MEMBERS,
@@ -355,6 +397,7 @@ function validateApplication(p, settings, today) {
   if (p.website) fail('Your application could not be submitted.');
   const scheme = SCHEMES[p.scheme];
   if (!scheme) fail('Please choose a funding scheme.');
+  if (callSchemes(settings).indexOf(p.scheme) < 0) fail(`${scheme.title} is not part of this call. Please choose another scheme.`);
   const a = { scheme: p.scheme };
 
   ['first_name', 'last_name', 'institution', 'position'].forEach(key => { a[key] = clean(p[key], 150); if (!a[key]) fail('Please complete all the fields about you.'); });
@@ -385,8 +428,9 @@ function validateApplication(p, settings, today) {
   if (a.days < scheme.minDays || a.days > scheme.maxDays) fail(`A ${scheme.short} must last between ${scheme.minDays} and ${scheme.maxDays} days; yours is ${a.days}.`);
 
   // What the money is for.
-  if (p.scheme === 'stsm') {
+  if (scheme.kind === 'stsm') {
     ['host_institution', 'host_name', 'host_country'].forEach(k => { a[k] = clean(p[k], 150); if (!a[k]) fail('Please give the host institution, the host\'s name and the host country.'); });
+    if (scheme.industry) { a.host_type = clean(p.host_type, 60); if (INDUSTRY_TYPES.indexOf(a.host_type) < 0) fail('Please say what kind of industry organisation your host is.'); }
     a.host_email = clean(p.host_email, 200).toLowerCase(); if (!EMAIL_PATTERN.test(a.host_email)) fail('Please give a valid email address for your host.');
     if (COUNTRIES.indexOf(a.host_country) < 0) fail('Please choose the host country from the list.');
     if (a.host_country === a.country) fail('An STSM host must be in a different country from your own institution.');
@@ -561,7 +605,7 @@ function applicationHtml(a, blind) {
   const row = (k, v) => v === '' || v == null ? '' : `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`;
   const section = (title, body) => `<h2>${esc(title)}</h2>${body}`;
   const specifics = s.kind === 'stsm'
-    ? (blind ? row('Host', a.host_name) : row('Host', `${a.host_name} (${a.host_email})`)) + row('Host institution', `${a.host_institution}, ${a.host_country}`) + row('Host is an EEG101 member', a.host_member)
+    ? (blind ? row('Host', a.host_name) : row('Host', `${a.host_name} (${a.host_email})`)) + row(s.industry ? 'Host organisation' : 'Host institution', `${a.host_institution}, ${a.host_country}`) + row('Type of organisation', a.host_type) + row('Host is an EEG101 member', a.host_member)
     : s.kind === 'vmg'
       ? row('Collaborators', a.collaborators) + row('Third-party organisation involved', a.third_party) + row('Third-party lead is an EEG101 member', a.third_party_member) + row('Not part of an EEG101 leadership role', a.not_leadership)
       : row('Conference', a.conference_name) + row('Web address', a.conference_url) + row('Attendance', a.attendance) + row('Location', a.attendance === 'Online' ? 'Online' : [a.conference_location, a.conference_country].filter(Boolean).join(', ')) + row('Organised by a third party', a.third_party_organised) + row('Presentation', `${a.presentation}: ${a.contribution_title}`) + row('Abstract', a.abstract_status);
@@ -699,6 +743,7 @@ function setUpGrants() {
     deadline: 'Closing time in Brussels time, e.g. 2026-12-15T17:00. The form closes by itself after it. Empty: open until call_open is FALSE.',
     period_end: 'Every activity must end on or before this date (YYYY-MM-DD).',
     id_prefix: 'Middle part of application IDs, e.g. G2 gives EEG101-G2-001.',
+    call_schemes: 'The schemes this call offers, e.g. "stsm_industry" for the industry STSM call. Set in the portal.',
     budget_stsm: 'Optional: money available for STSMs in this call, for the budget tracker (€).',
     budget_vmg: 'Optional: money available for VMGs (€).',
     budget_itc_conference: 'Optional: money available for ITC Conference Grants (€).',
@@ -1076,6 +1121,7 @@ const CALL_FIELDS = [
   { key: 'deadline', label: 'Deadline (Brussels time)', type: 'datetime', help: 'Empty: open until you switch it off.' },
   { key: 'period_end', label: 'Activities must end by', type: 'date', help: 'The end of the grant period.' },
   { key: 'id_prefix', label: 'Application ID prefix', type: 'text', help: 'e.g. G2 gives EEG101-G2-001. Change it for each new call.' },
+  { key: 'call_schemes', label: 'Schemes in this call', type: 'schemes', help: 'Only these appear on the form, and as open on the website\'s Grants page.', options: Object.keys(SCHEMES).map(id => ({ id: id, title: SCHEMES[id].title })) },
   { key: 'blind_review', label: 'Blind review', type: 'bool', help: 'On: reviewers who are not chairs do not see who applied or their documents.' }
 ].concat(Object.keys(SCHEMES).map(id => ({ key: 'budget_' + id, label: `Budget: ${SCHEMES[id].short} (€)`, type: 'money', help: 'Optional, for the budget tracker.' })));
 
@@ -1083,7 +1129,7 @@ function getCallSettings(key) {
   requireReviewer(key, true);
   const settings = readSettings();
   const values = {};
-  CALL_FIELDS.forEach(f => { values[f.key] = f.type === 'bool' ? String(settings[f.key]).toUpperCase() === 'TRUE' : String(settings[f.key] == null ? '' : settings[f.key]); });
+  CALL_FIELDS.forEach(f => { values[f.key] = f.type === 'bool' ? String(settings[f.key]).toUpperCase() === 'TRUE' : f.type === 'schemes' ? callSchemes(settings) : String(settings[f.key] == null ? '' : settings[f.key]); });
   return { fields: CALL_FIELDS, values: values, open: isCallOpen(settings), formUrl: (() => { try { return appUrl(); } catch (e) { return ''; } })() };
 }
 
@@ -1094,7 +1140,11 @@ function saveCallSettings(key, input) {
     const v = input ? input[f.key] : undefined;
     if (v === undefined) return;
     if (f.type === 'bool') out[f.key] = v === true || String(v).toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE';
-    else {
+    else if (f.type === 'schemes') {
+      const ids = (Array.isArray(v) ? v : String(v).split(/[,\s]+/)).map(String).filter(id => SCHEMES[id]);
+      if (!ids.length) throw new Error('Choose at least one scheme for the call.');
+      out[f.key] = ids.join(', ');
+    } else {
       const t = clean(v, 150);
       if (f.key === 'call_name' && !t) throw new Error('Please give the call a name.');
       if (f.type === 'datetime' && t && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) throw new Error('Please give the deadline as a date and time.');

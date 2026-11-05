@@ -35,7 +35,7 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <div>
 <h2 class="grant-detail__title">{{ grant.title }}</h2>
 <span class="grant-detail__value">{{ grant.value }}</span>
-<span class="grant-status grant-status--{{ grant.status }}">{% if grant.status == "open" %}● Open now{% elsif grant.status == "upcoming" %}◌ Coming soon{% else %}✕ Closed{% endif %}</span>
+<span class="grant-status grant-status--{{ grant.status }}" data-grant-status>{% if grant.status == "open" %}● Open now{% elsif grant.status == "upcoming" %}◌ Coming soon{% else %}✕ Closed{% endif %}</span>
 </div>
 </div>
 
@@ -58,17 +58,21 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 {% if grant.industry_track %}✓ Industry-involved projects {% endif %}
 
 {% if grant.deadline and grant.deadline != "" %}
-**Deadline:** {{ grant.deadline }}
+**Deadline:** <span data-grant-deadline>{{ grant.deadline }}</span>
 {% endif %}
 
 {% if grant.notes and grant.notes != "" %}
+<div data-grant-notes markdown="1">
+
 **Notes:** {{ grant.notes }}
+
+</div>
 {% endif %}
 
 </div>
 </div>
 
-<div class="grant-detail__actions">
+<div class="grant-detail__actions" data-grant-actions>
 {% if grant.status == "open" and site.data.site.grants_application_endpoint and site.data.site.grants_application_endpoint != "" %}
 <a href="{{ '/grants/apply/' | relative_url }}?scheme={{ grant.id | replace: '-', '_' }}" class="btn btn-primary">Apply now</a>
 {% elsif grant.status == "open" and grant.application_url != "" %}
@@ -196,3 +200,41 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 {:/nomarkdown}
 
 For further guidance, consult the [COST funding pages](https://www.cost.eu/funding/funding-opportunities/).
+
+{%- assign endpoint = site.data.site.grants_application_endpoint -%}
+{% if endpoint and endpoint != "" %}
+{::nomarkdown}
+<script>
+// The live call from the grants platform: opening or closing a call in the
+// grants portal shows here without editing the site. If the platform cannot be
+// reached, the page keeps what _data/grants.yml says.
+(function () {
+  var apply = '{{ '/grants/apply/' | relative_url }}';
+  fetch('{{ endpoint }}?view=status').then(function (r) { return r.json(); }).then(function (live) {
+    document.querySelectorAll('section.grant-detail').forEach(function (section) {
+      var id = section.id.replace(/-/g, '_');
+      var open = live.open && live.schemes.indexOf(id) >= 0;
+      var badge = section.querySelector('[data-grant-status]');
+      var actions = section.querySelector('[data-grant-actions]');
+      var button = actions && actions.querySelector('a[href^="' + apply + '"]');
+      var deadline = section.querySelector('[data-grant-deadline]');
+      var notes = section.querySelector('[data-grant-notes]');
+      if (open) {
+        badge.className = 'grant-status grant-status--open'; badge.textContent = '● Open now';
+        if (deadline && live.deadlineText) deadline.textContent = live.deadlineText + '. Activities must end by ' + live.periodEndText + '.';
+        if (notes) notes.hidden = true;
+        if (actions && !button) {
+          var a = document.createElement('a');
+          a.href = apply + '?scheme=' + id; a.className = 'btn btn-primary'; a.textContent = 'Apply now';
+          actions.insertBefore(a, actions.firstChild);
+        }
+      } else if (badge.classList.contains('grant-status--open')) {
+        badge.className = 'grant-status grant-status--closed'; badge.textContent = '✕ Closed';
+        if (button) button.remove();
+      }
+    });
+  }).catch(function () {});
+})();
+</script>
+{:/nomarkdown}
+{% endif %}

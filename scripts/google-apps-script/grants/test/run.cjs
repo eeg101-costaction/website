@@ -458,6 +458,43 @@ test('funded grants: tracked to payment by chairs and the grants administrator, 
   throwsLike(() => g.assignReviewers(chair, { ids: [c], add: ['admin@example.org'] }), /not on the reviewer list/);
 });
 
+test('a special Industry STSM call, and the status the website reads', () => {
+  const g = ready();
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair']]);
+  const chair = keys['chair@example.org'];
+  const industry = o => stsm(g, Object.assign({ scheme: 'stsm_industry', host_institution: 'NeuroTech GmbH', host_country: 'Germany', host_type: 'SME (small or medium-sized company)' }, o || {}));
+  // Not in the default call.
+  assert.ok(!g.applyConfig('').schemes.stsm_industry);
+  assert.strictEqual(g.applyConfig('stsm_industry').preselect, '');
+  throwsLike(() => g.submitApplication(industry()), /not part of this call/);
+  let status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
+  same(status.schemes, ['stsm', 'vmg', 'itc_conference', 'yri_conference', 'dissemination_conference']);
+  assert.strictEqual(status.open, true);
+  assert.match(status.deadlineText, /15 December 2026/);
+  assert.ok(!/@|key/i.test(JSON.stringify(status)), 'nothing private in the public status');
+  // The chair runs the industry call on its own.
+  throwsLike(() => g.saveCallSettings(chair, { call_schemes: [] }), /at least one scheme/);
+  const saved = g.saveCallSettings(chair, { call_schemes: ['stsm_industry'], call_name: 'EEG101 Industry STSM call', id_prefix: 'IND1' });
+  same(saved.values.call_schemes, ['stsm_industry']);
+  same(Object.keys(g.applyConfig('').schemes), ['stsm_industry']);
+  assert.strictEqual(g.applyConfig('stsm_industry').preselect, 'stsm_industry');
+  throwsLike(() => g.submitApplication(stsm(g)), /Short-Term Scientific Mission \(STSM\) is not part of this call/);
+  throwsLike(() => g.submitApplication(industry({ host_type: '' })), /kind of industry organisation/);
+  throwsLike(() => g.submitApplication(industry({ host_country: 'Portugal' })), /different country/);
+  const r = g.submitApplication(industry());
+  assert.strictEqual(r.id, 'EEG101-IND1-001');
+  assert.match(r.html, /Host organisation[\s\S]*NeuroTech GmbH[\s\S]*SME/);
+  assert.match(r.html, /Benefit to academia–industry collaboration/);
+  assert.strictEqual(g.rowsAsObjects(g.tab('Applications'))[0]['Scheme'], 'Industry STSM');
+  status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
+  same(status.schemes, ['stsm_industry']);
+  // Closing the call in the portal closes it on the website too.
+  g.saveCallSettings(chair, { call_open: false });
+  status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
+  assert.strictEqual(status.open, false);
+  same(status.schemes, []);
+});
+
 test('the application page is built with its settings and can be framed', () => {
   const g = ready();
   const page = g.doGet({ parameter: { scheme: 'vmg' } });

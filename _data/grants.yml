@@ -1,5 +1,7 @@
 # Grant schemes offered by EEG101.
 # Update status, deadline, and application_url when new rounds open.
+# While the grants platform is set up, the Grants page also reads the live call
+# from it: schemes in an open call show as open, with an Apply button.
 # status options: open | closed | upcoming | tbc
 
 schemes:
@@ -31,6 +33,33 @@ schemes:
     notes: >
       All Year 1 STSM funding has been allocated. Visit our Spotlight page to follow
       the funded projects. Check back from November onwards for Year 2 funding calls.
+
+  - id: stsm-industry
+    title: "Industry STSM"
+    short_title: "Industry STSM"
+    icon: "🏭"
+    summary: >
+      A special Short-Term Scientific Mission call for research visits to a
+      company, SME, start-up or other industry organisation, to build
+      collaboration between EEG research and industry.
+    eligibility: >
+      Open to EEG101 members affiliated with an institution in a COST Full or
+      Cooperating Member country or a Near Neighbour Country. The host
+      organisation must be in industry and in a different country from yours, and
+      its named lead must be an EEG101 member.
+    value: "Up to €4,000"
+    duration: "Minimum 5 days, maximum 90 days"
+    yri_track: true
+    itc_track: true
+    industry_track: true
+    status: "upcoming"
+    deadline: "To be announced."
+    round_label: "Industry call"
+    application_url: ""
+    guidance_url: "https://www.cost.eu/cost-actions-event/action-networking-tools/"
+    contact: "eeg101costaction@gmail.com"
+    notes: >
+      A dedicated call for industry-hosted STSMs is planned. Check back for dates.
 
   - id: vmg
     title: "Virtual Mobility Grant"

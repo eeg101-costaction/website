@@ -33,6 +33,7 @@ bypassed.
 | Scheme | Maximum | Length | Who | Documents |
 | --- | --- | --- | --- | --- |
 | STSM | €4,000 | 5–90 days | any eligible member; host in a **different country** | CV; confirmation from the host |
+| Industry STSM (special call) | €4,000 | 5–90 days | as STSM, with a company, SME, start-up or other industry host | CV; confirmation from the host organisation |
 | Virtual Mobility Grant | €1,500 | 1–90 days | any eligible member; not for leadership-role tasks | CV; letter from the collaborating organisation if a third party is involved |
 | ITC Conference Grant | €2,500 in person, €500 online | 1–14 days | institution in an ITC or Near Neighbour Country; oral only | CV; acceptance or invitation letter |
 | YRI Conference Grant | €2,500 in person, €500 online | 1–14 days | under 40; poster or oral | CV; acceptance or invitation letter |
@@ -246,12 +247,17 @@ spreadsheet changes are needed.
 
 1. Set the name of the call (shown on the form and in emails), the deadline
    (Brussels time), the date activities must end by (the end of the grant
-   period), and optionally the money available per scheme.
-2. Tick **Accepting applications** and save. The form opens at once. It
-   closes by itself at the deadline, or when you untick it.
-3. On the website, set each scheme's `status: "open"` in `_data/grants.yml`.
-   An **Apply now** button then appears on the Grants page, linking to the
-   form with that scheme already chosen. Announce the call as usual, for
+   period), the **schemes in this call**, and optionally the money available
+   per scheme.
+2. Tick **Accepting applications** and save. The form opens at once, offering
+   only the schemes in the call. It closes by itself at the deadline, or when
+   you untick it.
+3. The website follows by itself. While the call is open, the Grants page
+   shows its schemes as "Open now", with the deadline and an **Apply now**
+   button linking to the form with that scheme already chosen. When the call
+   closes, they show as closed again. Nothing in the site needs editing.
+   (`_data/grants.yml` still holds each scheme's description, and the status
+   shown if the platform cannot be reached.) Announce the call as usual, for
    example as an event or a calendar date in the website editor.
 4. Assign reviewers to the applications. After the deadline,
    reviewers score and the chairs record decisions. Then email applicants;
@@ -265,6 +271,16 @@ spreadsheet changes are needed.
 5. For the next call, change the ID prefix (e.g. `G3`), the name and the
    dates, and tick Accepting applications again. Earlier applications are
    kept.
+
+**The industry STSM call** is a call of its own. In Call settings choose
+only *Industry STSM* as the scheme, give it its own name and ID prefix
+(e.g. `IND1`), set its dates, and open it. It works like an STSM, but the
+host must be an industry organisation, the applicant says what kind
+(large company, SME, start-up or other), and one proposal question asks
+about the benefit to academia–industry collaboration. Applications go
+through the same review, funding and Funded grants pages, listed as
+*Industry STSM*. Only one call runs at a time, so run the industry call
+before or after the main call, not alongside it.
 
 ## If something goes wrong
 
