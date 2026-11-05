@@ -56,13 +56,21 @@ select.cell{border:1px solid var(--border);border-radius:5px;padding:5px 7px;fon
 .linkbtn{background:none;border:0;color:var(--primary);cursor:pointer;font:700 14px var(--ui);margin-right:12px;padding:0;text-decoration:underline}
 .decide{border-top:2px solid var(--gold);margin-top:16px;padding-top:12px}.decide .row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:8px}
 .decide label{font-size:13px;font-weight:700}.decide input,.decide select{display:block;margin-top:3px}
+.assignbar{background:var(--gold-light);border:1px solid var(--gold-dark);border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:14px}
+.assignbar label,.pick label{display:inline-flex;gap:6px;align-items:center;margin-right:10px}
+.who{font-size:12px;display:block;white-space:nowrap}.who.scored{color:var(--ok)}.who.conflict{color:var(--error)}.who.todo{color:#8a6d00}
+.pick{margin:6px 0 10px;line-height:2}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 18px;align-items:start}
+.form-grid label{font-weight:700;font-size:14px}.form-grid input,.form-grid select{display:block;width:100%;margin-top:4px;border:1px solid var(--border);border-radius:6px;font:400 14px var(--ui);padding:7px 10px}
+.form-grid .note{font-weight:400;display:block}.form-grid input[type=checkbox]{display:inline;width:auto;margin-right:6px}
+td .linkbtn{font-size:13px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}}
 @media print{header nav,.toolbar,.noprint{display:none!important}body{background:#fff}main{padding:0}.card,.panel,table{break-inside:avoid}}
 </style>
 </head>
 <body>
 <header>
-  <h1>EEG101 grant review</h1>
+  <h1>EEG101 grants portal</h1>
   <nav class="tabs" id="tabs"></nav>
   <span class="me" id="me"></span>
 </header>
@@ -70,7 +78,7 @@ select.cell{border:1px solid var(--border);border-radius:5px;padding:5px 7px;fon
 <script>
 const BOOT = <?!= boot ?>;
 const me = BOOT.me;
-let data = null, view = 'list', openId = null, filter = { scheme: '', q: '', mine: '' }, pending = {};
+let data = null, view = 'list', openId = null, filter = { scheme: '', q: '', mine: '' }, pending = {}, notice = '';
 const main = document.getElementById('main');
 
 function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -86,7 +94,8 @@ function download(name, base64) {
 function fail(err) { main.insertAdjacentHTML('afterbegin', `<p class="msg err">${esc((err && err.message) || err)}</p>`); }
 
 document.getElementById('me').textContent = `${me.name || me.email} · ${me.chair ? 'Chair' : BOOT.blind ? 'Reviewer (blind review)' : 'Reviewer'}`;
-const TABS = [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
+const TABS = [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding'], ['people', 'Reviewers'], ['call', 'Call settings']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
+let selected = {};
 function tabs() { document.getElementById('tabs').innerHTML = TABS.map(t => `<button type="button" data-tab="${t[0]}" class="${view === t[0] || (view === 'detail' && t[0] === 'list') ? 'on' : ''}">${t[1]}</button>`).join(''); }
 document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) show(b.dataset.tab); });
 
@@ -99,6 +108,8 @@ async function show(v, id) {
     else if (v === 'detail') await renderDetail(id);
     else if (v === 'decide') renderDecide();
     else if (v === 'report') await renderReport();
+    else if (v === 'people') await renderPeople();
+    else if (v === 'call') await renderCall();
   } catch (err) { main.innerHTML = ''; fail(err); }
 }
 
@@ -113,22 +124,62 @@ function decisionPill(d) { return d ? `<span class="pill ${d.toLowerCase().repla
 /* -------------------------------------------------------- applications */
 
 function renderList() {
-  const apps = data.applications.filter(a => (!filter.scheme || a.scheme === filter.scheme) && (!filter.mine || (filter.mine === 'todo' ? !a.mine : !!a.mine)) && (!filter.q || (a.id + ' ' + a.applicant + ' ' + a.title + ' ' + a.institution).toLowerCase().indexOf(filter.q.toLowerCase()) >= 0));
+  const apps = data.applications.filter(a => (!filter.scheme || a.scheme === filter.scheme) && (!filter.mine || (filter.mine === 'todo' ? !a.mine && !a.own : filter.mine === 'assigned' ? a.assignedToMe : filter.mine === 'unassigned' ? !a.assigned.length : !!a.mine)) && (!filter.q || (a.id + ' ' + a.applicant + ' ' + a.title + ' ' + a.institution).toLowerCase().indexOf(filter.q.toLowerCase()) >= 0));
   const schemes = Array.from(new Set(data.applications.map(a => a.scheme))).sort();
   const todo = data.applications.filter(a => !a.mine && !a.own).length;
   main.innerHTML = `<div class="toolbar">
     <input id="q" type="search" placeholder="Search name, title, ID…" value="${esc(filter.q)}" aria-label="Search">
     <select id="fs" aria-label="Scheme"><option value="">All schemes</option>${schemes.map(s => `<option${s === filter.scheme ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
-    <select id="fm" aria-label="My reviews"><option value="">All applications</option><option value="todo"${filter.mine === 'todo' ? ' selected' : ''}>Still to score</option><option value="done"${filter.mine === 'done' ? ' selected' : ''}>Scored by me</option></select>
+    <select id="fm" aria-label="My reviews"><option value="">All applications</option><option value="todo"${filter.mine === 'todo' ? ' selected' : ''}>Still to score</option><option value="done"${filter.mine === 'done' ? ' selected' : ''}>Scored by me</option>${me.chair ? `<option value="unassigned"${filter.mine === 'unassigned' ? ' selected' : ''}>No reviewers assigned</option>` : `<option value="assigned"${filter.mine === 'assigned' ? ' selected' : ''}>Assigned to me</option>`}</select>
     <span class="note">${data.applications.length} applications · ${todo} still to score by you</span></div>
-  ${apps.length ? `<table><thead><tr><th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th><th>Decision</th></tr></thead><tbody>
-  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}"><td>${esc(a.id)}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td><td>${decisionPill(a.decision)}</td></tr>`).join('')}
+  ${notice ? `<p class="msg ok">${esc(notice)}</p>` : ''}
+  ${me.chair ? assignBar() : ''}
+  ${apps.length ? `<table><thead><tr>${me.chair ? `<th><input type="checkbox" id="all" aria-label="Select all"${apps.every(a => selected[a.id]) ? ' checked' : ''}></th>` : ''}<th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th>${me.chair ? '<th>Reviewers</th>' : ''}<th>Decision</th></tr></thead><tbody>
+  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
   </tbody></table>` : '<p class="note">No applications match.</p>'}
+  ${me.chair ? '<p class="note">Applications with no reviewers assigned are open to every reviewer. Once you assign reviewers, only they (and the chairs) can see that application. Tick applications to assign them in bulk, or assign from an application\'s own page.</p>' : ''}
   <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Review is blind: applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
   main.querySelector('#q').addEventListener('input', e => { filter.q = e.target.value; renderListKeepFocus(); });
   main.querySelector('#fs').addEventListener('change', e => { filter.scheme = e.target.value; renderList(); });
   main.querySelector('#fm').addEventListener('change', e => { filter.mine = e.target.value; renderList(); });
-  main.querySelectorAll('tr[data-id]').forEach(r => r.addEventListener('click', () => show('detail', r.dataset.id)));
+  main.querySelectorAll('tr[data-id]').forEach(r => r.addEventListener('click', e => { if (e.target.closest('input')) return; show('detail', r.dataset.id); }));
+  main.querySelectorAll('[data-sel]').forEach(c => c.addEventListener('change', () => { if (c.checked) selected[c.dataset.sel] = true; else delete selected[c.dataset.sel]; renderList(); }));
+  const all = main.querySelector('#all');
+  if (all) all.addEventListener('change', () => { apps.forEach(a => { if (all.checked) selected[a.id] = true; else delete selected[a.id]; }); renderList(); });
+  bindAssignBar();
+}
+
+function assignedList(a) {
+  if (!a.assigned.length) return '<span class="note">Open to all</span>';
+  return a.assigned.map(x => `<span class="who ${x.status}">${x.status === 'scored' ? '✓' : x.status === 'conflict' ? '✕' : '○'} ${esc(x.name)}</span>`).join('');
+}
+
+function assignBar() {
+  const ids = Object.keys(selected).filter(id => data.applications.some(a => a.id === id));
+  if (!ids.length) return '';
+  return `<div class="assignbar"><b>${ids.length} selected</b>
+    <span class="pick">${data.reviewers.map(r => `<label><input type="checkbox" name="pick" value="${esc(r.email)}"> ${esc(r.name || r.email)}${r.chair ? ' (chair)' : ''}</label>`).join('')}</span>
+    <label><input type="checkbox" id="notify" checked> Email them</label>
+    <button type="button" class="btn" id="assignAdd">Assign</button><button type="button" class="btn secondary" id="assignRemove">Unassign</button>
+    <button type="button" class="linkbtn" id="assignClear">Clear selection</button><span id="amsg" class="msg"></span></div>`;
+}
+
+function bindAssignBar() {
+  const add = main.querySelector('#assignAdd');
+  if (!add) return;
+  const run = async remove => {
+    const picks = Array.from(main.querySelectorAll('[name=pick]:checked')).map(x => x.value);
+    const msg = main.querySelector('#amsg');
+    if (!picks.length) { msg.className = 'msg err'; msg.textContent = 'Tick at least one reviewer.'; return; }
+    try {
+      msg.className = 'msg'; msg.textContent = 'Saving…';
+      data = await call('assignReviewers', { ids: Object.keys(selected), add: remove ? [] : picks, remove: remove ? picks : [], notify: !remove && main.querySelector('#notify').checked });
+      notice = data.notice; selected = {}; renderList(); notice = '';
+    } catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }
+  };
+  add.addEventListener('click', () => run(false));
+  main.querySelector('#assignRemove').addEventListener('click', () => run(true));
+  main.querySelector('#assignClear').addEventListener('click', () => { selected = {}; renderList(); });
 }
 function renderListKeepFocus() { const pos = main.querySelector('#q').selectionStart; renderList(); const q = main.querySelector('#q'); q.focus(); q.setSelectionRange(pos, pos); }
 
@@ -162,6 +213,11 @@ async function renderDetail(id) {
       <p class="note">Leave the amount empty to award what was requested.</p>
       <button class="btn" type="submit">Save decision</button> <span id="dsaved" class="msg"></span></form>`
     : me.chair ? '<p class="note decide">You declared a conflict of interest or applied yourself, so another chair must decide on this application.</p>' : '';
+  const assign = me.chair ? `<form id="asg" class="decide"><b>Reviewers for this application</b>
+      <p class="note">${a.assigned.length ? 'Only these reviewers (and the chairs) can see it.' : 'None assigned: every reviewer can see it.'}</p>
+      <div class="pick">${data.reviewers.map(r => { const x = a.assigned.filter(y => y.email === r.email)[0]; return `<label><input type="checkbox" name="pick" value="${esc(r.email)}"${x ? ' checked' : ''}> ${esc(r.name || r.email)}${r.chair ? ' (chair)' : ''}${x ? ` <span class="who ${x.status}" style="display:inline">${x.status === 'scored' ? 'scored' : x.status === 'conflict' ? 'conflict' : 'to score'}</span>` : ''}</label>`; }).join('<br>')}</div>
+      <label style="font-size:13px"><input type="checkbox" name="notify" checked> Email newly assigned reviewers</label><br>
+      <button class="btn secondary" type="submit">Save reviewers</button> <span id="asaved" class="msg"></span></form>` : '';
   main.innerHTML = `<p class="noprint"><button type="button" class="btn secondary" id="back">← All applications</button></p>
   <div class="layout"><div>
     <div class="panel" style="margin-bottom:14px"><h2>${esc(a.id)} · ${esc(a.title)}</h2>
@@ -172,6 +228,7 @@ async function renderDetail(id) {
   </div><div class="panel"><h2>Your review</h2>
     ${reviewForm}
     ${decide}
+    ${assign}
     ${a.others.length ? `<div class="other"><b>Other reviews</b>${a.others.map(o => `<p>${esc(o.reviewer)}: ${o.conflict ? 'conflict declared' : `mean ${o.mean == null ? '—' : o.mean.toFixed(2)} (${o.scores.join(' / ')}), ${esc(o.recommendation)}`}${o.comments ? `<br><span class="note">${esc(o.comments)}</span>` : ''}</p>`).join('')}</div>` : ''}
   </div></div>`;
   main.querySelector('#back').addEventListener('click', () => show('list'));
@@ -195,6 +252,18 @@ async function renderDetail(id) {
       } catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not save.'; }
     });
   }
+  const asg = main.querySelector('#asg');
+  if (asg) asg.addEventListener('submit', async e => {
+    e.preventDefault();
+    const out = main.querySelector('#asaved');
+    const boxes = Array.from(asg.querySelectorAll('[name=pick]'));
+    try {
+      out.className = 'msg'; out.textContent = 'Saving…';
+      data = await call('assignReviewers', { ids: [a.id], add: boxes.filter(b => b.checked).map(b => b.value), remove: boxes.filter(b => !b.checked).map(b => b.value), notify: asg.notify.checked });
+      out.className = 'msg ok'; out.textContent = data.notice || 'Saved.';
+      setTimeout(() => show('detail', a.id), 1200);
+    } catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not save.'; }
+  });
   const dec = main.querySelector('#dec');
   if (dec) dec.addEventListener('submit', async e => {
     e.preventDefault();
@@ -246,6 +315,65 @@ function renderDecide() {
     const changes = Object.keys(pending).map(id => { const a = data.applications.filter(x => x.id === id)[0]; return { id: id, decision: value(a, 'decision'), awarded: value(a, 'awarded'), rank: value(a, 'rank'), notes: value(a, 'notes') }; });
     const msg = main.querySelector('#dmsg');
     try { msg.className = 'msg'; msg.textContent = 'Saving…'; data = await call('saveDecisions', changes); pending = {}; renderDecide(); main.querySelector('#dmsg').className = 'msg ok'; main.querySelector('#dmsg').textContent = 'Saved.'; }
+    catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }
+  });
+}
+
+/* ----------------------------------------------------- reviewers (chair) */
+
+async function renderPeople(list, message) {
+  if (!list) { main.innerHTML = '<p class="note">Loading…</p>'; list = await call('listReviewers'); }
+  main.innerHTML = `<div class="panel" style="margin-bottom:16px"><h2>Add a reviewer or chair</h2>
+    <form id="add" class="form-grid" style="margin-top:10px">
+      <label>Name<input name="name" required></label>
+      <label>Email<input name="email" type="email" required></label>
+      <label>Role<select name="role"><option value="reviewer">Reviewer</option><option value="chair">Chair</option></select></label>
+      <label style="align-self:end"><input type="checkbox" name="invite" checked> Email them their link now</label>
+      <div style="align-self:end"><button class="btn" type="submit">Add</button></div>
+    </form><p class="note">Reviewers score the applications open or assigned to them${BOOT.blind ? ', without seeing who applied (blind review)' : ''}. Chairs see everything, score, assign reviewers, decide on funding and manage this list. Everyone gets a personal link by email; no password or Google account is needed.</p></div>
+  ${message ? `<p class="msg ok">${esc(message)}</p>` : ''}<span id="pmsg" class="msg"></span>
+  <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Invited</th><th class="num">Assigned</th><th class="num">Scored</th><th class="num">Conflicts</th><th></th></tr></thead><tbody>
+  ${list.map(p => `<tr><td>${esc(p.name)}${p.self ? ' <span class="note">(you)</span>' : ''}</td><td>${esc(p.email)}</td>
+    <td>${p.self ? 'Chair' : `<select class="cell" data-role="${esc(p.email)}" aria-label="Role"><option value="reviewer"${p.chair ? '' : ' selected'}>Reviewer</option><option value="chair"${p.chair ? ' selected' : ''}>Chair</option></select>`}</td>
+    <td>${p.invited ? esc(p.invited) : '<span class="note">Not yet</span>'}</td><td class="num">${p.assigned ? `${p.assignedDone} of ${p.assigned} done` : '—'}</td><td class="num">${p.scored}</td><td class="num">${p.conflicts}</td>
+    <td><button type="button" class="linkbtn" data-invite="${esc(p.email)}">${p.invited ? 'Resend link' : 'Send link'}</button><button type="button" class="linkbtn" data-renew="${esc(p.email)}">New link</button>${p.self ? '' : `<button type="button" class="linkbtn" data-remove="${esc(p.email)}">Remove</button>`}</td></tr>`).join('')}
+  </tbody></table>
+  <p class="note">"New link" emails a fresh link and stops the old one working, for example if a link was forwarded by mistake. "Remove" stops their link at once and takes them off their assignments; their reviews so far are kept.</p>`;
+  const msg = main.querySelector('#pmsg');
+  const act = async (fn, args, done) => {
+    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const l = await call(fn, ...args); data = null; renderPeople(l, done); }
+    catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }
+  };
+  const form = main.querySelector('#add');
+  form.addEventListener('submit', e => { e.preventDefault(); act('saveReviewer', [{ name: form.name.value, email: form.email.value, role: form.role.value, invite: form.invite.checked }], `${form.name.value || form.email.value} added${form.invite.checked ? ' and emailed their link' : ''}.`); });
+  main.querySelectorAll('[data-role]').forEach(sel => sel.addEventListener('change', () => act('saveReviewer', [{ email: sel.dataset.role, role: sel.value }], 'Role changed.')));
+  main.querySelectorAll('[data-invite]').forEach(b => b.addEventListener('click', () => act('inviteReviewer', [b.dataset.invite, false], `Link sent to ${b.dataset.invite}.`)));
+  main.querySelectorAll('[data-renew]').forEach(b => b.addEventListener('click', () => { if (confirm(`Send ${b.dataset.renew} a new link? Their old link will stop working.`)) act('inviteReviewer', [b.dataset.renew, true], `New link sent to ${b.dataset.renew}.`); }));
+  main.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => { if (confirm(`Remove ${b.dataset.remove}? Their link will stop working.`)) act('removeReviewer', [b.dataset.remove], `${b.dataset.remove} removed.`); }));
+}
+
+/* ------------------------------------------------- call settings (chair) */
+
+async function renderCall(state, message) {
+  if (!state) { main.innerHTML = '<p class="note">Loading…</p>'; state = await call('getCallSettings'); }
+  const v = state.values;
+  const input = f => f.type === 'bool'
+    ? `<label><input type="checkbox" name="${f.key}"${v[f.key] ? ' checked' : ''}> ${esc(f.label)}<span class="note">${esc(f.help)}</span></label>`
+    : `<label>${esc(f.label)}<input name="${f.key}" type="${f.type === 'datetime' ? 'datetime-local' : f.type === 'date' ? 'date' : f.type === 'money' ? 'number' : 'text'}"${f.type === 'money' ? ' min="0" step="1"' : ''} value="${esc(v[f.key])}"><span class="note">${esc(f.help)}</span></label>`;
+  main.innerHTML = `<div class="panel"><h2>Call settings</h2>
+    <p class="note">The application form is <b>${state.open ? 'open' : 'closed'}</b> right now.${state.formUrl ? ` Reviewers' links point to ${esc(state.formUrl)}.` : ''}</p>
+    ${message ? `<p class="msg ok">${esc(message)}</p>` : ''}
+    <form id="callform"><h3>The call</h3><div class="form-grid">${state.fields.filter(f => !/^budget_/.test(f.key)).map(input).join('')}</div>
+    <h3 style="margin-top:18px">Money available per scheme</h3><div class="form-grid">${state.fields.filter(f => /^budget_/.test(f.key)).map(input).join('')}</div>
+    <p style="margin-top:16px"><button class="btn" type="submit">Save settings</button> <span id="cmsg" class="msg"></span></p></form>
+    <p class="note">For a new call: change the ID prefix (e.g. G3), the name, the deadline and the end date, then switch "Accepting applications" on. Earlier applications are kept. On the website, also set each open scheme to "open" so the Apply button shows.</p></div>`;
+  const form = main.querySelector('#callform');
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const out = {};
+    state.fields.forEach(f => { const el = form.elements[f.key]; out[f.key] = f.type === 'bool' ? el.checked : el.value; });
+    const msg = main.querySelector('#cmsg');
+    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const s2 = await call('saveCallSettings', out); data = null; renderCall(s2, 'Saved.'); }
     catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }
   });
 }

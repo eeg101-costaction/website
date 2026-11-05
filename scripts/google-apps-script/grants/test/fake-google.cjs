@@ -27,6 +27,7 @@ function makeGoogle(opts = {}) {
     getDataRange() { return new Range(this, 1, 1, Math.max(1, this.rows.length), Math.max(1, this.getLastColumn())); }
     appendRow(v) { this.rows.push(v.slice()); return this; }
     setFrozenRows() {} hideColumns() {}
+    deleteRow(n) { this.rows.splice(n - 1, 1); }
   }
   class Book {
     constructor(name) { this.id = newId('sheet'); this.name = name; this.tabs = [new Sheet('Sheet1')]; this.editors = []; state.sheets[this.id] = this; }
@@ -109,7 +110,7 @@ function makeGoogle(opts = {}) {
     LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
     MailApp: { sendEmail: o => state.mail.push(o), getRemainingDailyQuota: () => 100 },
     Session: { getActiveUser: () => ({ getEmail: () => state.activeUser }), getEffectiveUser: () => ({ getEmail: () => state.effectiveUser }) },
-    ScriptApp: { getProjectTriggers: () => state.triggers, deleteTrigger() {}, newTrigger: h => ({ timeBased: () => ({ everyDays: () => ({ create: () => state.triggers.push({ getHandlerFunction: () => h }) }) }) }) },
+    ScriptApp: { getService: () => ({ getUrl: () => state.serviceUrl || '' }), getProjectTriggers: () => state.triggers, deleteTrigger() {}, newTrigger: h => ({ timeBased: () => ({ everyDays: () => ({ create: () => state.triggers.push({ getHandlerFunction: () => h }) }) }) }) },
     Utilities, HtmlService,
   };
   // Fix "now" for Date() inside the script, so "today" is predictable.

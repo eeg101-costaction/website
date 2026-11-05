@@ -99,7 +99,10 @@ Gmail sends the confirmation emails.
 6. **Deploy → New deployment → ⚙ Web app**. Description *Grants*, **Execute
    as: Me**, **Who has access: Anyone**. Click **Deploy** and copy the **Web
    app URL** (it ends in `/exec`).
-7. In the spreadsheet's **Settings** tab, paste that URL into `web_app_url`.
+7. Open that URL once in your browser. It shows the application form, and
+   the app remembers its own address, which it needs for portal links. Then
+   run **showReviewerLinks** in the editor. The log shows your personal link
+   to the **grants portal**; bookmark it. Add everyone else from the portal.
 8. Put the same URL into `_data/site.yml` as `grants_application_endpoint`
    (or send it to the website admin). The /grants/apply/ page then shows the
    form.
@@ -111,37 +114,60 @@ keeps the web address. Then run **setUpGrants** once more. It adds any new
 settings and columns and leaves everything else as it is.
 
 If you set the platform up with an earlier version, you may have a second
-deployment called *Review*. You can archive it, since the review page now
-comes from the main deployment. Run **setUpGrants**, fill in `web_app_url`,
-and send everyone their link (below).
+deployment called *Review*. You can archive it, since the portal now comes
+from the main deployment. Run **setUpGrants**, then add and invite people
+from the portal (below).
 
-## Reviewers and chairs
+## The grants portal: reviewers, chairs and assignments
+
+Everything is managed in the portal, not the spreadsheet. The spreadsheet
+only stores the data, and is the backup. Chairs see these tabs:
+**Applications**, **Ranking and funding**, **Reviewers**, **Call settings**
+and **Reports**. Reviewers see Applications, plus Reports when review is not
+blind.
 
 In most calls the chairs are also the reviewers, so decisions can be quick:
 a chair scores an application and records the decision on the same page.
 
-1. In the spreadsheet's **Reviewers** tab, list each person's email, their
-   name, and `reviewer` or `chair`. You are added as chair during setup.
-2. In the Apps Script editor, run **sendReviewerLinks**. It emails everyone
-   on the list who has not had a link yet their **personal link** to the
-   review page, and records the date in *Link sent*. Run
-   **showReviewerLinks** to see the links in the log without emailing them,
-   for example to open your own.
-3. Reviewers need no Google access to the spreadsheet or folder. The page
-   runs as the owner and shows each person only what they may see.
+**Adding people (Reviewers tab).** Enter a name and email, choose
+*Reviewer* or *Chair*, and click **Add**. With "Email them their link now"
+ticked, they get their **personal link** straight away. No password or
+Google account is needed. The table shows who has been invited and, for
+each person, how many assigned applications they have done, how many they
+have scored, and how many conflicts they have declared. From the table you
+can:
+- change someone's role;
+- **Resend link**;
+- **New link**, which stops the old link working, e.g. if it was forwarded;
+- **Remove**, which stops their link at once and takes them off their
+  assignments. Their reviews so far are kept.
 
-To remove someone, delete their row; their link stops working at once. To
-replace a link that was shared by mistake, clear their *Personal key* and
-*Link sent* cells and run **sendReviewerLinks** again. Chairs who also want
-the spreadsheet and Drive folder can be given access with
-**shareWithChairs**.
+You cannot remove yourself or your own chair role; another chair can.
 
-**Blind review.** With `blind_review` set to `TRUE` (the default), reviewers
+**Assigning reviewers (Applications tab).** An application with no reviewers
+assigned is open to every reviewer. Once reviewers are assigned, only they
+(and the chairs) can see, open or score it. Two ways to assign:
+- **In bulk:** tick applications in the list, tick reviewers in the yellow
+  bar, then **Assign** or **Unassign**.
+- **One at a time:** on an application's page, under *Reviewers for this
+  application*.
+
+With "Email them" ticked, each newly assigned reviewer gets one email
+listing their new applications. The *Reviewers* column shows each
+assignee's progress: ○ to score, ✓ scored, ✕ conflict. Use the "No
+reviewers assigned" filter to find gaps. Applicants are never assigned
+their own application.
+
+From the Apps Script editor, **showReviewerLinks** logs everyone's link,
+including your own. **shareWithChairs** gives the chairs the spreadsheet and
+Drive folder too, if they want them.
+
+**Blind review.** With **Blind review** ticked in Call settings (the default), reviewers
 who are not chairs do not see who applied. They see the proposal, budget,
 dates, country, ITC, under-40 and career stage, but not the applicant's name,
 email, institution, ORCID, gender, signature or uploaded documents (CVs and
-letters name people). They do not get the Reports tab either. Set
-`blind_review` to `FALSE` to show reviewers everything. **Chairs always see
+letters name people). They do not get the Reports tab either. Untick it to
+show reviewers everything. **Chairs always see
 everything**, including every score as soon as it is given, so they can
 decide without waiting.
 
@@ -170,49 +196,53 @@ application.
   button ranks them by score; the order can then be adjusted by hand, and
   decisions made for many at once.
 - **Budget tracker:** money committed per scheme against the amounts set in
-  the Settings tab (`budget_stsm`, `budget_itc_conference` and so on).
+  the amounts set in **Call settings**.
 - **Reports:** totals, then breakdowns by scheme (against budget), by start
   month, gender, ITC, under-40, career stage and country. Also a list of
   funded grants with a CSV download, and **Print or save as PDF**.
 
 ## Running a call
 
-All of this is in the spreadsheet's **Settings** tab. No code changes are
-needed.
+All of this is in the portal's **Call settings** tab. No code or
+spreadsheet changes are needed.
 
-1. Set `call_name` (shown on the form and in emails), `deadline` (Brussels
-   time, e.g. `2026-12-15T17:00`), `period_end` (e.g. `2027-09-30`), and
-   optionally the budgets.
-2. Set `call_open` to `TRUE`. The form opens at once. It closes by itself at
-   the deadline, or when `call_open` is set back to `FALSE`.
+1. Set the name of the call (shown on the form and in emails), the deadline
+   (Brussels time), the date activities must end by (the end of the grant
+   period), and optionally the money available per scheme.
+2. Tick **Accepting applications** and save. The form opens at once. It
+   closes by itself at the deadline, or when you untick it.
 3. On the website, set each scheme's `status: "open"` in `_data/grants.yml`.
    An **Apply now** button then appears on the Grants page, linking to the
    form with that scheme already chosen. Announce the call as usual, for
    example as an event or a calendar date in the website editor.
-4. After the deadline, reviewers score and the chairs record decisions. Then
-   email applicants; the platform does not send decision emails. Funded
-   applicants are then asked to apply through e-COST, where the
-   application is approved and the grant letter issued. Grants are paid after
-   the activity, once the grantee's report is approved. The one exception:
-   an STSM grantee may ask the Grant Holder for up to 50% in advance once
-   the grant is approved, if funds allow and the Grant Holder agrees.
-5. For the next call, change `id_prefix` (e.g. `G3`) and the dates, and set
-   `call_open` to `TRUE` again. Earlier rows stay in the spreadsheet.
+4. Assign reviewers (or leave applications open to all). After the deadline,
+   reviewers score and the chairs record decisions. Then email applicants;
+   the platform does not send decision emails. Funded applicants are then
+   asked to apply through e-COST, where the application is approved and the
+   grant letter issued. Grants are paid after the activity, once the
+   grantee's report is approved. The one exception: an STSM grantee may ask
+   the Grant Holder for up to 50% in advance once the grant is approved, if
+   funds allow and the Grant Holder agrees.
+5. For the next call, change the ID prefix (e.g. `G3`), the name and the
+   dates, and tick Accepting applications again. Earlier applications are
+   kept.
 
 ## If something goes wrong
 
 - **An applicant says the form will not submit:** the message above the
   form says why, for example a date after `period_end` or a budget over the
-  maximum. If it says the call is closed, check `call_open` and `deadline`.
+  maximum. If it says the call is closed, check Call settings.
 - **No confirmation email arrived:** the application is still saved; the
   applicant is told so on screen and can download their copy. Look in the
   spreadsheet for their row. Emails come from the Gmail account that owns the
   script, so check its daily sending limit.
 - **A reviewer sees "This page is for EEG101 grant reviewers":** their link
-  is wrong or no longer valid (their row was deleted or their key cleared).
-  Run **showReviewerLinks** and send them the link from the log.
-- **`sendReviewerLinks` says to fill in `web_app_url`:** paste the
-  deployment's address (ending in `/exec`) into the Settings tab.
+  is wrong or no longer valid (they were removed, or given a new link).
+  Use **Resend link** on the Reviewers tab.
+- **"The review links need the web app address":** open the deployed web
+  app once, so it can remember its address, then try again.
+- **A reviewer can't find an application:** it is assigned to other
+  reviewers. Assign them on its page.
 - **To correct an application:** edit its row in the spreadsheet. The PDF in
   the folder is what the applicant submitted, and stays as the record.
 

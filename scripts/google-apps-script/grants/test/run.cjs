@@ -202,15 +202,15 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
 
   // Links: emailed once each, and only a listed key opens the page.
   g.sendReviewerLinks();
-  assert.strictEqual(g.state.mail.filter(m => m.subject === 'Your EEG101 grant review link').length, 5);
+  assert.strictEqual(g.state.mail.filter(m => m.subject === 'Your EEG101 grants portal link').length, 5);
   assert.match(g.state.mail.filter(m => m.to === 'r1@example.org')[0].body, new RegExp('exec\\?view=review&key=' + keys['r1@example.org']));
   g.sendReviewerLinks();
-  assert.strictEqual(g.state.mail.filter(m => m.subject === 'Your EEG101 grant review link').length, 5);
+  assert.strictEqual(g.state.mail.filter(m => m.subject === 'Your EEG101 grants portal link').length, 5);
   assert.match(g.doGet({ parameter: { view: 'review', key: 'x'.repeat(40) } }).getContent(), /not valid/);
   assert.match(g.doGet({ parameter: { view: 'review' } }).getContent(), /not valid/);
   throwsLike(() => g.listApplications('nope'), /not valid/);
   const page = g.doGet({ parameter: { view: 'review', key: keys['r1@example.org'] } }).getContent();
-  assert.match(page, /EEG101 grant review/);
+  assert.match(page, /EEG101 grants portal/);
   assert.strictEqual(JSON.parse(page.match(/const BOOT = (.*);\n/)[1]).blind, true);
 
   // A blind reviewer sees no names, documents or reports; scores stay hidden until they score.
@@ -304,6 +304,96 @@ test('set-up adds new columns to a spreadsheet made by an older version', () => 
   g.setUpGrants();
   same(tab.rows[0], ['Email', 'Name', 'Role (reviewer or chair)', 'Personal key', 'Link sent']);
   throwsLike(() => g.showReviewerLinks(), /web_app_url/);
+});
+
+test('portal: chairs add, invite, re-key and remove reviewers', () => {
+  const g = ready();
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer']]);
+  const chair = keys['chair@example.org'];
+  throwsLike(() => g.listReviewers(keys['r1@example.org']), /Only a grants chair/);
+  throwsLike(() => g.saveReviewer(keys['r1@example.org'], { email: 'x@example.org' }), /Only a grants chair/);
+  let list = g.saveReviewer(chair, { email: 'New@Example.org', name: 'New Person', role: 'reviewer', invite: true });
+  assert.ok(list.some(r => r.email === 'new@example.org' && r.name === 'New Person' && !r.chair && r.invited));
+  const mail = g.state.mail.filter(m => m.to === 'new@example.org');
+  assert.strictEqual(mail.length, 1);
+  const link = mail[0].body.match(/key=(\w+)/)[1];
+  assert.ok(g.listApplications(link));
+  throwsLike(() => g.saveReviewer(chair, { email: 'nope' }), /valid email/);
+  throwsLike(() => g.saveReviewer(chair, { email: 'chair@example.org', role: 'reviewer' }), /your own chair role/);
+  list = g.saveReviewer(chair, { email: 'new@example.org', role: 'chair' });
+  assert.ok(list.filter(r => r.email === 'new@example.org')[0].chair);
+  assert.ok(g.listApplications(link).me.chair);
+  // A new link replaces the old one.
+  g.inviteReviewer(chair, 'new@example.org', true);
+  const newLink = g.state.mail.filter(m => m.to === 'new@example.org').pop().body.match(/key=(\w+)/)[1];
+  assert.notStrictEqual(newLink, link);
+  throwsLike(() => g.listApplications(link), /not valid/);
+  assert.ok(g.listApplications(newLink));
+  // Removing stops the link working.
+  throwsLike(() => g.removeReviewer(chair, 'chair@example.org'), /yourself/);
+  list = g.removeReviewer(chair, 'new@example.org');
+  assert.ok(!list.some(r => r.email === 'new@example.org'));
+  throwsLike(() => g.listApplications(newLink), /not valid/);
+});
+
+test('portal: assigned applications are only open to their reviewers', () => {
+  const g = ready();
+  const a = g.submitApplication(stsm(g)).id;
+  const b = g.submitApplication(stsm(g, { email: 'r2@example.org', title: 'Second' })).id;
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer'], ['r2@example.org', 'Rev Two', 'reviewer']]);
+  const chair = keys['chair@example.org'], r1 = keys['r1@example.org'], r2 = keys['r2@example.org'];
+  // Nothing assigned yet: every reviewer sees everything.
+  assert.strictEqual(g.listApplications(r1).applications.length, 2);
+  throwsLike(() => g.assignReviewers(r1, { ids: [a], add: ['r1@example.org'] }), /Only a grants chair/);
+  throwsLike(() => g.assignReviewers(chair, { ids: [a], add: ['stranger@example.org'] }), /not on the reviewer list/);
+  g.state.mail = [];
+  const out = g.assignReviewers(chair, { ids: [a, b], add: ['r2@example.org'], notify: true });
+  assert.match(out.notice, /own application/);
+  same(out.applications.filter(x => x.id === a)[0].assigned.map(x => [x.email, x.status]), [['r2@example.org', 'todo']]);
+  same(out.applications.filter(x => x.id === b)[0].assigned, []);
+  assert.strictEqual(g.state.mail.length, 1);
+  assert.match(g.state.mail[0].body, new RegExp(`${a}: Harmonising`));
+  assert.ok(!new RegExp(b).test(g.state.mail[0].body));
+  // r1 is not assigned to a, so cannot see, open or score it; b is still open to all.
+  same(g.listApplications(r1).applications.map(x => x.id), [b]);
+  throwsLike(() => g.getApplication(r1, a), /not assigned to you/);
+  throwsLike(() => g.saveReview(r1, { id: a, scores: [5, 5, 5, 5, 5], recommendation: 'Fund' }), /not assigned to you/);
+  assert.ok(g.listApplications(r2).applications.filter(x => x.id === a)[0].assignedToMe);
+  g.saveReview(r2, { id: a, scores: [4, 4, 4, 4, 4], recommendation: 'Fund' });
+  assert.strictEqual(g.listApplications(chair).applications.filter(x => x.id === a)[0].assigned[0].status, 'scored');
+  const people = g.listReviewers(chair);
+  same(people.filter(p => p.email === 'r2@example.org').map(p => [p.assigned, p.assignedDone, p.scored]), [[1, 1, 1]]);
+  // Unassigning opens it up again; removing a reviewer takes them off.
+  g.assignReviewers(chair, { ids: [a], add: ['r1@example.org'], remove: ['r2@example.org'] });
+  assert.strictEqual(g.listApplications(r1).applications.length, 2);
+  g.removeReviewer(chair, 'r1@example.org');
+  same(g.listApplications(chair).applications.filter(x => x.id === a)[0].assigned, []);
+});
+
+test('portal: chairs run the call from the settings page', () => {
+  const g = ready();
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer']]);
+  const chair = keys['chair@example.org'];
+  throwsLike(() => g.getCallSettings(keys['r1@example.org']), /Only a grants chair/);
+  const s = g.getCallSettings(chair);
+  assert.strictEqual(s.values.call_open, true);
+  assert.ok(s.fields.some(f => f.key === 'budget_yri_conference'));
+  throwsLike(() => g.saveCallSettings(chair, { deadline: 'soon' }), /date and time/);
+  throwsLike(() => g.saveCallSettings(chair, { id_prefix: 'G 3!' }), /ID prefix/);
+  throwsLike(() => g.saveCallSettings(chair, { budget_stsm: '-5' }), /amount in euros/);
+  const saved = g.saveCallSettings(chair, { call_open: false, id_prefix: 'G3', budget_stsm: '20000', blind_review: false });
+  assert.strictEqual(saved.values.call_open, false);
+  assert.strictEqual(g.applyConfig('').open, false);
+  assert.strictEqual(g.readSettings().id_prefix, 'G3');
+  assert.strictEqual(g.listApplications(keys['r1@example.org']).blind, false);
+});
+
+test('the web app remembers its own address for review links', () => {
+  const g = makeGoogle();
+  g.setUpGrants();
+  g.state.serviceUrl = 'https://script.google.com/macros/s/LIVE/exec';
+  g.doGet({ parameter: {} });
+  assert.strictEqual(g.readSettings().web_app_url, 'https://script.google.com/macros/s/LIVE/exec');
 });
 
 test('the application page is built with its settings and can be framed', () => {

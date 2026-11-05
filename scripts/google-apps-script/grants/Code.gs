@@ -191,7 +191,7 @@ const APPLICATION_COLUMNS = [
   'Position', 'Country', 'ITC', 'Gender', 'Under 40 (YRI)', 'Early-career (PhD < 8 years or student)', 'Career stage',
   'EEG101 member', 'Working Groups', 'ORCID', 'Start date', 'End date', 'Days', 'Host / collaborator / conference',
   'Requested (€)', 'Eligibility notes', 'Drive folder', 'Application PDF', 'Documents',
-  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Data'
+  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Assigned reviewers', 'Data'
 ];
 const REVIEW_COLUMNS = ['Application ID', 'Reviewer', 'Conflict of interest'].concat(CRITERIA.map(c => c.label), ['Mean score', 'Recommendation', 'Comments', 'Updated']);
 const REVIEWER_COLUMNS = ['Email', 'Name', 'Role (reviewer or chair)', 'Personal key', 'Link sent'];
@@ -209,16 +209,17 @@ const CONFLICT_GUIDANCE = [
 
 function doGet(e) {
   const params = (e && e.parameter) || {};
+  rememberAppUrl();
   if (params.view === 'review') {
     const me = reviewerByKey(params.key);
     if (!me) {
       return HtmlService.createHtmlOutput(
         '<p style="font-family:sans-serif;padding:24px">This page is for EEG101 grant reviewers, who each have a personal link. This link is not valid, or no longer valid. If you think you should have access, contact eeg101costaction@gmail.com.</p>'
-      ).setTitle('EEG101 grant review');
+      ).setTitle('EEG101 grants portal');
     }
     const page = HtmlService.createTemplateFromFile('Review');
     page.boot = JSON.stringify({ me: me, key: String(params.key).trim(), blind: isBlind(me, readSettings()), criteria: CRITERIA, recommendations: RECOMMENDATIONS, decisions: DECISIONS, conflictGuidance: CONFLICT_GUIDANCE, schemes: schemeSummaries() }).replace(/</g, '\\u003c');
-    return page.evaluate().setTitle('EEG101 grant review').addMetaTag('viewport', 'width=device-width, initial-scale=1');
+    return page.evaluate().setTitle('EEG101 grants portal').addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
   const page = HtmlService.createTemplateFromFile('Apply');
   page.boot = JSON.stringify(applyConfig(String(params.scheme || ''))).replace(/</g, '\\u003c');
@@ -727,39 +728,269 @@ function shareWithChairs() {
 // owns the script, so reviewers need no access to the spreadsheet or folder,
 // and blind review is real: they only ever see what the page shows them.
 //
-// sendReviewerLinks emails a link to everyone listed who has not had one yet.
-// To withdraw someone's access, delete their row (or clear their key).
+// Chairs add, invite and remove reviewers on the "Reviewers" page of the
+// portal. From the editor, sendReviewerLinks emails everyone listed who has not
+// had a link yet, and showReviewerLinks logs everyone's link (e.g. your own).
 function sendReviewerLinks() { reviewerLinks(true); }
-
-// Logs everyone's link without emailing it, e.g. to open your own.
 function showReviewerLinks() { reviewerLinks(false); }
 
 function reviewerLinks(send) {
-  const url = String(readSettings().web_app_url || '').trim();
-  if (!/^https:\/\/script\.google\.com\/\S+\/exec$/.test(url)) throw new Error('Put the web app address (it ends in /exec) in the web_app_url row of the Settings tab first.');
-  const sheet = tab('Reviewers');
-  ensureColumns(sheet, REVIEWER_COLUMNS);
-  const { map } = headerMap(sheet);
+  const sheet = reviewersTab();
   rowsAsObjects(sheet).forEach(r => {
     const email = String(r['Email'] || '').trim().toLowerCase();
     if (!EMAIL_PATTERN.test(email)) return;
-    let key = String(r['Personal key'] || '').trim();
-    if (key.length < 32) { key = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, ''); sheet.getRange(r._row, map['Personal key'] + 1).setValue(key); }
-    const link = `${url}?view=review&key=${key}`;
-    const chair = /chair/i.test(String(r['Role (reviewer or chair)'] || ''));
-    if (send && !r['Link sent']) {
-      const text = [
-        `Dear ${String(r['Name'] || '').trim() || 'colleague'},`,
-        `You have been added as ${chair ? 'a chair' : 'a reviewer'} for EEG101 grant applications. This is your personal link to the review page:\n${link}`,
-        'Please keep it to yourself: anyone with the link can act as you. If it is shared by mistake, tell us and we will replace it.',
-        'Before you score an application, check whether you have a conflict of interest with the applicant (the page lists the situations). If you do, declare it and do not score.',
-        'With thanks,\nThe EEG101 Grants team'
-      ];
-      MailApp.sendEmail({ to: email, replyTo: GRANTS.replyTo, name: GRANTS.name, subject: 'Your EEG101 grant review link', body: text.join('\n\n') });
-      sheet.getRange(r._row, map['Link sent'] + 1).setValue(new Date());
-    }
+    const link = send && !r['Link sent'] ? sendInvite(sheet, r, false) : reviewLink(sheet, r, false);
     console.log(`${email}: ${link}`);
   });
+}
+
+// The web app's own address, kept in Settings (web_app_url) the first time the
+// deployed app is opened, so links can be made from the editor too.
+function rememberAppUrl() {
+  try {
+    const url = String(ScriptApp.getService().getUrl() || '');
+    if (/^https:\/\/script\.google\.com\/\S+\/exec$/.test(url) && readSettings().web_app_url !== url) setSetting('web_app_url', url);
+  } catch (error) { /* not set up yet, or not deployed: nothing to remember */ }
+}
+
+function appUrl() {
+  const saved = String(readSettings().web_app_url || '').trim();
+  if (/^https:\/\/script\.google\.com\/\S+\/exec$/.test(saved)) return saved;
+  let url = '';
+  try { url = String(ScriptApp.getService().getUrl() || ''); } catch (error) { url = ''; }
+  if (/^https:\/\/script\.google\.com\/\S+\/exec$/.test(url)) return url;
+  throw new Error('The review links need the web app address. Open the deployed web app once (or put its address, ending in /exec, in the web_app_url setting) and try again.');
+}
+
+function reviewersTab() {
+  const sheet = tab('Reviewers');
+  ensureColumns(sheet, REVIEWER_COLUMNS);
+  return sheet;
+}
+
+// The personal link for a row of the Reviewers tab, making a key if it has
+// none (or a new one, which stops the old link working).
+function reviewLink(sheet, r, renew) {
+  const { map } = headerMap(sheet);
+  let key = String(r['Personal key'] || '').trim();
+  if (renew || key.length < 32) {
+    key = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '');
+    sheet.getRange(r._row, map['Personal key'] + 1).setValue(key);
+    r['Personal key'] = key;
+  }
+  return `${appUrl()}?view=review&key=${key}`;
+}
+
+function sendInvite(sheet, r, renew) {
+  const link = reviewLink(sheet, r, renew);
+  const chair = /chair/i.test(String(r['Role (reviewer or chair)'] || ''));
+  const text = [
+    `Dear ${String(r['Name'] || '').trim() || 'colleague'},`,
+    `You have been added as ${chair ? 'a chair' : 'a reviewer'} for EEG101 grant applications. This is your personal link to the grants portal:\n${link}`,
+    renew ? 'This link replaces any earlier one, which no longer works.' : '',
+    'Please keep it to yourself: anyone with the link can act as you. If it is shared by mistake, tell us and we will replace it.',
+    'Before you score an application, check whether you have a conflict of interest with the applicant (the portal lists the situations). If you do, declare it and do not score.',
+    'With thanks,\nThe EEG101 Grants team'
+  ].filter(Boolean);
+  MailApp.sendEmail({ to: String(r['Email']).trim().toLowerCase(), replyTo: GRANTS.replyTo, name: GRANTS.name, subject: 'Your EEG101 grants portal link', body: text.join('\n\n') });
+  sheet.getRange(r._row, headerMap(sheet).map['Link sent'] + 1).setValue(new Date());
+  return link;
+}
+
+function setSetting(key, value) {
+  const sheet = tab('Settings');
+  const rows = sheet.getDataRange().getValues();
+  for (let i = 1; i < rows.length; i++) if (String(rows[i][0]).trim() === key) { sheet.getRange(i + 1, 2).setValue(value); return; }
+  sheet.appendRow([key, value, '']);
+}
+
+/* ------------------------------------------------------- portal: reviewers */
+
+// Chair only. Everyone who can open the portal, with how far they have got.
+function listReviewers(key) {
+  const me = requireReviewer(key, true);
+  const reviews = reviewsByApplication();
+  const apps = rowsAsObjects(tab('Applications'));
+  return rowsAsObjects(reviewersTab()).map(r => {
+    const email = String(r['Email'] || '').trim().toLowerCase();
+    if (!EMAIL_PATTERN.test(email)) return null;
+    const assigned = apps.filter(a => assignedTo(a).indexOf(email) >= 0).map(a => String(a['ID']));
+    const mine = Object.keys(reviews).map(id => (reviews[id].filter(x => x.reviewer === email)[0] || null) && { id: id, conflict: reviews[id].filter(x => x.reviewer === email)[0].conflict }).filter(Boolean);
+    return {
+      email: email, name: String(r['Name'] || '').trim(), chair: /chair/i.test(String(r['Role (reviewer or chair)'] || '')),
+      invited: r['Link sent'] ? formatDateTime(r['Link sent'] instanceof Date ? r['Link sent'] : new Date(r['Link sent'])) : '',
+      assigned: assigned.length, scored: mine.filter(x => !x.conflict).length, conflicts: mine.filter(x => x.conflict).length,
+      assignedDone: assigned.filter(id => mine.some(x => x.id === id)).length, self: email === me.email
+    };
+  }).filter(Boolean);
+}
+
+// Chair only: add someone, or change a name or role. invite emails their link.
+function saveReviewer(key, input) {
+  const me = requireReviewer(key, true);
+  const email = clean(input && input.email, 200).toLowerCase();
+  const name = clean(input && input.name, 150);
+  const role = input && input.role === 'chair' ? 'chair' : 'reviewer';
+  if (!EMAIL_PATTERN.test(email)) throw new Error('Please enter a valid email address.');
+  if (email === me.email && role !== 'chair') throw new Error('You cannot remove your own chair role. Ask another chair to do it.');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const sheet = reviewersTab();
+    const { map } = headerMap(sheet);
+    let r = rowsAsObjects(sheet).filter(x => String(x['Email'] || '').trim().toLowerCase() === email)[0];
+    if (r) {
+      if (name) sheet.getRange(r._row, map['Name'] + 1).setValue(name);
+      sheet.getRange(r._row, map['Role (reviewer or chair)'] + 1).setValue(role);
+    } else {
+      appendRow(sheet, REVIEWER_COLUMNS, { 'Email': email, 'Name': name, 'Role (reviewer or chair)': role });
+      r = rowsAsObjects(sheet).filter(x => String(x['Email'] || '').trim().toLowerCase() === email)[0];
+    }
+    r = rowsAsObjects(sheet).filter(x => x._row === r._row)[0];
+    if (input && input.invite) sendInvite(sheet, r, false);
+  } finally {
+    lock.releaseLock();
+  }
+  return listReviewers(key);
+}
+
+// Chair only: email someone their link again; renew makes a new link and
+// stops the old one working.
+function inviteReviewer(key, email, renew) {
+  requireReviewer(key, true);
+  const sheet = reviewersTab();
+  const r = rowsAsObjects(sheet).filter(x => String(x['Email'] || '').trim().toLowerCase() === String(email).toLowerCase())[0];
+  if (!r) throw new Error('That person is not on the list.');
+  sendInvite(sheet, r, !!renew);
+  return listReviewers(key);
+}
+
+// Chair only: their link stops working at once, and they are taken off any
+// applications assigned to them. Their reviews so far are kept.
+function removeReviewer(key, email) {
+  const me = requireReviewer(key, true);
+  email = String(email || '').toLowerCase();
+  if (email === me.email) throw new Error('You cannot remove yourself.');
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const sheet = reviewersTab();
+    const r = rowsAsObjects(sheet).filter(x => String(x['Email'] || '').trim().toLowerCase() === email)[0];
+    if (!r) throw new Error('That person is not on the list.');
+    sheet.deleteRow(r._row);
+    const apps = tab('Applications');
+    ensureColumns(apps, APPLICATION_COLUMNS);
+    const col = headerMap(apps).map['Assigned reviewers'] + 1;
+    rowsAsObjects(apps).forEach(a => { const list = assignedTo(a); if (list.indexOf(email) >= 0) apps.getRange(a._row, col).setValue(list.filter(x => x !== email).join(', ')); });
+  } finally {
+    lock.releaseLock();
+  }
+  return listReviewers(key);
+}
+
+/* ----------------------------------------------------- portal: assignments */
+
+const assignedTo = r => String(r['Assigned reviewers'] || '').split(/[,;\s]+/).map(x => x.trim().toLowerCase()).filter(x => EMAIL_PATTERN.test(x));
+
+// An application with no one assigned is open to every reviewer; once the chair
+// assigns reviewers, only they (and the chairs) can see it.
+const canAccess = (me, r) => me.chair || !assignedTo(r).length || assignedTo(r).indexOf(me.email) >= 0;
+
+function requireAccess(me, r) {
+  if (!canAccess(me, r)) throw new Error('This application is not assigned to you.');
+}
+
+// Chair only: input { ids, add: [emails], remove: [emails], notify }. Applicants
+// are never assigned their own application. notify emails each newly assigned
+// reviewer the list of what is new for them.
+function assignReviewers(key, input) {
+  requireReviewer(key, true);
+  const ids = (input && Array.isArray(input.ids) ? input.ids : []).map(String);
+  const add = (input && Array.isArray(input.add) ? input.add : []).map(x => String(x).toLowerCase());
+  const remove = (input && Array.isArray(input.remove) ? input.remove : []).map(x => String(x).toLowerCase());
+  if (!ids.length) throw new Error('Choose at least one application.');
+  const people = reviewerList();
+  add.concat(remove).forEach(e => { if (!people.some(p => p.email === e)) throw new Error(`${e} is not on the reviewer list.`); });
+  const skipped = [], fresh = {};
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
+    const sheet = tab('Applications');
+    ensureColumns(sheet, APPLICATION_COLUMNS);
+    const col = headerMap(sheet).map['Assigned reviewers'] + 1;
+    const rows = rowsAsObjects(sheet);
+    ids.forEach(id => {
+      const r = rows.filter(x => String(x['ID']) === id)[0];
+      if (!r) throw new Error(`Application ${id} not found.`);
+      const before = assignedTo(r);
+      let list = before.filter(e => remove.indexOf(e) < 0);
+      add.forEach(e => {
+        if (e === String(r['Email']).toLowerCase()) { skipped.push(`${id} is ${e}'s own application, so they were not assigned to it.`); return; }
+        if (list.indexOf(e) < 0) list.push(e);
+        if (before.indexOf(e) < 0) (fresh[e] = fresh[e] || []).push(`${id}: ${r['Title']} (${r['Scheme']})`);
+      });
+      sheet.getRange(r._row, col).setValue(list.join(', '));
+    });
+  } finally {
+    lock.releaseLock();
+  }
+  let notified = 0;
+  if (input.notify) {
+    const reviewersSheet = reviewersTab();
+    rowsAsObjects(reviewersSheet).forEach(r => {
+      const email = String(r['Email'] || '').trim().toLowerCase();
+      if (!fresh[email]) return;
+      const link = reviewLink(reviewersSheet, r, false);
+      MailApp.sendEmail({
+        to: email, replyTo: GRANTS.replyTo, name: GRANTS.name, subject: `EEG101 grants: ${fresh[email].length} application${fresh[email].length === 1 ? '' : 's'} to review`,
+        body: [`Dear ${String(r['Name'] || '').trim() || 'colleague'},`, `These applications have been assigned to you for review:\n${fresh[email].map(x => '• ' + x).join('\n')}`, `Open the grants portal with your personal link:\n${link}`, 'With thanks,\nThe EEG101 Grants team'].join('\n\n')
+      });
+      notified++;
+    });
+  }
+  const out = listApplications(key);
+  out.notice = [`Saved.${input.notify ? ` ${notified} reviewer${notified === 1 ? '' : 's'} emailed.` : ''}`].concat(skipped).join(' ');
+  return out;
+}
+
+/* ---------------------------------------------------- portal: call settings */
+
+const CALL_FIELDS = [
+  { key: 'call_name', label: 'Name of the call', type: 'text', help: 'Shown on the form and in emails.' },
+  { key: 'call_open', label: 'Accepting applications', type: 'bool', help: 'The form also closes by itself at the deadline.' },
+  { key: 'deadline', label: 'Deadline (Brussels time)', type: 'datetime', help: 'Empty: open until you switch it off.' },
+  { key: 'period_end', label: 'Activities must end by', type: 'date', help: 'The end of the grant period.' },
+  { key: 'id_prefix', label: 'Application ID prefix', type: 'text', help: 'e.g. G2 gives EEG101-G2-001. Change it for each new call.' },
+  { key: 'blind_review', label: 'Blind review', type: 'bool', help: 'On: reviewers who are not chairs do not see who applied or their documents.' }
+].concat(Object.keys(SCHEMES).map(id => ({ key: 'budget_' + id, label: `Budget: ${SCHEMES[id].short} (€)`, type: 'money', help: 'Optional, for the budget tracker.' })));
+
+function getCallSettings(key) {
+  requireReviewer(key, true);
+  const settings = readSettings();
+  const values = {};
+  CALL_FIELDS.forEach(f => { values[f.key] = f.type === 'bool' ? String(settings[f.key]).toUpperCase() === 'TRUE' : String(settings[f.key] == null ? '' : settings[f.key]); });
+  return { fields: CALL_FIELDS, values: values, open: isCallOpen(settings), formUrl: (() => { try { return appUrl(); } catch (e) { return ''; } })() };
+}
+
+function saveCallSettings(key, input) {
+  requireReviewer(key, true);
+  const out = {};
+  CALL_FIELDS.forEach(f => {
+    const v = input ? input[f.key] : undefined;
+    if (v === undefined) return;
+    if (f.type === 'bool') out[f.key] = v === true || String(v).toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE';
+    else {
+      const t = clean(v, 150);
+      if (f.key === 'call_name' && !t) throw new Error('Please give the call a name.');
+      if (f.type === 'datetime' && t && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) throw new Error('Please give the deadline as a date and time.');
+      if (f.type === 'date' && !DATE_PATTERN.test(t)) throw new Error('Please give the end of the grant period as a date.');
+      if (f.key === 'id_prefix' && !/^[A-Za-z0-9]{1,8}$/.test(t)) throw new Error('The ID prefix should be up to 8 letters or numbers, e.g. G2.');
+      if (f.type === 'money' && t && !(Number(t) >= 0)) throw new Error(`${f.label} should be an amount in euros, or empty.`);
+      out[f.key] = t;
+    }
+  });
+  Object.keys(out).forEach(k => setSetting(k, out[k]));
+  return getCallSettings(key);
 }
 
 /* ------------------------------------------------------------------- review */
@@ -842,7 +1073,9 @@ function listApplications(key) {
   const reviews = reviewsByApplication();
   const rows = rowsAsObjects(tab('Applications'));
   const warnings = overlapWarnings(rows);
-  const apps = rows.map(r => {
+  const people = reviewerList();
+  const nameOf = e => (people.filter(p => p.email === e)[0] || {}).name || e;
+  const apps = rows.filter(r => canAccess(me, r)).map(r => {
     const id = String(r['ID']);
     const all = reviews[id] || [];
     const mine = all.filter(x => x.reviewer === me.email)[0] || null;
@@ -860,11 +1093,12 @@ function listApplications(key) {
       decision: String(r['Decision'] || ''), awarded: asNumber(r['Awarded (€)']), rank: asNumber(r['Rank']), decisionNotes: String(r['Decision notes'] || ''),
       reviewCount: scored.length,
       mean: canSee && scored.length ? Math.round(scored.reduce((s, x) => s + x.mean, 0) / scored.length * 100) / 100 : null,
-      own: own, conflicted: conflicted,
+      own: own, conflicted: conflicted, assignedToMe: assignedTo(r).indexOf(me.email) >= 0,
+      assigned: me.chair ? assignedTo(r).map(e => { const x = all.filter(y => y.reviewer === e)[0]; return { email: e, name: nameOf(e), status: !x ? 'todo' : x.conflict ? 'conflict' : 'scored' }; }) : [],
       mine: mine, others: canSee ? all.filter(x => x.reviewer !== me.email) : []
     };
   });
-  return { me: me, blind: blind, applications: apps, settings: settings };
+  return { me: me, blind: blind, applications: apps, settings: settings, reviewers: me.chair ? people.map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
 }
 
 function applicationRecord(id) {
@@ -879,6 +1113,7 @@ function getApplication(key, id) {
   const me = requireReviewer(key, false);
   const blind = isBlind(me, readSettings());
   const { row, data } = applicationRecord(id);
+  requireAccess(me, row);
   const documents = {};
   if (!blind) Object.keys(data.documents || {}).forEach(k => { documents[k] = { label: data.documents[k].label, name: data.documents[k].name }; });
   return { id: String(id), blind: blind, html: applicationHtml(data, blind), folder: blind ? '' : String(row['Drive folder']), documents: documents };
@@ -889,7 +1124,8 @@ function getApplication(key, id) {
 function getDocument(key, id, doc) {
   const me = requireReviewer(key, false);
   if (isBlind(me, readSettings())) throw new Error('Documents are not shown in blind review.');
-  const { data } = applicationRecord(id);
+  const { row, data } = applicationRecord(id);
+  requireAccess(me, row);
   let blob;
   if (doc === 'application') blob = applicationPdf(data);
   else if (data.documents && data.documents[doc]) blob = DriveApp.getFileById(data.documents[doc].id).getBlob();
@@ -901,6 +1137,7 @@ function saveReview(key, input) {
   const me = requireReviewer(key, false);
   const id = String(input && input.id || '');
   const { row } = applicationRecord(id);
+  requireAccess(me, row);
   if (String(row['Email']).toLowerCase() === me.email) throw new Error('You cannot review your own application.');
   const conflict = !!input.conflict;
   const scores = CRITERIA.map((c, i) => conflict ? '' : Number(input.scores && input.scores[i]));
