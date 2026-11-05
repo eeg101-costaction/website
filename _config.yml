@@ -84,3 +84,6 @@ exclude:
   - .jekyll-cache
   - node_modules
   - "*.py"
+  # The grants Apps Script (form, review dashboard, tests) runs on Google, not
+  # here; published, its HTML files would be broken stand-alone pages.
+  - scripts/google-apps-script/grants

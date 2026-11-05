@@ -3374,3 +3374,9 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
 .drafts [data-event-booking],
 .drafts [data-event-members],
 .drafts .event-share { pointer-events: none; opacity: 0.6; }
+
+/* --- Grant application page (/grants/apply/) --- */
+.grant-apply { position: relative; margin: 1.5rem 0; }
+.grant-apply__frame { display: block; width: 100%; height: 900px; border: 0; background: var(--color-bg); }
+.grant-apply__loading { font-family: var(--font-ui); color: var(--color-text-muted); }
+.grant-apply__help { font-family: var(--font-ui); font-size: 0.9rem; color: var(--color-text-muted); }

@@ -51,6 +51,12 @@ ga_measurement_id: "G-CNKHMEVHS4"
 # It contains no credential. Registration details are written only to the private Sheet.
 event_booking_endpoint: "https://script.google.com/macros/s/AKfycby8dCtwmx30rgM17SZRDUZ9yyUpZNDJ9NEurxcfcBzJSVO_2pXXv1kLfxTM-vgMMfo/exec"
 
+# The grants application form: the "Applications" deployment of
+# scripts/google-apps-script/grants/ (Execute as: Me, access: Anyone). Public,
+# not a secret. While empty, /grants/apply/ says applications are not open yet.
+# See docs/grants-platform.md.
+grants_application_endpoint: ""
+
 # The internal calendar bridge, deployed from scripts/google-apps-script/internal-calendar.gs.
 # Leave empty and the Calendar page shows public events only, with no unlock control.
 # This URL is public; the passphrase and the calendar ID live in that script's

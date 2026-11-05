@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Lora:wght@400&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{--primary:#000099;--primary-dark:#00007a;--primary-light:#e8e8ff;--gold:#FFCC00;--gold-dark:#d4a800;--gold-light:#fff8d6;--text:#1a1a2e;--muted:#5a5a7a;--bg:#faf8f5;--bg-alt:#f0ede8;--border:#e0dbd4;--error:#991b1b;--heading:'Playfair Display',Georgia,serif;--body:'Lora',Georgia,serif;--ui:'Lato',system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font:16px/1.6 var(--body);margin:0;padding:4px}
+h2{color:var(--primary);font:700 26px/1.2 var(--heading);margin:0 0 6px}
+h3{font:700 17px var(--ui);margin:22px 0 8px}
+p{margin:0 0 12px}
+.lead{color:var(--muted)}
+.progress{display:flex;gap:6px;list-style:none;margin:0 0 22px;padding:0;flex-wrap:wrap}
+.progress li{font:700 12px var(--ui);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:var(--bg-alt);border-radius:999px;padding:5px 11px}
+.progress li.on{background:var(--primary);color:#fff}.progress li.past{background:var(--primary-light);color:var(--primary)}
+label{display:block;font:700 14px var(--ui);margin:0 0 14px}
+.hint{display:block;font:400 13px/1.5 var(--ui);color:var(--muted);margin-top:3px}
+input,select,textarea{background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--text);font:400 15px var(--ui);margin-top:6px;padding:10px 12px;width:100%}
+textarea{min-height:120px;resize:vertical;line-height:1.5}
+input:focus,select:focus,textarea:focus{border-color:var(--primary);outline:2px solid var(--primary-light)}
+.invalid{border-color:var(--error)!important;background:#fef2f2}
+.grid{display:grid;gap:0 14px;grid-template-columns:1fr 1fr}
+fieldset{border:0;margin:0 0 16px;padding:0}legend{font:700 14px var(--ui);margin-bottom:6px;padding:0}
+.choices{display:flex;flex-wrap:wrap;gap:8px 18px}
+.choice{align-items:center;display:flex;font:400 15px var(--ui);gap:7px;margin:0}
+.choice input{width:auto;margin:0;accent-color:var(--primary)}
+.schemes{display:grid;gap:12px;grid-template-columns:1fr 1fr}
+.scheme{background:#fff;border:2px solid var(--border);border-radius:12px;cursor:pointer;display:block;margin:0;padding:16px 18px;font-weight:400}
+.scheme:hover{border-color:var(--primary-light)}.scheme.on{border-color:var(--primary);box-shadow:0 0 0 3px var(--primary-light)}
+.scheme input{position:absolute;opacity:0;width:1px;height:1px}
+.scheme strong{display:block;font:700 16px var(--ui);color:var(--primary)}
+.scheme .amount{display:inline-block;background:var(--gold-light);border:1px solid var(--gold-dark);border-radius:999px;font:700 12px var(--ui);padding:2px 9px;margin:6px 0}
+.scheme span.d{display:block;font:400 14px/1.5 var(--ui);color:var(--muted)}
+.box{background:var(--bg-alt);border-radius:8px;font:400 14px/1.55 var(--ui);padding:12px 14px;margin:0 0 16px}
+.box.warn{background:var(--gold-light);border:1px solid var(--gold-dark)}
+.counter{display:block;font:400 12px var(--ui);color:var(--muted);text-align:right;margin-top:3px}.counter.over{color:var(--error);font-weight:700}
+table.budget{border-collapse:collapse;width:100%;font:400 14px var(--ui);margin-bottom:8px}
+table.budget th{text-align:left;font-weight:700;color:var(--muted);padding:4px 6px}
+table.budget td{padding:4px 6px;vertical-align:top}
+table.budget td input,table.budget td select{margin-top:0}
+.total{font:700 16px var(--ui);display:flex;justify-content:space-between;border-top:2px solid var(--text);padding-top:8px;margin:6px 0 16px}
+.total.over{color:var(--error)}
+.btn{background:var(--primary);border:2px solid var(--primary);border-radius:6px;color:#fff;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:700 14.4px var(--ui);padding:.6rem 1.4rem;text-decoration:none}
+.btn:hover{background:var(--primary-dark);border-color:var(--primary-dark)}
+.btn.secondary{background:#fff;color:var(--primary)}.btn.secondary:hover{background:var(--primary-light)}
+.btn.small{font-size:13px;padding:.35rem .8rem}.btn[disabled]{opacity:.55;cursor:default}
+.link{background:none;border:0;color:var(--primary);cursor:pointer;font:700 13px var(--ui);padding:0;text-decoration:underline}
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:24px;border-top:1px solid var(--border);padding-top:18px}
+.errors{background:#fef2f2;border:1px solid var(--error);border-radius:8px;color:var(--error);font:700 14px/1.5 var(--ui);padding:10px 14px;margin:0 0 16px}
+.errors ul{margin:4px 0 0;padding-left:20px;font-weight:400}
+.doc{background:#fff;border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin:0 0 12px;font:400 14px var(--ui)}
+.doc strong{display:block}.doc .status{display:block;margin-top:6px;color:var(--muted)}.doc .status.ok{color:#15803d;font-weight:700}.doc .status.bad{color:var(--error);font-weight:700}
+.doc input[type=file]{border:0;padding:6px 0;background:none}
+.summary{background:#fff;border:1px solid var(--border);border-radius:10px;font:400 14px/1.5 var(--ui);padding:14px 18px;margin-bottom:16px}
+.summary dl{display:grid;grid-template-columns:38% 1fr;gap:4px 12px;margin:0}.summary dt{color:var(--muted)}.summary dd{margin:0}
+.consent{align-items:flex-start;background:var(--bg-alt);border-radius:6px;display:flex;gap:10px;font:400 14px/1.55 var(--ui);margin-bottom:10px;padding:12px}
+.consent input{width:auto;margin-top:4px;accent-color:var(--primary)}
+.done{background:#fff;border:1px solid var(--border);border-left:4px solid var(--primary);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,100,.08);padding:22px 24px}
+.done .ref{font:700 20px var(--ui);color:var(--primary)}
+.downloads{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.trap{display:none}
+.saved{font:400 12px var(--ui);color:var(--muted)}
+@media(max-width:600px){.grid,.schemes{grid-template-columns:1fr}.summary dl{grid-template-columns:1fr}table.budget thead{display:none}table.budget tr{display:grid;grid-template-columns:1fr;border-bottom:1px solid var(--border);padding:6px 0}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const CONFIG = <?!= boot ?>;
+const STEPS = ['Funding scheme', 'About you', 'Activity and dates', 'Proposal', 'Budget', 'Documents', 'Check and submit'];
+const DRAFT_KEY = 'eeg101-grant-application-draft';
+const app = document.getElementById('app');
+let step = 0;
+let state = loadDraft() || { scheme: CONFIG.preselect, working_groups: [], budget: [], documents: {} };
+if (CONFIG.preselect && !state.scheme) state.scheme = CONFIG.preselect;
+state.documents = {}; // files are never kept between visits: upload them again
+
+function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function words(t) { return (String(t || '').trim().match(/\S+/g) || []).length; }
+function scheme() { return CONFIG.schemes[state.scheme]; }
+function money(n) { return '€' + (Number(n) || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function fmtDate(iso) { if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return ''; const d = new Date(iso + 'T12:00:00Z'); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); }
+function days(a, b) { if (!a || !b) return 0; return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000) + 1; }
+function total() { return Math.round((state.budget || []).reduce((s, l) => s + (Number(l.amount) || 0), 0) * 100) / 100; }
+
+function loadDraft() { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); return d && typeof d === 'object' ? d : null; } catch (e) { return null; } }
+function saveDraft() { try { const copy = Object.assign({}, state, { documents: {} }); localStorage.setItem(DRAFT_KEY, JSON.stringify(copy)); } catch (e) {} }
+function clearDraft() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+
+// The page sits in an iframe on www.eeg101.eu: tell it how tall to be, and when
+// to scroll back to the top of the form.
+// Measure the form itself, not the page: the page is at least as tall as the
+// frame, so measuring it would never let the frame shrink.
+function tellParent(type) { try { window.top.postMessage({ type: type, height: Math.ceil(app.getBoundingClientRect().height) + 16 }, '*'); } catch (e) {} }
+new ResizeObserver(() => tellParent('eeg101-grant-height')).observe(app);
+
+/* -------------------------------------------------------------- fields */
+
+function field(name, label, opts) {
+  opts = opts || {};
+  const value = state[name] == null ? '' : state[name];
+  const hint = opts.hint ? `<span class="hint">${opts.hint}</span>` : '';
+  const attrs = `name="${name}" id="f_${name}"${opts.required === false ? '' : ' required'}${opts.attrs ? ' ' + opts.attrs : ''}`;
+  if (opts.type === 'select') {
+    return `<label>${label}${hint}<select ${attrs}><option value="">Select…</option>${opts.options.map(o => `<option${o === value ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select></label>`;
+  }
+  if (opts.type === 'textarea') {
+    const limit = opts.words ? `<span class="counter" data-for="${name}" data-limit="${opts.words}"></span>` : '';
+    return `<label>${label}${hint}<textarea ${attrs}>${esc(value)}</textarea>${limit}</label>`;
+  }
+  return `<label>${label}${hint}<input type="${opts.type || 'text'}" value="${esc(value)}" ${attrs}></label>`;
+}
+
+function radios(name, legend, options, hint) {
+  return `<fieldset><legend>${legend}</legend>${hint ? `<span class="hint" style="margin:-4px 0 8px">${hint}</span>` : ''}<div class="choices">${options.map(o => `<label class="choice"><input type="radio" name="${name}" value="${esc(o)}"${state[name] === o ? ' checked' : ''}> ${esc(o)}</label>`).join('')}</div></fieldset>`;
+}
+
+/* --------------------------------------------------------------- steps */
+
+function viewScheme() {
+  return `<h2>Choose a funding scheme</h2>
+  <p class="lead">${esc(CONFIG.callName)}. ${CONFIG.deadlineText ? `Applications close on <strong>${esc(CONFIG.deadlineText)}</strong>.` : ''} Every funded activity must be completed by <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
+  <div class="schemes">${Object.keys(CONFIG.schemes).map(id => { const s = CONFIG.schemes[id]; return `<label class="scheme${state.scheme === id ? ' on' : ''}"><input type="radio" name="scheme" value="${id}"${state.scheme === id ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">Up to €${s.max.toLocaleString('en-GB')}</span><span class="d">${esc(s.blurb)}</span><span class="d">${s.minDays === s.maxDays ? '' : `${s.minDays}–${s.maxDays} days. `}You will need: ${s.documents.map(d => { const l = d.label.split(' (')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</span></label>`; }).join('')}</div>
+  <div class="box">You can only apply if you are a member of the EEG101 COST Action. Not a member yet? <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join through e-COST first</a>.</div>`;
+}
+
+function viewAbout() {
+  return `<h2>About you</h2><p class="lead">These details identify you and help us report on how funding is shared across the network, as COST requires.</p>
+  <div class="grid">${field('first_name', 'First name', { attrs: 'autocomplete="given-name"' })}${field('last_name', 'Last name', { attrs: 'autocomplete="family-name"' })}</div>
+  ${field('email', 'Email address', { type: 'email', attrs: 'autocomplete="email"', hint: 'We send your confirmation here.' })}
+  <div class="grid">${field('position', 'Current position', { hint: 'e.g. PhD student, Postdoctoral researcher' })}${field('career_stage', 'Career stage', { type: 'select', options: CONFIG.careerStages })}</div>
+  <div class="grid">${field('institution', 'Institution', { attrs: 'autocomplete="organization"' })}${field('department', 'Department', { required: false })}</div>
+  ${field('country', 'Country of your institution', { type: 'select', options: CONFIG.countries, hint: '<span id="itcNote"></span>' })}
+  ${field('orcid', 'ORCID iD (optional)', { required: false, hint: 'e.g. 0000-0002-1825-0097' })}
+  ${radios('yri', 'Are you under 40? (Young Researcher and Innovator)', ['Yes', 'No'])}
+  ${radios('eci', 'Are you an early-career researcher?', ['Yes', 'No'], 'A PhD student, or awarded your PhD within the last 8 years (excluding career breaks).')}
+  ${field('gender', 'Gender', { type: 'select', options: CONFIG.genders })}
+  <div id="genderOtherWrap"${state.gender === 'Prefer to self-describe' ? '' : ' hidden'}>${field('gender_other', 'Please describe (optional)', { required: false })}</div>
+  ${radios('member', 'Are you a member of the EEG101 COST Action?', ['Yes', 'No'])}
+  <div class="box warn" id="memberNote"${state.member === 'No' ? '' : ' hidden'}>Only members can apply. <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join EEG101 through e-COST</a>, then come back: your answers are kept on this device.</div>
+  <fieldset><legend>Which Working Groups are you part of? (optional)</legend><div class="choices">${CONFIG.workingGroups.map(w => `<label class="choice"><input type="checkbox" name="working_groups" value="${esc(w)}"${(state.working_groups || []).indexOf(w) >= 0 ? ' checked' : ''}> ${esc(w)}</label>`).join('')}</div></fieldset>`;
+}
+
+function viewActivity() {
+  const s = scheme();
+  let specific = '';
+  if (state.scheme === 'stsm') {
+    specific = `<h3>Your host</h3>
+    <div class="grid">${field('host_name', 'Host (academic lead)')}${field('host_email', 'Host email', { type: 'email' })}</div>
+    <div class="grid">${field('host_institution', 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries })}</div>
+    ${radios('host_member', 'Is your host a member of EEG101?', ['Yes', 'No'], 'The academic lead at the host institution must be a member before you apply.')}`;
+  } else if (state.scheme === 'vmg') {
+    specific = `<h3>Your collaborators</h3>
+    ${field('collaborators', 'Who will you collaborate with?', { type: 'textarea', hint: 'Names, roles and institutions, one per line.' })}
+    ${radios('third_party', 'Is a third-party organisation involved (e.g. a company or another organisation outside the network)?', ['Yes', 'No'])}
+    <div id="thirdPartyWrap"${state.third_party === 'Yes' ? '' : ' hidden'}>${radios('third_party_member', 'Is the named lead at that organisation a member of EEG101?', ['Yes', 'No'], 'They must be a member before you apply, and you will need a letter of support from them.')}</div>`;
+  } else {
+    specific = `<h3>The conference</h3>
+    ${field('conference_name', 'Conference name')}
+    <div class="grid">${field('conference_url', 'Conference web address (optional)', { type: 'url', required: false, attrs: 'placeholder="https://"' })}${state.scheme === 'conference_inperson' ? field('conference_location', 'City and country') : ''}</div>
+    ${field('contribution_title', 'Title of your contribution')}
+    <div class="grid">${field('presentation', 'Type of contribution', { type: 'select', options: ['Oral presentation', 'Poster', 'Other contribution'] })}${field('abstract_status', 'Abstract status', { type: 'select', options: ['Accepted', 'Submitted, awaiting decision'] })}</div>`;
+  }
+  return `<h2>Activity and dates</h2>
+  <p class="lead">${esc(s.title)}: ${s.minDays}–${s.maxDays} days, ending no later than <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
+  <div class="grid">${field('start_date', 'Start date', { type: 'date', attrs: `min="${CONFIG.today}" max="${CONFIG.periodEnd}"` })}${field('end_date', 'End date', { type: 'date', attrs: `min="${CONFIG.today}" max="${CONFIG.periodEnd}"` })}</div>
+  <p class="hint" id="daysNote" style="margin-top:-6px"></p>
+  ${specific}`;
+}
+
+function viewProposal() {
+  const w = CONFIG.words;
+  return `<h2>Your proposal</h2><p class="lead">Write for reviewers from across EEG research. Plain language helps.</p>
+  ${field('title', 'Title', { attrs: 'maxlength="200"' })}
+  ${field('summary', 'Summary', { type: 'textarea', words: w.summary, hint: 'What you will do and why, in a few sentences.' })}
+  ${field('workplan', 'Work plan', { type: 'textarea', words: w.workplan, hint: 'Aims, activities and timeline.' })}
+  ${field('outcomes', 'Expected outcomes', { type: 'textarea', words: w.outcomes, hint: 'Papers, data, code, training, new collaborations…' })}
+  ${field('relevance', 'Relevance to EEG101', { type: 'textarea', words: w.relevance, hint: 'How this advances the Action and its Working Groups.' })}
+  ${field('benefit', 'Benefit to you and the network', { type: 'textarea', words: w.benefit, hint: 'For your career, your team and the EEG101 community, including inclusiveness.' })}`;
+}
+
+function viewBudget() {
+  const s = scheme();
+  if (!state.budget || !state.budget.length) state.budget = [{ category: '', description: '', amount: '' }];
+  return `<h2>Budget</h2>
+  <p class="lead">List what you are asking for, in euros. The total cannot be more than <strong>€${s.max.toLocaleString('en-GB')}</strong> for a ${esc(s.short)}.</p>
+  <table class="budget"><thead><tr><th style="width:30%">Category</th><th>What it covers</th><th style="width:20%">Amount (€)</th><th style="width:1%"></th></tr></thead><tbody>
+  ${state.budget.map((l, i) => `<tr><td><select data-line="${i}" data-key="category" aria-label="Category"><option value="">Select…</option>${s.budget.map(c => `<option${c === l.category ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></td>
+  <td><input data-line="${i}" data-key="description" value="${esc(l.description)}" aria-label="What it covers" placeholder="e.g. Return flight Lisbon–Leeds"></td>
+  <td><input data-line="${i}" data-key="amount" type="number" min="0" step="0.01" value="${esc(l.amount)}" aria-label="Amount in euros"></td>
+  <td>${state.budget.length > 1 ? `<button type="button" class="link" data-remove="${i}" aria-label="Remove this line">Remove</button>` : ''}</td></tr>`).join('')}
+  </tbody></table>
+  <button type="button" class="btn secondary small" id="addLine">+ Add a line</button>
+  <div class="total" id="totalLine"><span>Total requested</span><span id="totalValue"></span></div>
+  ${field('justification', 'Justification of costs', { type: 'textarea', words: CONFIG.words.justification, hint: 'Explain how you estimated each cost (quotes, typical prices, daily rates) so reviewers can judge whether it is reasonable.' })}`;
+}
+
+function viewDocuments() {
+  const s = scheme();
+  return `<h2>Documents</h2><p class="lead">PDF files only, up to ${CONFIG.maxFileMb} MB each. Each file uploads as soon as you choose it.</p>
+  ${s.documents.map(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); const doc = state.documents[d.id]; return `<div class="doc"><strong>${esc(d.label)}${needed ? '' : ' (optional)'}</strong>
+  <input type="file" accept="application/pdf,.pdf" data-doc="${d.id}" aria-label="${esc(d.label)}">
+  <span class="status${doc ? ' ok' : ''}" id="status_${d.id}">${doc ? '✓ Uploaded: ' + esc(doc.name) : (needed ? 'Required' : 'Not uploaded')}</span></div>`; }).join('')}`;
+}
+
+function viewReview() {
+  const s = scheme();
+  const rows = [
+    ['Scheme', s.title], ['Applicant', `${state.first_name || ''} ${state.last_name || ''}`], ['Email', state.email], ['Institution', [state.department, state.institution].filter(Boolean).join(', ')],
+    ['Country', state.country + (CONFIG.itc.indexOf(state.country) >= 0 ? ' (ITC)' : '')], ['Dates', `${fmtDate(state.start_date)} – ${fmtDate(state.end_date)} (${days(state.start_date, state.end_date)} days)`],
+    ['Title', state.title], ['Amount requested', money(total())],
+    ['Documents', s.documents.filter(d => state.documents[d.id]).map(d => state.documents[d.id].name).join(', ') || 'None']
+  ];
+  return `<h2>Check and submit</h2><p class="lead">Please check your answers. You can go back to change anything.</p>
+  <div class="summary"><dl>${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></div>
+  <label class="consent"><input type="checkbox" name="confirm_accurate"${state.confirm_accurate ? ' checked' : ''}><span>The information in this application is accurate and complete.</span></label>
+  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, submit the report required, and acknowledge EEG101 and COST in any outputs.</span></label>
+  <label class="consent"><input type="checkbox" name="confirm_privacy"${state.confirm_privacy ? ' checked' : ''}><span>I agree to EEG101 storing this application and my documents, sharing them with the grant reviewers, and using anonymised totals (such as gender, ITC and career stage) in reports to COST, as described in the <a href="${esc(CONFIG.privacyUrl)}" target="_blank" rel="noopener">privacy notice</a>.</span></label>
+  ${field('signature', 'Type your full name as your signature')}
+  <div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>`;
+}
+
+const VIEWS = [viewScheme, viewAbout, viewActivity, viewProposal, viewBudget, viewDocuments, viewReview];
+
+/* ---------------------------------------------------------- validation */
+
+function problems() {
+  const out = [];
+  const need = (keys, message) => { if (keys.some(k => !String(state[k] || '').trim())) out.push(message); };
+  const s = scheme();
+  if (step === 0 && !s) out.push('Choose a funding scheme.');
+  if (step === 1) {
+    need(['first_name', 'last_name', 'email', 'position', 'career_stage', 'institution', 'country', 'gender'], 'Complete every required field.');
+    if (state.email && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(state.email)) out.push('Check your email address.');
+    if (!state.yri || !state.eci) out.push('Answer the two career questions.');
+    if (state.member !== 'Yes') out.push('Only members of the EEG101 COST Action can apply.');
+  }
+  if (step === 2) {
+    if (!state.start_date || !state.end_date) out.push('Give a start and an end date.');
+    else {
+      const n = days(state.start_date, state.end_date);
+      if (state.start_date < CONFIG.today) out.push('The start date cannot be in the past.');
+      if (state.end_date < state.start_date) out.push('The end date is before the start date.');
+      else if (state.end_date > CONFIG.periodEnd) out.push(`Everything must be finished by ${CONFIG.periodEndText}.`);
+      else if (n < s.minDays || n > s.maxDays) out.push(`A ${s.short} lasts ${s.minDays}–${s.maxDays} days; yours is ${n}.`);
+    }
+    if (state.scheme === 'stsm') {
+      need(['host_name', 'host_email', 'host_institution', 'host_country'], 'Give your host\'s details.');
+      if (state.host_member !== 'Yes') out.push('Your host must be a member of EEG101 before you apply.');
+    } else if (state.scheme === 'vmg') {
+      need(['collaborators'], 'List your collaborators.');
+      if (!state.third_party) out.push('Say whether a third-party organisation is involved.');
+      if (state.third_party === 'Yes' && state.third_party_member !== 'Yes') out.push('The lead at the third-party organisation must be a member of EEG101.');
+    } else {
+      need(['conference_name', 'contribution_title', 'presentation', 'abstract_status'].concat(state.scheme === 'conference_inperson' ? ['conference_location'] : []), 'Complete the conference details.');
+      if (state.conference_url && !/^https?:\/\/\S+$/i.test(state.conference_url)) out.push('The conference web address should start with https://.');
+    }
+  }
+  if (step === 3) {
+    need(['title', 'summary', 'workplan', 'outcomes', 'relevance', 'benefit'], 'Answer every question.');
+    Object.keys(CONFIG.words).filter(k => k !== 'justification').forEach(k => { if (words(state[k]) > CONFIG.words[k]) out.push(`Shorten one of your answers to ${CONFIG.words[k]} words.`); });
+  }
+  if (step === 4) {
+    const lines = (state.budget || []).filter(l => l.category || l.description || l.amount);
+    if (!lines.length) out.push('Add at least one budget line.');
+    if (lines.some(l => !l.category || !String(l.description || '').trim() || !(Number(l.amount) > 0))) out.push('Give every budget line a category, a description and an amount.');
+    if (total() > s.max) out.push(`The total is more than the €${s.max.toLocaleString('en-GB')} maximum.`);
+    if (!String(state.justification || '').trim()) out.push('Justify your costs.');
+    if (words(state.justification) > CONFIG.words.justification) out.push(`Shorten the justification to ${CONFIG.words.justification} words.`);
+  }
+  if (step === 5) {
+    s.documents.forEach(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); if (needed && !state.documents[d.id]) out.push(`Upload: ${d.label}.`); });
+    if (document.querySelector('.status.busy')) out.push('Wait for your files to finish uploading.');
+  }
+  if (step === 6) {
+    if (!state.confirm_accurate || !state.confirm_rules || !state.confirm_privacy) out.push('Tick all three declarations.');
+    if (!String(state.signature || '').trim()) out.push('Type your name as your signature.');
+  }
+  return out;
+}
+
+/* ------------------------------------------------------------- rendering */
+
+function render(errors) {
+  app.innerHTML = `<ol class="progress">${STEPS.map((s, i) => `<li class="${i === step ? 'on' : i < step ? 'past' : ''}">${i + 1}. ${esc(s)}</li>`).join('')}</ol>
+  ${errors && errors.length ? `<div class="errors" role="alert">Please fix the following:<ul>${errors.map(e => `<li>${esc(e)}</li>`).join('')}</ul></div>` : ''}
+  <form id="form" novalidate>${VIEWS[step]()}
+  <div class="nav"><span>${step > 0 ? '<button type="button" class="btn secondary" id="back">← Back</button>' : ''}</span>
+  <span style="display:flex;align-items:center;gap:12px"><span class="saved">Your answers are kept on this device until you submit.</span>
+  <button type="submit" class="btn" id="next">${step === STEPS.length - 1 ? 'Submit application' : 'Continue →'}</button></span></div></form>`;
+  bind();
+  refresh();
+}
+
+function refresh() {
+  document.querySelectorAll('.counter').forEach(c => { const n = words(state[c.dataset.for]); c.textContent = `${n} / ${c.dataset.limit} words`; c.classList.toggle('over', n > Number(c.dataset.limit)); });
+  const itc = document.getElementById('itcNote');
+  if (itc) itc.textContent = state.country ? (CONFIG.itc.indexOf(state.country) >= 0 ? `${state.country} is an Inclusiveness Target Country (ITC).` : '') : '';
+  const dn = document.getElementById('daysNote');
+  if (dn) dn.textContent = state.start_date && state.end_date && state.end_date >= state.start_date ? `${days(state.start_date, state.end_date)} days` : '';
+  const tv = document.getElementById('totalValue');
+  if (tv) { tv.textContent = `${money(total())} of ${money(scheme().max)}`; document.getElementById('totalLine').classList.toggle('over', total() > scheme().max); }
+  const g = document.getElementById('genderOtherWrap'); if (g) g.hidden = state.gender !== 'Prefer to self-describe';
+  const m = document.getElementById('memberNote'); if (m) m.hidden = state.member !== 'No';
+  const t = document.getElementById('thirdPartyWrap'); if (t) t.hidden = state.third_party !== 'Yes';
+}
+
+function bind() {
+  const form = document.getElementById('form');
+  form.addEventListener('input', onChange);
+  form.addEventListener('change', onChange);
+  form.addEventListener('submit', e => { e.preventDefault(); next(); });
+  const back = document.getElementById('back');
+  if (back) back.addEventListener('click', () => go(step - 1));
+  const add = document.getElementById('addLine');
+  if (add) add.addEventListener('click', () => { state.budget.push({ category: '', description: '', amount: '' }); saveDraft(); render(); });
+  form.querySelectorAll('[data-remove]').forEach(b => b.addEventListener('click', () => { state.budget.splice(Number(b.dataset.remove), 1); saveDraft(); render(); }));
+  form.querySelectorAll('input[type=file]').forEach(input => input.addEventListener('change', () => upload(input)));
+}
+
+function onChange(e) {
+  const el = e.target;
+  if (!el.name && !el.dataset.line) return;
+  if (el.type === 'file') return;
+  if (el.dataset.line != null) { state.budget[Number(el.dataset.line)][el.dataset.key] = el.value; }
+  else if (el.name === 'working_groups') { state.working_groups = Array.from(document.querySelectorAll('input[name=working_groups]:checked')).map(x => x.value); }
+  else if (el.type === 'checkbox') { state[el.name] = el.checked; }
+  else if (el.type === 'radio') { if (el.checked) state[el.name] = el.value; }
+  else { state[el.name] = el.value; }
+  if (el.name === 'scheme') { state.budget = []; state.documents = {}; document.querySelectorAll('.scheme').forEach(c => c.classList.toggle('on', c.querySelector('input').checked)); }
+  el.classList.remove('invalid');
+  saveDraft();
+  refresh();
+}
+
+function go(n) { step = Math.max(0, Math.min(STEPS.length - 1, n)); render(); tellParent('eeg101-grant-scroll'); }
+
+function next() {
+  const errors = problems();
+  if (errors.length) { render(errors); tellParent('eeg101-grant-scroll'); return; }
+  if (step < STEPS.length - 1) go(step + 1); else submit();
+}
+
+/* ------------------------------------------------------------- uploads */
+
+function upload(input) {
+  const file = input.files && input.files[0];
+  const status = document.getElementById('status_' + input.dataset.doc);
+  if (!file) return;
+  if (!/\.pdf$/i.test(file.name)) { status.className = 'status bad'; status.textContent = 'Please choose a PDF file.'; return; }
+  if (file.size > CONFIG.maxFileMb * 1024 * 1024) { status.className = 'status bad'; status.textContent = `That file is larger than ${CONFIG.maxFileMb} MB.`; return; }
+  status.className = 'status busy'; status.textContent = 'Uploading…';
+  const reader = new FileReader();
+  reader.onload = () => {
+    const data = String(reader.result).split(',')[1];
+    google.script.run
+      .withSuccessHandler(r => { state.documents[input.dataset.doc] = r; status.className = 'status ok'; status.textContent = '✓ Uploaded: ' + r.name; })
+      .withFailureHandler(err => { delete state.documents[input.dataset.doc]; status.className = 'status bad'; status.textContent = (err && err.message) || 'The upload failed. Please try again.'; })
+      .uploadFile({ name: file.name, data: data });
+  };
+  reader.onerror = () => { status.className = 'status bad'; status.textContent = 'That file could not be read.'; };
+  reader.readAsDataURL(file);
+}
+
+/* -------------------------------------------------------------- submit */
+
+function submit() {
+  const button = document.getElementById('next');
+  button.disabled = true; button.textContent = 'Submitting…';
+  const payload = Object.assign({}, state, { website: (document.querySelector('[name=website]') || {}).value || '' });
+  payload.budget = (state.budget || []).filter(l => l.category || l.description || l.amount);
+  google.script.run
+    .withSuccessHandler(done)
+    .withFailureHandler(err => { button.disabled = false; button.textContent = 'Submit application'; render([(err && err.message) || 'Your application could not be submitted. Please try again.']); tellParent('eeg101-grant-scroll'); })
+    .submitApplication(payload);
+}
+
+function done(result) {
+  clearDraft();
+  const pdfUrl = URL.createObjectURL(new Blob([Uint8Array.from(atob(result.pdf), c => c.charCodeAt(0))], { type: 'application/pdf' }));
+  const docUrl = URL.createObjectURL(new Blob([result.html], { type: 'application/msword' }));
+  app.innerHTML = `<div class="done" role="status"><h2>Application submitted</h2>
+  <p class="ref">${esc(result.id)}</p>
+  <p>Thank you. We received your application on ${esc(result.submitted)}. ${result.emailed ? `A confirmation with a PDF copy has been sent to <strong>${esc(result.email)}</strong>.` : `We could not send the confirmation email just now, so please download your copy below. We have your application.`}</p>
+  <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a>
+  <a class="btn secondary" href="${docUrl}" download="${esc(result.id)} application.doc">Download an editable copy (Word)</a></div>
+  <p class="hint">Please quote ${esc(result.id)} if you contact us. Questions: <a href="mailto:${esc(CONFIG.contact)}">${esc(CONFIG.contact)}</a>.</p></div>`;
+  tellParent('eeg101-grant-scroll');
+}
+
+/* ---------------------------------------------------------------- start */
+
+if (!CONFIG.open) {
+  app.innerHTML = `<div class="done"><h2>Applications are closed</h2><p>${esc(CONFIG.callName)} is not open for applications at the moment. Calls are announced on the <a href="https://www.eeg101.eu/grants/">Grants page</a>.</p></div>`;
+} else {
+  render();
+}
+</script>
+</body>
+</html>

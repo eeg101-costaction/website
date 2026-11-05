@@ -69,7 +69,9 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 </div>
 
 <div class="grant-detail__actions">
-{% if grant.status == "open" and grant.application_url != "" %}
+{% if grant.status == "open" and site.data.site.grants_application_endpoint and site.data.site.grants_application_endpoint != "" %}
+<a href="{{ '/grants/apply/' | relative_url }}?scheme={{ grant.id | replace: '-', '_' }}" class="btn btn-primary">Apply now</a>
+{% elsif grant.status == "open" and grant.application_url != "" %}
 <a href="{{ grant.application_url }}" class="btn btn-primary" target="_blank" rel="noopener">Apply on e-COST ↗</a>
 {% endif %}
 {% if grant.guidance_url and grant.guidance_url != "" %}
