@@ -149,7 +149,7 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">What happens after my grant?</button>
 </h3>
 <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-heading" data-bs-parent="#faqAccordion">
-<div class="accordion-body">You submit a report in e-COST within 30 days of the end of your activity, or within 15 days of the end of the grant period if that comes first. For conference grants, include your certificate of attendance and the programme or book of abstracts showing your presentation. The grant is paid once your report is approved; STSM grantees can ask for up to 50% in advance.</div>
+<div class="accordion-body">You submit a report in e-COST within 30 days of the end of your activity, or within 15 days of the end of the grant period if that comes first. For conference grants, include your certificate of attendance and the programme or book of abstracts showing your presentation. The grant is paid once your report is approved: see "When is the grant paid?" below.</div>
 </div>
 </div>
 <div class="accordion-item">
@@ -182,6 +182,14 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 </h3>
 <div id="faq10" class="accordion-collapse collapse" aria-labelledby="faq10-heading" data-bs-parent="#faqAccordion">
 <div class="accordion-body">Reviewers score each application on its quality, your contribution to EEG101 to date, relevance to EEG101, feasibility and value for money, and benefit to the applicant and the network, taking into account COST's Excellence and Inclusiveness policy. Reviewers declare any conflict of interest and do not score those applications. The grants committee then ranks the applications and decides on funding.</div>
+</div>
+</div>
+<div class="accordion-item">
+<h3 class="accordion-header" id="faq11-heading">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11" aria-expanded="false" aria-controls="faq11">When is the grant paid?</button>
+</h3>
+<div id="faq11" class="accordion-collapse collapse" aria-labelledby="faq11-heading" data-bs-parent="#faqAccordion">
+<div class="accordion-body">As standard, at the end: after your STSM, virtual mobility or conference, you submit your report in e-COST, and the Grant Holder pays the grant once the report is approved. Please plan to cover your costs until then. The only exception is for STSMs: once your grant is approved, you can ask the Grant Holder for up to 50% in advance. This depends on funds being available and the Grant Holder agreeing, so it is not guaranteed.</div>
 </div>
 </div>
 </div>

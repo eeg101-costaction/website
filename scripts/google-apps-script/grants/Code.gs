@@ -75,7 +75,7 @@ const SCHEMES = {
     rules: [
       'The host institution must be in a different country from your own institution.',
       'The academic lead at the host must be an EEG101 member.',
-      'You can ask for up to 50% of the grant to be paid before the visit.'
+      'The grant is normally paid after the visit, once your report is approved. Once it is approved, you can ask the Grant Holder for up to 50% in advance; this depends on funds being available and the Grant Holder agreeing.'
     ],
     questions: [
       { id: 'summary', label: 'Goals of the mission', hint: 'What you want to achieve, in a few sentences.' },

@@ -192,7 +192,10 @@ needed.
 4. After the deadline, reviewers score and the chairs record decisions. Then
    email applicants; the platform does not send decision emails. Funded
    applicants are then asked to apply through e-COST, where the
-   application is approved and the grant letter issued.
+   application is approved and the grant letter issued. Grants are paid after
+   the activity, once the grantee's report is approved. The one exception:
+   an STSM grantee may ask the Grant Holder for up to 50% in advance once
+   the grant is approved, if funds allow and the Grant Holder agrees.
 5. For the next call, change `id_prefix` (e.g. `G3`) and the dates, and set
    `call_open` to `TRUE` again. Earlier rows stay in the spreadsheet.
 
