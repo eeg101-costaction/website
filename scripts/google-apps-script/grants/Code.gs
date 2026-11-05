@@ -33,7 +33,7 @@ const GRANTS = {
   timezone: 'Europe/Brussels',
   maxFileBytes: 5 * 1024 * 1024,
   // Words, for the longer answers. Short fields have their own limits below.
-  words: { summary: 200, workplan: 600, outcomes: 300, relevance: 300, benefit: 300, justification: 400 },
+  words: { summary: 200, workplan: 600, outcomes: 300, relevance: 300, benefit: 300, contribution: 250, justification: 400 },
   // Defaults for the "Settings" tab, which the chair edits in the spreadsheet.
   defaults: {
     call_name: 'EEG101 Grant Period 2 call',
@@ -59,6 +59,8 @@ const GRANTS = {
 // summary, workplan, outcomes, relevance and benefit (word limits in GRANTS.words).
 const CV = { id: 'cv', label: 'Your CV (max. 2 pages)', required: true };
 const ACCEPTANCE = { id: 'acceptance', label: 'Acceptance or invitation letter from the conference organisers (or proof of submission if you are still waiting)', required: true };
+// Asked in every scheme, and scored by reviewers (see CRITERIA).
+const CONTRIBUTION = { id: 'contribution', label: 'Your contribution to EEG101 to date', hint: 'What you have done in the Action so far: Working Group activity, meetings, training schools, shared data, tools or protocols, roles you hold. If you joined recently, say how you have started to take part and plan to. This is one of the evaluation criteria: reviewers score it.' };
 const TRAVEL_BUDGET = ['Travel', 'Accommodation', 'Subsistence (meals, local transport)', 'Other'];
 const CONFERENCE_RULES = [
   'The conference must be a high-level one organised entirely by others, not by EEG101 or another COST Action.',
@@ -80,7 +82,8 @@ const SCHEMES = {
       { id: 'workplan', label: 'Work to be carried out', hint: 'What you will do at the host, and when.' },
       { id: 'outcomes', label: 'Expected outcomes', hint: 'Papers, data, code, training, new collaborations…' },
       { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the mission helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' },
-      { id: 'benefit', label: 'Benefit to you, the host and the network', hint: 'For your career, your host and the EEG101 community, including inclusiveness.' }
+      { id: 'benefit', label: 'Benefit to you, the host and the network', hint: 'For your career, your host and the EEG101 community, including inclusiveness.' },
+      CONTRIBUTION
     ],
     budget: TRAVEL_BUDGET,
     documents: [CV, { id: 'host_letter', label: 'Confirmation from the host institution that it will receive you, with the dates (e-COST has a template)', required: true }]
@@ -97,7 +100,8 @@ const SCHEMES = {
       { id: 'summary', label: 'Main objective', hint: 'What the collaboration will achieve, in a few sentences.' },
       { id: 'workplan', label: 'Work to be carried out and plan for participation', hint: 'Activities, who takes part, how you will work together online, and when.' },
       { id: 'outcomes', label: 'Expected outcomes', hint: 'Protocols, surveys, data, code, training, publications…' },
-      { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the work helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' }
+      { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the work helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' },
+      CONTRIBUTION
     ],
     budget: ['Your own time and effort on the activity', 'Software, data access or services', 'Other'],
     documents: [CV, { id: 'collaborator_letter', label: 'Letter of support from the collaborating organisation (required if a third party is involved)', required: false, requiredIf: 'third_party' }]
@@ -111,7 +115,8 @@ const SCHEMES = {
     questions: [
       { id: 'summary', label: 'Your presentation', hint: 'What you will present, in a few sentences (or paste your abstract).' },
       { id: 'relevance', label: 'Relevance of the conference topic to EEG101', hint: 'Why this conference matters for the Action\'s work.' },
-      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' }
+      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' },
+      CONTRIBUTION
     ],
     budget: ['Registration fee'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
     documents: [CV, ACCEPTANCE]
@@ -125,7 +130,8 @@ const SCHEMES = {
     questions: [
       { id: 'summary', label: 'Your presentation', hint: 'What you will present, in a few sentences (or paste your abstract).' },
       { id: 'relevance', label: 'Relevance of the conference topic to EEG101', hint: 'Why this conference matters for the Action\'s work.' },
-      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' }
+      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' },
+      CONTRIBUTION
     ],
     budget: ['Registration fee', 'Printing of the poster'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
     documents: [CV, ACCEPTANCE]
@@ -139,7 +145,8 @@ const SCHEMES = {
     questions: [
       { id: 'summary', label: 'What you will present about EEG101', hint: 'The Action\'s work, activities or results you will present.' },
       { id: 'relevance', label: 'Alignment with the EEG101 Science Communication Plan', hint: 'Which audiences this reaches and how it fits the Action\'s plan for communicating its work.' },
-      { id: 'benefit', label: 'Expected impact for EEG101', hint: 'New contacts, stakeholders, members or visibility the Action could gain.' }
+      { id: 'benefit', label: 'Expected impact for EEG101', hint: 'New contacts, stakeholders, members or visibility the Action could gain.' },
+      CONTRIBUTION
     ],
     budget: ['Registration fee'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
     documents: [CV, ACCEPTANCE]
@@ -162,6 +169,7 @@ const NNC_COUNTRIES = ['Algeria', 'Armenia', 'Azerbaijan', 'Egypt', 'Faroe Islan
 // What reviewers score, each from 1 (poor) to 5 (excellent).
 const CRITERIA = [
   { id: 'quality', label: 'Scientific quality and clarity of the plan' },
+  { id: 'contribution', label: 'Contribution to EEG101 to date' },
   { id: 'relevance', label: 'Relevance to EEG101 and its Working Groups' },
   { id: 'feasibility', label: 'Feasibility and value for money of the budget' },
   { id: 'impact', label: 'Benefit to the applicant and to the network (incl. inclusiveness)' }
@@ -568,7 +576,7 @@ ${section('Activity', `<table>${row('Dates', `${formatDate(a.start_date)} to ${f
 ${section('Proposal', questions)}
 ${section('Budget', budget + `<h3>Justification of costs</h3>${para(a.justification)}`)}
 ${section('Documents', `<ul>${docs}</ul>`)}
-${section('Declaration', `<p>The applicant confirmed that the information is accurate, that they have read the privacy notice, and that they will follow the COST rules for this grant, including applying in e-COST.${blind ? '' : ` Signed: ${esc(a.signature)}.`}</p>`)}
+${section('Declaration', `<p>The applicant confirmed that the information is accurate, that they have read the privacy notice, and that they will follow the COST rules for this grant, including applying through e-COST if accepted.${blind ? '' : ` Signed: ${esc(a.signature)}.`}</p>`)}
 </body></html>`;
 }
 
@@ -585,7 +593,7 @@ function sendConfirmation(a, pdf) {
     `Reference: ${a.id}\nScheme: ${s.title}\nTitle: ${a.title}\nDates: ${formatDate(a.start_date)} to ${formatDate(a.end_date)}\nAmount requested: €${a.total.toFixed(2)}\nSubmitted: ${a.submitted_text}`,
     'A PDF copy of your application is attached. Please quote your reference if you contact us about it.',
     'Your application will be reviewed after the call closes, and we will let you know the outcome by email. If you need to correct anything, reply to this email.',
-    'COST also requires every grant application to be made in e-COST (e-services.cost.eu), with your CV uploaded to your e-COST profile. If you have not done so yet, please submit the same application there too.',
+    'You do not need to do anything in e-COST yet. If your application is accepted, we will ask you to apply through COST\'s online platform, e-COST (e-services.cost.eu), with the same details and your CV in your e-COST profile. COST then issues your grant letter.',
     'With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148'
   ];
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#1a1a2e">${text.map(t => `<p>${esc(t).replace(/\n/g, '<br>')}</p>`).join('')}</div>`;

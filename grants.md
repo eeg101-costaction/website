@@ -181,7 +181,7 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10" aria-expanded="false" aria-controls="faq10">How are applications reviewed?</button>
 </h3>
 <div id="faq10" class="accordion-collapse collapse" aria-labelledby="faq10-heading" data-bs-parent="#faqAccordion">
-<div class="accordion-body">Reviewers score each application on its quality, relevance to EEG101, feasibility and value for money, and benefit to the applicant and the network, taking into account COST's Excellence and Inclusiveness policy. Reviewers declare any conflict of interest and do not score those applications. The grants committee then ranks the applications and decides on funding.</div>
+<div class="accordion-body">Reviewers score each application on its quality, your contribution to EEG101 to date, relevance to EEG101, feasibility and value for money, and benefit to the applicant and the network, taking into account COST's Excellence and Inclusiveness policy. Reviewers declare any conflict of interest and do not score those applications. The grants committee then ranks the applications and decides on funding.</div>
 </div>
 </div>
 </div>

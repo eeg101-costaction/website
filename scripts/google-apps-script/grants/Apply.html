@@ -145,7 +145,7 @@ function viewScheme() {
     <li>The activity must start after today and end by ${esc(CONFIG.periodEndText)}, within one grant period.</li>
     <li>You cannot hold overlapping grants, or more than one type of conference grant, in the same grant period.</li>
     <li>Grants contribute to travel, accommodation, subsistence, fees and your effort. They do not pay salaries or other employment costs.</li>
-    <li>COST also requires every application to be made in e-COST, with your CV uploaded to your e-COST profile.</li>
+    <li>Apply here only. Only if your application is accepted will we ask you to apply through COST's online platform, e-COST, with the same details and your CV in your e-COST profile. That is when COST issues your grant letter.</li>
     <li>If funded, you report in e-COST within 30 days of the end of the activity (or 15 days after the grant period ends, if sooner), and the grant is paid once the report is approved. STSM grantees can ask for up to 50% in advance.</li>
   </ul></div>`;
 }
@@ -240,7 +240,7 @@ function viewReview() {
   return `<h2>Check and submit</h2><p class="lead">Please check your answers. You can go back to change anything.</p>
   <div class="summary"><dl>${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></div>
   <label class="consent"><input type="checkbox" name="confirm_accurate"${state.confirm_accurate ? ' checked' : ''}><span>The information in this application is accurate and complete.</span></label>
-  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>I will also submit this application in e-COST, with my CV in my e-COST profile, as COST requires. If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, report in e-COST within 30 days of the end, and acknowledge EEG101 and COST in any outputs.</span></label>
+  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>If my application is accepted, I will then apply through e-COST, with my CV in my e-COST profile, as COST requires. If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, report in e-COST within 30 days of the end, and acknowledge EEG101 and COST in any outputs.</span></label>
   <label class="consent"><input type="checkbox" name="confirm_privacy"${state.confirm_privacy ? ' checked' : ''}><span>I agree to EEG101 storing this application and my documents, sharing them with the grant reviewers, and using anonymised totals (such as gender, ITC and career stage) in reports to COST, as described in the <a href="${esc(CONFIG.privacyUrl)}" target="_blank" rel="noopener">privacy notice</a>.</span></label>
   ${field('signature', 'Type your full name as your signature')}
   <div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>`;
@@ -419,9 +419,9 @@ function done(result) {
   <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a>
   <a class="btn secondary" href="${docUrl}" download="${esc(result.id)} application.doc">Download an editable copy (Word)</a></div>
   <h3>What happens next</h3>
-  <ul><li>If you have not done so yet, submit the same application in <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a> and upload your CV to your e-COST profile. COST requires this.</li>
-  <li>After the call closes, the grants committee reviews the applications, and we email you the outcome.</li>
-  <li>If you are funded, you receive a grant letter. After the activity, you report in e-COST within 30 days, and the grant is paid once the report is approved.</li></ul>
+  <ul><li>After the call closes, the grants committee reviews the applications, and we email you the outcome. You do not need to do anything in e-COST yet.</li>
+  <li>If your application is accepted, we will ask you to apply through COST's online platform, <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a>, with the same details and your CV in your e-COST profile. You then receive a grant letter.</li>
+  <li> After the activity, you report in e-COST within 30 days, and the grant is paid once the report is approved.</li></ul>
   <p class="hint">Please quote ${esc(result.id)} if you contact us. Questions: <a href="mailto:${esc(CONFIG.contact)}">${esc(CONFIG.contact)}</a>.</p></div>`;
   tellParent('eeg101-grant-scroll');
 }

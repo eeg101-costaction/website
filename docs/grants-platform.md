@@ -51,8 +51,12 @@ In addition:
   description. There are no salary or employment-cost categories;
 - a written justification of costs is required;
 - uploads must be PDFs of at most 5 MB;
-- applicants declare that they will also apply in e-COST, as COST requires,
-  with their CV in their e-COST profile.
+- every scheme asks for the applicant's contribution to EEG101 to date,
+  which reviewers score as one of the criteria;
+- applicants do not apply in e-COST at this stage. Only those whose
+  application is accepted are asked to apply through e-COST afterwards, with
+  their CV in their e-COST profile (COST requires this before it issues the
+  grant letter). Applicants declare they will do so if accepted.
 
 Flagged for reviewers, not blocked ("Eligibility notes" and the ⚠ lines on
 the dashboard):
@@ -142,8 +146,8 @@ everything**, including every score as soon as it is given, so they can
 decide without waiting.
 
 **What everyone sees:** the applications and a scoring form:
-- four criteria, each scored 1–5: quality, relevance, feasibility and value
-  for money, and benefit;
+- five criteria, each scored 1–5: quality, contribution to EEG101 to date,
+  relevance, feasibility and value for money, and benefit;
 - a recommendation;
 - comments;
 - a conflict-of-interest box, with the situations from the COST rules
@@ -187,8 +191,8 @@ needed.
    example as an event or a calendar date in the website editor.
 4. After the deadline, reviewers score and the chairs record decisions. Then
    email applicants; the platform does not send decision emails. Funded
-   applicants also need their application approved in e-COST, which issues
-   the grant letter.
+   applicants are then asked to apply through e-COST, where the
+   application is approved and the grant letter issued.
 5. For the next call, change `id_prefix` (e.g. `G3`) and the dates, and set
    `call_open` to `TRUE` again. Earlier rows stay in the spreadsheet.
 

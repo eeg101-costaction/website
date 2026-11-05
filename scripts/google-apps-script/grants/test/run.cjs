@@ -48,7 +48,7 @@ function stsm(g, overrides) {
     institution: 'University of Lisbon', department: 'Psychology', country: 'Portugal', orcid: '', yri: 'Yes', eci: 'Yes', gender: 'Female', member: 'Yes',
     working_groups: ['WG2 Curation and Harmonisation', 'Not a WG'], start_date: '2027-03-01', end_date: '2027-03-14',
     host_name: 'Prof Host', host_email: 'host@leeds.ac.uk', host_institution: 'University of Leeds', host_country: 'United Kingdom', host_member: 'Yes',
-    title: 'Harmonising resting-state EEG', summary: 'A short summary.', workplan: 'Plan.', outcomes: 'Outcomes.', relevance: 'Relevant.', benefit: 'Benefit.',
+    title: 'Harmonising resting-state EEG', summary: 'A short summary.', contribution: 'WG2 meetings.', workplan: 'Plan.', outcomes: 'Outcomes.', relevance: 'Relevant.', benefit: 'Benefit.',
     budget: [{ category: 'Travel', description: 'Flights', amount: '450' }, { category: 'Accommodation', description: '13 nights', amount: 1300 }],
     justification: 'Quotes from airline and university housing.',
     documents: { cv: cv, host_letter: letter },
@@ -112,6 +112,8 @@ test('a complete STSM application is stored, filed, emailed and returned as a PD
   assert.strictEqual(mail.bcc, 'amy@example.org,faisal@example.org');
   assert.strictEqual(mail.attachments.length, 1);
   assert.match(mail.subject, /EEG101-G2-001/);
+  assert.match(mail.body, /do not need to do anything in e-COST yet\. If your application is accepted/);
+  assert.match(result.html, /Your contribution to EEG101 to date[\s\S]*WG2 meetings/);
   assert.strictEqual(g.submitApplication(stsm(g)).id, 'EEG101-G2-002');
 });
 
@@ -126,6 +128,8 @@ test('the rules are enforced on the server', () => {
     [{ budget: [{ category: 'Registration fee', description: 'x', amount: 10 }] }, /category/],
     [{ host_member: 'No' }, /host institution must be a member/],
     [{ host_country: 'Portugal' }, /different country from your own institution/],
+    [{ contribution: '' }, /Your contribution to EEG101 to date/],
+    [{ contribution: 'word '.repeat(251) }, /250 words/],
     [{ budget: [{ category: 'Travel', description: 'x', amount: 10 }], summary: '' }, /answer "Goals of the mission"/],
     [{ member: 'No' }, /must be members/],
     [{ confirm_privacy: false }, /declarations/],
@@ -218,9 +222,9 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
   same(blindView.documents, {});
   throwsLike(() => g.getDocument(r1, a, 'cv'), /not shown in blind review/);
   throwsLike(() => g.getReport(r1), /for chairs/);
-  g.saveReview(r1, { id: a, scores: [5, 4, 4, 5], recommendation: 'Fund', comments: 'Strong' });
-  throwsLike(() => g.saveReview(r1, { id: a, scores: [5, 4, 9, 5], recommendation: 'Fund' }), /1 to 5/);
-  g.saveReview(r1, { id: a, scores: [5, 5, 5, 5], recommendation: 'Fund', comments: 'Updated' }); // edits, not duplicates
+  g.saveReview(r1, { id: a, scores: [5, 5, 4, 4, 5], recommendation: 'Fund', comments: 'Strong' });
+  throwsLike(() => g.saveReview(r1, { id: a, scores: [5, 5, 4, 9, 5], recommendation: 'Fund' }), /1 to 5/);
+  g.saveReview(r1, { id: a, scores: [5, 5, 5, 5, 5], recommendation: 'Fund', comments: 'Updated' }); // edits, not duplicates
   assert.strictEqual(g.tab('Reviews').rows.length, 2);
 
   const r2 = keys['r2@example.org'];
@@ -234,7 +238,7 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
 
   // Applicants who review cannot review or see the scores of their own application.
   const bob = keys['bob@example.org'];
-  throwsLike(() => g.saveReview(bob, { id: b, scores: [5, 5, 5, 5], recommendation: 'Fund' }), /your own application/);
+  throwsLike(() => g.saveReview(bob, { id: b, scores: [5, 5, 5, 5, 5], recommendation: 'Fund' }), /your own application/);
   assert.ok(g.listApplications(bob).applications.filter(x => x.id === b)[0].own);
 
   // Chairs see everything at once, score too, and decide straight away.
@@ -247,7 +251,7 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
   assert.ok(/Lovelace/.test(full.html) && full.documents.cv && !full.documents.cv.id);
   assert.strictEqual(Buffer.from(g.getDocument(chair, a, 'cv').data, 'base64').toString().slice(0, 5), '%PDF-');
   assert.match(g.getDocument(chair, a, 'application').name, /EEG101-G2-001 application\.pdf/);
-  g.saveReview(chair, { id: b, scores: [3, 3, 3, 3], recommendation: 'Fund if budget allows' });
+  g.saveReview(chair, { id: b, scores: [3, 3, 3, 3, 3], recommendation: 'Fund if budget allows' });
   throwsLike(() => g.saveDecisions(chair, [{ id: a, decision: 'Funded', awarded: 99999 }]), /between €0 and the €1750 requested/);
   g.saveDecisions(chair, [{ id: a, decision: 'Funded', awarded: '', rank: 1, notes: 'Top' }, { id: b, decision: 'Funded', awarded: 800, rank: 1 }]);
   let rows = g.rowsAsObjects(g.tab('Applications'));
