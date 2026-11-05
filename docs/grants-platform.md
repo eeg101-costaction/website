@@ -144,9 +144,10 @@ can:
 
 You cannot remove yourself or your own chair role; another chair can.
 
-**Assigning reviewers (Applications tab).** An application with no reviewers
-assigned is open to every reviewer. Once reviewers are assigned, only they
-(and the chairs) can see, open or score it. Two ways to assign:
+**Assigning reviewers (Applications tab).** Reviewers see only the
+applications assigned to them; an application with no reviewers assigned is
+seen by the chairs alone. So assign every application that needs reviewing
+beyond the chairs. Two ways to assign:
 - **In bulk:** tick applications in the list, tick reviewers in the yellow
   bar, then **Assign** or **Unassign**.
 - **One at a time:** on an application's page, under *Reviewers for this
@@ -215,7 +216,7 @@ spreadsheet changes are needed.
    An **Apply now** button then appears on the Grants page, linking to the
    form with that scheme already chosen. Announce the call as usual, for
    example as an event or a calendar date in the website editor.
-4. Assign reviewers (or leave applications open to all). After the deadline,
+4. Assign reviewers to the applications. After the deadline,
    reviewers score and the chairs record decisions. Then email applicants;
    the platform does not send decision emails. Funded applicants are then
    asked to apply through e-COST, where the application is approved and the

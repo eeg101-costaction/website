@@ -199,6 +199,7 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
   const b = g.submitApplication(stsm(g, { scheme: 'vmg', collaborators: 'Dr X', third_party: 'No', not_leadership: true, budget: [{ category: 'Other', description: 'x', amount: 1000 }], documents: { cv: g.uploadFile({ name: 'cv.pdf', data: PDF }) }, gender: 'Male', country: 'Germany', email: 'bob@example.org', first_name: 'Bob' })).id;
   const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['chair2@example.org', 'Second chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer'], ['r2@example.org', 'Rev Two', 'reviewer'], ['bob@example.org', 'Bob', 'reviewer']]);
   assert.ok(Object.values(keys).every(k => k.length >= 32) && new Set(Object.values(keys)).size === 5);
+  g.assignReviewers(keys['chair@example.org'], { ids: [a, b], add: ['r1@example.org', 'r2@example.org', 'bob@example.org'] });
 
   // Links: emailed once each, and only a listed key opens the page.
   g.sendReviewerLinks();
@@ -238,8 +239,8 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
 
   // Applicants who review cannot review or see the scores of their own application.
   const bob = keys['bob@example.org'];
-  throwsLike(() => g.saveReview(bob, { id: b, scores: [5, 5, 5, 5, 5], recommendation: 'Fund' }), /your own application/);
-  assert.ok(g.listApplications(bob).applications.filter(x => x.id === b)[0].own);
+  throwsLike(() => g.saveReview(bob, { id: b, scores: [5, 5, 5, 5, 5], recommendation: 'Fund' }), /not assigned to you/);
+  same(g.listApplications(bob).applications.map(x => x.id), [a], 'never assigned their own');
 
   // Chairs see everything at once, score too, and decide straight away.
   const chair = keys['chair@example.org'];
@@ -342,8 +343,10 @@ test('portal: assigned applications are only open to their reviewers', () => {
   const b = g.submitApplication(stsm(g, { email: 'r2@example.org', title: 'Second' })).id;
   const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer'], ['r2@example.org', 'Rev Two', 'reviewer']]);
   const chair = keys['chair@example.org'], r1 = keys['r1@example.org'], r2 = keys['r2@example.org'];
-  // Nothing assigned yet: every reviewer sees everything.
-  assert.strictEqual(g.listApplications(r1).applications.length, 2);
+  // Nothing assigned yet: reviewers see nothing, chairs see everything.
+  assert.strictEqual(g.listApplications(r1).applications.length, 0);
+  assert.strictEqual(g.listApplications(chair).applications.length, 2);
+  throwsLike(() => g.getApplication(r1, b), /not assigned to you/);
   throwsLike(() => g.assignReviewers(r1, { ids: [a], add: ['r1@example.org'] }), /Only a grants chair/);
   throwsLike(() => g.assignReviewers(chair, { ids: [a], add: ['stranger@example.org'] }), /not on the reviewer list/);
   g.state.mail = [];
@@ -354,8 +357,9 @@ test('portal: assigned applications are only open to their reviewers', () => {
   assert.strictEqual(g.state.mail.length, 1);
   assert.match(g.state.mail[0].body, new RegExp(`${a}: Harmonising`));
   assert.ok(!new RegExp(b).test(g.state.mail[0].body));
-  // r1 is not assigned to a, so cannot see, open or score it; b is still open to all.
-  same(g.listApplications(r1).applications.map(x => x.id), [b]);
+  // r1 is not assigned to a, so cannot see, open or score it; b has no one assigned, so only chairs see it.
+  same(g.listApplications(r1).applications.map(x => x.id), []);
+  same(g.listApplications(r2).applications.map(x => x.id), [a]);
   throwsLike(() => g.getApplication(r1, a), /not assigned to you/);
   throwsLike(() => g.saveReview(r1, { id: a, scores: [5, 5, 5, 5, 5], recommendation: 'Fund' }), /not assigned to you/);
   assert.ok(g.listApplications(r2).applications.filter(x => x.id === a)[0].assignedToMe);
@@ -363,9 +367,10 @@ test('portal: assigned applications are only open to their reviewers', () => {
   assert.strictEqual(g.listApplications(chair).applications.filter(x => x.id === a)[0].assigned[0].status, 'scored');
   const people = g.listReviewers(chair);
   same(people.filter(p => p.email === 'r2@example.org').map(p => [p.assigned, p.assignedDone, p.scored]), [[1, 1, 1]]);
-  // Unassigning opens it up again; removing a reviewer takes them off.
+  // Unassigning takes it away; removing a reviewer takes them off.
   g.assignReviewers(chair, { ids: [a], add: ['r1@example.org'], remove: ['r2@example.org'] });
-  assert.strictEqual(g.listApplications(r1).applications.length, 2);
+  same(g.listApplications(r1).applications.map(x => x.id), [a]);
+  same(g.listApplications(r2).applications, []);
   g.removeReviewer(chair, 'r1@example.org');
   same(g.listApplications(chair).applications.filter(x => x.id === a)[0].assigned, []);
 });

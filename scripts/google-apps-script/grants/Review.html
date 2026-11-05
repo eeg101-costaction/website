@@ -137,7 +137,7 @@ function renderList() {
   ${apps.length ? `<table><thead><tr>${me.chair ? `<th><input type="checkbox" id="all" aria-label="Select all"${apps.every(a => selected[a.id]) ? ' checked' : ''}></th>` : ''}<th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th>${me.chair ? '<th>Reviewers</th>' : ''}<th>Decision</th></tr></thead><tbody>
   ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
   </tbody></table>` : '<p class="note">No applications match.</p>'}
-  ${me.chair ? '<p class="note">Applications with no reviewers assigned are open to every reviewer. Once you assign reviewers, only they (and the chairs) can see that application. Tick applications to assign them in bulk, or assign from an application\'s own page.</p>' : ''}
+  ${me.chair ? '<p class="note">Reviewers see only the applications assigned to them. Applications with no reviewers assigned are seen by the chairs alone. Tick applications to assign them in bulk, or assign from an application\'s own page.</p>' : ''}
   <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Review is blind: applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
   main.querySelector('#q').addEventListener('input', e => { filter.q = e.target.value; renderListKeepFocus(); });
   main.querySelector('#fs').addEventListener('change', e => { filter.scheme = e.target.value; renderList(); });
@@ -150,7 +150,7 @@ function renderList() {
 }
 
 function assignedList(a) {
-  if (!a.assigned.length) return '<span class="note">Open to all</span>';
+  if (!a.assigned.length) return '<span class="note">Not assigned</span>';
   return a.assigned.map(x => `<span class="who ${x.status}">${x.status === 'scored' ? '✓' : x.status === 'conflict' ? '✕' : '○'} ${esc(x.name)}</span>`).join('');
 }
 
@@ -214,7 +214,7 @@ async function renderDetail(id) {
       <button class="btn" type="submit">Save decision</button> <span id="dsaved" class="msg"></span></form>`
     : me.chair ? '<p class="note decide">You declared a conflict of interest or applied yourself, so another chair must decide on this application.</p>' : '';
   const assign = me.chair ? `<form id="asg" class="decide"><b>Reviewers for this application</b>
-      <p class="note">${a.assigned.length ? 'Only these reviewers (and the chairs) can see it.' : 'None assigned: every reviewer can see it.'}</p>
+      <p class="note">${a.assigned.length ? 'Only these reviewers (and the chairs) can see it.' : 'None assigned: only the chairs can see it.'}</p>
       <div class="pick">${data.reviewers.map(r => { const x = a.assigned.filter(y => y.email === r.email)[0]; return `<label><input type="checkbox" name="pick" value="${esc(r.email)}"${x ? ' checked' : ''}> ${esc(r.name || r.email)}${r.chair ? ' (chair)' : ''}${x ? ` <span class="who ${x.status}" style="display:inline">${x.status === 'scored' ? 'scored' : x.status === 'conflict' ? 'conflict' : 'to score'}</span>` : ''}</label>`; }).join('<br>')}</div>
       <label style="font-size:13px"><input type="checkbox" name="notify" checked> Email newly assigned reviewers</label><br>
       <button class="btn secondary" type="submit">Save reviewers</button> <span id="asaved" class="msg"></span></form>` : '';
@@ -330,7 +330,7 @@ async function renderPeople(list, message) {
       <label>Role<select name="role"><option value="reviewer">Reviewer</option><option value="chair">Chair</option></select></label>
       <label style="align-self:end"><input type="checkbox" name="invite" checked> Email them their link now</label>
       <div style="align-self:end"><button class="btn" type="submit">Add</button></div>
-    </form><p class="note">Reviewers score the applications open or assigned to them${BOOT.blind ? ', without seeing who applied (blind review)' : ''}. Chairs see everything, score, assign reviewers, decide on funding and manage this list. Everyone gets a personal link by email; no password or Google account is needed.</p></div>
+    </form><p class="note">Reviewers see and score only the applications you assign to them${BOOT.blind ? ', without seeing who applied (blind review)' : ''}. Chairs see everything, score, assign reviewers, decide on funding and manage this list. Everyone gets a personal link by email; no password or Google account is needed.</p></div>
   ${message ? `<p class="msg ok">${esc(message)}</p>` : ''}<span id="pmsg" class="msg"></span>
   <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Invited</th><th class="num">Assigned</th><th class="num">Scored</th><th class="num">Conflicts</th><th></th></tr></thead><tbody>
   ${list.map(p => `<tr><td>${esc(p.name)}${p.self ? ' <span class="note">(you)</span>' : ''}</td><td>${esc(p.email)}</td>

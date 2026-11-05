@@ -892,9 +892,9 @@ function removeReviewer(key, email) {
 
 const assignedTo = r => String(r['Assigned reviewers'] || '').split(/[,;\s]+/).map(x => x.trim().toLowerCase()).filter(x => EMAIL_PATTERN.test(x));
 
-// An application with no one assigned is open to every reviewer; once the chair
-// assigns reviewers, only they (and the chairs) can see it.
-const canAccess = (me, r) => me.chair || !assignedTo(r).length || assignedTo(r).indexOf(me.email) >= 0;
+// Reviewers see only the applications a chair has assigned to them. An
+// application with no one assigned is seen by the chairs alone.
+const canAccess = (me, r) => me.chair || assignedTo(r).indexOf(me.email) >= 0;
 
 function requireAccess(me, r) {
   if (!canAccess(me, r)) throw new Error('This application is not assigned to you.');
