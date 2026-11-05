@@ -13,9 +13,10 @@ schemes:
       STSMs support knowledge exchange, skill development, and collaborative
       projects addressing community-identified challenges.
     eligibility: >
-      Open to researchers affiliated with an institution in a COST Full Member
-      or Cooperating Member country. Applicants must be working in a field related
-      to EEG research.
+      Open to EEG101 members affiliated with an institution in a COST Full or
+      Cooperating Member country or a Near Neighbour Country. The host institution
+      must be in a different country from yours, and its academic lead must be an
+      EEG101 member.
     value: "Up to €4,000"
     duration: "Minimum 5 days, maximum 90 days"
     yri_track: true
@@ -40,9 +41,10 @@ schemes:
       members. VMGs are particularly suited to researchers who cannot travel,
       including those with caring responsibilities or disabilities.
     eligibility: >
-      Open to researchers affiliated with institutions in COST member countries.
-      The collaboration must involve at least one host institution different from
-      the applicant's home institution.
+      Open to EEG101 members affiliated with an institution in a COST Full or
+      Cooperating Member country or a Near Neighbour Country. The collaboration must
+      involve at least one institution other than your own. Not for tasks that are
+      part of a leadership role in EEG101.
     value: "Up to €1,500"
     duration: "1 to 90 days (virtual)"
     yri_track: true
@@ -58,19 +60,20 @@ schemes:
       All Year 1 VMG funding has been allocated. Visit our Spotlight page to follow
       the funded projects. Check back from November onwards for Year 2 funding calls.
 
-  - id: conference-inperson
-    title: "Conference Grant (In-Person)"
-    short_title: "Conference Grant"
+  - id: itc-conference
+    title: "ITC Conference Grant"
+    short_title: "ITC Conference Grant"
     icon: "🎤"
     summary: >
-      Grants supporting attendance and presentation at scientific conferences
-      relevant to EEG research and open science.
+      Supports an oral presentation of your own work, within the scope of EEG101,
+      at a high-level conference organised by others (not by EEG101 or another
+      COST Action).
     eligibility: >
-      Open to Early Career Investigators and researchers from ITC countries.
-      Applicants must be presenting at the conference (oral or poster).
-    value: "Up to €2,500"
+      Open to EEG101 members affiliated with an institution in an Inclusiveness
+      Target Country (ITC) or a Near Neighbour Country. Oral presentations only.
+    value: "Up to €2,500 in person, or €500 online"
     duration: "Conference duration"
-    yri_track: true
+    yri_track: false
     itc_track: true
     industry_track: false
     status: "closed"
@@ -83,48 +86,75 @@ schemes:
       All Year 1 Conference Grant funding has been allocated. Visit our Spotlight page
       to follow the funded projects. Check back from November onwards for Year 2 funding calls.
 
-  - id: conference-online
-    title: "Conference Grant (Online)"
-    short_title: "Online Conference Grant"
-    icon: "🌐"
+  - id: yri-conference
+    title: "YRI Conference Grant"
+    short_title: "YRI Conference Grant"
+    icon: "🌱"
     summary: >
-      Grants supporting registration and participation in online or hybrid
-      conferences for researchers unable to attend in person.
+      Supports a poster or oral presentation of your own work, within the scope of
+      EEG101, at a high-level conference organised by others (not by EEG101 or
+      another COST Action).
     eligibility: >
-      Open to Early Career Investigators and ITC-based researchers. Applicants
-      must be actively presenting or contributing to the event.
-    value: "Up to €500"
+      Open to EEG101 members who are Young Researchers and Innovators (under 40),
+      affiliated with an institution in a COST Full or Cooperating Member country
+      or a Near Neighbour Country.
+    value: "Up to €2,500 in person, or €500 online"
     duration: "Conference duration"
     yri_track: true
-    itc_track: true
+    itc_track: false
     industry_track: false
     status: "closed"
-    deadline: "All Year 1 funding has been allocated."
+    deadline: "Opens with the Year 2 funding call."
     round_label: "Round 2"
     application_url: ""
     guidance_url: "https://www.cost.eu/cost-actions-event/action-networking-tools/#h-conference-grants"
     contact: "eeg101costaction@gmail.com"
     notes: >
-      All Year 1 Online Conference Grant funding has been allocated. Visit our Spotlight page
-      to follow the funded projects. Check back from November onwards for Year 2 funding calls.
+      New for Year 2. Check back from November onwards for Year 2 funding calls.
+
+  - id: dissemination-conference
+    title: "Dissemination Conference Grant"
+    short_title: "Dissemination Conference Grant"
+    icon: "📣"
+    summary: >
+      Supports an oral presentation of the work and results of EEG101 itself at a
+      high-level conference organised by others, to bring the Action to new
+      audiences and stakeholders.
+    eligibility: >
+      Open to EEG101 members affiliated with an institution in a COST Full or
+      Cooperating Member country or a Near Neighbour Country. The presentation must
+      be about the Action's work and fit its Science Communication Plan.
+    value: "Up to €2,500 in person, or €500 online"
+    duration: "Conference duration"
+    yri_track: true
+    itc_track: true
+    industry_track: false
+    status: "closed"
+    deadline: "Opens with the Year 2 funding call."
+    round_label: "Round 2"
+    application_url: ""
+    guidance_url: "https://www.cost.eu/cost-actions-event/action-networking-tools/#h-conference-grants"
+    contact: "eeg101costaction@gmail.com"
+    notes: >
+      New for Year 2. Check back from November onwards for Year 2 funding calls.
 
 # Application process steps (shown on Grants page)
 application_process:
   - step: 1
     title: "Check eligibility"
-    description: "Review the grant scheme requirements and COST rules. Confirm your institution is in an eligible country."
+    description: "Read the scheme requirements and the COST rules below. You must be an EEG101 member, at an institution in a COST Full or Cooperating Member country or a Near Neighbour Country."
   - step: 2
     title: "Agree your visit or project"
-    description: "Contact a potential host institution within the EEG101 network and agree the work plan and dates."
+    description: "For an STSM, agree the work plan and dates with a host in another country. For a conference grant, have your abstract submitted or accepted."
   - step: 3
-    title: "Submit via e-COST"
-    description: "Complete your application on the e-COST platform (e-services.cost.eu/action/CA24148/working-groups/apply) before the deadline."
+    title: "Apply"
+    description: "Apply through the EEG101 application form while a call is open, and submit the same application in e-COST (e-services.cost.eu/action/CA24148/working-groups/apply), with your CV uploaded to your e-COST profile."
   - step: 4
     title: "Await decision"
-    description: "Applications are reviewed by the Grant Awarding Coordinator. Decisions are communicated within 4 weeks of the deadline."
+    description: "Applications are reviewed by the grants committee, coordinated by the Grant Awarding Coordinator. Decisions are communicated within 4 weeks of the deadline, and successful applicants receive a grant letter."
   - step: 5
     title: "Carry out your mission"
-    description: "Complete your STSM, VMG, or attend the conference as approved."
+    description: "Complete your STSM or VMG, or give your presentation, as approved. STSM grantees can ask for up to 50% of the grant in advance."
   - step: 6
     title: "Submit report"
-    description: "A short scientific report is required within 30 days of completing your grant. Payment is released on approval."
+    description: "Report in e-COST within 30 days of the end of your activity, or within 15 days of the end of the grant period if that comes first. The grant is paid once your report is approved."

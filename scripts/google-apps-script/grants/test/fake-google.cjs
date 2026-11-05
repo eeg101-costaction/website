@@ -48,7 +48,7 @@ function makeGoogle(opts = {}) {
     constructor(blob, folder) { this.id = newId('file'); this.blob = blob; this.name = blob.getName(); this.folder = folder; this.created = new Date(now); this.trashed = false; state.files[this.id] = this; }
     getId() { return this.id; } getName() { return this.name; } setName(n) { this.name = n; return this; }
     getUrl() { return `https://drive.google.com/file/d/${this.id}/view`; } moveTo(f) { this.folder = f; return this; }
-    getDateCreated() { return this.created; } setTrashed(t) { this.trashed = t; }
+    getDateCreated() { return this.created; } setTrashed(t) { this.trashed = t; } getBlob() { return this.blob.copyBlob(); }
   }
   class Folder {
     constructor(name, parent) { this.id = newId('folder'); this.name = name; this.parent = parent; this.viewers = []; state.folders[this.id] = this; }
@@ -57,7 +57,7 @@ function makeGoogle(opts = {}) {
     createFile(blob) { return new File(blob, this); }
     getFoldersByName(n) { const list = Object.values(state.folders).filter(f => f.parent === this && f.name === n); return iter(list); }
     getFiles() { return iter(Object.values(state.files).filter(f => f.folder === this && !f.trashed)); }
-    addViewer(e) { this.viewers.push(e); }
+    addViewer(e) { this.viewers.push(e); } addEditor(e) { this.viewers.push(e); }
   }
   const iter = list => { let i = 0; return { hasNext: () => i < list.length, next: () => list[i++] }; };
 

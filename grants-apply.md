@@ -15,7 +15,7 @@ permalink: /grants/apply/
 
 {::nomarkdown}
 {% if endpoint and endpoint != "" %}
-<p>Please read the scheme details and COST rules on the <a href="{{ '/grants/' | relative_url }}">Grants page</a> before you start. The form takes about 30 minutes; your answers are kept on your device as you go, so you can come back to it. You will need your CV, and depending on the scheme, a letter of support or proof of your conference abstract, as PDF files.</p>
+<p>Please read the scheme details and COST rules on the <a href="{{ '/grants/' | relative_url }}">Grants page</a> before you start. The form takes about 30 minutes; your answers are kept on your device as you go, so you can come back to it. You will need your CV, and depending on the scheme, a confirmation from your host, a letter of support, or the acceptance or invitation letter for your conference, as PDF files. COST also requires every application to be made in e-COST, so please submit it there too.</p>
 <div class="grant-apply">
   <p class="grant-apply__loading" id="grantApplyLoading">Loading the application form…</p>
   <iframe id="grantApplyFrame" class="grant-apply__frame" title="EEG101 grant application form" src="{{ endpoint }}" allow="clipboard-write"></iframe>

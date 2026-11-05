@@ -37,6 +37,8 @@ fieldset{border:0;margin:0 0 16px;padding:0}legend{font:700 14px var(--ui);margi
 .scheme span.d{display:block;font:400 14px/1.5 var(--ui);color:var(--muted)}
 .box{background:var(--bg-alt);border-radius:8px;font:400 14px/1.55 var(--ui);padding:12px 14px;margin:0 0 16px}
 .box.warn{background:var(--gold-light);border:1px solid var(--gold-dark)}
+.box ul,.scheme ul{margin:6px 0 0;padding-left:20px}.scheme ul{font:400 13px/1.45 var(--ui);color:var(--muted);padding-left:18px}
+.scheme .who{display:block;font:700 13px/1.45 var(--ui);color:var(--text);margin-top:6px}
 .counter{display:block;font:400 12px var(--ui);color:var(--muted);text-align:right;margin-top:3px}.counter.over{color:var(--error);font-weight:700}
 table.budget{border-collapse:collapse;width:100%;font:400 14px var(--ui);margin-bottom:8px}
 table.budget th{text-align:left;font-weight:700;color:var(--muted);padding:4px 6px}
@@ -78,6 +80,7 @@ let step = 0;
 let state = loadDraft() || { scheme: CONFIG.preselect, working_groups: [], budget: [], documents: {} };
 if (CONFIG.preselect && !state.scheme) state.scheme = CONFIG.preselect;
 state.documents = {}; // files are never kept between visits: upload them again
+if (state.scheme && !CONFIG.schemes[state.scheme]) state.scheme = ''; // a draft from an older version of the form
 
 function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function words(t) { return (String(t || '').trim().match(/\S+/g) || []).length; }
@@ -85,6 +88,17 @@ function scheme() { return CONFIG.schemes[state.scheme]; }
 function money(n) { return '€' + (Number(n) || 0).toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function fmtDate(iso) { if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return ''; const d = new Date(iso + 'T12:00:00Z'); return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }); }
 function days(a, b) { if (!a || !b) return 0; return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000) + 1; }
+function maxOf() { const s = scheme(); return s.maxOnline && state.attendance === 'Online' ? s.maxOnline : s.max; }
+function categories() { const s = scheme(); return s.budgetOnline && state.attendance === 'Online' ? s.budgetOnline : s.budget; }
+function euros(n) { return '€' + Number(n).toLocaleString('en-GB'); }
+function amountText(s) { return s.maxOnline ? `Up to ${euros(s.max)} in person · ${euros(s.maxOnline)} online` : `Up to ${euros(s.max)}`; }
+function countryNote(c) {
+  if (!c) return '';
+  if (CONFIG.itc.indexOf(c) >= 0) return `${c} is an Inclusiveness Target Country (ITC).`;
+  if (CONFIG.nnc.indexOf(c) >= 0) return `${c} is a COST Near Neighbour Country.`;
+  if (CONFIG.costMembers.indexOf(c) >= 0) return '';
+  return `${c} is not a COST Member or Near Neighbour Country, so COST grants are normally not available. You can still apply, and reviewers will check.`;
+}
 function total() { return Math.round((state.budget || []).reduce((s, l) => s + (Number(l.amount) || 0), 0) * 100) / 100; }
 
 function loadDraft() { try { const d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); return d && typeof d === 'object' ? d : null; } catch (e) { return null; } }
@@ -124,8 +138,16 @@ function radios(name, legend, options, hint) {
 function viewScheme() {
   return `<h2>Choose a funding scheme</h2>
   <p class="lead">${esc(CONFIG.callName)}. ${CONFIG.deadlineText ? `Applications close on <strong>${esc(CONFIG.deadlineText)}</strong>.` : ''} Every funded activity must be completed by <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
-  <div class="schemes">${Object.keys(CONFIG.schemes).map(id => { const s = CONFIG.schemes[id]; return `<label class="scheme${state.scheme === id ? ' on' : ''}"><input type="radio" name="scheme" value="${id}"${state.scheme === id ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">Up to €${s.max.toLocaleString('en-GB')}</span><span class="d">${esc(s.blurb)}</span><span class="d">${s.minDays === s.maxDays ? '' : `${s.minDays}–${s.maxDays} days. `}You will need: ${s.documents.map(d => { const l = d.label.split(' (')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</span></label>`; }).join('')}</div>
-  <div class="box">You can only apply if you are a member of the EEG101 COST Action. Not a member yet? <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join through e-COST first</a>.</div>`;
+  <div class="schemes">${Object.keys(CONFIG.schemes).map(id => { const s = CONFIG.schemes[id]; return `<label class="scheme${state.scheme === id ? ' on' : ''}"><input type="radio" name="scheme" value="${id}"${state.scheme === id ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">${amountText(s)}</span><span class="d">${esc(s.blurb)}</span><span class="who">For: ${esc(s.who)}</span><ul>${s.rules.map(r => `<li>${esc(r)}</li>`).join('')}<li>${s.minDays}–${s.maxDays} days. You will need: ${s.documents.map(d => { const l = d.label.split(' (')[0].split(',')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</li></ul></label>`; }).join('')}</div>
+  <div class="box"><strong>Before you start</strong><ul>
+    <li>You must be a member of the EEG101 COST Action. Not a member yet? <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join through e-COST first</a>.</li>
+    <li>Your institution should be in a COST Full or Cooperating Member country or a Near Neighbour Country.</li>
+    <li>The activity must start after today and end by ${esc(CONFIG.periodEndText)}, within one grant period.</li>
+    <li>You cannot hold overlapping grants, or more than one type of conference grant, in the same grant period.</li>
+    <li>Grants contribute to travel, accommodation, subsistence, fees and your effort. They do not pay salaries or other employment costs.</li>
+    <li>COST also requires every application to be made in e-COST, with your CV uploaded to your e-COST profile.</li>
+    <li>If funded, you report in e-COST within 30 days of the end of the activity (or 15 days after the grant period ends, if sooner), and the grant is paid once the report is approved. STSM grantees can ask for up to 50% in advance.</li>
+  </ul></div>`;
 }
 
 function viewAbout() {
@@ -136,7 +158,7 @@ function viewAbout() {
   <div class="grid">${field('institution', 'Institution', { attrs: 'autocomplete="organization"' })}${field('department', 'Department', { required: false })}</div>
   ${field('country', 'Country of your institution', { type: 'select', options: CONFIG.countries, hint: '<span id="itcNote"></span>' })}
   ${field('orcid', 'ORCID iD (optional)', { required: false, hint: 'e.g. 0000-0002-1825-0097' })}
-  ${radios('yri', 'Are you under 40? (Young Researcher and Innovator)', ['Yes', 'No'])}
+  ${radios('yri', 'Are you under 40? (Young Researcher and Innovator)', ['Yes', 'No'], state.scheme === 'yri_conference' ? 'YRI Conference Grants are only for people under 40.' : '')}
   ${radios('eci', 'Are you an early-career researcher?', ['Yes', 'No'], 'A PhD student, or awarded your PhD within the last 8 years (excluding career breaks).')}
   ${field('gender', 'Gender', { type: 'select', options: CONFIG.genders })}
   <div id="genderOtherWrap"${state.gender === 'Prefer to self-describe' ? '' : ' hidden'}>${field('gender_other', 'Please describe (optional)', { required: false })}</div>
@@ -151,19 +173,23 @@ function viewActivity() {
   if (state.scheme === 'stsm') {
     specific = `<h3>Your host</h3>
     <div class="grid">${field('host_name', 'Host (academic lead)')}${field('host_email', 'Host email', { type: 'email' })}</div>
-    <div class="grid">${field('host_institution', 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries })}</div>
+    <div class="grid">${field('host_institution', 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries, hint: 'Must be a different country from your own institution\'s.' })}</div>
     ${radios('host_member', 'Is your host a member of EEG101?', ['Yes', 'No'], 'The academic lead at the host institution must be a member before you apply.')}`;
   } else if (state.scheme === 'vmg') {
     specific = `<h3>Your collaborators</h3>
     ${field('collaborators', 'Who will you collaborate with?', { type: 'textarea', hint: 'Names, roles and institutions, one per line.' })}
     ${radios('third_party', 'Is a third-party organisation involved (e.g. a company or another organisation outside the network)?', ['Yes', 'No'])}
-    <div id="thirdPartyWrap"${state.third_party === 'Yes' ? '' : ' hidden'}>${radios('third_party_member', 'Is the named lead at that organisation a member of EEG101?', ['Yes', 'No'], 'They must be a member before you apply, and you will need a letter of support from them.')}</div>`;
+    <div id="thirdPartyWrap"${state.third_party === 'Yes' ? '' : ' hidden'}>${radios('third_party_member', 'Is the named lead at that organisation a member of EEG101?', ['Yes', 'No'], 'They must be a member before you apply, and you will need a letter of support from them.')}</div>
+    <label class="consent"><input type="checkbox" name="not_leadership"${state.not_leadership ? ' checked' : ''}><span>This work is not part of the tasks of a leadership role I hold in EEG101 (for example Grant Awarding Coordinator or Working Group leader). COST does not allow Virtual Mobility Grants for those tasks.</span></label>`;
   } else {
     specific = `<h3>The conference</h3>
     ${field('conference_name', 'Conference name')}
-    <div class="grid">${field('conference_url', 'Conference web address (optional)', { type: 'url', required: false, attrs: 'placeholder="https://"' })}${state.scheme === 'conference_inperson' ? field('conference_location', 'City and country') : ''}</div>
-    ${field('contribution_title', 'Title of your contribution')}
-    <div class="grid">${field('presentation', 'Type of contribution', { type: 'select', options: ['Oral presentation', 'Poster', 'Other contribution'] })}${field('abstract_status', 'Abstract status', { type: 'select', options: ['Accepted', 'Submitted, awaiting decision'] })}</div>`;
+    ${field('conference_url', 'Conference web address (optional)', { type: 'url', required: false, attrs: 'placeholder="https://"' })}
+    ${radios('third_party_organised', 'Is the conference organised entirely by others, not by EEG101 or another COST Action?', ['Yes', 'No'], 'Conference grants are only for high-level conferences organised by third parties.')}
+    ${radios('attendance', 'How will you attend?', CONFIG.attendance, `Up to ${euros(s.max)} face to face, or ${euros(s.maxOnline)} online.`)}
+    <div class="grid" id="f2fWrap"${state.attendance === 'Face to face' ? '' : ' hidden'}>${field('conference_location', 'City')}${field('conference_country', 'Country', { type: 'select', options: CONFIG.countries })}</div>
+    ${field('contribution_title', 'Title of your presentation')}
+    <div class="grid">${field('presentation', 'Type of presentation', { type: 'select', options: s.presentations, hint: s.presentations.length === 1 ? 'This grant is for oral presentations only.' : '' })}${field('abstract_status', 'Abstract status', { type: 'select', options: ['Accepted', 'Submitted, awaiting decision'] })}</div>`;
   }
   return `<h2>Activity and dates</h2>
   <p class="lead">${esc(s.title)}: ${s.minDays}–${s.maxDays} days, ending no later than <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
@@ -176,20 +202,16 @@ function viewProposal() {
   const w = CONFIG.words;
   return `<h2>Your proposal</h2><p class="lead">Write for reviewers from across EEG research. Plain language helps.</p>
   ${field('title', 'Title', { attrs: 'maxlength="200"' })}
-  ${field('summary', 'Summary', { type: 'textarea', words: w.summary, hint: 'What you will do and why, in a few sentences.' })}
-  ${field('workplan', 'Work plan', { type: 'textarea', words: w.workplan, hint: 'Aims, activities and timeline.' })}
-  ${field('outcomes', 'Expected outcomes', { type: 'textarea', words: w.outcomes, hint: 'Papers, data, code, training, new collaborations…' })}
-  ${field('relevance', 'Relevance to EEG101', { type: 'textarea', words: w.relevance, hint: 'How this advances the Action and its Working Groups.' })}
-  ${field('benefit', 'Benefit to you and the network', { type: 'textarea', words: w.benefit, hint: 'For your career, your team and the EEG101 community, including inclusiveness.' })}`;
+  ${scheme().questions.map(q => field(q.id, q.label, { type: 'textarea', words: w[q.id], hint: q.hint })).join('')}`;
 }
 
 function viewBudget() {
   const s = scheme();
   if (!state.budget || !state.budget.length) state.budget = [{ category: '', description: '', amount: '' }];
   return `<h2>Budget</h2>
-  <p class="lead">List what you are asking for, in euros. The total cannot be more than <strong>€${s.max.toLocaleString('en-GB')}</strong> for a ${esc(s.short)}.</p>
+  <p class="lead">List what you are asking for, in euros. The total cannot be more than <strong>${euros(maxOf())}</strong> for ${state.attendance === 'Online' ? 'attending online with ' : ''}a ${esc(s.short)}. Grants do not cover salaries or other employment costs.</p>
   <table class="budget"><thead><tr><th style="width:30%">Category</th><th>What it covers</th><th style="width:20%">Amount (€)</th><th style="width:1%"></th></tr></thead><tbody>
-  ${state.budget.map((l, i) => `<tr><td><select data-line="${i}" data-key="category" aria-label="Category"><option value="">Select…</option>${s.budget.map(c => `<option${c === l.category ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></td>
+  ${state.budget.map((l, i) => `<tr><td><select data-line="${i}" data-key="category" aria-label="Category"><option value="">Select…</option>${categories().map(c => `<option${c === l.category ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select></td>
   <td><input data-line="${i}" data-key="description" value="${esc(l.description)}" aria-label="What it covers" placeholder="e.g. Return flight Lisbon–Leeds"></td>
   <td><input data-line="${i}" data-key="amount" type="number" min="0" step="0.01" value="${esc(l.amount)}" aria-label="Amount in euros"></td>
   <td>${state.budget.length > 1 ? `<button type="button" class="link" data-remove="${i}" aria-label="Remove this line">Remove</button>` : ''}</td></tr>`).join('')}
@@ -218,7 +240,7 @@ function viewReview() {
   return `<h2>Check and submit</h2><p class="lead">Please check your answers. You can go back to change anything.</p>
   <div class="summary"><dl>${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></div>
   <label class="consent"><input type="checkbox" name="confirm_accurate"${state.confirm_accurate ? ' checked' : ''}><span>The information in this application is accurate and complete.</span></label>
-  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, submit the report required, and acknowledge EEG101 and COST in any outputs.</span></label>
+  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>I will also submit this application in e-COST, with my CV in my e-COST profile, as COST requires. If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, report in e-COST within 30 days of the end, and acknowledge EEG101 and COST in any outputs.</span></label>
   <label class="consent"><input type="checkbox" name="confirm_privacy"${state.confirm_privacy ? ' checked' : ''}><span>I agree to EEG101 storing this application and my documents, sharing them with the grant reviewers, and using anonymised totals (such as gender, ITC and career stage) in reports to COST, as described in the <a href="${esc(CONFIG.privacyUrl)}" target="_blank" rel="noopener">privacy notice</a>.</span></label>
   ${field('signature', 'Type your full name as your signature')}
   <div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>`;
@@ -250,25 +272,32 @@ function problems() {
     }
     if (state.scheme === 'stsm') {
       need(['host_name', 'host_email', 'host_institution', 'host_country'], 'Give your host\'s details.');
+      if (state.host_country && state.host_country === state.country) out.push('Your host must be in a different country from your own institution.');
       if (state.host_member !== 'Yes') out.push('Your host must be a member of EEG101 before you apply.');
     } else if (state.scheme === 'vmg') {
       need(['collaborators'], 'List your collaborators.');
       if (!state.third_party) out.push('Say whether a third-party organisation is involved.');
       if (state.third_party === 'Yes' && state.third_party_member !== 'Yes') out.push('The lead at the third-party organisation must be a member of EEG101.');
+      if (!state.not_leadership) out.push('Confirm that this work is not part of a leadership role in EEG101.');
     } else {
-      need(['conference_name', 'contribution_title', 'presentation', 'abstract_status'].concat(state.scheme === 'conference_inperson' ? ['conference_location'] : []), 'Complete the conference details.');
+      need(['conference_name', 'contribution_title', 'presentation', 'abstract_status', 'attendance'].concat(state.attendance === 'Face to face' ? ['conference_location', 'conference_country'] : []), 'Complete the conference details.');
+      if (state.third_party_organised !== 'Yes') out.push('Conference grants are only for conferences organised entirely by others.');
+      if (state.presentation && s.presentations.indexOf(state.presentation) < 0) out.push('Choose the type of presentation again.');
+      if (state.scheme === 'itc_conference' && state.country && CONFIG.itc.indexOf(state.country) < 0 && CONFIG.nnc.indexOf(state.country) < 0) out.push(`ITC Conference Grants are only for institutions in Inclusiveness Target Countries or Near Neighbour Countries, and ${state.country} is neither. A YRI or Dissemination Conference Grant may suit you instead.`);
+      if (state.scheme === 'yri_conference' && state.yri !== 'Yes') out.push('YRI Conference Grants are only for Young Researchers and Innovators (under 40).');
       if (state.conference_url && !/^https?:\/\/\S+$/i.test(state.conference_url)) out.push('The conference web address should start with https://.');
     }
   }
   if (step === 3) {
-    need(['title', 'summary', 'workplan', 'outcomes', 'relevance', 'benefit'], 'Answer every question.');
-    Object.keys(CONFIG.words).filter(k => k !== 'justification').forEach(k => { if (words(state[k]) > CONFIG.words[k]) out.push(`Shorten one of your answers to ${CONFIG.words[k]} words.`); });
+    need(['title'].concat(s.questions.map(q => q.id)), 'Answer every question.');
+    s.questions.forEach(q => { if (words(state[q.id]) > CONFIG.words[q.id]) out.push(`Shorten "${q.label}" to ${CONFIG.words[q.id]} words.`); });
   }
   if (step === 4) {
     const lines = (state.budget || []).filter(l => l.category || l.description || l.amount);
     if (!lines.length) out.push('Add at least one budget line.');
     if (lines.some(l => !l.category || !String(l.description || '').trim() || !(Number(l.amount) > 0))) out.push('Give every budget line a category, a description and an amount.');
-    if (total() > s.max) out.push(`The total is more than the €${s.max.toLocaleString('en-GB')} maximum.`);
+    if (lines.some(l => l.category && categories().indexOf(l.category) < 0)) out.push('Choose the category of each line again: the options depend on how you attend.');
+    if (total() > maxOf()) out.push(`The total is more than the ${euros(maxOf())} maximum.`);
     if (!String(state.justification || '').trim()) out.push('Justify your costs.');
     if (words(state.justification) > CONFIG.words.justification) out.push(`Shorten the justification to ${CONFIG.words.justification} words.`);
   }
@@ -299,11 +328,12 @@ function render(errors) {
 function refresh() {
   document.querySelectorAll('.counter').forEach(c => { const n = words(state[c.dataset.for]); c.textContent = `${n} / ${c.dataset.limit} words`; c.classList.toggle('over', n > Number(c.dataset.limit)); });
   const itc = document.getElementById('itcNote');
-  if (itc) itc.textContent = state.country ? (CONFIG.itc.indexOf(state.country) >= 0 ? `${state.country} is an Inclusiveness Target Country (ITC).` : '') : '';
+  if (itc) itc.textContent = countryNote(state.country);
   const dn = document.getElementById('daysNote');
   if (dn) dn.textContent = state.start_date && state.end_date && state.end_date >= state.start_date ? `${days(state.start_date, state.end_date)} days` : '';
   const tv = document.getElementById('totalValue');
-  if (tv) { tv.textContent = `${money(total())} of ${money(scheme().max)}`; document.getElementById('totalLine').classList.toggle('over', total() > scheme().max); }
+  if (tv) { tv.textContent = `${money(total())} of ${money(maxOf())}`; document.getElementById('totalLine').classList.toggle('over', total() > maxOf()); }
+  const f2f = document.getElementById('f2fWrap'); if (f2f) f2f.hidden = state.attendance !== 'Face to face';
   const g = document.getElementById('genderOtherWrap'); if (g) g.hidden = state.gender !== 'Prefer to self-describe';
   const m = document.getElementById('memberNote'); if (m) m.hidden = state.member !== 'No';
   const t = document.getElementById('thirdPartyWrap'); if (t) t.hidden = state.third_party !== 'Yes';
@@ -388,6 +418,10 @@ function done(result) {
   <p>Thank you. We received your application on ${esc(result.submitted)}. ${result.emailed ? `A confirmation with a PDF copy has been sent to <strong>${esc(result.email)}</strong>.` : `We could not send the confirmation email just now, so please download your copy below. We have your application.`}</p>
   <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a>
   <a class="btn secondary" href="${docUrl}" download="${esc(result.id)} application.doc">Download an editable copy (Word)</a></div>
+  <h3>What happens next</h3>
+  <ul><li>If you have not done so yet, submit the same application in <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a> and upload your CV to your e-COST profile. COST requires this.</li>
+  <li>After the call closes, the grants committee reviews the applications, and we email you the outcome.</li>
+  <li>If you are funded, you receive a grant letter. After the activity, you report in e-COST within 30 days, and the grant is paid once the report is approved.</li></ul>
   <p class="hint">Please quote ${esc(result.id)} if you contact us. Questions: <a href="mailto:${esc(CONFIG.contact)}">${esc(CONFIG.contact)}</a>.</p></div>`;
   tellParent('eeg101-grant-scroll');
 }

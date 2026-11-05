@@ -2,11 +2,11 @@
 layout: page
 title: "Grants"
 subtitle: "Funding opportunities for EEG101 network members"
-description: "EEG101 COST Action grant schemes: Short-Term Scientific Missions, Virtual Mobility Grants, and Conference Grants. Deadlines and application guidance."
+description: "EEG101 COST Action grant schemes: Short-Term Scientific Missions, Virtual Mobility Grants, and ITC, YRI and Dissemination Conference Grants. Deadlines, rules and application guidance."
 permalink: /grants/
 ---
 
-EEG101 offers several COST grant schemes to support research collaboration, training, and dissemination. Grants are open to researchers affiliated with institutions in COST Full Member or Cooperating Member countries.
+EEG101 offers several COST grant schemes to support research collaboration, training, and dissemination. Grants are open to EEG101 members affiliated with institutions in COST Full Member or Cooperating Member countries, or in Near Neighbour Countries.
 
 <div class="grants-status-banner">
 <h3>Important information</h3>
@@ -109,7 +109,7 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false" aria-controls="faq1">Who can apply for EEG101 grants?</button>
 </h3>
 <div id="faq1" class="accordion-collapse collapse" aria-labelledby="faq1-heading" data-bs-parent="#faqAccordion">
-<div class="accordion-body">Applicants must be affiliated with an institution in a COST Full Member or Cooperating Member country. You do not need to be from the same country as your host institution. Membership of EEG101 is free — <a href="{{ '/join/' | relative_url }}">join first</a>.</div>
+<div class="accordion-body">EEG101 members affiliated with an institution in a COST Full or Cooperating Member country, or in a Near Neighbour Country. For an STSM, your host must be in a different country from your own institution. ITC Conference Grants are only for people at institutions in Inclusiveness Target Countries or Near Neighbour Countries, and YRI Conference Grants only for Young Researchers and Innovators (under 40). Membership of EEG101 is free — <a href="{{ '/join/' | relative_url }}">join first</a>.</div>
 </div>
 </div>
 <div class="accordion-item">
@@ -149,7 +149,39 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq6" aria-expanded="false" aria-controls="faq6">What happens after my grant?</button>
 </h3>
 <div id="faq6" class="accordion-collapse collapse" aria-labelledby="faq6-heading" data-bs-parent="#faqAccordion">
-<div class="accordion-body">A short scientific report is required within 30 days of completion. Payment is released upon approval of your report.</div>
+<div class="accordion-body">You submit a report in e-COST within 30 days of the end of your activity, or within 15 days of the end of the grant period if that comes first. For conference grants, include your certificate of attendance and the programme or book of abstracts showing your presentation. The grant is paid once your report is approved; STSM grantees can ask for up to 50% in advance.</div>
+</div>
+</div>
+<div class="accordion-item">
+<h3 class="accordion-header" id="faq7-heading">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq7" aria-expanded="false" aria-controls="faq7">Which conference grant should I apply for?</button>
+</h3>
+<div id="faq7" class="accordion-collapse collapse" aria-labelledby="faq7-heading" data-bs-parent="#faqAccordion">
+<div class="accordion-body">Presenting your own work: an <strong>ITC Conference Grant</strong> if your institution is in an Inclusiveness Target Country or Near Neighbour Country (oral presentations only), or a <strong>YRI Conference Grant</strong> if you are under 40 (poster or oral). Presenting the work of EEG101 itself: a <strong>Dissemination Conference Grant</strong> (oral presentations only). Each covers up to €2,500 to attend in person or €500 online. The conference must be organised entirely by others, not by EEG101 or another COST Action, and you can hold only one type of conference grant in a grant period.</div>
+</div>
+</div>
+<div class="accordion-item">
+<h3 class="accordion-header" id="faq8-heading">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq8" aria-expanded="false" aria-controls="faq8">Can I hold more than one grant?</button>
+</h3>
+<div id="faq8" class="accordion-collapse collapse" aria-labelledby="faq8-heading" data-bs-parent="#faqAccordion">
+<div class="accordion-body">Not at the same time: COST does not allow overlapping grants in the same grant period. Every activity must take place within one grant period; this period's activities must end by 30 September 2027.</div>
+</div>
+</div>
+<div class="accordion-item">
+<h3 class="accordion-header" id="faq9-heading">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq9" aria-expanded="false" aria-controls="faq9">What can a grant pay for?</button>
+</h3>
+<div id="faq9" class="accordion-collapse collapse" aria-labelledby="faq9-heading" data-bs-parent="#faqAccordion">
+<div class="accordion-body">A contribution to travel, accommodation and subsistence, conference registration fees (and poster printing for YRI Conference Grants), and your effort. Grants do not cover salaries or other employment costs, and a Virtual Mobility Grant cannot pay for tasks that are part of a leadership role in EEG101.</div>
+</div>
+</div>
+<div class="accordion-item">
+<h3 class="accordion-header" id="faq10-heading">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq10" aria-expanded="false" aria-controls="faq10">How are applications reviewed?</button>
+</h3>
+<div id="faq10" class="accordion-collapse collapse" aria-labelledby="faq10-heading" data-bs-parent="#faqAccordion">
+<div class="accordion-body">Reviewers score each application on its quality, relevance to EEG101, feasibility and value for money, and benefit to the applicant and the network, taking into account COST's Excellence and Inclusiveness policy. Reviewers declare any conflict of interest and do not score those applications. The grants committee then ranks the applications and decides on funding.</div>
 </div>
 </div>
 </div>

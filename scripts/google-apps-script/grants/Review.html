@@ -3,6 +3,7 @@
 <head>
 <base target="_blank">
 <meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
 <style>
@@ -51,6 +52,10 @@ input.cell{width:90px;border:1px solid var(--border);border-radius:5px;padding:5
 input.cell.rank{width:56px}input.cell.wide{width:180px}
 select.cell{border:1px solid var(--border);border-radius:5px;padding:5px 7px;font:400 14px var(--ui)}
 .flag{color:#8a6d00;font-size:12px;display:block}
+.coi{background:var(--bg-alt);border-radius:8px;font-size:13px;padding:10px 12px;margin:0 0 12px}.coi ul{margin:4px 0 0;padding-left:18px}
+.linkbtn{background:none;border:0;color:var(--primary);cursor:pointer;font:700 14px var(--ui);margin-right:12px;padding:0;text-decoration:underline}
+.decide{border-top:2px solid var(--gold);margin-top:16px;padding-top:12px}.decide .row{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-bottom:8px}
+.decide label{font-size:13px;font-weight:700}.decide input,.decide select{display:block;margin-top:3px}
 @media(max-width:900px){.layout{grid-template-columns:1fr}}
 @media print{header nav,.toolbar,.noprint{display:none!important}body{background:#fff}main{padding:0}.card,.panel,table{break-inside:avoid}}
 </style>
@@ -71,11 +76,17 @@ const main = document.getElementById('main');
 function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function money(n) { return n == null || n === '' ? '' : '€' + Number(n).toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
 function fmt(iso) { return /^\d{4}-\d{2}-\d{2}/.test(iso || '') ? new Date(iso.slice(0, 10) + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : ''; }
-function call(fn, arg) { return new Promise((resolve, reject) => google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[fn](arg)); }
+// Every call carries this reviewer's personal key, which the server checks.
+function call(fn, ...args) { return new Promise((resolve, reject) => google.script.run.withSuccessHandler(resolve).withFailureHandler(reject)[fn](BOOT.key, ...args)); }
+function download(name, base64) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([Uint8Array.from(atob(base64), c => c.charCodeAt(0))], { type: 'application/pdf' }));
+  a.download = name; a.target = '_self'; document.body.appendChild(a); a.click(); a.remove();
+}
 function fail(err) { main.insertAdjacentHTML('afterbegin', `<p class="msg err">${esc((err && err.message) || err)}</p>`); }
 
-document.getElementById('me').textContent = `${me.name || me.email} · ${me.chair ? 'Chair' : 'Reviewer'}`;
-const TABS = [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding']] : [], [['report', 'Reports']]);
+document.getElementById('me').textContent = `${me.name || me.email} · ${me.chair ? 'Chair' : BOOT.blind ? 'Reviewer (blind review)' : 'Reviewer'}`;
+const TABS = [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
 function tabs() { document.getElementById('tabs').innerHTML = TABS.map(t => `<button type="button" data-tab="${t[0]}" class="${view === t[0] || (view === 'detail' && t[0] === 'list') ? 'on' : ''}">${t[1]}</button>`).join(''); }
 document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) show(b.dataset.tab); });
 
@@ -92,6 +103,7 @@ async function show(v, id) {
 }
 
 function statusPill(a) {
+  if (a.own) return '<span class="pill coi">Your application</span>';
   if (a.mine && a.mine.conflict) return '<span class="pill coi">Conflict declared</span>';
   if (a.mine) return '<span class="pill ok">Scored</span>';
   return '<span class="pill todo">To score</span>';
@@ -103,16 +115,16 @@ function decisionPill(d) { return d ? `<span class="pill ${d.toLowerCase().repla
 function renderList() {
   const apps = data.applications.filter(a => (!filter.scheme || a.scheme === filter.scheme) && (!filter.mine || (filter.mine === 'todo' ? !a.mine : !!a.mine)) && (!filter.q || (a.id + ' ' + a.applicant + ' ' + a.title + ' ' + a.institution).toLowerCase().indexOf(filter.q.toLowerCase()) >= 0));
   const schemes = Array.from(new Set(data.applications.map(a => a.scheme))).sort();
-  const todo = data.applications.filter(a => !a.mine).length;
+  const todo = data.applications.filter(a => !a.mine && !a.own).length;
   main.innerHTML = `<div class="toolbar">
     <input id="q" type="search" placeholder="Search name, title, ID…" value="${esc(filter.q)}" aria-label="Search">
     <select id="fs" aria-label="Scheme"><option value="">All schemes</option>${schemes.map(s => `<option${s === filter.scheme ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
     <select id="fm" aria-label="My reviews"><option value="">All applications</option><option value="todo"${filter.mine === 'todo' ? ' selected' : ''}>Still to score</option><option value="done"${filter.mine === 'done' ? ' selected' : ''}>Scored by me</option></select>
     <span class="note">${data.applications.length} applications · ${todo} still to score by you</span></div>
   ${apps.length ? `<table><thead><tr><th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th><th>Decision</th></tr></thead><tbody>
-  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}"><td>${esc(a.id)}</td><td>${esc(a.applicant)}<span class="note" style="display:block">${esc(a.institution)}, ${esc(a.country)}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td><td>${decisionPill(a.decision)}</td></tr>`).join('')}
+  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}"><td>${esc(a.id)}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td><td>${decisionPill(a.decision)}</td></tr>`).join('')}
   </tbody></table>` : '<p class="note">No applications match.</p>'}
-  <p class="note">Mean scores of other reviewers appear once you have scored an application yourself.</p>`;
+  <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Review is blind: applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
   main.querySelector('#q').addEventListener('input', e => { filter.q = e.target.value; renderListKeepFocus(); });
   main.querySelector('#fs').addEventListener('change', e => { filter.scheme = e.target.value; renderList(); });
   main.querySelector('#fm').addEventListener('change', e => { filter.mine = e.target.value; renderList(); });
@@ -127,37 +139,69 @@ async function renderDetail(id) {
   main.innerHTML = '<p class="note">Loading the application…</p>';
   const full = await call('getApplication', id);
   const mine = a.mine || {};
-  const docs = Object.keys(full.documents || {}).map(k => `<a href="${esc(full.documents[k].url)}">${esc(full.documents[k].label.split(' (')[0].split(',')[0].replace(/^Your /, ''))}</a>`).join('');
-  main.innerHTML = `<p class="noprint"><button type="button" class="btn secondary" id="back">← All applications</button></p>
-  <div class="layout"><div>
-    <div class="panel" style="margin-bottom:14px"><h2>${esc(a.id)} · ${esc(a.title)}</h2>
-      <p class="note">${esc(a.applicant)} · ${esc(a.scheme)} · ${money(a.requested)} · ${fmt(a.start)} – ${fmt(a.end)} (${a.days} days) · ${a.itc === 'Yes' ? 'ITC · ' : ''}${a.yri === 'Yes' ? 'Under 40 · ' : ''}${esc(a.career)}</p>
-      ${a.notes ? `<p class="flag">⚠ ${esc(a.notes)}</p>` : ''}
-      <p class="links"><a href="${esc(full.pdf)}">Application PDF</a>${docs}<a href="${esc(full.folder)}">Drive folder</a></p></div>
-    <iframe class="doc-frame" sandbox title="Application" srcdoc="${esc(full.html)}"></iframe>
-  </div><div class="panel"><h2>Your review</h2>
-    <form id="rev">
-      <label style="display:flex;gap:8px;align-items:flex-start;margin:6px 0 14px"><input type="checkbox" name="conflict"${mine.conflict ? ' checked' : ''}> <span>I have a conflict of interest (e.g. same institution, collaborator, supervisor, family) and will not score this application.</span></label>
+  const docs = full.blind ? '' : `<button type="button" class="linkbtn" data-doc="application">Application PDF</button>${Object.keys(full.documents || {}).map(k => `<button type="button" class="linkbtn" data-doc="${esc(k)}">${esc(full.documents[k].label.split(' (')[0].split(',')[0].replace(/^Your /, ''))}</button>`).join('')}${me.chair && full.folder ? `<a href="${esc(full.folder)}">Drive folder</a>` : ''}`;
+  const coi = `<div class="coi"><b>Declare a conflict of interest if:</b><ul>${BOOT.conflictGuidance.map(g => `<li>${esc(g)}</li>`).join('')}</ul>If in doubt, declare it. You will then not score this application or see its other reviews${me.chair ? ', and another chair must decide on it' : ''}.</div>`;
+  const reviewForm = a.own
+    ? '<p class="msg">This is your own application, so you cannot review it, see its scores or decide on it.</p>'
+    : `<form id="rev">
+      ${coi}
+      <label style="display:flex;gap:8px;align-items:flex-start;margin:6px 0 14px"><input type="checkbox" name="conflict"${mine.conflict ? ' checked' : ''}> <span>I have a conflict of interest with this application and will not score it.</span></label>
       <div id="scoring"${mine.conflict ? ' hidden' : ''}>
       ${BOOT.criteria.map((c, i) => `<fieldset><legend>${esc(c.label)}</legend><div class="score">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="s${i}" value="${n}"${mine.scores && mine.scores[i] === n ? ' checked' : ''}>${n}</label>`).join('')}</div></fieldset>`).join('')}
       <p class="note">1 poor · 2 weak · 3 good · 4 very good · 5 excellent</p>
       <label><b>Recommendation</b><select class="full" name="recommendation"><option value="">Select…</option>${BOOT.recommendations.map(r => `<option${mine.recommendation === r ? ' selected' : ''}>${esc(r)}</option>`).join('')}</select></label>
-      </div>
       <label><b>Comments</b> <span class="note">(seen by the other reviewers and chairs, not by the applicant)</span><textarea name="comments">${esc(mine.comments || '')}</textarea></label>
+      </div>
       <button class="btn" type="submit">Save review</button> <span id="saved" class="msg"></span>
-    </form>
+    </form>`;
+  const decide = me.chair && !a.conflicted ? `<form id="dec" class="decide"><b>Decision</b>
+      <div class="row"><label>Decision<select class="cell" name="decision">${BOOT.decisions.map(d => `<option value="${esc(d)}"${a.decision === d ? ' selected' : ''}>${d || '—'}</option>`).join('')}</select></label>
+      <label>Awarded (€)<input class="cell" name="awarded" type="number" min="0" step="0.01" max="${a.requested}" placeholder="${a.requested}" value="${a.awarded == null ? '' : a.awarded}"></label>
+      <label>Rank<input class="cell rank" name="rank" type="number" min="1" value="${a.rank == null ? '' : a.rank}"></label></div>
+      <label>Notes<input class="cell wide" style="width:100%" name="notes" value="${esc(a.decisionNotes)}"></label>
+      <p class="note">Leave the amount empty to award what was requested.</p>
+      <button class="btn" type="submit">Save decision</button> <span id="dsaved" class="msg"></span></form>`
+    : me.chair ? '<p class="note decide">You declared a conflict of interest or applied yourself, so another chair must decide on this application.</p>' : '';
+  main.innerHTML = `<p class="noprint"><button type="button" class="btn secondary" id="back">← All applications</button></p>
+  <div class="layout"><div>
+    <div class="panel" style="margin-bottom:14px"><h2>${esc(a.id)} · ${esc(a.title)}</h2>
+      <p class="note">${a.applicant ? esc(a.applicant) + ' · ' : ''}${esc(a.scheme)} · ${money(a.requested)} · ${fmt(a.start)} – ${fmt(a.end)} (${a.days} days) · ${a.itc === 'Yes' ? 'ITC · ' : ''}${a.yri === 'Yes' ? 'Under 40 · ' : ''}${esc(a.career)}${a.mean != null ? ` · mean score ${a.mean.toFixed(2)} from ${a.reviewCount}` : ''}${a.decision ? ` · ${esc(a.decision)}` : ''}</p>
+      ${a.notes ? `<p class="flag">⚠ ${esc(a.notes)}</p>` : ''}
+      ${docs ? `<p class="links">${docs}</p><span id="docmsg" class="msg"></span>` : '<p class="note">Shown without the applicant\'s identity or documents, for blind review.</p>'}</div>
+    <iframe class="doc-frame" sandbox title="Application" srcdoc="${esc(full.html)}"></iframe>
+  </div><div class="panel"><h2>Your review</h2>
+    ${reviewForm}
+    ${decide}
     ${a.others.length ? `<div class="other"><b>Other reviews</b>${a.others.map(o => `<p>${esc(o.reviewer)}: ${o.conflict ? 'conflict declared' : `mean ${o.mean == null ? '—' : o.mean.toFixed(2)} (${o.scores.join(' / ')}), ${esc(o.recommendation)}`}${o.comments ? `<br><span class="note">${esc(o.comments)}</span>` : ''}</p>`).join('')}</div>` : ''}
   </div></div>`;
   main.querySelector('#back').addEventListener('click', () => show('list'));
+  main.querySelectorAll('[data-doc]').forEach(b => b.addEventListener('click', async () => {
+    const msg = main.querySelector('#docmsg');
+    try { msg.className = 'msg'; msg.textContent = 'Downloading…'; const d = await call('getDocument', a.id, b.dataset.doc); download(d.name, d.data); msg.textContent = ''; }
+    catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not download.'; }
+  }));
   const form = main.querySelector('#rev');
-  form.conflict.addEventListener('change', () => { main.querySelector('#scoring').hidden = form.conflict.checked; });
-  form.addEventListener('submit', async e => {
+  if (form) {
+    form.conflict.addEventListener('change', () => { main.querySelector('#scoring').hidden = form.conflict.checked; });
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const out = main.querySelector('#saved');
+      const scores = BOOT.criteria.map((c, i) => { const r = form.querySelector(`[name=s${i}]:checked`); return r ? Number(r.value) : null; });
+      try {
+        out.className = 'msg'; out.textContent = 'Saving…';
+        data = await call('saveReview', { id: a.id, conflict: form.conflict.checked, scores: scores, recommendation: form.recommendation.value, comments: form.comments.value });
+        out.className = 'msg ok'; out.textContent = 'Saved.';
+        setTimeout(() => show('detail', a.id), 600);
+      } catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not save.'; }
+    });
+  }
+  const dec = main.querySelector('#dec');
+  if (dec) dec.addEventListener('submit', async e => {
     e.preventDefault();
-    const out = main.querySelector('#saved');
-    const scores = BOOT.criteria.map((c, i) => { const r = form.querySelector(`[name=s${i}]:checked`); return r ? Number(r.value) : null; });
+    const out = main.querySelector('#dsaved');
     try {
       out.className = 'msg'; out.textContent = 'Saving…';
-      data = await call('saveReview', { id: a.id, conflict: form.conflict.checked, scores: scores, recommendation: form.recommendation.value, comments: form.comments.value });
+      data = await call('saveDecisions', [{ id: a.id, decision: dec.decision.value, awarded: dec.awarded.value, rank: dec.rank.value, notes: dec.notes.value }]);
       out.className = 'msg ok'; out.textContent = 'Saved.';
       setTimeout(() => show('detail', a.id), 600);
     } catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not save.'; }
@@ -181,11 +225,11 @@ function renderDecide() {
     <p class="note">${list.length} application${list.length === 1 ? '' : 's'} · committed ${money(used)}${b ? ` of ${money(b)} (${money(b - used)} left)` : ''}</p>
     ${b ? `<div class="bar${used > b ? ' over' : ''}"><span style="width:${Math.min(100, used / b * 100)}%"></span></div>` : ''}
     <table style="margin-top:10px"><thead><tr><th>Rank</th><th>ID</th><th>Applicant</th><th>Title</th><th class="num">Mean</th><th class="num">Reviews</th><th class="num">Requested</th><th>Decision</th><th>Awarded (€)</th><th>Notes</th></tr></thead><tbody>
-    ${list.map(a => `<tr><td><input class="cell rank" data-id="${esc(a.id)}" data-k="rank" type="number" min="1" value="${esc(value(a, 'rank'))}" aria-label="Rank"></td><td><a href="#" data-open="${esc(a.id)}" target="_self">${esc(a.id)}</a></td><td>${esc(a.applicant)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td>
+    ${list.map(a => { const off = a.conflicted ? ' disabled title="You declared a conflict of interest or applied yourself: another chair must decide."' : ''; return `<tr><td><input class="cell rank" data-id="${esc(a.id)}" data-k="rank" type="number" min="1" value="${esc(value(a, 'rank'))}" aria-label="Rank"${off}></td><td><a href="#" data-open="${esc(a.id)}" target="_self">${esc(a.id)}</a></td><td>${esc(a.applicant)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}${a.conflicted ? '<span class="flag">You cannot decide on this one (conflict or own application).</span>' : ''}</td>
     <td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td><td class="num">${a.reviewCount}</td><td class="num">${money(a.requested)}</td>
-    <td><select class="cell" data-id="${esc(a.id)}" data-k="decision" aria-label="Decision">${BOOT.decisions.map(d => `<option value="${esc(d)}"${value(a, 'decision') === d ? ' selected' : ''}>${d || '—'}</option>`).join('')}</select></td>
-    <td><input class="cell" data-id="${esc(a.id)}" data-k="awarded" type="number" min="0" step="0.01" max="${a.requested}" placeholder="${a.requested}" value="${esc(value(a, 'awarded'))}" aria-label="Awarded"></td>
-    <td><input class="cell wide" data-id="${esc(a.id)}" data-k="notes" value="${esc(value(a, 'notes'))}" aria-label="Notes"></td></tr>`).join('')}
+    <td><select class="cell" data-id="${esc(a.id)}" data-k="decision" aria-label="Decision"${off}>${BOOT.decisions.map(d => `<option value="${esc(d)}"${value(a, 'decision') === d ? ' selected' : ''}>${d || '—'}</option>`).join('')}</select></td>
+    <td><input class="cell" data-id="${esc(a.id)}" data-k="awarded" type="number" min="0" step="0.01" max="${a.requested}" placeholder="${a.requested}" value="${esc(value(a, 'awarded'))}" aria-label="Awarded"${off}></td>
+    <td><input class="cell wide" data-id="${esc(a.id)}" data-k="notes" value="${esc(value(a, 'notes'))}" aria-label="Notes"${off}></td></tr>`; }).join('')}
     </tbody></table></div>`; }).join('') || '<p class="note">No applications yet.</p>'}`;
   main.querySelectorAll('[data-k]').forEach(el => el.addEventListener('change', () => {
     const a = data.applications.filter(x => x.id === el.dataset.id)[0];
@@ -195,7 +239,7 @@ function renderDecide() {
   }));
   main.querySelectorAll('[data-open]').forEach(l => l.addEventListener('click', e => { e.preventDefault(); show('detail', l.dataset.open); }));
   main.querySelector('#autorank').addEventListener('click', () => {
-    Object.keys(groups).forEach(g => groups[g].slice().sort((x, y) => (y.mean || 0) - (x.mean || 0)).forEach((a, i) => { pending[a.id] = pending[a.id] || {}; pending[a.id].rank = String(i + 1); }));
+    Object.keys(groups).forEach(g => groups[g].slice().sort((x, y) => (y.mean || 0) - (x.mean || 0)).forEach((a, i) => { if (a.conflicted) return; pending[a.id] = pending[a.id] || {}; pending[a.id].rank = String(i + 1); }));
     renderDecide();
   });
   main.querySelector('#save').addEventListener('click', async () => {

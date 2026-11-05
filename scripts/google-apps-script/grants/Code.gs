@@ -1,27 +1,27 @@
 /*
  * EEG101 Grants: applications and review
  *
- * One Apps Script project, two web-app deployments of the same code:
+ * One Apps Script project with one web-app deployment
+ * (Execute as: Me · Who has access: Anyone) serving two pages:
  *
- *   1. Applications  Execute as: Me · Who has access: Anyone
- *      The step-by-step application form (Apply.html), embedded on
+ *   1. Applications  The step-by-step application form (Apply.html), embedded on
  *      www.eeg101.eu/grants/apply/. Applicants need no account. Each submission
  *      gets an ID, its own Drive folder (uploads plus a PDF of the application),
  *      a row in the "Applications" tab of the grants spreadsheet, and a
  *      confirmation email (cc the EEG101 address, bcc the people in the
  *      GRANTS_BCC script property) with the PDF attached.
  *
- *   2. Review        Execute as: User accessing the web app · Who has access:
- *                    Anyone with a Google account
- *      Open with ?view=review. Reviewers score applications; chairs rank them,
- *      select them for funding and run reports (Review.html). It runs as the
- *      signed-in reviewer, so it only works for people the spreadsheet and
- *      folder are shared with (run shareWithReviewers after editing the
- *      "Reviewers" tab), and every call checks the "Reviewers" tab as well.
+ *   2. Review        Opened with ?view=review&key=… .
+ *      Each person in the "Reviewers" tab has a personal key; run
+ *      sendReviewerLinks to email them their link. Reviewers score
+ *      applications; chairs (who may score too) rank them, decide on funding
+ *      and run reports (Review.html). Reviewers who are not chairs see
+ *      applications without the applicant's identity unless the Settings tab
+ *      says blind_review FALSE. Every call checks the key again.
  *
  * Set-up and day-to-day use: docs/grants-platform.md in the website repository.
  * Nothing private is in this file: the spreadsheet, folder, signing secret and
- * bcc addresses live in Script properties.
+ * bcc addresses live in Script properties, and reviewers' keys in the sheet.
  */
 
 const GRANTS = {
@@ -41,57 +41,123 @@ const GRANTS = {
     deadline: '',
     period_end: '2027-09-30',
     id_prefix: 'G2',
+    blind_review: 'TRUE',
+    web_app_url: '',
     budget_stsm: '',
     budget_vmg: '',
-    budget_conference_inperson: '',
-    budget_conference_online: ''
+    budget_itc_conference: '',
+    budget_yri_conference: '',
+    budget_dissemination_conference: ''
   }
 };
 
-// The funding mechanisms. Amounts and durations match _data/grants.yml on the
-// website (the Grants page); change them in both places.
+// The funding mechanisms, following the COST Annotated Rules for COST Actions
+// (level C, version 4.0), Annex 2. Amounts and durations match
+// _data/grants.yml on the website (the Grants page); change them in both places.
+//
+// questions: the proposal questions each scheme asks, using the answer fields
+// summary, workplan, outcomes, relevance and benefit (word limits in GRANTS.words).
+const CV = { id: 'cv', label: 'Your CV (max. 2 pages)', required: true };
+const ACCEPTANCE = { id: 'acceptance', label: 'Acceptance or invitation letter from the conference organisers (or proof of submission if you are still waiting)', required: true };
+const TRAVEL_BUDGET = ['Travel', 'Accommodation', 'Subsistence (meals, local transport)', 'Other'];
+const CONFERENCE_RULES = [
+  'The conference must be a high-level one organised entirely by others, not by EEG101 or another COST Action.',
+  'Up to €2,500 to attend in person, or €500 to attend online.',
+  'You can hold only one type of conference grant in a grant period.'
+];
 const SCHEMES = {
   stsm: {
-    title: 'Short-Term Scientific Mission (STSM)', short: 'STSM', max: 4000, minDays: 5, maxDays: 90,
-    blurb: 'A funded research visit to a host institution in the EEG101 network.',
-    budget: ['Travel', 'Accommodation', 'Subsistence (meals, local transport)', 'Other'],
-    documents: [
-      { id: 'cv', label: 'Your CV (max. 2 pages)', required: true },
-      { id: 'host_letter', label: 'Letter of support from the host, confirming the visit and its dates', required: true }
-    ]
+    kind: 'stsm', title: 'Short-Term Scientific Mission (STSM)', short: 'STSM', max: 4000, minDays: 5, maxDays: 90,
+    blurb: 'A research visit to a host institution in another country, for specific work agreed with the host.',
+    who: 'Members at an institution in a COST Full or Cooperating Member country or a Near Neighbour Country.',
+    rules: [
+      'The host institution must be in a different country from your own institution.',
+      'The academic lead at the host must be an EEG101 member.',
+      'You can ask for up to 50% of the grant to be paid before the visit.'
+    ],
+    questions: [
+      { id: 'summary', label: 'Goals of the mission', hint: 'What you want to achieve, in a few sentences.' },
+      { id: 'workplan', label: 'Work to be carried out', hint: 'What you will do at the host, and when.' },
+      { id: 'outcomes', label: 'Expected outcomes', hint: 'Papers, data, code, training, new collaborations…' },
+      { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the mission helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' },
+      { id: 'benefit', label: 'Benefit to you, the host and the network', hint: 'For your career, your host and the EEG101 community, including inclusiveness.' }
+    ],
+    budget: TRAVEL_BUDGET,
+    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host institution that it will receive you, with the dates (e-COST has a template)', required: true }]
   },
   vmg: {
-    title: 'Virtual Mobility Grant (VMG)', short: 'VMG', max: 1500, minDays: 1, maxDays: 90,
-    blurb: 'Support for a virtual research collaboration with EEG101 network members.',
-    budget: ['Virtual collaboration costs (e.g. software, data access, services)', 'Personnel time / coordination', 'Other'],
-    documents: [
-      { id: 'cv', label: 'Your CV (max. 2 pages)', required: true },
-      { id: 'collaborator_letter', label: 'Letter of support from the collaborating organisation (required if a third party is involved)', required: false, requiredIf: 'third_party' }
-    ]
+    kind: 'vmg', title: 'Virtual Mobility Grant (VMG)', short: 'VMG', max: 1500, minDays: 1, maxDays: 90,
+    blurb: 'An online collaboration with EEG101 members: sharing knowledge, harmonising methods, mentoring, shared analysis.',
+    who: 'Members at an institution in a COST Full or Cooperating Member country or a Near Neighbour Country.',
+    rules: [
+      'Not for tasks that are part of a leadership role in EEG101 (for example Grant Awarding Coordinator).',
+      'If a third-party organisation is involved, its named lead must be an EEG101 member.'
+    ],
+    questions: [
+      { id: 'summary', label: 'Main objective', hint: 'What the collaboration will achieve, in a few sentences.' },
+      { id: 'workplan', label: 'Work to be carried out and plan for participation', hint: 'Activities, who takes part, how you will work together online, and when.' },
+      { id: 'outcomes', label: 'Expected outcomes', hint: 'Protocols, surveys, data, code, training, publications…' },
+      { id: 'relevance', label: 'Contribution to the EEG101 objectives', hint: 'How the work helps the Action meet the objectives in its Memorandum of Understanding, and which Working Group it supports.' }
+    ],
+    budget: ['Your own time and effort on the activity', 'Software, data access or services', 'Other'],
+    documents: [CV, { id: 'collaborator_letter', label: 'Letter of support from the collaborating organisation (required if a third party is involved)', required: false, requiredIf: 'third_party' }]
   },
-  conference_inperson: {
-    title: 'Conference Grant (in person)', short: 'Conference Grant', max: 2500, minDays: 1, maxDays: 14,
-    blurb: 'Support to attend and present at a scientific conference in person.',
-    budget: ['Registration fee', 'Travel', 'Accommodation', 'Subsistence (meals, local transport)', 'Other'],
-    documents: [
-      { id: 'cv', label: 'Your CV (max. 2 pages)', required: true },
-      { id: 'acceptance', label: 'Proof of abstract submission or acceptance', required: true }
-    ]
+  itc_conference: {
+    kind: 'conference', title: 'ITC Conference Grant', short: 'ITC Conference Grant', max: 2500, maxOnline: 500, minDays: 1, maxDays: 14,
+    blurb: 'An oral presentation of your own work, within the scope of EEG101, at a high-level conference.',
+    who: 'Members at an institution in an Inclusiveness Target Country (ITC) or a Near Neighbour Country.',
+    rules: ['Oral presentations only.'].concat(CONFERENCE_RULES),
+    presentations: ['Oral presentation'],
+    questions: [
+      { id: 'summary', label: 'Your presentation', hint: 'What you will present, in a few sentences (or paste your abstract).' },
+      { id: 'relevance', label: 'Relevance of the conference topic to EEG101', hint: 'Why this conference matters for the Action\'s work.' },
+      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' }
+    ],
+    budget: ['Registration fee'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
+    documents: [CV, ACCEPTANCE]
   },
-  conference_online: {
-    title: 'Conference Grant (online)', short: 'Online Conference Grant', max: 500, minDays: 1, maxDays: 14,
-    blurb: 'Support to register for and present at an online or hybrid conference.',
-    budget: ['Registration fee', 'Other'],
-    documents: [
-      { id: 'cv', label: 'Your CV (max. 2 pages)', required: true },
-      { id: 'acceptance', label: 'Proof of abstract submission or acceptance', required: true }
-    ]
+  yri_conference: {
+    kind: 'conference', title: 'YRI Conference Grant', short: 'YRI Conference Grant', max: 2500, maxOnline: 500, minDays: 1, maxDays: 14,
+    blurb: 'A poster or oral presentation of your own work, within the scope of EEG101, at a high-level conference.',
+    who: 'Young Researchers and Innovators (under 40).',
+    rules: ['Posters or oral presentations.'].concat(CONFERENCE_RULES),
+    presentations: ['Oral presentation', 'Poster'],
+    questions: [
+      { id: 'summary', label: 'Your presentation', hint: 'What you will present, in a few sentences (or paste your abstract).' },
+      { id: 'relevance', label: 'Relevance of the conference topic to EEG101', hint: 'Why this conference matters for the Action\'s work.' },
+      { id: 'benefit', label: 'Motivation and benefit to your career', hint: 'How presenting here could help your career and your research.' }
+    ],
+    budget: ['Registration fee', 'Printing of the poster'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
+    documents: [CV, ACCEPTANCE]
+  },
+  dissemination_conference: {
+    kind: 'conference', title: 'Dissemination Conference Grant', short: 'Dissemination Conference Grant', max: 2500, maxOnline: 500, minDays: 1, maxDays: 14,
+    blurb: 'An oral presentation of the work and results of EEG101 itself at a high-level conference, to reach new audiences.',
+    who: 'Any member presenting the Action\'s work, not only their own research.',
+    rules: ['Oral presentations of EEG101\'s work only.'].concat(CONFERENCE_RULES, ['While there, you network and promote EEG101 to potential stakeholders.']),
+    presentations: ['Oral presentation'],
+    questions: [
+      { id: 'summary', label: 'What you will present about EEG101', hint: 'The Action\'s work, activities or results you will present.' },
+      { id: 'relevance', label: 'Alignment with the EEG101 Science Communication Plan', hint: 'Which audiences this reaches and how it fits the Action\'s plan for communicating its work.' },
+      { id: 'benefit', label: 'Expected impact for EEG101', hint: 'New contacts, stakeholders, members or visibility the Action could gain.' }
+    ],
+    budget: ['Registration fee'].concat(TRAVEL_BUDGET), budgetOnline: ['Registration fee', 'Other'],
+    documents: [CV, ACCEPTANCE]
   }
 };
+const ATTENDANCE = ['Face to face', 'Online'];
+const maxFor = (s, attendance) => s.maxOnline && attendance === 'Online' ? s.maxOnline : s.max;
+const budgetFor = (s, attendance) => s.budgetOnline && attendance === 'Online' ? s.budgetOnline : s.budget;
 
 // Inclusiveness Target Countries, as defined by COST. Check against
 // https://www.cost.eu/about/members/ when a new call opens.
 const ITC_COUNTRIES = ['Albania', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Czechia', 'Estonia', 'Georgia', 'Greece', 'Hungary', 'Latvia', 'Lithuania', 'Malta', 'Moldova', 'Montenegro', 'North Macedonia', 'Poland', 'Portugal', 'Romania', 'Serbia', 'Slovakia', 'Slovenia', 'Türkiye', 'Ukraine'];
+// COST Full and Cooperating Members, and Near Neighbour Countries. People at
+// institutions there can receive grants (Annotated Rules, Article 6.4); others
+// normally cannot, so their applications are flagged for reviewers. ITC
+// Conference Grants are limited to ITCs and Near Neighbour Countries.
+const COST_MEMBERS = ['Albania', 'Austria', 'Belgium', 'Bosnia and Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Czechia', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel', 'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Moldova', 'Montenegro', 'Netherlands', 'North Macedonia', 'Norway', 'Poland', 'Portugal', 'Romania', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Türkiye', 'Ukraine', 'United Kingdom'];
+const NNC_COUNTRIES = ['Algeria', 'Armenia', 'Azerbaijan', 'Egypt', 'Faroe Islands', 'Kosovo', 'Lebanon', 'Libya', 'Morocco', 'Palestine', 'Syria', 'Tunisia'];
 
 // What reviewers score, each from 1 (poor) to 5 (excellent).
 const CRITERIA = [
@@ -120,21 +186,30 @@ const APPLICATION_COLUMNS = [
   'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Data'
 ];
 const REVIEW_COLUMNS = ['Application ID', 'Reviewer', 'Conflict of interest'].concat(CRITERIA.map(c => c.label), ['Mean score', 'Recommendation', 'Comments', 'Updated']);
-const REVIEWER_COLUMNS = ['Email', 'Name', 'Role (reviewer or chair)'];
+const REVIEWER_COLUMNS = ['Email', 'Name', 'Role (reviewer or chair)', 'Personal key', 'Link sent'];
+
+// When a reviewer must declare a conflict of interest (Annotated Rules, Level A, II).
+const CONFLICT_GUIDANCE = [
+  'You work, or will soon work, in the same research unit as the applicant.',
+  'You have a close family or personal relationship with them (relative, partner, close friend).',
+  'You depend on them professionally, or compete with them, now or recently.',
+  'You cooperate closely with them, for example through joint publications.',
+  'You would benefit directly or indirectly from the grant, or cannot be impartial for any other reason.'
+];
 
 /* ------------------------------------------------------------------ web app */
 
 function doGet(e) {
   const params = (e && e.parameter) || {};
   if (params.view === 'review') {
-    const me = currentReviewer();
+    const me = reviewerByKey(params.key);
     if (!me) {
       return HtmlService.createHtmlOutput(
-        '<p style="font-family:sans-serif;padding:24px">This page is for EEG101 grant reviewers. Sign in to Google with the account the grants spreadsheet was shared with. If you think you should have access, contact eeg101costaction@gmail.com.</p>'
+        '<p style="font-family:sans-serif;padding:24px">This page is for EEG101 grant reviewers, who each have a personal link. This link is not valid, or no longer valid. If you think you should have access, contact eeg101costaction@gmail.com.</p>'
       ).setTitle('EEG101 grant review');
     }
     const page = HtmlService.createTemplateFromFile('Review');
-    page.boot = JSON.stringify({ me: me, criteria: CRITERIA, recommendations: RECOMMENDATIONS, decisions: DECISIONS, schemes: schemeSummaries() }).replace(/</g, '\\u003c');
+    page.boot = JSON.stringify({ me: me, key: String(params.key).trim(), blind: isBlind(me, readSettings()), criteria: CRITERIA, recommendations: RECOMMENDATIONS, decisions: DECISIONS, conflictGuidance: CONFLICT_GUIDANCE, schemes: schemeSummaries() }).replace(/</g, '\\u003c');
     return page.evaluate().setTitle('EEG101 grant review').addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
   const page = HtmlService.createTemplateFromFile('Apply');
@@ -162,6 +237,9 @@ function applyConfig(preselect) {
     preselect: SCHEMES[preselect] ? preselect : '',
     schemes: SCHEMES,
     itc: ITC_COUNTRIES,
+    nnc: NNC_COUNTRIES,
+    costMembers: COST_MEMBERS,
+    attendance: ATTENDANCE,
     countries: COUNTRIES,
     genders: GENDER_OPTIONS,
     careerStages: CAREER_STAGES,
@@ -293,6 +371,7 @@ function validateApplication(p, settings, today) {
     ['host_institution', 'host_name', 'host_country'].forEach(k => { a[k] = clean(p[k], 150); if (!a[k]) fail('Please give the host institution, the host\'s name and the host country.'); });
     a.host_email = clean(p.host_email, 200).toLowerCase(); if (!EMAIL_PATTERN.test(a.host_email)) fail('Please give a valid email address for your host.');
     if (COUNTRIES.indexOf(a.host_country) < 0) fail('Please choose the host country from the list.');
+    if (a.host_country === a.country) fail('An STSM host must be in a different country from your own institution.');
     a.host_member = clean(p.host_member, 3); if (a.host_member !== 'Yes') fail('The academic lead at the host institution must be a member of EEG101. Please ask them to join before you apply.');
     a.activity = `Host: ${a.host_name}, ${a.host_institution} (${a.host_country})`;
   } else if (p.scheme === 'vmg') {
@@ -300,24 +379,39 @@ function validateApplication(p, settings, today) {
     a.third_party = clean(p.third_party, 3); if (YES_NO.indexOf(a.third_party) < 0) fail('Please say whether a third-party organisation is involved.');
     a.third_party_member = a.third_party === 'Yes' ? clean(p.third_party_member, 3) : '';
     if (a.third_party === 'Yes' && a.third_party_member !== 'Yes') fail('The named lead at the collaborating organisation must be a member of EEG101. Please ask them to join before you apply.');
+    if (p.not_leadership !== true) fail('Please confirm that this work is not part of a leadership role you hold in EEG101.');
+    a.not_leadership = 'Yes';
     a.activity = `Collaborators: ${a.collaborators}`.slice(0, 300);
   } else {
-    ['conference_name', 'contribution_title'].forEach(k => { a[k] = clean(p[k], 250); if (!a[k]) fail('Please give the conference name and the title of your contribution.'); });
+    a.attendance = clean(p.attendance, 20); if (ATTENDANCE.indexOf(a.attendance) < 0) fail('Please say whether you will attend the conference face to face or online.');
+    ['conference_name', 'contribution_title'].forEach(k => { a[k] = clean(p[k], 250); if (!a[k]) fail('Please give the conference name and the title of your presentation.'); });
     a.conference_url = clean(p.conference_url, 300);
     if (a.conference_url && !/^https?:\/\/\S+$/i.test(a.conference_url)) fail('Please give the conference web address starting with https://, or leave it empty.');
-    a.conference_location = p.scheme === 'conference_inperson' ? clean(p.conference_location, 150) : 'Online';
-    if (!a.conference_location) fail('Please give the conference location.');
-    a.presentation = clean(p.presentation, 40); if (['Oral presentation', 'Poster', 'Other contribution'].indexOf(a.presentation) < 0) fail('Please choose the type of contribution.');
+    if (a.attendance === 'Face to face') {
+      a.conference_location = clean(p.conference_location, 150);
+      a.conference_country = clean(p.conference_country, 100);
+      if (!a.conference_location || COUNTRIES.indexOf(a.conference_country) < 0) fail('Please give the city and country of the conference.');
+    } else {
+      a.conference_location = 'Online'; a.conference_country = '';
+    }
+    a.third_party_organised = clean(p.third_party_organised, 3);
+    if (a.third_party_organised !== 'Yes') fail('Conference grants are only for conferences organised entirely by others, not by EEG101 or another COST Action.');
+    a.presentation = clean(p.presentation, 40);
+    if (scheme.presentations.indexOf(a.presentation) < 0) fail(scheme.presentations.length === 1 ? `A ${scheme.short} is for an oral presentation.` : 'Please choose the type of presentation.');
     a.abstract_status = clean(p.abstract_status, 40); if (['Accepted', 'Submitted, awaiting decision'].indexOf(a.abstract_status) < 0) fail('Please say whether your abstract has been accepted.');
-    a.activity = `${a.conference_name} (${a.conference_location}): ${a.presentation}, "${a.contribution_title}"`.slice(0, 300);
+    if (p.scheme === 'itc_conference' && ITC_COUNTRIES.indexOf(a.country) < 0 && NNC_COUNTRIES.indexOf(a.country) < 0) fail(`ITC Conference Grants are only for people at institutions in Inclusiveness Target Countries or Near Neighbour Countries, and ${a.country} is neither. A YRI or Dissemination Conference Grant may suit you instead.`);
+    if (p.scheme === 'yri_conference' && a.yri !== 'Yes') fail('YRI Conference Grants are only for Young Researchers and Innovators (under 40). An ITC or Dissemination Conference Grant may suit you instead.');
+    const where = a.attendance === 'Online' ? 'online' : `${a.conference_location}, ${a.conference_country}`;
+    a.activity = `${a.conference_name} (${where}): ${a.presentation}, "${a.contribution_title}"`.slice(0, 300);
   }
 
   // The proposal.
   a.title = clean(p.title, 200); if (!a.title) fail('Please give your application a title.');
-  [['summary', 'a short summary'], ['workplan', 'the work plan'], ['outcomes', 'the expected outcomes'], ['relevance', 'the relevance to EEG101'], ['benefit', 'the benefit to you and the network']].forEach(([k, what]) => {
-    a[k] = clean(p[k], 8000);
-    if (!a[k]) fail(`Please describe ${what}.`);
-    if (countWords(a[k]) > GRANTS.words[k]) fail(`Please shorten ${what} to ${GRANTS.words[k]} words or fewer.`);
+  scheme.questions.forEach(q => {
+    const what = `"${q.label}"`;
+    a[q.id] = clean(p[q.id], 8000);
+    if (!a[q.id]) fail(`Please answer ${what}.`);
+    if (countWords(a[q.id]) > GRANTS.words[q.id]) fail(`Please shorten ${what} to ${GRANTS.words[q.id]} words or fewer.`);
   });
 
   // The budget: every line in a category this scheme allows, a positive amount,
@@ -326,13 +420,16 @@ function validateApplication(p, settings, today) {
   a.budget = lines.map(l => ({ category: clean(l && l.category, 80), description: clean(l && l.description, 300), amount: Math.round(Number(l && l.amount) * 100) / 100 }))
     .filter(l => l.category || l.description || l.amount);
   if (!a.budget.length) fail('Please add at least one budget line.');
+  const max = maxFor(scheme, a.attendance);
+  const categories = budgetFor(scheme, a.attendance);
   a.budget.forEach(l => {
-    if (scheme.budget.indexOf(l.category) < 0) fail('Please choose a category for every budget line.');
+    if (categories.indexOf(l.category) < 0) fail('Please choose a category for every budget line.');
     if (!l.description) fail('Please describe every budget line.');
-    if (!(l.amount > 0) || l.amount > scheme.max) fail('Every budget line needs an amount in euros.');
+    if (!(l.amount > 0) || l.amount > max) fail('Every budget line needs an amount in euros.');
   });
   a.total = Math.round(a.budget.reduce((s, l) => s + l.amount, 0) * 100) / 100;
-  if (a.total > scheme.max) fail(`The total requested (€${a.total.toFixed(2)}) is more than the maximum for a ${scheme.short} (€${scheme.max}).`);
+  a.max = max;
+  if (a.total > max) fail(`The total requested (€${a.total.toFixed(2)}) is more than the maximum for ${a.attendance === 'Online' ? 'attending online with ' : ''}a ${scheme.short} (€${max}).`);
   a.justification = clean(p.justification, 8000);
   if (!a.justification) fail('Please justify the costs you are asking for.');
   if (countWords(a.justification) > GRANTS.words.justification) fail(`Please shorten the cost justification to ${GRANTS.words.justification} words or fewer.`);
@@ -358,8 +455,8 @@ function validateApplication(p, settings, today) {
 
   // Things reviewers should know, but that do not block an application.
   const notes = [];
-  if (p.scheme.indexOf('conference') === 0 && a.eci !== 'Yes' && a.itc !== 'Yes') notes.push('Conference grants are for early-career researchers and researchers based in ITC countries; the applicant reports neither.');
-  if (p.scheme.indexOf('conference') === 0 && a.abstract_status !== 'Accepted') notes.push('Abstract not yet accepted.');
+  if (COST_MEMBERS.indexOf(a.country) < 0 && NNC_COUNTRIES.indexOf(a.country) < 0) notes.push(`Institution in ${a.country}, which is not a COST Full or Cooperating Member or a Near Neighbour Country: COST grants are normally not available there.`);
+  if (scheme.kind === 'conference' && a.abstract_status !== 'Accepted') notes.push('Abstract not yet accepted.');
   a.eligibility_notes = notes.join(' ');
   return a;
 }
@@ -438,18 +535,25 @@ function esc(value) {
 const para = text => esc(text).split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 
 // The application as one self-contained HTML document: the PDF, the email and
-// the applicant's downloadable copy are all made from this.
-function applicationHtml(a) {
+// the applicant's downloadable copy are all made from this. With blind set, as
+// reviewers see it when the Settings tab says blind_review TRUE: without the
+// applicant's name, contact details, institution, gender, ORCID or signature.
+function applicationHtml(a, blind) {
   const s = SCHEMES[a.scheme];
   const row = (k, v) => v === '' || v == null ? '' : `<tr><th>${esc(k)}</th><td>${esc(v)}</td></tr>`;
   const section = (title, body) => `<h2>${esc(title)}</h2>${body}`;
-  const specifics = a.scheme === 'stsm'
-    ? row('Host', `${a.host_name} (${a.host_email})`) + row('Host institution', `${a.host_institution}, ${a.host_country}`) + row('Host is an EEG101 member', a.host_member)
-    : a.scheme === 'vmg'
-      ? row('Collaborators', a.collaborators) + row('Third-party organisation involved', a.third_party) + row('Third-party lead is an EEG101 member', a.third_party_member)
-      : row('Conference', a.conference_name) + row('Web address', a.conference_url) + row('Location', a.conference_location) + row('Contribution', `${a.presentation}: ${a.contribution_title}`) + row('Abstract', a.abstract_status);
-  const budget = `<table class="budget"><thead><tr><th>Category</th><th>Description</th><th class="num">€</th></tr></thead><tbody>${a.budget.map(l => `<tr><td>${esc(l.category)}</td><td>${esc(l.description)}</td><td class="num">${l.amount.toFixed(2)}</td></tr>`).join('')}<tr class="total"><td colspan="2">Total requested (maximum €${s.max})</td><td class="num">${a.total.toFixed(2)}</td></tr></tbody></table>`;
-  const docs = Object.keys(a.documents).map(k => `<li>${esc(a.documents[k].label)}: ${esc(a.documents[k].name)}</li>`).join('') || '<li>None</li>';
+  const specifics = s.kind === 'stsm'
+    ? (blind ? row('Host', a.host_name) : row('Host', `${a.host_name} (${a.host_email})`)) + row('Host institution', `${a.host_institution}, ${a.host_country}`) + row('Host is an EEG101 member', a.host_member)
+    : s.kind === 'vmg'
+      ? row('Collaborators', a.collaborators) + row('Third-party organisation involved', a.third_party) + row('Third-party lead is an EEG101 member', a.third_party_member) + row('Not part of an EEG101 leadership role', a.not_leadership)
+      : row('Conference', a.conference_name) + row('Web address', a.conference_url) + row('Attendance', a.attendance) + row('Location', a.attendance === 'Online' ? 'Online' : [a.conference_location, a.conference_country].filter(Boolean).join(', ')) + row('Organised by a third party', a.third_party_organised) + row('Presentation', `${a.presentation}: ${a.contribution_title}`) + row('Abstract', a.abstract_status);
+  const max = a.max || maxFor(s, a.attendance);
+  const budget = `<table class="budget"><thead><tr><th>Category</th><th>Description</th><th class="num">€</th></tr></thead><tbody>${a.budget.map(l => `<tr><td>${esc(l.category)}</td><td>${esc(l.description)}</td><td class="num">${l.amount.toFixed(2)}</td></tr>`).join('')}<tr class="total"><td colspan="2">Total requested (maximum €${max})</td><td class="num">${a.total.toFixed(2)}</td></tr></tbody></table>`;
+  const docs = Object.keys(a.documents).map(k => `<li>${esc(a.documents[k].label)}${blind ? '' : `: ${esc(a.documents[k].name)}`}</li>`).join('') || '<li>None</li>';
+  const questions = (s.questions || []).filter(q => a[q.id]).map(q => `<h3>${esc(q.label)}</h3>${para(a[q.id])}`).join('');
+  const applicant = blind
+    ? `<table>${row('Position', a.position)}${row('Country of institution', `${a.country}${a.itc === 'Yes' ? ' (ITC)' : ''}`)}${row('Career stage', a.career_stage)}${row('Under 40 (YRI)', a.yri)}${row('Early-career researcher', a.eci)}${row('EEG101 member', a.member)}${row('Working Groups', a.working_groups.join(', '))}</table><p class="meta">Shown without the applicant's name, contact details and institution, for blind review.</p>`
+    : `<table>${row('Name', `${a.first_name} ${a.last_name}`)}${row('Email', a.email)}${row('Position', a.position)}${row('Institution', [a.department, a.institution].filter(Boolean).join(', '))}${row('Country', `${a.country}${a.itc === 'Yes' ? ' (ITC)' : ''}`)}${row('ORCID', a.orcid)}${row('Career stage', a.career_stage)}${row('Under 40 (YRI)', a.yri)}${row('Early-career researcher', a.eci)}${row('Gender', a.gender_other ? `${a.gender}: ${a.gender_other}` : a.gender)}${row('EEG101 member', a.member)}${row('Working Groups', a.working_groups.join(', '))}</table>`;
   return `<!doctype html><html><head><meta charset="utf-8"><title>${esc(a.id)} – ${esc(a.title)}</title><style>
 body{font-family:Arial,Helvetica,sans-serif;font-size:11pt;color:#1a1a2e;line-height:1.45;margin:28px}
 h1{color:#000099;font-size:18pt;margin:0 0 4px}h2{color:#000099;font-size:12.5pt;border-bottom:2px solid #FFCC00;padding-bottom:3px;margin:22px 0 8px}
@@ -458,13 +562,13 @@ th{width:34%;color:#5a5a7a;font-weight:normal}.budget th{width:auto;font-weight:
 p{margin:0 0 8px}h3{font-size:11pt;margin:14px 0 4px}</style></head><body>
 <h1>${esc(a.title)}</h1>
 <p class="meta"><strong>${esc(a.id)}</strong> · ${esc(s.title)} · ${esc(a.call_name)}</p>
-<p class="meta">Submitted ${esc(a.submitted_text)} by ${esc(a.first_name)} ${esc(a.last_name)}</p>
-${section('Applicant', `<table>${row('Name', `${a.first_name} ${a.last_name}`)}${row('Email', a.email)}${row('Position', a.position)}${row('Institution', [a.department, a.institution].filter(Boolean).join(', '))}${row('Country', `${a.country}${a.itc === 'Yes' ? ' (ITC)' : ''}`)}${row('ORCID', a.orcid)}${row('Career stage', a.career_stage)}${row('Under 40 (YRI)', a.yri)}${row('Early-career researcher', a.eci)}${row('Gender', a.gender_other ? `${a.gender}: ${a.gender_other}` : a.gender)}${row('EEG101 member', a.member)}${row('Working Groups', a.working_groups.join(', '))}</table>`)}
+<p class="meta">Submitted ${esc(a.submitted_text)}${blind ? '' : ` by ${esc(a.first_name)} ${esc(a.last_name)}`}</p>
+${section('Applicant', applicant)}
 ${section('Activity', `<table>${row('Dates', `${formatDate(a.start_date)} to ${formatDate(a.end_date)} (${a.days} day${a.days === 1 ? '' : 's'})`)}${specifics}</table>`)}
-${section('Proposal', `<h3>Summary</h3>${para(a.summary)}<h3>Work plan</h3>${para(a.workplan)}<h3>Expected outcomes</h3>${para(a.outcomes)}<h3>Relevance to EEG101</h3>${para(a.relevance)}<h3>Benefit to the applicant and the network</h3>${para(a.benefit)}`)}
+${section('Proposal', questions)}
 ${section('Budget', budget + `<h3>Justification of costs</h3>${para(a.justification)}`)}
 ${section('Documents', `<ul>${docs}</ul>`)}
-${section('Declaration', `<p>The applicant confirmed that the information is accurate, that they have read the privacy notice, and that they will follow the COST rules for this grant. Signed: ${esc(a.signature)}.</p>`)}
+${section('Declaration', `<p>The applicant confirmed that the information is accurate, that they have read the privacy notice, and that they will follow the COST rules for this grant, including applying in e-COST.${blind ? '' : ` Signed: ${esc(a.signature)}.`}</p>`)}
 </body></html>`;
 }
 
@@ -481,6 +585,7 @@ function sendConfirmation(a, pdf) {
     `Reference: ${a.id}\nScheme: ${s.title}\nTitle: ${a.title}\nDates: ${formatDate(a.start_date)} to ${formatDate(a.end_date)}\nAmount requested: €${a.total.toFixed(2)}\nSubmitted: ${a.submitted_text}`,
     'A PDF copy of your application is attached. Please quote your reference if you contact us about it.',
     'Your application will be reviewed after the call closes, and we will let you know the outcome by email. If you need to correct anything, reply to this email.',
+    'COST also requires every grant application to be made in e-COST (e-services.cost.eu), with your CV uploaded to your e-COST profile. If you have not done so yet, please submit the same application there too.',
     'With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148'
   ];
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#1a1a2e">${text.map(t => `<p>${esc(t).replace(/\n/g, '<br>')}</p>`).join('')}</div>`;
@@ -522,6 +627,14 @@ function headerMap(sheet) {
   return { headers: headers, map: map };
 }
 
+// Adds any of these headers that an existing tab lacks, at the end, so a newer
+// version of this script works with a spreadsheet made by an older one.
+function ensureColumns(sheet, columns) {
+  const { headers } = headerMap(sheet);
+  const missing = columns.filter(c => headers.indexOf(c) < 0);
+  if (missing.length) sheet.getRange(1, headers.length + 1, 1, missing.length).setValues([missing]).setFontWeight('bold').setBackground('#e8e8ff');
+}
+
 function appendRow(sheet, columns, values) {
   const { headers } = headerMap(sheet);
   sheet.appendRow(headers.map(h => values[h] === undefined ? '' : values[h]));
@@ -553,10 +666,11 @@ function setUpGrants() {
       sheet.getRange(1, 1, 1, columns.length).setValues([columns]).setFontWeight('bold').setBackground('#e8e8ff');
       sheet.setFrozenRows(1);
     }
+    ensureColumns(sheet, columns);
     return sheet;
   };
   const apps = ensure('Applications', APPLICATION_COLUMNS);
-  apps.hideColumns(APPLICATION_COLUMNS.indexOf('Data') + 1);
+  apps.hideColumns(headerMap(apps).map['Data'] + 1);
   ensure('Reviews', REVIEW_COLUMNS);
   const reviewers = ensure('Reviewers', REVIEWER_COLUMNS);
   if (reviewers.getLastRow() === 1) reviewers.appendRow([Session.getEffectiveUser().getEmail(), 'Grants chair', 'chair']);
@@ -569,8 +683,11 @@ function setUpGrants() {
     id_prefix: 'Middle part of application IDs, e.g. G2 gives EEG101-G2-001.',
     budget_stsm: 'Optional: money available for STSMs in this call, for the budget tracker (€).',
     budget_vmg: 'Optional: money available for VMGs (€).',
-    budget_conference_inperson: 'Optional: money available for in-person Conference Grants (€).',
-    budget_conference_online: 'Optional: money available for online Conference Grants (€).'
+    budget_itc_conference: 'Optional: money available for ITC Conference Grants (€).',
+    budget_yri_conference: 'Optional: money available for YRI Conference Grants (€).',
+    budget_dissemination_conference: 'Optional: money available for Dissemination Conference Grants (€).',
+    blind_review: 'TRUE: reviewers who are not chairs see applications without the applicant\'s name, contact details, institution, gender or documents. FALSE: they see everything. Chairs always see everything.',
+    web_app_url: 'The address of the web app deployment (ends in /exec). Used for reviewers\' personal links.'
   };
   const existing = settings.getDataRange().getValues().map(r => String(r[0]));
   Object.keys(GRANTS.defaults).forEach(key => { if (existing.indexOf(key) < 0) settings.appendRow([key, GRANTS.defaults[key], help[key] || '']); });
@@ -584,15 +701,56 @@ function setUpGrants() {
   console.log('Folder: ' + rootFolder().getUrl());
 }
 
-// Run after adding people to the "Reviewers" tab: gives them edit access to the
-// spreadsheet and view access to the applications folder, which the review page
-// needs because it runs as the reviewer.
-function shareWithReviewers() {
+// Optional: gives the chairs edit access to the spreadsheet and the
+// applications folder in Google Drive. The review page itself needs no access.
+function shareWithChairs() {
   const book = SpreadsheetApp.openById(PropertiesService.getScriptProperties().getProperty('GRANTS_SHEET_ID'));
   const folder = rootFolder();
-  reviewerList().forEach(r => {
-    try { book.addEditor(r.email); folder.addViewer(r.email); console.log('Shared with ' + r.email); }
+  reviewerList().filter(r => r.chair).forEach(r => {
+    try { book.addEditor(r.email); folder.addEditor(r.email); console.log('Shared with ' + r.email); }
     catch (error) { console.warn(`Could not share with ${r.email}: ${error}`); }
+  });
+}
+
+/* ---------------------------------------------------------- reviewer links */
+
+// Each reviewer opens the review page with their own link, which carries a
+// personal key kept in the "Reviewers" tab. The page runs as the account that
+// owns the script, so reviewers need no access to the spreadsheet or folder,
+// and blind review is real: they only ever see what the page shows them.
+//
+// sendReviewerLinks emails a link to everyone listed who has not had one yet.
+// To withdraw someone's access, delete their row (or clear their key).
+function sendReviewerLinks() { reviewerLinks(true); }
+
+// Logs everyone's link without emailing it, e.g. to open your own.
+function showReviewerLinks() { reviewerLinks(false); }
+
+function reviewerLinks(send) {
+  const url = String(readSettings().web_app_url || '').trim();
+  if (!/^https:\/\/script\.google\.com\/\S+\/exec$/.test(url)) throw new Error('Put the web app address (it ends in /exec) in the web_app_url row of the Settings tab first.');
+  const sheet = tab('Reviewers');
+  ensureColumns(sheet, REVIEWER_COLUMNS);
+  const { map } = headerMap(sheet);
+  rowsAsObjects(sheet).forEach(r => {
+    const email = String(r['Email'] || '').trim().toLowerCase();
+    if (!EMAIL_PATTERN.test(email)) return;
+    let key = String(r['Personal key'] || '').trim();
+    if (key.length < 32) { key = (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, ''); sheet.getRange(r._row, map['Personal key'] + 1).setValue(key); }
+    const link = `${url}?view=review&key=${key}`;
+    const chair = /chair/i.test(String(r['Role (reviewer or chair)'] || ''));
+    if (send && !r['Link sent']) {
+      const text = [
+        `Dear ${String(r['Name'] || '').trim() || 'colleague'},`,
+        `You have been added as ${chair ? 'a chair' : 'a reviewer'} for EEG101 grant applications. This is your personal link to the review page:\n${link}`,
+        'Please keep it to yourself: anyone with the link can act as you. If it is shared by mistake, tell us and we will replace it.',
+        'Before you score an application, check whether you have a conflict of interest with the applicant (the page lists the situations). If you do, declare it and do not score.',
+        'With thanks,\nThe EEG101 Grants team'
+      ];
+      MailApp.sendEmail({ to: email, replyTo: GRANTS.replyTo, name: GRANTS.name, subject: 'Your EEG101 grant review link', body: text.join('\n\n') });
+      sheet.getRange(r._row, map['Link sent'] + 1).setValue(new Date());
+    }
+    console.log(`${email}: ${link}`);
   });
 }
 
@@ -602,25 +760,31 @@ function reviewerList() {
   return rowsAsObjects(tab('Reviewers')).map(r => ({
     email: String(r['Email'] || '').trim().toLowerCase(),
     name: String(r['Name'] || '').trim(),
-    chair: /chair/i.test(String(r['Role (reviewer or chair)'] || ''))
+    chair: /chair/i.test(String(r['Role (reviewer or chair)'] || '')),
+    key: String(r['Personal key'] || '').trim()
   })).filter(r => EMAIL_PATTERN.test(r.email));
 }
 
-// The signed-in reviewer, or null. In the review deployment the script runs as
-// the person using it, so this is their own account.
-function currentReviewer() {
-  let email = '';
-  try { email = String(Session.getActiveUser().getEmail() || '').toLowerCase(); } catch (error) { email = ''; }
-  if (!email) return null;
-  try { return reviewerList().filter(r => r.email === email)[0] || null; } catch (error) { return null; }
+// The reviewer a personal key belongs to, or null.
+function reviewerByKey(key) {
+  key = String(key || '').trim();
+  if (key.length < 32) return null;
+  try {
+    const r = reviewerList().filter(x => x.key === key)[0];
+    return r ? { email: r.email, name: r.name, chair: r.chair } : null;
+  } catch (error) { return null; }
 }
 
-function requireReviewer(chairOnly) {
-  const me = currentReviewer();
-  if (!me) throw new Error('You are not on the list of EEG101 grant reviewers.');
+function requireReviewer(key, chairOnly) {
+  const me = reviewerByKey(key);
+  if (!me) throw new Error('This review link is not valid any more. Ask the grants chair for a new one.');
   if (chairOnly && !me.chair) throw new Error('Only a grants chair can do this.');
   return me;
 }
+
+// Reviewers who are not chairs see applications without the applicant's
+// identity, unless the Settings tab says blind_review FALSE. Chairs see everything.
+const isBlind = (me, settings) => !me.chair && String(settings.blind_review).toUpperCase() !== 'FALSE';
 
 const asNumber = v => (v === '' || v == null || isNaN(Number(v))) ? null : Number(v);
 const iso = v => v instanceof Date ? Utilities.formatDate(v, GRANTS.timezone, 'yyyy-MM-dd') : String(v || '');
@@ -638,53 +802,105 @@ function reviewsByApplication() {
   return out;
 }
 
+// COST allows one grant at a time (no overlapping grants in a grant period) and
+// only one type of conference grant per grant period. Checked across the
+// applications of the same call (same ID prefix), leaving out those not funded
+// or withdrawn.
+function overlapWarnings(rows) {
+  const byShort = {};
+  Object.keys(SCHEMES).forEach(id => { byShort[SCHEMES[id].short] = SCHEMES[id]; });
+  const live = rows.filter(r => ['Not funded', 'Withdrawn'].indexOf(String(r['Decision'])) < 0).map(r => ({
+    id: String(r['ID']), call: String(r['ID']).replace(/-\d+$/, ''), email: String(r['Email']).toLowerCase(),
+    scheme: String(r['Scheme']), kind: (byShort[String(r['Scheme'])] || {}).kind, start: iso(r['Start date']), end: iso(r['End date'])
+  }));
+  const out = {};
+  const add = (id, text) => { (out[id] = out[id] || []).push(text); };
+  live.forEach((x, i) => live.slice(i + 1).forEach(y => {
+    if (x.email !== y.email || x.call !== y.call) return;
+    if (x.start <= y.end && y.start <= x.end) { add(x.id, `Dates overlap with ${y.id} (${y.scheme}) by the same applicant.`); add(y.id, `Dates overlap with ${x.id} (${x.scheme}) by the same applicant.`); }
+    if (x.kind === 'conference' && y.kind === 'conference' && x.scheme !== y.scheme) { add(x.id, `The applicant also applied for a ${y.scheme} (${y.id}); only one type of conference grant is allowed per grant period.`); add(y.id, `The applicant also applied for a ${x.scheme} (${x.id}); only one type of conference grant is allowed per grant period.`); }
+  }));
+  return out;
+}
+
 // Everything the dashboard lists. A reviewer sees others' scores for an
-// application only after scoring it (or declaring a conflict) themselves; chairs
-// see everything.
-function listApplications() {
-  const me = requireReviewer(false);
+// application only after scoring it themselves; chairs see them at once. Anyone
+// who declared a conflict of interest, or who is the applicant, sees no scores
+// for that application and cannot score or decide on it.
+function listApplications(key) {
+  const me = requireReviewer(key, false);
+  const settings = readSettings();
+  const blind = isBlind(me, settings);
   const reviews = reviewsByApplication();
-  const apps = rowsAsObjects(tab('Applications')).map(r => {
+  const rows = rowsAsObjects(tab('Applications'));
+  const warnings = overlapWarnings(rows);
+  const apps = rows.map(r => {
     const id = String(r['ID']);
     const all = reviews[id] || [];
     const mine = all.filter(x => x.reviewer === me.email)[0] || null;
+    const own = String(r['Email']).toLowerCase() === me.email;
+    const conflicted = own || !!(mine && mine.conflict);
     const scored = all.filter(x => !x.conflict && x.mean != null);
-    const canSee = me.chair || !!mine;
+    const canSee = !conflicted && (me.chair || !!mine);
     return {
       id: id, submitted: iso(r['Submitted']), scheme: String(r['Scheme']), title: String(r['Title']),
-      applicant: `${r['First name']} ${r['Last name']}`, institution: String(r['Institution']), country: String(r['Country']), itc: String(r['ITC']),
-      gender: String(r['Gender']), yri: String(r['Under 40 (YRI)']), eci: String(r['Early-career (PhD < 8 years or student)']), career: String(r['Career stage']),
+      applicant: blind ? '' : `${r['First name']} ${r['Last name']}`, institution: blind ? '' : String(r['Institution']), country: String(r['Country']), itc: String(r['ITC']),
+      gender: blind ? '' : String(r['Gender']), yri: String(r['Under 40 (YRI)']), eci: String(r['Early-career (PhD < 8 years or student)']), career: String(r['Career stage']),
       start: iso(r['Start date']), end: iso(r['End date']), days: asNumber(r['Days']),
-      requested: asNumber(r['Requested (€)']), notes: String(r['Eligibility notes'] || ''),
-      folder: String(r['Drive folder']), pdf: String(r['Application PDF']),
+      requested: asNumber(r['Requested (€)']), notes: [String(r['Eligibility notes'] || '')].concat(warnings[id] || []).filter(Boolean).join(' '),
+      folder: blind ? '' : String(r['Drive folder']),
       decision: String(r['Decision'] || ''), awarded: asNumber(r['Awarded (€)']), rank: asNumber(r['Rank']), decisionNotes: String(r['Decision notes'] || ''),
       reviewCount: scored.length,
       mean: canSee && scored.length ? Math.round(scored.reduce((s, x) => s + x.mean, 0) / scored.length * 100) / 100 : null,
+      own: own, conflicted: conflicted,
       mine: mine, others: canSee ? all.filter(x => x.reviewer !== me.email) : []
     };
   });
-  return { me: me, applications: apps, settings: readSettings() };
+  return { me: me, blind: blind, applications: apps, settings: settings };
 }
 
-function getApplication(id) {
-  requireReviewer(false);
+function applicationRecord(id) {
   const r = rowsAsObjects(tab('Applications')).filter(x => String(x['ID']) === String(id))[0];
   if (!r) throw new Error('Application not found.');
   const data = JSON.parse(String(r['Data'] || '{}'));
-  return { id: String(id), html: applicationHtml(Object.assign(data, { submitted_text: data.submitted_text || iso(r['Submitted']) })), folder: String(r['Drive folder']), pdf: String(r['Application PDF']), documents: data.documents || {} };
+  data.submitted_text = data.submitted_text || iso(r['Submitted']);
+  return { row: r, data: data };
 }
 
-function saveReview(input) {
-  const me = requireReviewer(false);
+function getApplication(key, id) {
+  const me = requireReviewer(key, false);
+  const blind = isBlind(me, readSettings());
+  const { row, data } = applicationRecord(id);
+  const documents = {};
+  if (!blind) Object.keys(data.documents || {}).forEach(k => { documents[k] = { label: data.documents[k].label, name: data.documents[k].name }; });
+  return { id: String(id), blind: blind, html: applicationHtml(data, blind), folder: blind ? '' : String(row['Drive folder']), documents: documents };
+}
+
+// A copy of the application PDF (doc "application") or one of its uploaded
+// documents, for people allowed to see the applicant's identity.
+function getDocument(key, id, doc) {
+  const me = requireReviewer(key, false);
+  if (isBlind(me, readSettings())) throw new Error('Documents are not shown in blind review.');
+  const { data } = applicationRecord(id);
+  let blob;
+  if (doc === 'application') blob = applicationPdf(data);
+  else if (data.documents && data.documents[doc]) blob = DriveApp.getFileById(data.documents[doc].id).getBlob();
+  else throw new Error('Document not found.');
+  return { name: doc === 'application' ? `${id} application.pdf` : `${id} ${data.documents[doc].name}`, data: Utilities.base64Encode(blob.getBytes()) };
+}
+
+function saveReview(key, input) {
+  const me = requireReviewer(key, false);
   const id = String(input && input.id || '');
-  if (!rowsAsObjects(tab('Applications')).some(r => String(r['ID']) === id)) throw new Error('Application not found.');
+  const { row } = applicationRecord(id);
+  if (String(row['Email']).toLowerCase() === me.email) throw new Error('You cannot review your own application.');
   const conflict = !!input.conflict;
   const scores = CRITERIA.map((c, i) => conflict ? '' : Number(input.scores && input.scores[i]));
   if (!conflict && scores.some(s => !(s >= 1 && s <= 5 && Math.round(s) === s))) throw new Error('Please give every criterion a score from 1 to 5.');
   const recommendation = conflict ? '' : String(input.recommendation || '');
   if (!conflict && RECOMMENDATIONS.indexOf(recommendation) < 0) throw new Error('Please choose a recommendation.');
   const mean = conflict ? '' : Math.round(scores.reduce((s, x) => s + x, 0) / scores.length * 100) / 100;
-  const values = { 'Application ID': id, 'Reviewer': me.email, 'Conflict of interest': conflict ? 'Yes' : 'No', 'Mean score': mean, 'Recommendation': recommendation, 'Comments': String(input.comments || '').slice(0, 5000), 'Updated': new Date() };
+  const values = { 'Application ID': id, 'Reviewer': me.email, 'Conflict of interest': conflict ? 'Yes' : 'No', 'Mean score': mean, 'Recommendation': recommendation, 'Comments': conflict ? '' : String(input.comments || '').slice(0, 5000), 'Updated': new Date() };
   CRITERIA.forEach((c, i) => { values[c.label] = scores[i]; });
 
   const lock = LockService.getScriptLock();
@@ -702,7 +918,7 @@ function saveReview(input) {
   } finally {
     lock.releaseLock();
   }
-  return listApplications();
+  return listApplications(key);
 }
 
 function markStatus(id, status) {
@@ -712,18 +928,25 @@ function markStatus(id, status) {
   if (r && String(r['Status']) === 'Submitted') sheet.getRange(r._row, map['Status'] + 1).setValue(status);
 }
 
-// Chair only: decision, amount awarded and rank for one or more applications.
-function saveDecisions(changes) {
-  const me = requireReviewer(true);
+// Chair only: decision, amount awarded and rank for one or more applications,
+// from the ranking page or straight from an application. A chair who declared a
+// conflict of interest, or who applied, cannot decide on that application.
+function saveDecisions(key, changes) {
+  const me = requireReviewer(key, true);
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {
     const sheet = tab('Applications');
     const { map } = headerMap(sheet);
     const rows = rowsAsObjects(sheet);
-    (Array.isArray(changes) ? changes : []).forEach(change => {
+    const reviews = reviewsByApplication();
+    const list = Array.isArray(changes) ? changes : [];
+    // Check everything first, so a refused change saves nothing.
+    const checked = list.map(change => {
       const r = rows.filter(x => String(x['ID']) === String(change.id))[0];
       if (!r) throw new Error(`Application ${change.id} not found.`);
+      if (String(r['Email']).toLowerCase() === me.email) throw new Error(`${change.id} is your own application, so another chair must decide on it.`);
+      if ((reviews[String(change.id)] || []).some(x => x.reviewer === me.email && x.conflict)) throw new Error(`You declared a conflict of interest for ${change.id}, so another chair must decide on it.`);
       const decision = String(change.decision || '');
       if (DECISIONS.indexOf(decision) < 0) throw new Error('Unknown decision.');
       const requested = asNumber(r['Requested (€)']) || 0;
@@ -731,27 +954,32 @@ function saveDecisions(changes) {
       if (decision === 'Funded' && awarded === '') awarded = requested;
       if (awarded !== '' && (!(awarded >= 0) || awarded > requested)) throw new Error(`The amount awarded to ${change.id} must be between €0 and the €${requested} requested.`);
       const rank = change.rank === '' || change.rank == null ? '' : Math.max(1, Math.round(Number(change.rank)));
-      const set = (header, value) => sheet.getRange(r._row, map[header] + 1).setValue(value);
-      set('Decision', decision);
-      set('Awarded (€)', decision === 'Funded' ? awarded : '');
-      set('Rank', rank);
-      set('Decision notes', String(change.notes || '').slice(0, 2000));
+      return { r: r, decision: decision, awarded: awarded, rank: rank, notes: String(change.notes || '').slice(0, 2000) };
+    });
+    checked.forEach(c => {
+      const set = (header, value) => sheet.getRange(c.r._row, map[header] + 1).setValue(value);
+      set('Decision', c.decision);
+      set('Awarded (€)', c.decision === 'Funded' ? c.awarded : '');
+      set('Rank', c.rank);
+      set('Decision notes', c.notes);
       set('Decided by', me.email);
       set('Decided at', new Date());
-      set('Status', decision || (String(r['Status']) === 'Submitted' ? 'Submitted' : 'Under review'));
+      set('Status', c.decision || (String(c.r['Status']) === 'Submitted' ? 'Submitted' : 'Under review'));
     });
   } finally {
     lock.releaseLock();
   }
-  return listApplications();
+  return listApplications(key);
 }
 
 // Totals for the reports page: by scheme, month, gender, ITC, YRI, career stage
-// and country, for everything submitted and for what was funded.
-function getReport() {
-  requireReviewer(false);
-  const apps = rowsAsObjects(tab('Applications'));
+// and country, for everything submitted and for what was funded. Chairs only
+// when review is blind, as the funded list names people.
+function getReport(key) {
+  const me = requireReviewer(key, false);
   const settings = readSettings();
+  if (isBlind(me, settings)) throw new Error('Reports are for chairs while review is blind.');
+  const apps = rowsAsObjects(tab('Applications'));
   const funded = apps.filter(r => String(r['Decision']) === 'Funded');
   const group = (rows, keyFn, valueFn) => {
     const out = {};
