@@ -15,10 +15,18 @@ const throwsLike = (fn, re) => assert.throws(fn, err => re.test(String(err && er
 function ready(opts) {
   const g = makeGoogle(opts);
   g.setUpGrants();
-  const settings = g.tab('Settings');
-  settings.rows.forEach(r => { if (r[0] === 'call_open') r[1] = 'TRUE'; if (r[0] === 'deadline') r[1] = '2026-12-15T17:00'; if (r[0] === 'web_app_url') r[1] = 'https://script.google.com/macros/s/ABC/exec'; });
+  g.tab('Settings').rows.forEach(r => { if (r[0] === 'web_app_url') r[1] = 'https://script.google.com/macros/s/ABC/exec'; });
+  setCall(g, 'main', { 'Open': 'TRUE', 'Deadline': '2026-12-15T17:00' });
   g.state.props.GRANTS_BCC = 'amy@example.org, faisal@example.org, not-an-email';
   return g;
+}
+
+// Changes cells of a call's row in the Calls tab, by header.
+function setCall(g, id, values) {
+  const tab = g.tab('Calls');
+  const headers = tab.rows[0];
+  const row = tab.rows.filter(r => r[headers.indexOf('Call ID')] === id)[0];
+  Object.keys(values).forEach(h => { row[headers.indexOf(h)] = values[h]; });
 }
 
 // Sets the Reviewers tab, gives everyone a key, and returns email → key.
@@ -60,20 +68,21 @@ test('set-up creates the tabs, defaults and a staging clean-up trigger, closed b
   const g = makeGoogle();
   g.setUpGrants();
   const book = g.state.sheets[g.state.props.GRANTS_SHEET_ID];
-  same(book.tabs.map(t => t.name), ['Applications', 'Reviews', 'Reviewers', 'Settings']);
+  same(book.tabs.map(t => t.name), ['Applications', 'Reviews', 'Reviewers', 'Calls', 'Settings']);
   assert.strictEqual(g.applyConfig('').open, false);
   assert.strictEqual(g.state.triggers.length, 1);
   g.setUpGrants(); // running again adds nothing twice
-  assert.strictEqual(g.tab('Settings').rows.filter(r => r[0] === 'call_open').length, 1);
+  assert.strictEqual(g.tab('Calls').rows.length, 2, 'one first call, made once');
   assert.strictEqual(g.tab('Reviewers').rows.length, 2);
 });
 
-test('the call opens and closes with the Settings tab and the deadline', () => {
+test('the call opens and closes with its row in the Calls tab and its deadline', () => {
   const g = ready();
   assert.strictEqual(g.applyConfig('stsm').open, true);
   assert.strictEqual(g.applyConfig('stsm').preselect, 'stsm');
   assert.strictEqual(g.applyConfig('nonsense').preselect, '');
-  assert.match(g.applyConfig('').deadlineText, /15 December 2026, 17:00 Brussels time/);
+  assert.match(g.applyConfig('').calls[0].deadlineText, /15 December 2026, 17:00 Brussels time/);
+  assert.strictEqual(g.applyConfig('').calls[0].name, 'EEG101 Grant Period 2 call');
   g.setNow('2026-12-15T15:59:00Z'); assert.strictEqual(g.applyConfig('').open, true);   // 16:59 in Brussels
   g.setNow('2026-12-15T16:01:00Z'); assert.strictEqual(g.applyConfig('').open, false);  // 17:01 in Brussels
   throwsLike(() => g.uploadFile({ name: 'cv.pdf', data: PDF }), /closed/);
@@ -375,22 +384,83 @@ test('portal: assigned applications are only open to their reviewers', () => {
   same(g.listApplications(chair).applications.filter(x => x.id === a)[0].assigned, []);
 });
 
-test('portal: chairs run the call from the settings page', () => {
+test('portal: chairs run calls side by side, each with its own deadline, questions and documents', () => {
   const g = ready();
   const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer']]);
   const chair = keys['chair@example.org'];
-  throwsLike(() => g.getCallSettings(keys['r1@example.org']), /Only a grants chair/);
-  const s = g.getCallSettings(chair);
-  assert.strictEqual(s.values.call_open, true);
-  assert.ok(s.fields.some(f => f.key === 'budget_yri_conference'));
-  throwsLike(() => g.saveCallSettings(chair, { deadline: 'soon' }), /date and time/);
-  throwsLike(() => g.saveCallSettings(chair, { id_prefix: 'G 3!' }), /ID prefix/);
-  throwsLike(() => g.saveCallSettings(chair, { budget_stsm: '-5' }), /amount in euros/);
-  const saved = g.saveCallSettings(chair, { call_open: false, id_prefix: 'G3', budget_stsm: '20000', blind_review: false });
-  assert.strictEqual(saved.values.call_open, false);
-  assert.strictEqual(g.applyConfig('').open, false);
-  assert.strictEqual(g.readSettings().id_prefix, 'G3');
+  throwsLike(() => g.listCalls(keys['r1@example.org']), /Only a grants chair/);
+  let calls = g.listCalls(chair);
+  same(calls.calls.map(c => [c.id, c.prefix, c.accepting]), [['main', 'G2', true]]);
+  const company = { name: 'Industry STSM: NeuroTech GmbH', schemes: ['stsm_industry'], open: true, deadline: '2027-02-28T17:00', periodEnd: '2027-08-31', prefix: 'ind1',
+    host: { institution: 'NeuroTech GmbH', country: 'Germany', type: 'SME (small or medium-sized company)', name: 'Dr Lena Fischer' },
+    questions: [{ label: 'Which NeuroTech product line would you work with?', hint: 'See their website', words: 100, required: true }, { label: '' }],
+    documents: [{ label: 'NDA signed with NeuroTech', required: true }], budget: '8000' };
+  throwsLike(() => g.saveCall(chair, Object.assign({}, company, { prefix: 'g2' })), /already uses the ID prefix G2/);
+  throwsLike(() => g.saveCall(chair, Object.assign({}, company, { schemes: [] })), /at least one scheme/);
+  throwsLike(() => g.saveCall(chair, Object.assign({}, company, { deadline: 'soon' })), /date and time/);
+  throwsLike(() => g.saveCall(chair, Object.assign({}, company, { periodEnd: '' })), /must end by/);
+  calls = g.saveCall(chair, company);
+  const ind = calls.calls.filter(c => c.id === calls.saved)[0];
+  assert.strictEqual(ind.id, 'industry-stsm-neurotech-gmbh');
+  assert.strictEqual(ind.prefix, 'IND1');
+  assert.strictEqual(ind.questions.length, 1, 'empty questions are dropped');
+  calls = g.saveCall(chair, Object.assign({}, company, { name: 'Industry STSM: BrainCo', prefix: 'IND2', deadline: '2027-03-31T12:00', host: { institution: 'BrainCo', country: 'Spain', type: 'Start-up' }, questions: [], documents: [] }));
+  assert.strictEqual(calls.calls.length, 3);
+
+  // All three are open at once; the form offers each.
+  const cfg = g.applyConfig('stsm_industry');
+  same(cfg.calls.map(c => c.id), ['main', 'industry-stsm-neurotech-gmbh', 'industry-stsm-brainco']);
+  assert.strictEqual(cfg.preselect, 'stsm_industry');
+  assert.strictEqual(g.applyConfig('', 'industry-stsm-brainco').preselectCall, 'industry-stsm-brainco');
+  const status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
+  same(status.schemes, ['stsm', 'vmg', 'itc_conference', 'yri_conference', 'dissemination_conference', 'stsm_industry']);
+  same(status.calls.map(c => [c.name, c.host]), [['EEG101 Grant Period 2 call', ''], ['Industry STSM: NeuroTech GmbH', 'NeuroTech GmbH'], ['Industry STSM: BrainCo', 'BrainCo']]);
+  assert.ok(!/Fischer|@/.test(JSON.stringify(status)), 'nothing private in the public status');
+
+  // A NeuroTech application: the host comes from the call, its question and document are required,
+  // and its own end date applies.
+  const base = { scheme: 'stsm_industry', call: ind.id, host_institution: 'Somewhere else', host_country: 'France', host_type: 'Start-up', host_name: 'Someone' };
+  const withDocs = o => stsm(g, Object.assign({}, base, { documents: { cv: g.uploadFile({ name: 'cv.pdf', data: PDF }), host_letter: g.uploadFile({ name: 'l.pdf', data: PDF }), call_d1: g.uploadFile({ name: 'nda.pdf', data: PDF }) }, q_q1: 'The dry-electrode headset.' }, o || {}));
+  throwsLike(() => g.submitApplication(withDocs({ q_q1: '' })), /Which NeuroTech product line/);
+  throwsLike(() => g.submitApplication(withDocs({ documents: { cv: g.uploadFile({ name: 'cv.pdf', data: PDF }), host_letter: g.uploadFile({ name: 'l.pdf', data: PDF }) } })), /upload: NDA signed with NeuroTech/i);
+  throwsLike(() => g.submitApplication(withDocs({ start_date: '2027-08-20', end_date: '2027-09-10' })), /completed by 31 August 2027/);
+  throwsLike(() => g.submitApplication(withDocs({ scheme: 'stsm' })), /not part of Industry STSM: NeuroTech GmbH/);
+  const r = g.submitApplication(withDocs());
+  assert.strictEqual(r.id, 'EEG101-IND1-001');
+  assert.match(r.html, /NeuroTech GmbH, Germany[\s\S]*SME[\s\S]*Which NeuroTech product line[\s\S]*dry-electrode/);
+  assert.match(r.html, /Dr Lena Fischer/);
+  assert.match(r.html, /Industry STSM: NeuroTech GmbH/);
+  const row = g.rowsAsObjects(g.tab('Applications'))[0];
+  assert.strictEqual(row['Call'], ind.id);
+  // The main call carries on with its own numbering.
+  assert.strictEqual(g.submitApplication(stsm(g, { call: 'main' })).id, 'EEG101-G2-001');
+  assert.strictEqual(g.submitApplication(stsm(g)).id, 'EEG101-G2-002', 'the only open call offering STSM is chosen');
+  throwsLike(() => g.submitApplication(stsm(g, { call: 'nope' })), /closed/);
+
+  // Calls with applications keep their prefix and cannot be deleted; a closed call is not offered.
+  throwsLike(() => g.saveCall(chair, Object.assign({}, company, { id: ind.id, prefix: 'IND9' })), /cannot change/);
+  throwsLike(() => g.deleteCall(chair, ind.id), /cannot be deleted/);
+  g.saveCall(chair, Object.assign({}, company, { id: ind.id, open: false }));
+  assert.ok(!g.applyConfig('').calls.some(c => c.id === ind.id));
+  calls = g.deleteCall(chair, 'industry-stsm-brainco');
+  same(calls.calls.map(c => [c.id, c.applications]), [['main', 2], [ind.id, 1]]);
+  // Each call's deadline is its own.
+  g.setNow('2027-03-01T09:00:00Z');
+  same(g.applyConfig('').calls.map(c => c.id), []);
+  // Settings for all calls.
+  throwsLike(() => g.saveGrantSettings(chair, { budgets: { stsm: '-5' } }), /amount in euros/);
+  const after = g.saveGrantSettings(chair, { blindReview: false, budgets: { stsm: '20000' } });
+  assert.strictEqual(after.blindReview, false);
+  assert.strictEqual(after.budgets.stsm, '20000');
   assert.strictEqual(g.listApplications(keys['r1@example.org']).blind, false);
+  // Reports and funded grants know the calls.
+  const rep = g.getReport(chair);
+  same(rep.byCall.submitted.map(x => [x.key, x.count]), [['EEG101 Grant Period 2 call', 2], ['Industry STSM: NeuroTech GmbH', 1]]);
+  g.saveDecisions(chair, [{ id: 'EEG101-IND1-001', decision: 'Funded' }]);
+  const f = g.listFunded(chair).grants[0];
+  assert.strictEqual(f.callName, 'Industry STSM: NeuroTech GmbH');
+  assert.strictEqual(f.reportDue, '2027-04-13');
+  assert.strictEqual(g.reportDue('2027-08-25', '2027-08-31'), '2027-09-15', 'its own period end');
 });
 
 test('the web app remembers its own address for review links', () => {
@@ -458,38 +528,17 @@ test('funded grants: tracked to payment by chairs and the grants administrator, 
   throwsLike(() => g.assignReviewers(chair, { ids: [c], add: ['admin@example.org'] }), /not on the reviewer list/);
 });
 
-test('a special Industry STSM call, and the status the website reads', () => {
+test('the status the website reads follows the calls', () => {
   const g = ready();
   const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair']]);
-  const chair = keys['chair@example.org'];
-  const industry = o => stsm(g, Object.assign({ scheme: 'stsm_industry', host_institution: 'NeuroTech GmbH', host_country: 'Germany', host_type: 'SME (small or medium-sized company)' }, o || {}));
-  // Not in the default call.
-  assert.ok(!g.applyConfig('').schemes.stsm_industry);
-  assert.strictEqual(g.applyConfig('stsm_industry').preselect, '');
-  throwsLike(() => g.submitApplication(industry()), /not part of this call/);
   let status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
-  same(status.schemes, ['stsm', 'vmg', 'itc_conference', 'yri_conference', 'dissemination_conference']);
   assert.strictEqual(status.open, true);
-  assert.match(status.deadlineText, /15 December 2026/);
-  assert.ok(!/@|key/i.test(JSON.stringify(status)), 'nothing private in the public status');
-  // The chair runs the industry call on its own.
-  throwsLike(() => g.saveCallSettings(chair, { call_schemes: [] }), /at least one scheme/);
-  const saved = g.saveCallSettings(chair, { call_schemes: ['stsm_industry'], call_name: 'EEG101 Industry STSM call', id_prefix: 'IND1' });
-  same(saved.values.call_schemes, ['stsm_industry']);
-  same(Object.keys(g.applyConfig('').schemes), ['stsm_industry']);
-  assert.strictEqual(g.applyConfig('stsm_industry').preselect, 'stsm_industry');
-  throwsLike(() => g.submitApplication(stsm(g)), /Short-Term Scientific Mission \(STSM\) is not part of this call/);
-  throwsLike(() => g.submitApplication(industry({ host_type: '' })), /kind of industry organisation/);
-  throwsLike(() => g.submitApplication(industry({ host_country: 'Portugal' })), /different country/);
-  const r = g.submitApplication(industry());
-  assert.strictEqual(r.id, 'EEG101-IND1-001');
-  assert.match(r.html, /Host organisation[\s\S]*NeuroTech GmbH[\s\S]*SME/);
-  assert.match(r.html, /Benefit to academia–industry collaboration/);
-  assert.strictEqual(g.rowsAsObjects(g.tab('Applications'))[0]['Scheme'], 'Industry STSM');
-  status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
-  same(status.schemes, ['stsm_industry']);
-  // Closing the call in the portal closes it on the website too.
-  g.saveCallSettings(chair, { call_open: false });
+  same(status.schemes, ['stsm', 'vmg', 'itc_conference', 'yri_conference', 'dissemination_conference']);
+  assert.match(status.calls[0].deadlineText, /15 December 2026/);
+  assert.ok(!g.applyConfig('').schemes.stsm_industry, 'the industry STSM is not in the main call');
+  throwsLike(() => g.submitApplication(stsm(g, { scheme: 'stsm_industry', host_type: 'Start-up' })), /not part of|choose the call|closed/);
+  const main = g.listCalls(keys['chair@example.org']).calls[0];
+  g.saveCall(keys['chair@example.org'], Object.assign({}, main, { open: false }));
   status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
   assert.strictEqual(status.open, false);
   same(status.schemes, []);
@@ -501,7 +550,7 @@ test('the application page is built with its settings and can be framed', () => 
   assert.strictEqual(page.xframe, 'ALLOWALL');
   const boot = JSON.parse(page.getContent().match(/const CONFIG = (.*);\n/)[1]);
   assert.strictEqual(boot.preselect, 'vmg');
-  assert.strictEqual(boot.periodEnd, '2027-09-30');
+  assert.strictEqual(boot.calls[0].periodEnd, '2027-09-30');
   assert.ok(!/<\/script>/.test(page.getContent().match(/const CONFIG = (.*);\n/)[1]));
 });
 

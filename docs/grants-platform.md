@@ -124,7 +124,7 @@ from the portal (below).
 Everything is managed in the portal, not the spreadsheet. The spreadsheet
 only stores the data, and is the backup. There are three roles:
 - **Chairs** see these tabs: **Applications**, **Ranking and funding**,
-  **Funded grants**, **People**, **Call settings** and **Reports**.
+  **Funded grants**, **People**, **Calls** and **Reports**.
 - **Reviewers** see Applications (only those assigned to them), plus Reports
   when review is not blind.
 - **The grants administrator** sees **Funded grants** and **Reports** only.
@@ -167,7 +167,7 @@ From the Apps Script editor, **showReviewerLinks** logs everyone's link,
 including your own. **shareWithChairs** gives the chairs the spreadsheet and
 Drive folder too, if they want them.
 
-**Blind review.** With **Blind review** ticked in Call settings (the default), reviewers
+**Blind review.** With **Blind review** ticked on the Calls page (the default), reviewers
 who are not chairs do not see who applied. They see the proposal, budget,
 dates, country, ITC, under-40 and career stage, but not the applicant's name,
 email, institution, ORCID, gender, signature or uploaded documents (CVs and
@@ -201,7 +201,7 @@ application.
   button ranks them by score; the order can then be adjusted by hand, and
   decisions made for many at once.
 - **Budget tracker:** money committed per scheme against the amounts set in
-  the amounts set in **Call settings**.
+  the amounts set on the **Calls** page (per call or per scheme).
 - **Reports:** totals, then breakdowns by scheme (against budget), by start
   month, gender, ITC, under-40, career stage and country. Also a list of
   funded grants with a CSV download, and **Print or save as PDF**.
@@ -240,53 +240,62 @@ The filter at the top shows the grants still open (the default), reports
 overdue, those awaiting an e-COST application, those done, or all of them.
 The cards count each group.
 
-## Running a call
+## Running calls
 
-All of this is in the portal's **Call settings** tab. No code or
-spreadsheet changes are needed.
+Calls are managed on the portal's **Calls** page. Any number can be open at
+once, each with its own:
+- name;
+- schemes;
+- deadline (Brussels time);
+- end date for activities (the end of its grant period);
+- ID prefix (e.g. `G2` gives EEG101-G2-001);
+- optional budget.
 
-1. Set the name of the call (shown on the form and in emails), the deadline
-   (Brussels time), the date activities must end by (the end of the grant
-   period), the **schemes in this call**, and optionally the money available
-   per scheme.
-2. Tick **Accepting applications** and save. The form opens at once, offering
-   only the schemes in the call. It closes by itself at the deadline, or when
-   you untick it.
-3. The website follows by itself. While the call is open, the Grants page
-   shows its schemes as "Open now", with the deadline and an **Apply now**
-   button linking to the form with that scheme already chosen. When the call
-   closes, they show as closed again. Nothing in the site needs editing.
-   (`_data/grants.yml` still holds each scheme's description, and the status
-   shown if the platform cannot be reached.) Announce the call as usual, for
-   example as an event or a calendar date in the website editor.
-4. Assign reviewers to the applications. After the deadline,
-   reviewers score and the chairs record decisions. Then email applicants;
-   the platform does not send decision emails. Funded applicants are then
-   asked to apply through e-COST (track this, and send reminders, on Funded
-   grants), where the application is approved and the
+The first call, the main one, is made during setup.
+
+1. **New call**, or **Edit** on an existing one. Fill in the details, tick
+   the schemes, and tick **Accepting applications** to open it. It closes by
+   itself at its deadline, or when you untick it.
+2. **A company call** (e.g. an Industry STSM with one company) can also:
+   - **fix the host**: organisation, and optionally country, type and named
+     lead. Applicants see these filled in and cannot change them;
+   - add **its own questions** (with help text, a word limit, required or
+     optional), asked after the scheme's questions;
+   - add **its own documents** to upload (e.g. a signed NDA).
+
+   Each company can have different questions and timelines. Make one call
+   per company.
+3. **The website follows by itself.** The Grants page shows every scheme in
+   an open call as "Open now", with an **Apply now** button. A scheme that
+   several calls offer lists each call with its deadline, e.g. "Industry
+   STSM: NeuroTech GmbH: closes 28 February; Industry STSM: BrainCo: closes
+   31 March". `_data/grants.yml` still holds each scheme's description, and
+   the status shown if the platform cannot be reached.
+4. **On the form**, applicants choose the call and scheme. **Copy form link**
+   on the Calls page gives a link that opens one call only, to send to a
+   company's contacts.
+5. Review, ranking, Funded grants and reports work across calls. Ranking has
+   one table per call and scheme, and can be filtered by call. Report due
+   dates use each call's own end date. Overlapping grants are flagged
+   across all calls.
+6. After the deadline, reviewers score and the chairs record decisions. Then
+   email applicants; the platform does not send decision emails. Funded
+   applicants are then asked to apply through e-COST (track this, and send
+   reminders, on Funded grants), where the application is approved and the
    grant letter issued. Grants are paid after the activity, once the
    grantee's report is approved. The one exception: an STSM grantee may ask
    the Grant Holder for up to 50% in advance once the grant is approved, if
    funds allow and the Grant Holder agrees.
-5. For the next call, change the ID prefix (e.g. `G3`), the name and the
-   dates, and tick Accepting applications again. Earlier applications are
-   kept.
 
-**The industry STSM call** is a call of its own. In Call settings choose
-only *Industry STSM* as the scheme, give it its own name and ID prefix
-(e.g. `IND1`), set its dates, and open it. It works like an STSM, but the
-host must be an industry organisation, the applicant says what kind
-(large company, SME, start-up or other), and one proposal question asks
-about the benefit to academia–industry collaboration. Applications go
-through the same review, funding and Funded grants pages, listed as
-*Industry STSM*. Only one call runs at a time, so run the industry call
-before or after the main call, not alongside it.
+A call with applications keeps its ID prefix and cannot be deleted, only
+closed. **For all calls**, at the bottom of the Calls page, sets blind review
+and the money available per scheme.
 
 ## If something goes wrong
 
 - **An applicant says the form will not submit:** the message above the
   form says why, for example a date after `period_end` or a budget over the
-  maximum. If it says the call is closed, check Call settings.
+  maximum. If it says the call is closed, check the call on the Calls page.
 - **No confirmation email arrived:** the application is still saved; the
   applicant is told so on screen and can download their copy. Look in the
   spreadsheet for their row. Emails come from the Gmail account that owns the

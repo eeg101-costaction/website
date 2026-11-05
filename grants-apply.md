@@ -24,8 +24,11 @@ permalink: /grants/apply/
 <script>
 (function () {
   var frame = document.getElementById('grantApplyFrame');
-  var scheme = (new URLSearchParams(location.search).get('scheme') || '').replace(/[^a-z_]/g, '');
-  if (scheme) frame.src = frame.src + (frame.src.indexOf('?') < 0 ? '?' : '&') + 'scheme=' + scheme;
+  var params = new URLSearchParams(location.search);
+  var scheme = (params.get('scheme') || '').replace(/[^a-z_]/g, '');
+  var callId = (params.get('call') || '').replace(/[^a-z0-9-]/g, '');
+  var extra = (scheme ? '&scheme=' + scheme : '') + (callId ? '&call=' + callId : '');
+  if (extra) frame.src = frame.src + (frame.src.indexOf('?') < 0 ? '?' : '&') + extra.slice(1);
   frame.addEventListener('load', function () { document.getElementById('grantApplyLoading').hidden = true; });
   // The form runs inside Google's own wrapper frames, so accept messages from
   // any frame nested in ours, and only these two kinds.

@@ -78,7 +78,7 @@ td .linkbtn{font-size:13px}
 <script>
 const BOOT = <?!= boot ?>;
 const me = BOOT.me;
-let data = null, view = 'list', openId = null, filter = { scheme: '', q: '', mine: '' }, pending = {}, notice = '';
+let data = null, view = 'list', openId = null, filter = { scheme: '', q: '', mine: '', call: '' }, pending = {}, notice = '';
 const main = document.getElementById('main');
 
 function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -95,7 +95,7 @@ function fail(err) { main.insertAdjacentHTML('afterbegin', `<p class="msg err">$
 
 document.getElementById('me').textContent = `${me.name || me.email} · ${me.chair ? 'Chair' : me.admin ? 'Grants administrator' : BOOT.blind ? 'Reviewer (blind review)' : 'Reviewer'}`;
 const TABS = me.admin ? [['funded', 'Funded grants'], ['report', 'Reports']]
-  : [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding'], ['funded', 'Funded grants'], ['people', 'People'], ['call', 'Call settings']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
+  : [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding'], ['funded', 'Funded grants'], ['people', 'People'], ['call', 'Calls']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
 const ROLE_LABELS = { reviewer: 'Reviewer', chair: 'Chair', administrator: 'Grants administrator' };
 let selected = {};
 function tabs() { document.getElementById('tabs').innerHTML = TABS.map(t => `<button type="button" data-tab="${t[0]}" class="${view === t[0] || (view === 'detail' && t[0] === 'list') ? 'on' : ''}">${t[1]}</button>`).join(''); }
@@ -112,7 +112,7 @@ async function show(v, id) {
     else if (v === 'report') await renderReport();
     else if (v === 'people') await renderPeople();
     else if (v === 'funded') await renderFunded();
-    else if (v === 'call') await renderCall();
+    else if (v === 'call') { callDraft = null; await renderCalls(); }
   } catch (err) { main.innerHTML = ''; fail(err); }
 }
 
@@ -128,23 +128,25 @@ function decisionPill(d) { return d ? `<span class="pill ${d.toLowerCase().repla
 
 function renderList() {
   const fundedCount = data.applications.filter(a => a.decision === 'Funded').length;
-  const apps = data.applications.filter(a => a.decision !== 'Funded').filter(a => (!filter.scheme || a.scheme === filter.scheme) && (!filter.mine || (filter.mine === 'todo' ? !a.mine && !a.own : filter.mine === 'assigned' ? a.assignedToMe : filter.mine === 'unassigned' ? !a.assigned.length : !!a.mine)) && (!filter.q || (a.id + ' ' + a.applicant + ' ' + a.title + ' ' + a.institution).toLowerCase().indexOf(filter.q.toLowerCase()) >= 0));
+  const apps = data.applications.filter(a => a.decision !== 'Funded').filter(a => (!filter.call || a.call === filter.call) && (!filter.scheme || a.scheme === filter.scheme) && (!filter.mine || (filter.mine === 'todo' ? !a.mine && !a.own : filter.mine === 'assigned' ? a.assignedToMe : filter.mine === 'unassigned' ? !a.assigned.length : !!a.mine)) && (!filter.q || (a.id + ' ' + a.applicant + ' ' + a.title + ' ' + a.institution).toLowerCase().indexOf(filter.q.toLowerCase()) >= 0));
   const schemes = Array.from(new Set(data.applications.map(a => a.scheme))).sort();
   const todo = data.applications.filter(a => !a.mine && !a.own && a.decision !== 'Funded').length;
   main.innerHTML = `<div class="toolbar">
     <input id="q" type="search" placeholder="Search name, title, ID…" value="${esc(filter.q)}" aria-label="Search">
+    ${(data.calls || []).length > 1 ? `<select id="fc" aria-label="Call"><option value="">All calls</option>${data.calls.map(c => `<option value="${esc(c.id)}"${c.id === filter.call ? ' selected' : ''}>${esc(c.name)}</option>`).join('')}</select>` : ''}
     <select id="fs" aria-label="Scheme"><option value="">All schemes</option>${schemes.map(s => `<option${s === filter.scheme ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select>
     <select id="fm" aria-label="My reviews"><option value="">All applications</option><option value="todo"${filter.mine === 'todo' ? ' selected' : ''}>Still to score</option><option value="done"${filter.mine === 'done' ? ' selected' : ''}>Scored by me</option>${me.chair ? `<option value="unassigned"${filter.mine === 'unassigned' ? ' selected' : ''}>No reviewers assigned</option>` : `<option value="assigned"${filter.mine === 'assigned' ? ' selected' : ''}>Assigned to me</option>`}</select>
     <span class="note">${data.applications.length - fundedCount} applications · ${todo} still to score by you${fundedCount ? ` · ${fundedCount} funded, now ${me.chair ? '<a href="#" id="toFunded" target="_self">under Funded grants</a>' : 'closed'}` : ''}</span></div>
   ${notice ? `<p class="msg ok">${esc(notice)}</p>` : ''}
   ${me.chair ? assignBar() : ''}
   ${apps.length ? `<table><thead><tr>${me.chair ? `<th><input type="checkbox" id="all" aria-label="Select all"${apps.every(a => selected[a.id]) ? ' checked' : ''}></th>` : ''}<th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th>${me.chair ? '<th>Reviewers</th>' : ''}<th>Decision</th></tr></thead><tbody>
-  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
+  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}${(data.calls || []).length > 1 && a.callName ? `<span class="note" style="display:block">${esc(a.callName)}</span>` : ''}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
   </tbody></table>` : '<p class="note">No applications match.</p>'}
   ${me.chair ? '<p class="note">Reviewers see only the applications assigned to them. Applications with no reviewers assigned are seen by the chairs alone. Tick applications to assign them in bulk, or assign from an application\'s own page.</p>' : ''}
   <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Review is blind: applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
   main.querySelector('#q').addEventListener('input', e => { filter.q = e.target.value; renderListKeepFocus(); });
   main.querySelector('#fs').addEventListener('change', e => { filter.scheme = e.target.value; renderList(); });
+  const fc = main.querySelector('#fc'); if (fc) fc.addEventListener('change', e => { filter.call = e.target.value; renderList(); });
   main.querySelector('#fm').addEventListener('change', e => { filter.mine = e.target.value; renderList(); });
   main.querySelectorAll('tr[data-id]').forEach(r => r.addEventListener('click', e => { if (e.target.closest('input')) return; show('detail', r.dataset.id); }));
   const tf = main.querySelector('#toFunded'); if (tf) tf.addEventListener('click', e => { e.preventDefault(); show('funded'); });
@@ -287,15 +289,24 @@ async function renderDetail(id) {
 function renderDecide() {
   const budgets = {};
   Object.keys(BOOT.schemes).forEach(id => { const v = Number(data.settings['budget_' + id]); budgets[BOOT.schemes[id].short] = v > 0 ? v : null; });
-  const groups = {};
-  data.applications.forEach(a => { (groups[a.scheme] = groups[a.scheme] || []).push(a); });
+  // One table per call and scheme. A call's own budget applies when the call
+  // has a single scheme; otherwise the money per scheme (Calls page) does.
+  const groups = {}, groupBudget = {};
+  const many = (data.calls || []).length > 1;
+  data.applications.forEach(a => {
+    const g = many && a.callName ? `${a.callName} · ${a.scheme}` : a.scheme;
+    (groups[g] = groups[g] || []).push(a);
+    const c = (data.calls || []).filter(x => x.id === a.call)[0];
+    const sameCall = data.applications.filter(x => x.call === a.call).every(x => x.scheme === a.scheme);
+    groupBudget[g] = c && c.budget && sameCall ? c.budget : budgets[a.scheme];
+  });
   const sorted = list => list.slice().sort((x, y) => (x.rank || 1e9) - (y.rank || 1e9) || (y.mean || 0) - (x.mean || 0));
   const value = (a, k) => pending[a.id] && pending[a.id][k] !== undefined ? pending[a.id][k] : (k === 'decision' ? a.decision : k === 'awarded' ? (a.awarded == null ? '' : a.awarded) : k === 'rank' ? (a.rank == null ? '' : a.rank) : a.decisionNotes);
   const committed = list => list.reduce((s, a) => s + (value(a, 'decision') === 'Funded' ? Number(value(a, 'awarded') === '' ? a.requested : value(a, 'awarded')) || 0 : 0), 0);
   main.innerHTML = `<div class="toolbar"><button type="button" class="btn secondary" id="autorank">Rank each scheme by mean score</button>
     <button type="button" class="btn" id="save" ${Object.keys(pending).length ? '' : 'disabled'}>Save ${Object.keys(pending).length || ''} change${Object.keys(pending).length === 1 ? '' : 's'}</button>
-    <span class="note">Choose "Funded" to select an application; leave the amount empty to award what was requested. The money available per scheme is set in the Settings tab of the spreadsheet.</span><span id="dmsg" class="msg"></span></div>
-  ${Object.keys(groups).sort().map(g => { const list = sorted(groups[g]); const used = committed(list); const b = budgets[g]; return `<div class="panel" style="margin-bottom:16px"><h2>${esc(g)}</h2>
+    <span class="note">Choose "Funded" to select an application; leave the amount empty to award what was requested. The money available is set on the Calls page, per call or per scheme.</span><span id="dmsg" class="msg"></span></div>
+  ${Object.keys(groups).sort().map(g => { const list = sorted(groups[g]); const used = committed(list); const b = groupBudget[g]; return `<div class="panel" style="margin-bottom:16px"><h2>${esc(g)}</h2>
     <p class="note">${list.length} application${list.length === 1 ? '' : 's'} · committed ${money(used)}${b ? ` of ${money(b)} (${money(b - used)} left)` : ''}</p>
     ${b ? `<div class="bar${used > b ? ' over' : ''}"><span style="width:${Math.min(100, used / b * 100)}%"></span></div>` : ''}
     <table style="margin-top:10px"><thead><tr><th>Rank</th><th>ID</th><th>Applicant</th><th>Title</th><th class="num">Mean</th><th class="num">Reviews</th><th class="num">Requested</th><th>Decision</th><th>Awarded (€)</th><th>Notes</th></tr></thead><tbody>
@@ -375,7 +386,7 @@ async function renderFunded(state, message) {
   ${shown.length ? `<table><thead><tr><th><input type="checkbox" id="fall" aria-label="Select all"${shown.every(x => fundedSel[x.id]) ? ' checked' : ''}></th><th>ID</th><th>Grantee</th><th>Scheme</th><th class="num">Awarded</th><th>Activity</th><th>Report due</th><th>Status</th><th>Reminders</th><th>Notes</th></tr></thead><tbody>
   ${shown.map(x => `<tr><td><input type="checkbox" data-fsel="${esc(x.id)}"${fundedSel[x.id] ? ' checked' : ''} aria-label="Select ${esc(x.id)}"></td>
     <td>${me.admin ? `<button type="button" class="linkbtn" data-pdf="${esc(x.id)}">${esc(x.id)}</button>` : `<a href="#" target="_self" data-open="${esc(x.id)}">${esc(x.id)}</a>`}</td>
-    <td>${esc(x.applicant)}<span class="note" style="display:block">${esc(x.email)}</span></td><td>${esc(x.scheme)}<span class="note" style="display:block">${esc(x.title)}</span></td>
+    <td>${esc(x.applicant)}<span class="note" style="display:block">${esc(x.email)}</span></td><td>${esc(x.scheme)}<span class="note" style="display:block">${esc(x.title)}</span>${x.callName ? `<span class="note" style="display:block">${esc(x.callName)}</span>` : ''}</td>
     <td class="num">${money(x.awarded)}</td><td>${fmt(x.start)} – ${fmt(x.end)}<span class="note" style="display:block">${x.ended ? 'Finished' : x.started ? 'Under way' : 'Not started'}</span></td>
     <td>${fmt(x.reportDue)}${dueText(x)}</td>
     <td><select class="cell" data-status="${esc(x.id)}" aria-label="Status">${state.statuses.map(st => `<option${st === x.status ? ' selected' : ''}>${esc(st)}</option>`).join('')}</select>${x.statusUpdated ? `<span class="note" style="display:block">${esc(x.statusUpdated)}${x.statusBy ? ' · ' + esc(x.statusBy) : ''}</span>` : ''}</td>
@@ -399,31 +410,106 @@ async function renderFunded(state, message) {
   main.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click', async () => { try { const d = await call('getDocument', b.dataset.pdf, 'application'); download(d.name, d.data); } catch (err) { msg.className = 'msg err'; msg.textContent = err.message; } }));
 }
 
-/* ------------------------------------------------- call settings (chair) */
+/* ---------------------------------------------------------- calls (chair) */
 
-async function renderCall(state, message) {
-  if (!state) { main.innerHTML = '<p class="note">Loading…</p>'; state = await call('getCallSettings'); }
-  const v = state.values;
-  const input = f => f.type === 'schemes'
-    ? `<div style="grid-column:1/-1"><b style="font-size:14px">${esc(f.label)}</b><span class="note" style="display:block">${esc(f.help)}</span><div class="pick">${f.options.map(o => `<label><input type="checkbox" name="${f.key}" value="${esc(o.id)}"${v[f.key].indexOf(o.id) >= 0 ? ' checked' : ''}> ${esc(o.title)}</label>`).join('')}</div></div>`
-    : f.type === 'bool'
-    ? `<label><input type="checkbox" name="${f.key}"${v[f.key] ? ' checked' : ''}> ${esc(f.label)}<span class="note">${esc(f.help)}</span></label>`
-    : `<label>${esc(f.label)}<input name="${f.key}" type="${f.type === 'datetime' ? 'datetime-local' : f.type === 'date' ? 'date' : f.type === 'money' ? 'number' : 'text'}"${f.type === 'money' ? ' min="0" step="1"' : ''} value="${esc(v[f.key])}"><span class="note">${esc(f.help)}</span></label>`;
-  main.innerHTML = `<div class="panel"><h2>Call settings</h2>
-    <p class="note">The application form is <b>${state.open ? 'open' : 'closed'}</b> right now.${state.formUrl ? ` Reviewers' links point to ${esc(state.formUrl)}.` : ''}</p>
-    ${message ? `<p class="msg ok">${esc(message)}</p>` : ''}
-    <form id="callform"><h3>The call</h3><div class="form-grid">${state.fields.filter(f => !/^budget_/.test(f.key)).map(input).join('')}</div>
-    <h3 style="margin-top:18px">Money available per scheme</h3><div class="form-grid">${state.fields.filter(f => /^budget_/.test(f.key)).map(input).join('')}</div>
-    <p style="margin-top:16px"><button class="btn" type="submit">Save settings</button> <span id="cmsg" class="msg"></span></p></form>
-    <p class="note">For a new call: change the ID prefix (e.g. G3), the name, the deadline and the end date, then switch "Accepting applications" on. Earlier applications are kept. The website's Grants page shows the schemes in this call as open, with an Apply button, while applications are accepted.</p></div>`;
-  const form = main.querySelector('#callform');
-  form.addEventListener('submit', async e => {
+let callsState = null, callDraft = null;
+const blankCall = () => ({ id: '', name: '', schemes: [], open: false, deadline: '', periodEnd: '2027-09-30', prefix: '', description: '', budget: '', host: null, questions: [], documents: [] });
+
+async function renderCalls(state, message) {
+  if (state) callsState = state;
+  if (!callsState || !state && !message) { main.innerHTML = '<p class="note">Loading…</p>'; callsState = await call('listCalls'); }
+  const st = callsState;
+  const short = id => (st.schemes.filter(x => x.id === id)[0] || {}).title || id;
+  const pill = c => c.accepting ? '<span class="pill ok">Accepting applications</span>' : c.open ? '<span class="pill todo">Deadline passed</span>' : '<span class="pill">Closed</span>';
+  main.innerHTML = `<div class="toolbar"><button type="button" class="btn" id="newCall">+ New call</button>
+    <span class="note">Calls run side by side, each with its own schemes, deadline, end date and ID prefix. A company call can fix the host and ask its own questions.</span></div>
+  ${message && message.trim() ? `<p class="msg ok">${esc(message)}</p>` : ''}<span id="cmsg" class="msg"></span>
+  ${callDraft ? callEditor(st) : ''}
+  <table><thead><tr><th>Call</th><th>Schemes</th><th>Status</th><th>Deadline</th><th>Activities end by</th><th>ID prefix</th><th class="num">Applications</th><th class="num">Funded</th><th></th></tr></thead><tbody>
+  ${st.calls.map(c => `<tr><td><b>${esc(c.name)}</b>${c.host ? `<span class="note" style="display:block">Host: ${esc(c.host.institution)}</span>` : ''}${c.questions.length || c.documents.length ? `<span class="note" style="display:block">${c.questions.length} own question${c.questions.length === 1 ? '' : 's'}, ${c.documents.length} own document${c.documents.length === 1 ? '' : 's'}</span>` : ''}</td>
+    <td>${c.schemes.map(id => `<span class="who" style="color:var(--text)">${esc(short(id))}</span>`).join('')}</td><td>${pill(c)}</td>
+    <td>${esc(c.deadlineText || '—')}</td><td>${esc(c.periodEndText)}</td><td>${esc(c.prefix)}</td><td class="num">${c.applications}</td><td class="num">${c.funded ? `${c.funded} · ${money(c.awarded)}${c.budget ? ` of ${money(c.budget)}` : ''}` : '—'}</td>
+    <td><button type="button" class="linkbtn" data-edit="${esc(c.id)}">Edit</button>${st.formUrl ? `<button type="button" class="linkbtn" data-link="${esc(c.id)}">Copy form link</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="note">No calls yet.</td></tr>'}
+  </tbody></table>
+  <p class="note">The website's Grants page shows the schemes of every call that is accepting applications as open, with its deadline and an Apply button. "Copy form link" gives a link straight to one call's form, e.g. to send to a company's contacts.</p>
+  <div class="panel" style="margin-top:18px"><h2>For all calls</h2><form id="gsettings">
+    <label style="display:block;margin:8px 0 12px"><input type="checkbox" name="blind"${st.blindReview ? ' checked' : ''}> <b>Blind review</b> <span class="note">Reviewers who are not chairs do not see who applied or their documents.</span></label>
+    <b style="font-size:14px">Money available per scheme (€), for the budget tracker</b>
+    <div class="form-grid" style="margin-top:6px">${st.schemes.map(x => `<label>${esc(x.title)}<input name="b_${x.id}" type="number" min="0" step="1" value="${esc(st.budgets[x.id])}"></label>`).join('')}</div>
+    <p style="margin-top:12px"><button class="btn secondary" type="submit">Save</button></p></form></div>`;
+  const msg = main.querySelector('#cmsg');
+  const fail = err => { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; };
+  main.querySelector('#newCall').addEventListener('click', () => { callDraft = blankCall(); renderCalls(null, ' '); });
+  main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { const c = st.calls.filter(x => x.id === b.dataset.edit)[0]; callDraft = JSON.parse(JSON.stringify({ id: c.id, name: c.name, schemes: c.schemes, open: c.open, deadline: c.deadline, periodEnd: c.periodEnd, prefix: c.prefix, description: c.description, budget: c.budget == null ? '' : c.budget, host: c.host, questions: c.questions, documents: c.documents, applications: c.applications })); renderCalls(null, ' '); }));
+  main.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => { const url = `${st.formUrl}?call=${encodeURIComponent(b.dataset.link)}`; try { navigator.clipboard.writeText(url); msg.className = 'msg ok'; msg.textContent = 'Copied: ' + url; } catch (e) { msg.className = 'msg'; msg.textContent = url; } }));
+  main.querySelector('#gsettings').addEventListener('submit', async e => {
     e.preventDefault();
-    const out = {};
-    state.fields.forEach(f => { const el = form.elements[f.key]; out[f.key] = f.type === 'schemes' ? Array.from(form.querySelectorAll(`[name=${f.key}]:checked`)).map(x => x.value) : f.type === 'bool' ? el.checked : el.value; });
-    const msg = main.querySelector('#cmsg');
-    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const s2 = await call('saveCallSettings', out); data = null; renderCall(s2, 'Saved.'); }
-    catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; }
+    const f = e.target, budgets = {};
+    st.schemes.forEach(x => { budgets[x.id] = f.elements['b_' + x.id].value; });
+    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const out = await call('saveGrantSettings', { blindReview: f.blind.checked, budgets: budgets }); data = null; renderCalls(out, 'Saved.'); } catch (err) { fail(err); }
+  });
+  if (callDraft) bindCallEditor(st, fail);
+}
+
+function callEditor(st) {
+  const c = callDraft;
+  const industry = c.schemes.some(id => (st.schemes.filter(x => x.id === id)[0] || {}).kind === 'stsm');
+  const h = c.host || {};
+  return `<div class="panel" style="margin-bottom:16px"><h2>${c.id ? 'Edit call' : 'New call'}</h2>
+  <form id="calledit"><div class="form-grid" style="margin-top:10px">
+    <label>Name of the call<input name="name" value="${esc(c.name)}" placeholder="e.g. Industry STSM: NeuroTech GmbH"><span class="note">Shown on the form, the website and in emails.</span></label>
+    <label>ID prefix<input name="prefix" value="${esc(c.prefix)}" placeholder="e.g. IND1"${c.applications ? ' readonly' : ''}><span class="note">${c.applications ? 'Fixed: the call has applications.' : 'Gives IDs like EEG101-IND1-001. Unique per call.'}</span></label>
+    <label>Deadline (Brussels time)<input name="deadline" type="datetime-local" value="${esc(c.deadline)}"><span class="note">The form closes by itself after it.</span></label>
+    <label>Activities must end by<input name="periodEnd" type="date" value="${esc(c.periodEnd)}"><span class="note">The end of the grant period for this call.</span></label>
+    <label>Budget for this call (€)<input name="budget" type="number" min="0" step="1" value="${esc(c.budget)}"><span class="note">Optional.</span></label>
+    <label style="align-self:center"><input type="checkbox" name="open"${c.open ? ' checked' : ''}> Accepting applications</label>
+  </div>
+  <div style="margin-top:12px"><b style="font-size:14px">Schemes in this call</b><div class="pick">${st.schemes.map(x => `<label><input type="checkbox" name="schemes" value="${esc(x.id)}"${c.schemes.indexOf(x.id) >= 0 ? ' checked' : ''}> ${esc(x.title)}</label>`).join('')}</div></div>
+  <label style="display:block;font-weight:700;font-size:14px">Description <span class="note" style="display:inline">(optional, shown above the call's schemes on the form)</span><textarea name="description" style="min-height:60px">${esc(c.description)}</textarea></label>
+  ${industry ? `<div style="margin-top:6px"><b style="font-size:14px">Host set by this call</b> <span class="note">For a company call: these are filled in for applicants and cannot be changed. Leave the organisation empty to let applicants choose their host.</span>
+    <div class="form-grid" style="margin-top:6px"><label>Organisation<input name="h_institution" value="${esc(h.institution || '')}"></label>
+    <label>Country<select name="h_country"><option value="">Applicant chooses</option>${st.countries.map(x => `<option${x === h.country ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select></label>
+    <label>Type of organisation<select name="h_type"><option value="">Applicant chooses</option>${st.industryTypes.map(x => `<option${x === h.type ? ' selected' : ''}>${esc(x)}</option>`).join('')}</select></label>
+    <label>Named lead at the host<input name="h_name" value="${esc(h.name || '')}" placeholder="Applicant enters if empty"></label></div></div>` : ''}
+  <div style="margin-top:14px"><b style="font-size:14px">This call's own questions</b> <span class="note">Asked after the scheme's questions, e.g. what a company needs to know.</span>
+    ${c.questions.map((q, i) => `<div class="form-grid" style="margin-top:6px;border-top:1px solid var(--border);padding-top:6px"><label>Question<input data-q="${i}" data-k="label" value="${esc(q.label)}"></label><label>Help text<input data-q="${i}" data-k="hint" value="${esc(q.hint || '')}"></label><label>Word limit<input data-q="${i}" data-k="words" type="number" min="20" max="1000" value="${esc(q.words || 300)}"></label><label style="align-self:center"><input type="checkbox" data-q="${i}" data-k="required"${q.required ? ' checked' : ''}> Required <button type="button" class="linkbtn" data-qdel="${i}">Remove</button></label></div>`).join('')}
+    <p><button type="button" class="btn secondary" id="addQ">+ Add a question</button></p></div>
+  <div><b style="font-size:14px">This call's own documents</b> <span class="note">Uploaded as PDFs, on top of the scheme's (e.g. a signed agreement with the company).</span>
+    ${c.documents.map((d, i) => `<div class="form-grid" style="margin-top:6px"><label>Document<input data-d="${i}" data-k="label" value="${esc(d.label)}"></label><label style="align-self:center"><input type="checkbox" data-d="${i}" data-k="required"${d.required ? ' checked' : ''}> Required <button type="button" class="linkbtn" data-ddel="${i}">Remove</button></label></div>`).join('')}
+    <p><button type="button" class="btn secondary" id="addD">+ Add a document</button></p></div>
+  <p><button class="btn" type="submit">Save call</button> <button type="button" class="btn secondary" id="cancelCall">Cancel</button>${c.id && !c.applications ? ' <button type="button" class="linkbtn" id="deleteCall">Delete this call</button>' : ''}</p>
+  </form></div>`;
+}
+
+function bindCallEditor(st, fail) {
+  const f = main.querySelector('#calledit');
+  const read = () => {
+    const c = callDraft;
+    ['name', 'prefix', 'deadline', 'periodEnd', 'budget', 'description'].forEach(k => { c[k] = f.elements[k].value; });
+    c.open = f.elements.open.checked;
+    c.schemes = Array.from(f.querySelectorAll('[name=schemes]:checked')).map(x => x.value);
+    if (f.elements.h_institution) c.host = { institution: f.elements.h_institution.value, country: f.elements.h_country.value, type: f.elements.h_type.value, name: f.elements.h_name.value };
+    f.querySelectorAll('[data-q]').forEach(el => { c.questions[+el.dataset.q][el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value; });
+    f.querySelectorAll('[data-d]').forEach(el => { c.documents[+el.dataset.d][el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value; });
+  };
+  const again = () => { read(); renderCalls(null, ' '); };
+  f.querySelectorAll('[name=schemes]').forEach(el => el.addEventListener('change', again));
+  f.querySelector('#addQ').addEventListener('click', () => { read(); callDraft.questions.push({ label: '', hint: '', words: 300, required: true }); renderCalls(null, ' '); });
+  f.querySelector('#addD').addEventListener('click', () => { read(); callDraft.documents.push({ label: '', required: true }); renderCalls(null, ' '); });
+  f.querySelectorAll('[data-qdel]').forEach(b => b.addEventListener('click', () => { read(); callDraft.questions.splice(+b.dataset.qdel, 1); renderCalls(null, ' '); }));
+  f.querySelectorAll('[data-ddel]').forEach(b => b.addEventListener('click', () => { read(); callDraft.documents.splice(+b.dataset.ddel, 1); renderCalls(null, ' '); }));
+  f.querySelector('#cancelCall').addEventListener('click', () => { callDraft = null; renderCalls(null, ' '); });
+  const del = f.querySelector('#deleteCall');
+  if (del) del.addEventListener('click', async () => { if (!confirm('Delete this call?')) return; try { const out = await call('deleteCall', callDraft.id); callDraft = null; renderCalls(out, 'Call deleted.'); } catch (err) { fail(err); } });
+  f.addEventListener('submit', async e => {
+    e.preventDefault(); read();
+    if (callDraft.host && !String(callDraft.host.institution || '').trim()) callDraft.host = null;
+    try {
+      const out = await call('saveCall', callDraft);
+      const saved = out.calls.filter(x => x.id === out.saved)[0];
+      callDraft = null; data = null;
+      renderCalls(out, `Saved "${saved.name}". ${saved.accepting ? 'It is accepting applications, and shows as open on the website.' : 'It is not accepting applications.'}`);
+    } catch (err) { fail(err); }
   });
 }
 
@@ -447,6 +533,7 @@ async function renderReport() {
   <div class="cards"><div class="card"><b>${r.totals.submitted}</b>applications</div><div class="card"><b>${money(r.totals.requested)}</b>requested</div><div class="card"><b>${r.totals.funded}</b>funded</div><div class="card"><b>${money(r.totals.awarded)}</b>awarded</div></div>
   <div class="reports">
     ${table('By scheme', r.byScheme.submitted, r.byScheme.funded, { requested: true, budget: r.byScheme.budget, wide: true })}
+    ${r.byCall && r.byCall.submitted.length > 1 ? table('By call', r.byCall.submitted, r.byCall.funded, { requested: true, wide: true }) : ''}
     ${table('Funded by start month', null, r.byMonth, { months: true })}
     ${table('Gender', r.byGender.submitted, r.byGender.funded)}
     ${table('Inclusiveness Target Countries', r.byItc.submitted, r.byItc.funded)}

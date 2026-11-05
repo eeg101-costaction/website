@@ -77,10 +77,25 @@ const STEPS = ['Funding scheme', 'About you', 'Activity and dates', 'Proposal', 
 const DRAFT_KEY = 'eeg101-grant-application-draft';
 const app = document.getElementById('app');
 let step = 0;
-let state = loadDraft() || { scheme: CONFIG.preselect, working_groups: [], budget: [], documents: {} };
-if (CONFIG.preselect && !state.scheme) state.scheme = CONFIG.preselect;
+let state = loadDraft() || { scheme: '', call: '', working_groups: [], budget: [], documents: {} };
 state.documents = {}; // files are never kept between visits: upload them again
-if (state.scheme && !CONFIG.schemes[state.scheme]) state.scheme = ''; // a draft from an older version of the form
+// Calls can close, and a draft can come from an older version of the form.
+if (!CONFIG.calls.some(c => (c.id === state.call || (!state.call && CONFIG.calls.length === 1)) && c.schemes.indexOf(state.scheme) >= 0)) { state.call = ''; state.scheme = ''; }
+// A link can choose the call (?call=), the scheme (?scheme=), or both.
+const linked = CONFIG.calls.filter(c => (!CONFIG.preselectCall || c.id === CONFIG.preselectCall) && (!CONFIG.preselect || c.schemes.indexOf(CONFIG.preselect) >= 0));
+if (CONFIG.preselectCall || CONFIG.preselect) {
+  const c = linked.length === 1 ? linked[0] : null;
+  if (c) { state.call = c.id; state.scheme = CONFIG.preselect || (c.schemes.length === 1 ? c.schemes[0] : (c.schemes.indexOf(state.scheme) >= 0 ? state.scheme : '')); if (!state.scheme) state.call = c.id; }
+}
+// With several calls open and a link to one scheme, show the calls offering it.
+let onlyScheme = !CONFIG.preselectCall && CONFIG.preselect && linked.length > 1 ? CONFIG.preselect : '';
+// A link to one call (e.g. sent to a company's contacts) shows only that call.
+let onlyCall = CONFIG.preselectCall || '';
+function currentCall() { return CONFIG.calls.filter(c => c.id === state.call)[0] || (CONFIG.calls.length === 1 ? CONFIG.calls[0] : null); }
+function callQuestions() { const c = currentCall(); return c ? c.questions || [] : []; }
+function allDocuments() { const c = currentCall(); return scheme().documents.concat((c && c.documents || []).map(d => ({ id: 'call_' + d.id, label: d.label, required: !!d.required }))); }
+function periodEnd() { const c = currentCall(); return c ? c.periodEnd : ''; }
+function periodEndText() { const c = currentCall(); return c ? c.periodEndText : ''; }
 
 function esc(v) { return String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function words(t) { return (String(t || '').trim().match(/\S+/g) || []).length; }
@@ -135,14 +150,28 @@ function radios(name, legend, options, hint) {
 
 /* --------------------------------------------------------------- steps */
 
+function schemeCard(call, id) {
+  const s = CONFIG.schemes[id];
+  const on = state.scheme === id && (state.call === call.id || (!state.call && CONFIG.calls.length === 1));
+  const docs = s.documents.concat((call.documents || []).map(d => ({ label: d.label })));
+  return `<label class="scheme${on ? ' on' : ''}"><input type="radio" name="pick" value="${esc(call.id)}|${id}"${on ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">${amountText(s)}</span><span class="d">${esc(s.blurb)}</span>${call.host && s.kind === 'stsm' ? `<span class="who">Host: ${esc(call.host.institution)}${call.host.country ? ', ' + esc(call.host.country) : ''}</span>` : ''}<span class="who">For: ${esc(s.who)}</span><ul>${s.rules.map(r => `<li>${esc(r)}</li>`).join('')}<li>${s.minDays}–${s.maxDays} days. You will need: ${docs.map(d => { const l = d.label.split(' (')[0].split(',')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</li></ul></label>`;
+}
+
+function callIntro(c) {
+  return `${c.deadlineText ? `Applications close on <strong>${esc(c.deadlineText)}</strong>.` : ''} Every funded activity must be completed by <strong>${esc(c.periodEndText)}</strong>.${c.description ? `<br>${esc(c.description)}` : ''}`;
+}
+
 function viewScheme() {
+  const calls = CONFIG.calls.filter(c => (!onlyScheme || c.schemes.indexOf(onlyScheme) >= 0) && (!onlyCall || c.id === onlyCall));
+  const single = calls.length === 1;
   return `<h2>Choose a funding scheme</h2>
-  <p class="lead">${esc(CONFIG.callName)}. ${CONFIG.deadlineText ? `Applications close on <strong>${esc(CONFIG.deadlineText)}</strong>.` : ''} Every funded activity must be completed by <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
-  <div class="schemes">${Object.keys(CONFIG.schemes).map(id => { const s = CONFIG.schemes[id]; return `<label class="scheme${state.scheme === id ? ' on' : ''}"><input type="radio" name="scheme" value="${id}"${state.scheme === id ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">${amountText(s)}</span><span class="d">${esc(s.blurb)}</span><span class="who">For: ${esc(s.who)}</span><ul>${s.rules.map(r => `<li>${esc(r)}</li>`).join('')}<li>${s.minDays}–${s.maxDays} days. You will need: ${s.documents.map(d => { const l = d.label.split(' (')[0].split(',')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</li></ul></label>`; }).join('')}</div>
+  ${single ? `<p class="lead">${esc(calls[0].name)}. ${callIntro(calls[0])}${CONFIG.calls.length > 1 ? ` <button type="button" class="link" id="allCalls">See all ${CONFIG.calls.length} open calls</button>` : ''}</p><div class="schemes">${calls[0].schemes.filter(id => !onlyScheme || id === onlyScheme).map(id => schemeCard(calls[0], id)).join('')}</div>`
+    : `<p class="lead">${CONFIG.calls.length} calls are open. Choose the call and the scheme you are applying to.${onlyScheme ? ` Showing the calls that offer the ${esc(CONFIG.schemes[onlyScheme].title)}. <button type="button" class="link" id="allCalls">Show all open calls</button>` : ''}</p>
+      ${calls.map(c => `<h3>${esc(c.name)}</h3><p class="hint" style="margin-top:-4px">${callIntro(c)}</p><div class="schemes">${c.schemes.filter(id => !onlyScheme || id === onlyScheme).map(id => schemeCard(c, id)).join('')}</div>`).join('')}`}
   <div class="box"><strong>Before you start</strong><ul>
     <li>You must be a member of the EEG101 COST Action. Not a member yet? <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join through e-COST first</a>.</li>
     <li>Your institution should be in a COST Full or Cooperating Member country or a Near Neighbour Country.</li>
-    <li>The activity must start after today and end by ${esc(CONFIG.periodEndText)}, within one grant period.</li>
+    <li>The activity must start after today and end by the date its call gives, within one grant period.</li>
     <li>You cannot hold overlapping grants, or more than one type of conference grant, in the same grant period.</li>
     <li>Grants contribute to travel, accommodation, subsistence, fees and your effort. They do not pay salaries or other employment costs.</li>
     <li>Apply here only. Only if your application is accepted will we ask you to apply through COST's online platform, e-COST, with the same details and your CV in your e-COST profile. That is when COST issues your grant letter.</li>
@@ -170,11 +199,21 @@ function viewAbout() {
 function viewActivity() {
   const s = scheme();
   let specific = '';
+  const preset = s.kind === 'stsm' && currentCall() && currentCall().host;
+  if (preset) {
+    // A company call fixes the host organisation (and what the call says about it).
+    state.host_institution = preset.institution;
+    if (preset.country) state.host_country = preset.country;
+    if (preset.type) state.host_type = preset.type;
+    if (preset.name) state.host_name = preset.name;
+  }
+  const fixed = k => preset && ((k === 'host_institution') || (k === 'host_country' && preset.country) || (k === 'host_type' && preset.type) || (k === 'host_name' && preset.name));
+  const lockAttr = k => fixed(k) ? 'readonly tabindex="-1" style="background:var(--bg-alt)"' : '';
   if (s.kind === 'stsm') {
-    specific = `<h3>Your host</h3>
-    <div class="grid">${field('host_name', s.industry ? 'Host (named lead at the organisation)' : 'Host (academic lead)')}${field('host_email', 'Host email', { type: 'email' })}</div>
-    <div class="grid">${field('host_institution', s.industry ? 'Host company or organisation' : 'Host institution')}${field('host_country', 'Host country', { type: 'select', options: CONFIG.countries, hint: 'Must be a different country from your own institution\'s.' })}</div>
-    ${s.industry ? field('host_type', 'Type of organisation', { type: 'select', options: CONFIG.industryTypes }) : ''}
+    specific = `<h3>Your host</h3>${preset ? `<p class="hint">This call is for visits to <strong>${esc(preset.institution)}</strong>, so the host details it sets are filled in for you.</p>` : ''}
+    <div class="grid">${field('host_name', s.industry ? 'Host (named lead at the organisation)' : 'Host (academic lead)', { attrs: lockAttr('host_name') })}${field('host_email', 'Host email', { type: 'email' })}</div>
+    <div class="grid">${field('host_institution', s.industry ? 'Host company or organisation' : 'Host institution', { attrs: lockAttr('host_institution') })}${fixed('host_country') ? field('host_country', 'Host country', { attrs: lockAttr('host_country'), hint: 'Must be a different country from your own institution\'s.' }) : field('host_country', 'Host country', { type: 'select', options: CONFIG.countries, hint: 'Must be a different country from your own institution\'s.' })}</div>
+    ${s.industry ? (fixed('host_type') ? field('host_type', 'Type of organisation', { attrs: lockAttr('host_type') }) : field('host_type', 'Type of organisation', { type: 'select', options: CONFIG.industryTypes })) : ''}
     ${radios('host_member', 'Is your host a member of EEG101?', ['Yes', 'No'], s.industry ? 'The named lead at the host organisation must be a member before you apply.' : 'The academic lead at the host institution must be a member before you apply.')}`;
   } else if (state.scheme === 'vmg') {
     specific = `<h3>Your collaborators</h3>
@@ -193,8 +232,8 @@ function viewActivity() {
     <div class="grid">${field('presentation', 'Type of presentation', { type: 'select', options: s.presentations, hint: s.presentations.length === 1 ? 'This grant is for oral presentations only.' : '' })}${field('abstract_status', 'Abstract status', { type: 'select', options: ['Accepted', 'Submitted, awaiting decision'] })}</div>`;
   }
   return `<h2>Activity and dates</h2>
-  <p class="lead">${esc(s.title)}: ${s.minDays}–${s.maxDays} days, ending no later than <strong>${esc(CONFIG.periodEndText)}</strong>.</p>
-  <div class="grid">${field('start_date', 'Start date', { type: 'date', attrs: `min="${CONFIG.today}" max="${CONFIG.periodEnd}"` })}${field('end_date', 'End date', { type: 'date', attrs: `min="${CONFIG.today}" max="${CONFIG.periodEnd}"` })}</div>
+  <p class="lead">${esc(s.title)}: ${s.minDays}–${s.maxDays} days, ending no later than <strong>${esc(periodEndText())}</strong>.</p>
+  <div class="grid">${field('start_date', 'Start date', { type: 'date', attrs: `min="${CONFIG.today}" max="${periodEnd()}"` })}${field('end_date', 'End date', { type: 'date', attrs: `min="${CONFIG.today}" max="${periodEnd()}"` })}</div>
   <p class="hint" id="daysNote" style="margin-top:-6px"></p>
   ${specific}`;
 }
@@ -203,7 +242,8 @@ function viewProposal() {
   const w = CONFIG.words;
   return `<h2>Your proposal</h2><p class="lead">Write for reviewers from across EEG research. Plain language helps.</p>
   ${field('title', 'Title', { attrs: 'maxlength="200"' })}
-  ${scheme().questions.map(q => field(q.id, q.label, { type: 'textarea', words: w[q.id], hint: q.hint })).join('')}`;
+  ${scheme().questions.map(q => field(q.id, q.label, { type: 'textarea', words: w[q.id], hint: q.hint })).join('')}
+  ${callQuestions().length ? `<h3>Questions for ${esc(currentCall().name)}</h3>${callQuestions().map(q => field('q_' + q.id, q.label + (q.required ? '' : ' (optional)'), { type: 'textarea', words: q.words || 300, hint: q.hint || '', required: !!q.required })).join('')}` : ''}`;
 }
 
 function viewBudget() {
@@ -225,7 +265,7 @@ function viewBudget() {
 function viewDocuments() {
   const s = scheme();
   return `<h2>Documents</h2><p class="lead">PDF files only, up to ${CONFIG.maxFileMb} MB each. Each file uploads as soon as you choose it.</p>
-  ${s.documents.map(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); const doc = state.documents[d.id]; return `<div class="doc"><strong>${esc(d.label)}${needed ? '' : ' (optional)'}</strong>
+  ${allDocuments().map(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); const doc = state.documents[d.id]; return `<div class="doc"><strong>${esc(d.label)}${needed ? '' : ' (optional)'}</strong>
   <input type="file" accept="application/pdf,.pdf" data-doc="${d.id}" aria-label="${esc(d.label)}">
   <span class="status${doc ? ' ok' : ''}" id="status_${d.id}">${doc ? '✓ Uploaded: ' + esc(doc.name) : (needed ? 'Required' : 'Not uploaded')}</span></div>`; }).join('')}`;
 }
@@ -233,15 +273,15 @@ function viewDocuments() {
 function viewReview() {
   const s = scheme();
   const rows = [
-    ['Scheme', s.title], ['Applicant', `${state.first_name || ''} ${state.last_name || ''}`], ['Email', state.email], ['Institution', [state.department, state.institution].filter(Boolean).join(', ')],
+    ['Call', currentCall() ? currentCall().name : ''], ['Scheme', s.title], ['Applicant', `${state.first_name || ''} ${state.last_name || ''}`], ['Email', state.email], ['Institution', [state.department, state.institution].filter(Boolean).join(', ')],
     ['Country', state.country + (CONFIG.itc.indexOf(state.country) >= 0 ? ' (ITC)' : '')], ['Dates', `${fmtDate(state.start_date)} – ${fmtDate(state.end_date)} (${days(state.start_date, state.end_date)} days)`],
     ['Title', state.title], ['Amount requested', money(total())],
-    ['Documents', s.documents.filter(d => state.documents[d.id]).map(d => state.documents[d.id].name).join(', ') || 'None']
+    ['Documents', allDocuments().filter(d => state.documents[d.id]).map(d => state.documents[d.id].name).join(', ') || 'None']
   ];
   return `<h2>Check and submit</h2><p class="lead">Please check your answers. You can go back to change anything.</p>
   <div class="summary"><dl>${rows.map(r => `<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join('')}</dl></div>
   <label class="consent"><input type="checkbox" name="confirm_accurate"${state.confirm_accurate ? ' checked' : ''}><span>The information in this application is accurate and complete.</span></label>
-  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>If my application is accepted, I will then apply through e-COST, with my CV in my e-COST profile, as COST requires. If funded, I will follow the COST rules for this grant, complete the activity by ${esc(CONFIG.periodEndText)}, report in e-COST within 30 days of the end, and acknowledge EEG101 and COST in any outputs.</span></label>
+  <label class="consent"><input type="checkbox" name="confirm_rules"${state.confirm_rules ? ' checked' : ''}><span>If my application is accepted, I will then apply through e-COST, with my CV in my e-COST profile, as COST requires. If funded, I will follow the COST rules for this grant, complete the activity by ${esc(periodEndText())}, report in e-COST within 30 days of the end, and acknowledge EEG101 and COST in any outputs.</span></label>
   <label class="consent"><input type="checkbox" name="confirm_privacy"${state.confirm_privacy ? ' checked' : ''}><span>I agree to EEG101 storing this application and my documents, sharing them with the grant reviewers, and using anonymised totals (such as gender, ITC and career stage) in reports to COST, as described in the <a href="${esc(CONFIG.privacyUrl)}" target="_blank" rel="noopener">privacy notice</a>.</span></label>
   ${field('signature', 'Type your full name as your signature')}
   <div class="trap"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>`;
@@ -255,7 +295,7 @@ function problems() {
   const out = [];
   const need = (keys, message) => { if (keys.some(k => !String(state[k] || '').trim())) out.push(message); };
   const s = scheme();
-  if (step === 0 && !s) out.push('Choose a funding scheme.');
+  if (step === 0 && (!s || !currentCall())) out.push(CONFIG.calls.length > 1 ? 'Choose a call and a funding scheme.' : 'Choose a funding scheme.');
   if (step === 1) {
     need(['first_name', 'last_name', 'email', 'position', 'career_stage', 'institution', 'country', 'gender'], 'Complete every required field.');
     if (state.email && !/^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/.test(state.email)) out.push('Check your email address.');
@@ -268,7 +308,7 @@ function problems() {
       const n = days(state.start_date, state.end_date);
       if (state.start_date < CONFIG.today) out.push('The start date cannot be in the past.');
       if (state.end_date < state.start_date) out.push('The end date is before the start date.');
-      else if (state.end_date > CONFIG.periodEnd) out.push(`Everything must be finished by ${CONFIG.periodEndText}.`);
+      else if (state.end_date > periodEnd()) out.push(`Everything must be finished by ${periodEndText()}.`);
       else if (n < s.minDays || n > s.maxDays) out.push(`A ${s.short} lasts ${s.minDays}–${s.maxDays} days; yours is ${n}.`);
     }
     if (s.kind === 'stsm') {
@@ -292,6 +332,10 @@ function problems() {
   if (step === 3) {
     need(['title'].concat(s.questions.map(q => q.id)), 'Answer every question.');
     s.questions.forEach(q => { if (words(state[q.id]) > CONFIG.words[q.id]) out.push(`Shorten "${q.label}" to ${CONFIG.words[q.id]} words.`); });
+    callQuestions().forEach(q => {
+      if (q.required && !String(state['q_' + q.id] || '').trim()) out.push(`Answer "${q.label}".`);
+      if (words(state['q_' + q.id]) > (q.words || 300)) out.push(`Shorten "${q.label}" to ${q.words || 300} words.`);
+    });
   }
   if (step === 4) {
     const lines = (state.budget || []).filter(l => l.category || l.description || l.amount);
@@ -303,7 +347,7 @@ function problems() {
     if (words(state.justification) > CONFIG.words.justification) out.push(`Shorten the justification to ${CONFIG.words.justification} words.`);
   }
   if (step === 5) {
-    s.documents.forEach(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); if (needed && !state.documents[d.id]) out.push(`Upload: ${d.label}.`); });
+    allDocuments().forEach(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); if (needed && !state.documents[d.id]) out.push(`Upload: ${d.label}.`); });
     if (document.querySelector('.status.busy')) out.push('Wait for your files to finish uploading.');
   }
   if (step === 6) {
@@ -345,6 +389,8 @@ function bind() {
   form.addEventListener('input', onChange);
   form.addEventListener('change', onChange);
   form.addEventListener('submit', e => { e.preventDefault(); next(); });
+  const allCalls = document.getElementById('allCalls');
+  if (allCalls) allCalls.addEventListener('click', () => { onlyScheme = ''; onlyCall = ''; render(); });
   const back = document.getElementById('back');
   if (back) back.addEventListener('click', () => go(step - 1));
   const add = document.getElementById('addLine');
@@ -362,7 +408,13 @@ function onChange(e) {
   else if (el.type === 'checkbox') { state[el.name] = el.checked; }
   else if (el.type === 'radio') { if (el.checked) state[el.name] = el.value; }
   else { state[el.name] = el.value; }
-  if (el.name === 'scheme') { state.budget = []; state.documents = {}; document.querySelectorAll('.scheme').forEach(c => c.classList.toggle('on', c.querySelector('input').checked)); }
+  if (el.name === 'pick') {
+    const [call, id] = el.value.split('|');
+    if (call !== state.call || id !== state.scheme) { state.budget = []; state.documents = {}; }
+    if (call !== state.call) ['host_institution', 'host_country', 'host_type', 'host_name'].forEach(k => { delete state[k]; });
+    state.call = call; state.scheme = id; delete state.pick;
+    document.querySelectorAll('.scheme').forEach(c => c.classList.toggle('on', c.querySelector('input').checked));
+  }
   el.classList.remove('invalid');
   saveDraft();
   refresh();
@@ -402,7 +454,7 @@ function upload(input) {
 function submit() {
   const button = document.getElementById('next');
   button.disabled = true; button.textContent = 'Submitting…';
-  const payload = Object.assign({}, state, { website: (document.querySelector('[name=website]') || {}).value || '' });
+  const payload = Object.assign({}, state, { call: currentCall().id, website: (document.querySelector('[name=website]') || {}).value || '' });
   payload.budget = (state.budget || []).filter(l => l.category || l.description || l.amount);
   google.script.run
     .withSuccessHandler(done)
@@ -430,7 +482,7 @@ function done(result) {
 /* ---------------------------------------------------------------- start */
 
 if (!CONFIG.open) {
-  app.innerHTML = `<div class="done"><h2>Applications are closed</h2><p>${esc(CONFIG.callName)} is not open for applications at the moment. Calls are announced on the <a href="https://www.eeg101.eu/grants/">Grants page</a>.</p></div>`;
+  app.innerHTML = `<div class="done"><h2>Applications are closed</h2><p>No EEG101 funding call is open for applications at the moment. Calls are announced on the <a href="https://www.eeg101.eu/grants/">Grants page</a>.</p></div>`;
 } else {
   render();
 }

@@ -35,13 +35,10 @@ const GRANTS = {
   // Words, for the longer answers. Short fields have their own limits below.
   words: { summary: 200, workplan: 600, outcomes: 300, relevance: 300, benefit: 300, contribution: 250, justification: 400 },
   // Defaults for the "Settings" tab, which the chair edits in the spreadsheet.
+  // Each call (name, schemes, deadline, dates…) is a row of the "Calls" tab,
+  // managed on the portal's Calls page. The first call is made from these.
+  firstCall: { name: 'EEG101 Grant Period 2 call', period_end: '2027-09-30', id_prefix: 'G2' },
   defaults: {
-    call_name: 'EEG101 Grant Period 2 call',
-    call_open: 'FALSE',
-    deadline: '',
-    period_end: '2027-09-30',
-    id_prefix: 'G2',
-    call_schemes: 'stsm, vmg, itc_conference, yri_conference, dissemination_conference',
     blind_review: 'TRUE',
     web_app_url: '',
     budget_stsm: '',
@@ -180,7 +177,7 @@ const INDUSTRY_TYPES = ['Large company', 'SME (small or medium-sized company)', 
 // The schemes a call offers when nothing else is set: all but the special
 // industry call, which runs on its own.
 const DEFAULT_CALL_SCHEMES = Object.keys(SCHEMES).filter(id => !SCHEMES[id].industry);
-const callSchemes = settings => { const ids = String(settings.call_schemes || '').split(/[,\s]+/).filter(id => SCHEMES[id]); return ids.length ? ids : DEFAULT_CALL_SCHEMES; };
+
 const maxFor = (s, attendance) => s.maxOnline && attendance === 'Online' ? s.maxOnline : s.max;
 const budgetFor = (s, attendance) => s.budgetOnline && attendance === 'Online' ? s.budgetOnline : s.budget;
 
@@ -223,7 +220,7 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
 // Columns of the "Applications" tab, in order. Rows are written and read by
 // header name, so the chair may add columns at the end without breaking anything.
 const APPLICATION_COLUMNS = [
-  'ID', 'Submitted', 'Status', 'Scheme', 'Title', 'First name', 'Last name', 'Email', 'Institution', 'Department',
+  'ID', 'Submitted', 'Status', 'Call', 'Scheme', 'Title', 'First name', 'Last name', 'Email', 'Institution', 'Department',
   'Position', 'Country', 'ITC', 'Gender', 'Under 40 (YRI)', 'Early-career (PhD < 8 years or student)', 'Career stage',
   'EEG101 member', 'Working Groups', 'ORCID', 'Start date', 'End date', 'Days', 'Host / collaborator / conference',
   'Requested (€)', 'Eligibility notes', 'Drive folder', 'Application PDF', 'Documents',
@@ -241,6 +238,48 @@ const CONFLICT_GUIDANCE = [
   'You cooperate closely with them, for example through joint publications.',
   'You would benefit directly or indirectly from the grant, or cannot be impartial for any other reason.'
 ];
+
+/* -------------------------------------------------------------------- calls */
+
+// Calls run side by side, each with its own schemes, deadline, end date and ID
+// prefix: the main call, and special calls such as one per company for
+// industry STSMs. A call can preset the host (for a company call) and add its
+// own questions and documents to the form.
+const CALL_COLUMNS = ['Call ID', 'Name', 'Schemes', 'Open', 'Deadline', 'Period end', 'ID prefix', 'Description',
+  'Host organisation', 'Host country', 'Host type', 'Host lead', 'Questions', 'Documents', 'Budget (€)', 'Created'];
+
+function callFromRow(r) {
+  const text = (v, pattern) => v instanceof Date ? Utilities.formatDate(v, GRANTS.timezone, pattern || 'yyyy-MM-dd') : String(v == null ? '' : v).trim();
+  const list = v => { try { const x = JSON.parse(String(v || '[]')); return Array.isArray(x) ? x : []; } catch (e) { return []; } };
+  const host = text(r['Host organisation']);
+  return {
+    id: text(r['Call ID']), name: text(r['Name']), schemes: String(r['Schemes'] || '').split(/[,\s]+/).filter(id => SCHEMES[id]),
+    open: String(r['Open']).toUpperCase() === 'TRUE', deadline: text(r['Deadline'], "yyyy-MM-dd'T'HH:mm"), periodEnd: text(r['Period end']),
+    prefix: text(r['ID prefix']), description: text(r['Description']),
+    host: host ? { institution: host, country: text(r['Host country']), type: text(r['Host type']), name: text(r['Host lead']) } : null,
+    questions: list(r['Questions']), documents: list(r['Documents']), budget: asNumber(r['Budget (€)']), row: r._row
+  };
+}
+
+function readCalls() { return rowsAsObjects(tab('Calls')).map(callFromRow).filter(c => c.id); }
+
+function callIsOpen(c) {
+  if (!c.open || !c.schemes.length) return false;
+  if (!c.deadline) return true;
+  const deadline = parseDeadline(c.deadline);
+  return !deadline || new Date() <= deadline;
+}
+
+const openCalls = () => readCalls().filter(callIsOpen);
+
+// What the application form needs to know about a call.
+function callForForm(c) {
+  return {
+    id: c.id, name: c.name, description: c.description, schemes: c.schemes, host: c.host,
+    deadlineText: c.deadline ? formatDateTime(parseDeadline(c.deadline)) : '', periodEnd: c.periodEnd, periodEndText: formatDate(c.periodEnd),
+    questions: c.questions, documents: c.documents
+  };
+}
 
 /* ------------------------------------------------------------------ web app */
 
@@ -260,7 +299,7 @@ function doGet(e) {
     return page.evaluate().setTitle('EEG101 grants portal').addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
   const page = HtmlService.createTemplateFromFile('Apply');
-  page.boot = JSON.stringify(applyConfig(String(params.scheme || ''))).replace(/</g, '\\u003c');
+  page.boot = JSON.stringify(applyConfig(String(params.scheme || ''), String(params.call || ''))).replace(/</g, '\\u003c');
   return page.evaluate().setTitle('Apply for EEG101 funding').addMetaTag('viewport', 'width=device-width, initial-scale=1')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
@@ -268,12 +307,11 @@ function doGet(e) {
 // What the website's Grants page shows: whether the call is open, until when,
 // and which schemes it offers. Nothing private.
 function publicStatus() {
-  const settings = readSettings();
-  const open = isCallOpen(settings);
+  const calls = openCalls();
   return {
-    open: open, callName: settings.call_name, schemes: open ? callSchemes(settings) : [],
-    deadline: settings.deadline, deadlineText: settings.deadline ? formatDateTime(parseDeadline(settings.deadline)) : '',
-    periodEndText: formatDate(settings.period_end)
+    open: calls.length > 0,
+    schemes: calls.reduce((all, c) => all.concat(c.schemes.filter(id => all.indexOf(id) < 0)), []),
+    calls: calls.map(c => ({ id: c.id, name: c.name, schemes: c.schemes, host: c.host ? c.host.institution : '', deadlineText: c.deadline ? formatDateTime(parseDeadline(c.deadline)) : '', periodEndText: formatDate(c.periodEnd) }))
   };
 }
 
@@ -283,18 +321,16 @@ function schemeSummaries() {
   return out;
 }
 
-function applyConfig(preselect) {
-  const settings = readSettings();
+function applyConfig(preselect, preselectCall) {
+  const calls = openCalls();
+  const offered = calls.reduce((all, c) => all.concat(c.schemes.filter(id => all.indexOf(id) < 0)), []);
   return {
-    callName: settings.call_name,
-    open: isCallOpen(settings),
-    deadline: settings.deadline,
-    deadlineText: settings.deadline ? formatDateTime(parseDeadline(settings.deadline)) : '',
-    periodEnd: settings.period_end,
-    periodEndText: formatDate(settings.period_end),
+    open: calls.length > 0,
+    calls: calls.map(callForForm),
     today: Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd'),
-    preselect: callSchemes(settings).indexOf(preselect) >= 0 ? preselect : '',
-    schemes: callSchemes(settings).reduce((o, id) => { o[id] = SCHEMES[id]; return o; }, {}),
+    preselect: offered.indexOf(preselect) >= 0 ? preselect : '',
+    preselectCall: calls.some(c => c.id === String(preselectCall || '')) ? String(preselectCall) : '',
+    schemes: offered.reduce((o, id) => { o[id] = SCHEMES[id]; return o; }, {}),
     industryTypes: INDUSTRY_TYPES,
     itc: ITC_COUNTRIES,
     nnc: NNC_COUNTRIES,
@@ -326,13 +362,6 @@ function readSettings() {
   return settings;
 }
 
-function isCallOpen(settings) {
-  if (String(settings.call_open).toUpperCase() !== 'TRUE') return false;
-  if (!settings.deadline) return true;
-  const deadline = parseDeadline(settings.deadline);
-  return !deadline || new Date() <= deadline;
-}
-
 // "2026-12-15T17:00" (or a date alone, meaning the end of that day), in Brussels time.
 function parseDeadline(text) {
   const m = String(text).match(/^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2}))?$/);
@@ -357,7 +386,7 @@ function formatDateTime(date) {
 // that were uploaded through this form; the files move to the application's
 // folder on submission, and leftovers are deleted after two days.
 function uploadFile(upload) {
-  if (!isCallOpen(readSettings())) throw new Error('This call is closed, so files can no longer be uploaded.');
+  if (!openCalls().length) throw new Error('This call is closed, so files can no longer be uploaded.');
   const name = String(upload && upload.name || '').replace(/[\\/:*?"<>|\r\n]+/g, '_').slice(0, 120) || 'document.pdf';
   const data = String(upload && upload.data || '');
   if (!/\.pdf$/i.test(name)) throw new Error('Please upload a PDF file.');
@@ -391,14 +420,19 @@ const daysBetween = (a, b) => Math.round((Date.UTC(+b.slice(0, 4), +b.slice(5, 7
 // Checks everything the form checks, again, on the server: the form can be
 // bypassed, this cannot. Returns the cleaned application or throws a message
 // written for the applicant.
-function validateApplication(p, settings, today) {
+function validateApplication(p, call, today) {
   const fail = message => { throw new Error(message); };
   if (!p || typeof p !== 'object') fail('The application could not be read. Please try again.');
   if (p.website) fail('Your application could not be submitted.');
   const scheme = SCHEMES[p.scheme];
   if (!scheme) fail('Please choose a funding scheme.');
-  if (callSchemes(settings).indexOf(p.scheme) < 0) fail(`${scheme.title} is not part of this call. Please choose another scheme.`);
-  const a = { scheme: p.scheme };
+  if (call.schemes.indexOf(p.scheme) < 0) fail(`${scheme.title} is not part of ${call.name}. Please choose another scheme.`);
+  // A company call fixes the host: the form shows it, and it is set here too.
+  if (call.host && scheme.kind === 'stsm') {
+    const h = call.host;
+    p = Object.assign({}, p, { host_institution: h.institution }, h.country ? { host_country: h.country } : {}, h.type ? { host_type: h.type } : {}, h.name ? { host_name: h.name } : {});
+  }
+  const a = { scheme: p.scheme, call_id: call.id, call_name: call.name };
 
   ['first_name', 'last_name', 'institution', 'position'].forEach(key => { a[key] = clean(p[key], 150); if (!a[key]) fail('Please complete all the fields about you.'); });
   a.department = clean(p.department, 150);
@@ -423,7 +457,7 @@ function validateApplication(p, settings, today) {
   if (!DATE_PATTERN.test(a.start_date) || !DATE_PATTERN.test(a.end_date)) fail('Please give a start and end date.');
   if (a.start_date < today) fail('The start date cannot be in the past.');
   if (a.end_date < a.start_date) fail('The end date is before the start date.');
-  if (a.end_date > settings.period_end) fail(`All activities must be completed by ${formatDate(settings.period_end)}. Please choose an end date on or before then.`);
+  if (a.end_date > call.periodEnd) fail(`All activities must be completed by ${formatDate(call.periodEnd)}. Please choose an end date on or before then.`);
   a.days = daysBetween(a.start_date, a.end_date);
   if (a.days < scheme.minDays || a.days > scheme.maxDays) fail(`A ${scheme.short} must last between ${scheme.minDays} and ${scheme.maxDays} days; yours is ${a.days}.`);
 
@@ -475,6 +509,14 @@ function validateApplication(p, settings, today) {
     if (!a[q.id]) fail(`Please answer ${what}.`);
     if (countWords(a[q.id]) > GRANTS.words[q.id]) fail(`Please shorten ${what} to ${GRANTS.words[q.id]} words or fewer.`);
   });
+  // The call's own questions.
+  a.call_answers = (call.questions || []).map(q => {
+    const answer = clean(p['q_' + q.id], 8000);
+    const limit = Number(q.words) || 300;
+    if (!answer && q.required) fail(`Please answer "${q.label}".`);
+    if (countWords(answer) > limit) fail(`Please shorten "${q.label}" to ${limit} words or fewer.`);
+    return { id: q.id, label: q.label, answer: answer };
+  });
 
   // The budget: every line in a category this scheme allows, a positive amount,
   // and a total within the scheme's maximum.
@@ -500,7 +542,7 @@ function validateApplication(p, settings, today) {
   // required one present.
   a.documents = {};
   const docs = (p.documents && typeof p.documents === 'object') ? p.documents : {};
-  scheme.documents.forEach(d => {
+  scheme.documents.concat((call.documents || []).map(d => ({ id: 'call_' + d.id, label: d.label, required: !!d.required }))).forEach(d => {
     const doc = docs[d.id];
     const needed = d.required || (d.requiredIf && a[d.requiredIf] === 'Yes');
     if (doc && doc.id) {
@@ -524,10 +566,13 @@ function validateApplication(p, settings, today) {
 }
 
 function submitApplication(payload) {
-  const settings = readSettings();
-  if (!isCallOpen(settings)) throw new Error('This call is closed, so applications can no longer be submitted.');
+  const calls = openCalls();
+  const asked = String(payload && payload.call || '');
+  let call = calls.filter(c => c.id === asked)[0];
+  if (!call && !asked) { const offering = calls.filter(c => c.schemes.indexOf(String(payload && payload.scheme)) >= 0); if (offering.length === 1) call = offering[0]; }
+  if (!call) throw new Error(asked || !calls.length ? 'This call is closed, so applications can no longer be submitted.' : 'Please choose the call you are applying to.');
   const today = Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd');
-  const a = validateApplication(payload, settings, today);
+  const a = validateApplication(payload, call, today);
 
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -535,13 +580,12 @@ function submitApplication(payload) {
   try {
     const sheet = tab('Applications');
     const ids = sheet.getLastRow() > 1 ? sheet.getRange(2, 1, sheet.getLastRow() - 1, 1).getValues().map(r => String(r[0])) : [];
-    const prefix = `EEG101-${settings.id_prefix || 'G'}-`;
+    const prefix = `EEG101-${call.prefix || 'G'}-`;
     const next = ids.filter(x => x.indexOf(prefix) === 0).map(x => Number(x.slice(prefix.length)) || 0).reduce((m, n) => Math.max(m, n), 0) + 1;
     id = prefix + String(next).padStart(3, '0');
     a.id = id;
     a.submitted = new Date();
     a.submitted_text = formatDateTime(a.submitted);
-    a.call_name = settings.call_name;
 
     folder = rootFolder().createFolder(`${id} – ${a.last_name}, ${a.first_name} – ${SCHEMES[a.scheme].short}`);
     Object.keys(a.documents).forEach(key => {
@@ -577,7 +621,7 @@ function applicationRow(a) {
   const data = Object.assign({}, a);
   delete data.submitted;
   return {
-    'ID': a.id, 'Submitted': a.submitted, 'Status': 'Submitted', 'Scheme': scheme.short, 'Title': a.title,
+    'ID': a.id, 'Submitted': a.submitted, 'Status': 'Submitted', 'Call': a.call_id, 'Scheme': scheme.short, 'Title': a.title,
     'First name': a.first_name, 'Last name': a.last_name, 'Email': a.email, 'Institution': a.institution, 'Department': a.department,
     'Position': a.position, 'Country': a.country, 'ITC': a.itc, 'Gender': a.gender_other ? `${a.gender}: ${a.gender_other}` : a.gender,
     'Under 40 (YRI)': a.yri, 'Early-career (PhD < 8 years or student)': a.eci, 'Career stage': a.career_stage,
@@ -612,7 +656,8 @@ function applicationHtml(a, blind) {
   const max = a.max || maxFor(s, a.attendance);
   const budget = `<table class="budget"><thead><tr><th>Category</th><th>Description</th><th class="num">€</th></tr></thead><tbody>${a.budget.map(l => `<tr><td>${esc(l.category)}</td><td>${esc(l.description)}</td><td class="num">${l.amount.toFixed(2)}</td></tr>`).join('')}<tr class="total"><td colspan="2">Total requested (maximum €${max})</td><td class="num">${a.total.toFixed(2)}</td></tr></tbody></table>`;
   const docs = Object.keys(a.documents).map(k => `<li>${esc(a.documents[k].label)}${blind ? '' : `: ${esc(a.documents[k].name)}`}</li>`).join('') || '<li>None</li>';
-  const questions = (s.questions || []).filter(q => a[q.id]).map(q => `<h3>${esc(q.label)}</h3>${para(a[q.id])}`).join('');
+  const questions = (s.questions || []).filter(q => a[q.id]).map(q => `<h3>${esc(q.label)}</h3>${para(a[q.id])}`).join('')
+    + (a.call_answers || []).filter(x => x.answer).map(x => `<h3>${esc(x.label)}</h3>${para(x.answer)}`).join('');
   const applicant = blind
     ? `<table>${row('Position', a.position)}${row('Country of institution', `${a.country}${a.itc === 'Yes' ? ' (ITC)' : ''}`)}${row('Career stage', a.career_stage)}${row('Under 40 (YRI)', a.yri)}${row('Early-career researcher', a.eci)}${row('EEG101 member', a.member)}${row('Working Groups', a.working_groups.join(', '))}</table><p class="meta">Shown without the applicant's name, contact details and institution, for blind review.</p>`
     : `<table>${row('Name', `${a.first_name} ${a.last_name}`)}${row('Email', a.email)}${row('Position', a.position)}${row('Institution', [a.department, a.institution].filter(Boolean).join(', '))}${row('Country', `${a.country}${a.itc === 'Yes' ? ' (ITC)' : ''}`)}${row('ORCID', a.orcid)}${row('Career stage', a.career_stage)}${row('Under 40 (YRI)', a.yri)}${row('Early-career researcher', a.eci)}${row('Gender', a.gender_other ? `${a.gender}: ${a.gender_other}` : a.gender)}${row('EEG101 member', a.member)}${row('Working Groups', a.working_groups.join(', '))}</table>`;
@@ -736,14 +781,21 @@ function setUpGrants() {
   ensure('Reviews', REVIEW_COLUMNS);
   const reviewers = ensure('Reviewers', REVIEWER_COLUMNS);
   if (reviewers.getLastRow() === 1) reviewers.appendRow([Session.getEffectiveUser().getEmail(), 'Grants chair', 'chair']);
+  const callsTab = ensure('Calls', CALL_COLUMNS);
+  callsTab.getRange('E:F').setNumberFormat('@');
+  if (callsTab.getLastRow() === 1) {
+    // The first call, from the call settings of an earlier version if there are any.
+    let old = {};
+    try { old = readSettings(); } catch (error) { old = {}; }
+    const f = GRANTS.firstCall;
+    appendRow(callsTab, CALL_COLUMNS, {
+      'Call ID': 'main', 'Name': old.call_name || f.name, 'Schemes': old.call_schemes || DEFAULT_CALL_SCHEMES.join(', '),
+      'Open': String(old.call_open).toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE', 'Deadline': old.deadline || '', 'Period end': old.period_end || f.period_end,
+      'ID prefix': old.id_prefix || f.id_prefix, 'Questions': '[]', 'Documents': '[]', 'Created': new Date()
+    });
+  }
   const settings = ensure('Settings', ['Setting', 'Value', 'What it means']);
   const help = {
-    call_name: 'Shown on the form and in emails.',
-    call_open: 'TRUE to accept applications, FALSE to close the form.',
-    deadline: 'Closing time in Brussels time, e.g. 2026-12-15T17:00. The form closes by itself after it. Empty: open until call_open is FALSE.',
-    period_end: 'Every activity must end on or before this date (YYYY-MM-DD).',
-    id_prefix: 'Middle part of application IDs, e.g. G2 gives EEG101-G2-001.',
-    call_schemes: 'The schemes this call offers, e.g. "stsm_industry" for the industry STSM call. Set in the portal.',
     budget_stsm: 'Optional: money available for STSMs in this call, for the budget tracker (€).',
     budget_vmg: 'Optional: money available for VMGs (€).',
     budget_itc_conference: 'Optional: money available for ITC Conference Grants (€).',
@@ -1020,18 +1072,27 @@ function reportDue(end, periodEnd) {
   return DATE_PATTERN.test(periodEnd) && addDays(periodEnd, 15) < a ? addDays(periodEnd, 15) : a;
 }
 
+// The end of the grant period for an application: its call's.
+function periodEnds() {
+  const byCall = {};
+  readCalls().forEach(c => { byCall[c.id] = c.periodEnd; });
+  return r => byCall[String(r['Call'])] || GRANTS.firstCall.period_end;
+}
+
 // Chairs and the grants administrator: every funded application, with where it
 // is and what is due.
 function listFunded(key) {
   const me = requireReviewer(key, true, true);
-  const settings = readSettings();
+  const ends = periodEnds();
+  const calls = readCalls();
   const today = Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd');
   const grants = rowsAsObjects(tab('Applications')).filter(r => String(r['Decision']) === 'Funded').map(r => {
     const start = iso(r['Start date']), end = iso(r['End date']);
     const status = String(r['Grant status'] || '') || GRANT_STATUSES[0];
-    const due = reportDue(end, settings.period_end);
+    const due = reportDue(end, ends(r));
     return {
       id: String(r['ID']), applicant: `${r['First name']} ${r['Last name']}`, email: String(r['Email']), scheme: String(r['Scheme']), title: String(r['Title']),
+      callName: (calls.filter(c => c.id === String(r['Call']))[0] || {}).name || '',
       country: String(r['Country']), awarded: asNumber(r['Awarded (€)']), start: start, end: end, reportDue: due,
       daysToReport: due ? daysBetween(today, due) - 1 : null, started: !!start && start <= today, ended: !!end && end < today,
       status: status, done: GRANT_DONE.indexOf(status) >= 0,
@@ -1076,7 +1137,7 @@ function updateGrants(key, changes) {
 // cancelled, are skipped. Copied to the EEG101 address, for the record.
 function sendGrantReminders(key, ids) {
   requireReviewer(key, true, true);
-  const settings = readSettings();
+  const ends = periodEnds();
   const sheet = tab('Applications');
   ensureColumns(sheet, APPLICATION_COLUMNS);
   const { map } = headerMap(sheet);
@@ -1087,7 +1148,7 @@ function sendGrantReminders(key, ids) {
     if (!r) { skipped.push(`${id} is not a funded grant.`); return; }
     const status = String(r['Grant status'] || '') || GRANT_STATUSES[0];
     if (GRANT_DONE.indexOf(status) >= 0) { skipped.push(`${id}: ${status}, so no reminder is needed.`); return; }
-    const due = reportDue(iso(r['End date']), settings.period_end);
+    const due = reportDue(iso(r['End date']), ends(r));
     const ecost = status === 'Awaiting e-COST application';
     const awarded = asNumber(r['Awarded (€)']) || 0;
     const text = [
@@ -1113,49 +1174,123 @@ function sendGrantReminders(key, ids) {
   return out;
 }
 
-/* ---------------------------------------------------- portal: call settings */
+/* ------------------------------------------------------------ portal: calls */
 
-const CALL_FIELDS = [
-  { key: 'call_name', label: 'Name of the call', type: 'text', help: 'Shown on the form and in emails.' },
-  { key: 'call_open', label: 'Accepting applications', type: 'bool', help: 'The form also closes by itself at the deadline.' },
-  { key: 'deadline', label: 'Deadline (Brussels time)', type: 'datetime', help: 'Empty: open until you switch it off.' },
-  { key: 'period_end', label: 'Activities must end by', type: 'date', help: 'The end of the grant period.' },
-  { key: 'id_prefix', label: 'Application ID prefix', type: 'text', help: 'e.g. G2 gives EEG101-G2-001. Change it for each new call.' },
-  { key: 'call_schemes', label: 'Schemes in this call', type: 'schemes', help: 'Only these appear on the form, and as open on the website\'s Grants page.', options: Object.keys(SCHEMES).map(id => ({ id: id, title: SCHEMES[id].title })) },
-  { key: 'blind_review', label: 'Blind review', type: 'bool', help: 'On: reviewers who are not chairs do not see who applied or their documents.' }
-].concat(Object.keys(SCHEMES).map(id => ({ key: 'budget_' + id, label: `Budget: ${SCHEMES[id].short} (€)`, type: 'money', help: 'Optional, for the budget tracker.' })));
-
-function getCallSettings(key) {
+// Chair only: every call, with its applications so far, and the settings that
+// apply to all calls (blind review, money per scheme).
+function listCalls(key) {
   requireReviewer(key, true);
   const settings = readSettings();
-  const values = {};
-  CALL_FIELDS.forEach(f => { values[f.key] = f.type === 'bool' ? String(settings[f.key]).toUpperCase() === 'TRUE' : f.type === 'schemes' ? callSchemes(settings) : String(settings[f.key] == null ? '' : settings[f.key]); });
-  return { fields: CALL_FIELDS, values: values, open: isCallOpen(settings), formUrl: (() => { try { return appUrl(); } catch (e) { return ''; } })() };
+  const apps = rowsAsObjects(tab('Applications'));
+  const calls = readCalls().map(c => {
+    const mine = apps.filter(r => String(r['Call']) === c.id);
+    const funded = mine.filter(r => String(r['Decision']) === 'Funded');
+    return Object.assign(callForForm(c), {
+      open: c.open, accepting: callIsOpen(c), deadline: c.deadline, prefix: c.prefix, budget: c.budget,
+      applications: mine.length, funded: funded.length, awarded: Math.round(funded.reduce((t, r) => t + (asNumber(r['Awarded (€)']) || 0), 0) * 100) / 100
+    });
+  });
+  const budgets = {};
+  Object.keys(SCHEMES).forEach(id => { budgets[id] = String(settings['budget_' + id] || ''); });
+  let formUrl = '';
+  try { formUrl = appUrl(); } catch (e) { formUrl = ''; }
+  return {
+    calls: calls, blindReview: String(settings.blind_review).toUpperCase() !== 'FALSE', budgets: budgets, formUrl: formUrl,
+    schemes: Object.keys(SCHEMES).map(id => ({ id: id, title: SCHEMES[id].title, kind: SCHEMES[id].kind })),
+    countries: COUNTRIES, industryTypes: INDUSTRY_TYPES
+  };
 }
 
-function saveCallSettings(key, input) {
+const slug = text => String(text || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'call';
+
+// Chair only: create a call (no id) or change one.
+function saveCall(key, input) {
   requireReviewer(key, true);
-  const out = {};
-  CALL_FIELDS.forEach(f => {
-    const v = input ? input[f.key] : undefined;
-    if (v === undefined) return;
-    if (f.type === 'bool') out[f.key] = v === true || String(v).toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE';
-    else if (f.type === 'schemes') {
-      const ids = (Array.isArray(v) ? v : String(v).split(/[,\s]+/)).map(String).filter(id => SCHEMES[id]);
-      if (!ids.length) throw new Error('Choose at least one scheme for the call.');
-      out[f.key] = ids.join(', ');
+  input = input || {};
+  const name = clean(input.name, 150);
+  if (!name) throw new Error('Please give the call a name.');
+  const schemes = (Array.isArray(input.schemes) ? input.schemes : []).map(String).filter(id => SCHEMES[id]);
+  if (!schemes.length) throw new Error('Choose at least one scheme for the call.');
+  const deadline = clean(input.deadline, 20);
+  if (deadline && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(deadline)) throw new Error('Please give the deadline as a date and time.');
+  const periodEnd = clean(input.periodEnd, 10);
+  if (!DATE_PATTERN.test(periodEnd)) throw new Error('Please give the date activities must end by.');
+  const prefix = clean(input.prefix, 8).toUpperCase();
+  if (!/^[A-Z0-9]{1,8}$/.test(prefix)) throw new Error('The ID prefix should be up to 8 letters or numbers, e.g. G2 or IND1.');
+  const budget = clean(input.budget, 20);
+  if (budget && !(Number(budget) >= 0)) throw new Error('The budget should be an amount in euros, or empty.');
+  const host = input.host && clean(input.host.institution, 150) ? input.host : null;
+  if (host && host.country && COUNTRIES.indexOf(host.country) < 0) throw new Error('Please choose the host country from the list.');
+  if (host && host.type && INDUSTRY_TYPES.indexOf(host.type) < 0) throw new Error('Please choose the type of host organisation from the list.');
+  const ids = {};
+  const items = (list, kind) => (Array.isArray(list) ? list : []).map((x, i) => {
+    const label = clean(x && x.label, 200);
+    if (!label) return null;
+    let id = String(x.id || '').replace(/[^a-z0-9]/gi, '').slice(0, 12) || `${kind}${i + 1}`;
+    while (ids[kind + ':' + id]) id += 'x';
+    ids[kind + ':' + id] = true;
+    const out = { id: id, label: label, required: !!x.required };
+    if (kind === 'q') { out.hint = clean(x.hint, 300); out.words = Math.max(20, Math.min(1000, Math.round(Number(x.words) || 300))); }
+    return out;
+  }).filter(Boolean);
+  const questions = items(input.questions, 'q'), documents = items(input.documents, 'd');
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  let id;
+  try {
+    const sheet = tab('Calls');
+    ensureColumns(sheet, CALL_COLUMNS);
+    const calls = readCalls();
+    const existing = input.id ? calls.filter(c => c.id === String(input.id))[0] : null;
+    if (input.id && !existing) throw new Error('That call no longer exists.');
+    if (calls.some(c => c !== existing && c.prefix.toUpperCase() === prefix)) throw new Error(`Another call already uses the ID prefix ${prefix}.`);
+    if (existing && existing.prefix !== prefix && rowsAsObjects(tab('Applications')).some(r => String(r['Call']) === existing.id)) throw new Error('This call already has applications, so its ID prefix cannot change.');
+    id = existing ? existing.id : slug(name);
+    if (!existing) { let n = 2; const base = id; while (calls.some(c => c.id === id)) id = `${base}-${n++}`; }
+    const values = {
+      'Call ID': id, 'Name': name, 'Schemes': schemes.join(', '), 'Open': input.open ? 'TRUE' : 'FALSE', 'Deadline': deadline, 'Period end': periodEnd,
+      'ID prefix': prefix, 'Description': clean(input.description, 1000),
+      'Host organisation': host ? clean(host.institution, 150) : '', 'Host country': host ? clean(host.country, 100) : '', 'Host type': host ? clean(host.type, 60) : '', 'Host lead': host ? clean(host.name, 150) : '',
+      'Questions': JSON.stringify(questions), 'Documents': JSON.stringify(documents), 'Budget (€)': budget
+    };
+    if (existing) {
+      const { map } = headerMap(sheet);
+      Object.keys(values).forEach(h => sheet.getRange(existing.row, map[h] + 1).setValue(values[h]));
     } else {
-      const t = clean(v, 150);
-      if (f.key === 'call_name' && !t) throw new Error('Please give the call a name.');
-      if (f.type === 'datetime' && t && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(t)) throw new Error('Please give the deadline as a date and time.');
-      if (f.type === 'date' && !DATE_PATTERN.test(t)) throw new Error('Please give the end of the grant period as a date.');
-      if (f.key === 'id_prefix' && !/^[A-Za-z0-9]{1,8}$/.test(t)) throw new Error('The ID prefix should be up to 8 letters or numbers, e.g. G2.');
-      if (f.type === 'money' && t && !(Number(t) >= 0)) throw new Error(`${f.label} should be an amount in euros, or empty.`);
-      out[f.key] = t;
+      values['Created'] = new Date();
+      appendRow(sheet, CALL_COLUMNS, values);
     }
+  } finally {
+    lock.releaseLock();
+  }
+  const out = listCalls(key);
+  out.saved = id;
+  return out;
+}
+
+// Chair only: a call with no applications can be deleted; otherwise close it.
+function deleteCall(key, id) {
+  requireReviewer(key, true);
+  const call = readCalls().filter(c => c.id === String(id))[0];
+  if (!call) throw new Error('That call no longer exists.');
+  if (rowsAsObjects(tab('Applications')).some(r => String(r['Call']) === call.id)) throw new Error('This call has applications, so it cannot be deleted. Close it instead.');
+  tab('Calls').deleteRow(call.row);
+  return listCalls(key);
+}
+
+// Chair only: blind review and the money available per scheme, for all calls.
+function saveGrantSettings(key, input) {
+  requireReviewer(key, true);
+  input = input || {};
+  if (input.blindReview !== undefined) setSetting('blind_review', input.blindReview ? 'TRUE' : 'FALSE');
+  Object.keys(input.budgets || {}).forEach(id => {
+    if (!SCHEMES[id]) return;
+    const v = clean(input.budgets[id], 20);
+    if (v && !(Number(v) >= 0)) throw new Error(`The budget for ${SCHEMES[id].short} should be an amount in euros, or empty.`);
+    setSetting('budget_' + id, v);
   });
-  Object.keys(out).forEach(k => setSetting(k, out[k]));
-  return getCallSettings(key);
+  return listCalls(key);
 }
 
 /* ------------------------------------------------------------------- review */
@@ -1218,16 +1353,17 @@ function reviewsByApplication() {
 function overlapWarnings(rows) {
   const byShort = {};
   Object.keys(SCHEMES).forEach(id => { byShort[SCHEMES[id].short] = SCHEMES[id]; });
+  const period = periodEnds();
   const live = rows.filter(r => ['Not funded', 'Withdrawn'].indexOf(String(r['Decision'])) < 0).map(r => ({
-    id: String(r['ID']), call: String(r['ID']).replace(/-\d+$/, ''), email: String(r['Email']).toLowerCase(),
+    id: String(r['ID']), period: period(r), email: String(r['Email']).toLowerCase(),
     scheme: String(r['Scheme']), kind: (byShort[String(r['Scheme'])] || {}).kind, start: iso(r['Start date']), end: iso(r['End date'])
   }));
   const out = {};
   const add = (id, text) => { (out[id] = out[id] || []).push(text); };
   live.forEach((x, i) => live.slice(i + 1).forEach(y => {
-    if (x.email !== y.email || x.call !== y.call) return;
+    if (x.email !== y.email) return;
     if (x.start <= y.end && y.start <= x.end) { add(x.id, `Dates overlap with ${y.id} (${y.scheme}) by the same applicant.`); add(y.id, `Dates overlap with ${x.id} (${x.scheme}) by the same applicant.`); }
-    if (x.kind === 'conference' && y.kind === 'conference' && x.scheme !== y.scheme) { add(x.id, `The applicant also applied for a ${y.scheme} (${y.id}); only one type of conference grant is allowed per grant period.`); add(y.id, `The applicant also applied for a ${x.scheme} (${x.id}); only one type of conference grant is allowed per grant period.`); }
+    if (x.period === y.period && x.kind === 'conference' && y.kind === 'conference' && x.scheme !== y.scheme) { add(x.id, `The applicant also applied for a ${y.scheme} (${y.id}); only one type of conference grant is allowed per grant period.`); add(y.id, `The applicant also applied for a ${x.scheme} (${x.id}); only one type of conference grant is allowed per grant period.`); }
   }));
   return out;
 }
@@ -1245,6 +1381,8 @@ function listApplications(key) {
   const warnings = overlapWarnings(rows);
   const people = reviewerList();
   const nameOf = e => (people.filter(p => p.email === e)[0] || {}).name || e;
+  const calls = readCalls();
+  const callNameOf = id => (calls.filter(c => c.id === id)[0] || {}).name || '';
   const apps = rows.filter(r => canAccess(me, r)).map(r => {
     const id = String(r['ID']);
     const all = reviews[id] || [];
@@ -1254,7 +1392,7 @@ function listApplications(key) {
     const scored = all.filter(x => !x.conflict && x.mean != null);
     const canSee = !conflicted && (me.chair || !!mine);
     return {
-      id: id, submitted: iso(r['Submitted']), scheme: String(r['Scheme']), title: String(r['Title']),
+      id: id, submitted: iso(r['Submitted']), call: String(r['Call'] || ''), callName: callNameOf(String(r['Call'] || '')), scheme: String(r['Scheme']), title: String(r['Title']),
       applicant: blind ? '' : `${r['First name']} ${r['Last name']}`, institution: blind ? '' : String(r['Institution']), country: String(r['Country']), itc: String(r['ITC']),
       gender: blind ? '' : String(r['Gender']), yri: String(r['Under 40 (YRI)']), eci: String(r['Early-career (PhD < 8 years or student)']), career: String(r['Career stage']),
       start: iso(r['Start date']), end: iso(r['End date']), days: asNumber(r['Days']),
@@ -1268,7 +1406,7 @@ function listApplications(key) {
       mine: mine, others: canSee ? all.filter(x => x.reviewer !== me.email) : []
     };
   });
-  return { me: me, blind: blind, applications: apps, settings: settings, reviewers: me.chair ? people.filter(p => !p.admin).map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
+  return { me: me, blind: blind, applications: apps, settings: settings, calls: calls.map(c => ({ id: c.id, name: c.name, budget: c.budget })), reviewers: me.chair ? people.filter(p => !p.admin).map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
 }
 
 function applicationRecord(id) {
@@ -1398,6 +1536,8 @@ function getReport(key) {
   if (isBlind(me, settings)) throw new Error('Reports are for chairs while review is blind.');
   const apps = rowsAsObjects(tab('Applications'));
   const funded = apps.filter(r => String(r['Decision']) === 'Funded');
+  const names = {}; readCalls().forEach(c => { names[c.id] = c.name; });
+  const callName = r => names[String(r['Call'])] || String(r['Call'] || '');
   const group = (rows, keyFn, valueFn) => {
     const out = {};
     rows.forEach(r => { const k = keyFn(r) || 'Not stated'; out[k] = out[k] || { count: 0, amount: 0 }; out[k].count += 1; out[k].amount += valueFn ? (valueFn(r) || 0) : 0; });
@@ -1409,7 +1549,8 @@ function getReport(key) {
   const schemeBudget = {};
   Object.keys(SCHEMES).forEach(id => { schemeBudget[SCHEMES[id].short] = asNumber(settings['budget_' + id]); });
   return {
-    generated: formatDateTime(new Date()), callName: settings.call_name,
+    generated: formatDateTime(new Date()), callName: readCalls().map(c => c.name).join(', '),
+    byCall: { submitted: group(apps, r => callName(r), requested), funded: group(funded, r => callName(r), awarded) },
     totals: { submitted: apps.length, requested: Math.round(apps.reduce((s, r) => s + requested(r), 0) * 100) / 100, funded: funded.length, awarded: Math.round(funded.reduce((s, r) => s + awarded(r), 0) * 100) / 100 },
     byScheme: { submitted: group(apps, r => String(r['Scheme']), requested), funded: group(funded, r => String(r['Scheme']), awarded), budget: schemeBudget },
     byMonth: group(funded, month, awarded),

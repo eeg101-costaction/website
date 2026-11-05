@@ -221,11 +221,14 @@ For further guidance, consult the [COST funding pages](https://www.cost.eu/fundi
       var notes = section.querySelector('[data-grant-notes]');
       if (open) {
         badge.className = 'grant-status grant-status--open'; badge.textContent = '● Open now';
-        if (deadline && live.deadlineText) deadline.textContent = live.deadlineText + '. Activities must end by ' + live.periodEndText + '.';
+        // One call offering this scheme, or several (e.g. one per company).
+        var calls = (live.calls || []).filter(function (c) { return c.schemes.indexOf(id) >= 0; });
+        if (deadline && calls.length === 1) deadline.textContent = (calls[0].deadlineText || 'Open') + '. Activities must end by ' + calls[0].periodEndText + '.';
+        else if (deadline && calls.length > 1) deadline.textContent = calls.map(function (c) { return c.name + ': ' + (c.deadlineText ? 'closes ' + c.deadlineText : 'open'); }).join('; ') + '.';
         if (notes) notes.hidden = true;
         if (actions && !button) {
           var a = document.createElement('a');
-          a.href = apply + '?scheme=' + id; a.className = 'btn btn-primary'; a.textContent = 'Apply now';
+          a.href = apply + '?scheme=' + id + (calls.length === 1 ? '&call=' + encodeURIComponent(calls[0].id) : ''); a.className = 'btn btn-primary'; a.textContent = 'Apply now';
           actions.insertBefore(a, actions.firstChild);
         }
       } else if (badge.classList.contains('grant-status--open')) {
