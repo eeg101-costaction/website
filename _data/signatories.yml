@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-04"
+generated: "2026-11-05"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 182
-public_count: 145
+total: 183
+public_count: 146
 
 people:
   - name: "Enes Abanoz"
@@ -104,6 +104,8 @@ people:
     affiliation: "Paris Brain Institute - ICM"
   - name: "Branislav Gerazov"
     affiliation: "FEEIT, Ss Cyril and Methodius in Skopje, Macedonia"
+  - name: "Carmen Brigitte Aguilar Gonzales"
+    affiliation: "Faculty of Engineering, National University of Entre Ríos"
   - name: "Klaus Gramann"
     affiliation: "Technische Univeristaet Berlin"
   - name: "Romain Grandchamp"
