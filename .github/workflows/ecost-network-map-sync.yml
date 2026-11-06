@@ -16,7 +16,9 @@ concurrency:
 jobs:
   sync-network-map:
     name: Export eCOST membership and stage map update
-    runs-on: ubuntu-latest
+    # Pinned: Playwright 1.52 cannot install Chromium on Ubuntu 26.04, which
+    # ubuntu-latest moved to in November 2026.
+    runs-on: ubuntu-24.04
     env:
       ECOST_EMAIL: ${{ secrets.ECOST_EMAIL }}
       ECOST_PASSWORD: ${{ secrets.ECOST_PASSWORD }}
