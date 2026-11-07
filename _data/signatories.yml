@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-06"
+generated: "2026-11-07"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 186
-public_count: 149
+total: 187
+public_count: 150
 
 people:
   - name: "Enes Abanoz"
@@ -294,6 +294,8 @@ people:
     affiliation: "University of Oldenburg"
   - name: "Franz Wurm"
     affiliation: "Leiden University"
+  - name: "Lei XI"
+    affiliation: "Huazhong University of Science and Technology"
   - name: "Selen Yaka"
     affiliation: "Bogazici University"
   - name: "Melek Öyküm Yalçın"
