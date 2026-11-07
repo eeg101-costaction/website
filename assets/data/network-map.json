@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 567,
+  "member_count": 568,
   "site_count": 326,
   "country_count": 57,
   "countries": [
@@ -272,7 +272,7 @@
     {
       "name": "Türkiye",
       "site_count": 63,
-      "member_count": 110
+      "member_count": 111
     },
     {
       "name": "United Kingdom",
@@ -4041,6 +4041,17 @@
           "orcid": "0000-0001-8894-5794"
         },
         {
+          "name": "Lütfi Mutlu",
+          "affiliation": "Izmir Ekonomi Universitesi",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "lutfi.mutlu [at] ieu [dot] edu [dot] tr",
+          "homepage": "https://scholar.google.com/citations?hl=tr&user=qWLqpL8AAAAJ",
+          "orcid": "0000-0002-6133-4528"
+        },
+        {
           "name": "Uğur Emin Baynal",
           "affiliation": "Izmir Ekonomi Universitesi",
           "working_groups": [
@@ -4053,7 +4064,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 2,
+      "member_count": 3,
       "working_groups": [
         "WG1",
         "WG2",
