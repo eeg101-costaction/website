@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 568,
+  "member_count": 570,
   "site_count": 326,
   "country_count": 57,
   "countries": [
@@ -217,7 +217,7 @@
     {
       "name": "Portugal",
       "site_count": 15,
-      "member_count": 25
+      "member_count": 26
     },
     {
       "name": "Romania",
@@ -237,7 +237,7 @@
     {
       "name": "Singapore",
       "site_count": 1,
-      "member_count": 2
+      "member_count": 3
     },
     {
       "name": "Slovakia",
@@ -3777,6 +3777,18 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "Aíssa Baldé",
+          "affiliation": "Iscte - Instituto Universitário de Lisboa",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "amnbe [at] iscte-iul [dot] pt",
+          "homepage": "https://www.researchgate.net/profile/Aissa-Balde?ev=hdr_xprf",
+          "orcid": ""
+        },
+        {
           "name": "Khaoula Ennahli",
           "affiliation": "Iscte - Instituto Universitário de Lisboa",
           "working_groups": [
@@ -3789,7 +3801,7 @@
           "orcid": "0009-0004-3761-1486"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
         "WG2",
@@ -5482,6 +5494,17 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "Aung Aung Phyo Wai",
+          "affiliation": "Nanyang Technological University",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "apwaung [at] ntu [dot] edu [dot] sg",
+          "homepage": "https://www.researchgate.net/profile/Aung-Aung-Phyo-Wai-2; https://aung-aung-phyo-wai.apwaung.chatgpt.site/",
+          "orcid": "0000-0002-5734-5689"
+        },
+        {
           "name": "Nastassja Lopes Fischer",
           "affiliation": "Nanyang Technological University",
           "working_groups": [
@@ -5505,7 +5528,7 @@
           "orcid": "0000-0003-3517-9680"
         }
       ],
-      "member_count": 2,
+      "member_count": 3,
       "working_groups": [
         "WG1",
         "WG2",
