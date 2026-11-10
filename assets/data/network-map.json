@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 570,
+  "member_count": 571,
   "site_count": 326,
   "country_count": 57,
   "countries": [
@@ -277,7 +277,7 @@
     {
       "name": "United Kingdom",
       "site_count": 21,
-      "member_count": 55
+      "member_count": 56
     },
     {
       "name": "United States",
@@ -9633,6 +9633,16 @@
           "orcid": "0000-0003-3259-3878"
         },
         {
+          "name": "Megan Roker",
+          "affiliation": "University of Leeds",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "bs21mr [at] leeds [dot] ac [dot] uk",
+          "homepage": "https://scholar.google.com/citations?user=fhOz2XAAAAAJ&hl=en",
+          "orcid": ""
+        },
+        {
           "name": "Miftah Faizah",
           "affiliation": "University of Leeds",
           "working_groups": [
@@ -9677,7 +9687,7 @@
           "orcid": "0000-0002-5466-2822"
         }
       ],
-      "member_count": 12,
+      "member_count": 13,
       "working_groups": [
         "WG1",
         "WG2",
