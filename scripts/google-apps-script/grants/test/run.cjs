@@ -79,8 +79,9 @@ test('set-up creates the tabs, defaults and a staging clean-up trigger, closed b
   const book = g.state.sheets[g.state.props.GRANTS_SHEET_ID];
   same(book.tabs.map(t => t.name), ['Applications', 'Reviews', 'Reviewers', 'Calls', 'Settings']);
   assert.strictEqual(g.applyConfig('').open, false);
-  assert.strictEqual(g.state.triggers.length, 1);
+  same(g.state.triggers.map(t => [t.getHandlerFunction(), t.hour]), [['cleanStaging', undefined], ['sendDailyDigest', 8]]);
   g.setUpGrants(); // running again adds nothing twice
+  assert.strictEqual(g.state.triggers.length, 2);
   assert.strictEqual(g.tab('Calls').rows.length, 2, 'one first call, made once');
   assert.strictEqual(g.tab('Reviewers').rows.length, 2);
 });
@@ -127,8 +128,7 @@ test('a complete STSM application is stored, filed, emailed and returned as a PD
   assert.ok(inFolder.some(n => /Application\.pdf$/.test(n)));
   const mail = g.state.mail[0];
   assert.strictEqual(mail.to, 'ada@example.org');
-  assert.strictEqual(mail.cc, 'eeg101costaction@gmail.com');
-  assert.strictEqual(mail.bcc, 'amy@example.org,faisal@example.org');
+  assert.ok(!mail.cc && !mail.bcc, 'the team gets the daily digest instead of a copy of each');
   assert.strictEqual(mail.attachments.length, 1);
   assert.match(mail.body, /within 8 weeks of the call's deadline \(15 December 2026\), and in practice usually much sooner/);
   assert.ok(!/correct anything/.test(mail.body));
@@ -515,7 +515,7 @@ test('funded grants: tracked to payment by chairs and the grants administrator, 
   let out = g.sendGrantReminders(admin, [a]);
   assert.match(out.notice, /1 reminder sent/);
   assert.match(g.state.mail[0].subject, /please apply in e-COST/);
-  assert.strictEqual(g.state.mail[0].cc, 'eeg101costaction@gmail.com');
+  assert.ok(!g.state.mail[0].cc);
   g.updateGrants(admin, [{ id: a, status: 'Report due', notes: 'Chased by phone' }]);
   out = g.sendGrantReminders(chair, [a, b, c]);
   assert.match(g.state.mail[1].subject, new RegExp(`${a}: report due 13 April 2027`));
@@ -625,6 +625,68 @@ test('spam protection: honeypot, minimum time, hourly limits and the optional CA
   // The portal's form links point at the website, where the CAPTCHA is.
   const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair']]);
   assert.strictEqual(g.listCalls(keys['chair@example.org']).applyPage, 'https://www.eeg101.eu/grants/apply/');
+});
+
+test('the daily digest goes to the GRANTS_BCC people, once, with what is new', () => {
+  const g = ready();
+  g.state.mail = [];
+  assert.strictEqual(g.sendDailyDigest(), 0, 'nothing new, nothing sent');
+  assert.strictEqual(g.state.mail.length, 0);
+  g.setNow('2026-11-10T10:00:00Z');
+  const a = g.submitApplication(stsm(g)).id;
+  const b = g.submitApplication(stsm(g, { email: 'ben@example.org', first_name: 'Ben', last_name: 'Okafor', country: 'Germany' })).id;
+  g.state.mail = [];
+  g.setNow('2026-11-11T07:00:00Z');
+  assert.strictEqual(g.sendDailyDigest(), 2);
+  const d = g.state.mail[0];
+  assert.strictEqual(d.to, 'amy@example.org,faisal@example.org');
+  assert.match(d.subject, /2 new applications/);
+  assert.match(d.body, new RegExp(`${a} · STSM · Ada Lovelace \\(Portugal\\)[\\s\\S]*${b} · STSM · Ben Okafor`));
+  assert.match(d.body, /EEG101 Grant Period 2 call: 2/);
+  assert.strictEqual(d.attachments.length, 2);
+  assert.strictEqual(g.sendDailyDigest(), 0, 'not the same ones again');
+  delete g.state.props.GRANTS_BCC;
+  g.setNow('2026-11-11T09:00:00Z');
+  g.submitApplication(stsm(g, { email: 'c@example.org' }));
+  g.setNow('2026-11-12T07:00:00Z');
+  assert.strictEqual(g.sendDailyDigest(), 0, 'no one to send to');
+});
+
+test('decision emails: previewed and sent by chairs, recorded, with the right template', () => {
+  const g = ready();
+  const a = g.submitApplication(stsm(g)).id;
+  const b = g.submitApplication(stsm(g, { email: 'ben@example.org', first_name: 'Ben' })).id;
+  const c = g.submitApplication(conference(g, { email: 'cy@example.org', first_name: 'Cy' })).id;
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['chair2@example.org', 'Chair Two', 'chair'], ['r1@example.org', 'Rev', 'reviewer']]);
+  const chair = keys['chair@example.org'];
+  throwsLike(() => g.previewDecisionEmail(chair, a, ''), /no decision to email/);
+  g.saveDecisions(chair, [{ id: a, decision: 'Funded', awarded: 1500 }, { id: b, decision: 'Not funded' }, { id: c, decision: 'Reserve' }]);
+  throwsLike(() => g.previewDecisionEmail(keys['r1@example.org'], a, ''), /Only a grants chair/);
+  const p = g.previewDecisionEmail(chair, a, 'Well done on a clear plan.');
+  assert.strictEqual(p.to, 'ada@example.org');
+  assert.match(p.subject, new RegExp(`EEG101 grant awarded: ${a}`));
+  assert.match(p.body, /up to €1500\.00[\s\S]*e-COST \(https:\/\/e-services\.cost\.eu\/\)[\s\S]*1 March 2027 to 14 March 2027[\s\S]*CA24148: ‘EEG101[\s\S]*by 13 April 2027[\s\S]*up to 50%[\s\S]*A note from the grants committee:\nWell done on a clear plan\./);
+  assert.strictEqual(p.alreadySent, '');
+  assert.match(g.previewDecisionEmail(chair, b, '').body, /has not been selected for funding[\s\S]*www\.eeg101\.eu\/grants/);
+  const reserve = g.previewDecisionEmail(chair, c, '').body;
+  assert.match(reserve, /reserve list[\s\S]*do not apply in e-COST/);
+  assert.ok(!/50%/.test(reserve));
+  // A chair with a conflict cannot send; others go out and are recorded.
+  g.saveReview(keys['chair2@example.org'], { id: b, conflict: true });
+  g.state.mail = [];
+  let out = g.sendDecisionEmails(keys['chair2@example.org'], [{ id: a }, { id: b }]);
+  assert.match(out.notice, /1 decision email sent[\s\S]*conflict of interest for/);
+  out = g.sendDecisionEmails(chair, [{ id: b }, { id: c, note: '' }]);
+  assert.match(out.notice, /2 decision emails sent/);
+  assert.strictEqual(g.state.mail.length, 3);
+  assert.ok(g.state.mail.every(m => !m.cc && !m.bcc));
+  const listed = out.applications.filter(x => x.id === a)[0];
+  assert.ok(listed.decisionEmailed && listed.decisionEmailedAs === 'Funded');
+  assert.match(g.previewDecisionEmail(chair, a, '').alreadySent, /as Funded/);
+  // The daily allowance is respected.
+  vm.runInContext('MailApp.getRemainingDailyQuota = () => 1;', g);
+  out = g.sendDecisionEmails(chair, [{ id: a }]);
+  assert.match(out.notice, /0 decision emails sent[\s\S]*allowance for today/);
 });
 
 test('the application page is built with its settings and can be framed', () => {

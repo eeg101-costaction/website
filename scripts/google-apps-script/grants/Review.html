@@ -96,6 +96,7 @@ function fail(err) { main.insertAdjacentHTML('afterbegin', `<p class="msg err">$
 document.getElementById('me').textContent = `${me.name || me.email} · ${me.chair ? 'Chair' : me.admin ? 'Grants administrator' : BOOT.blind ? 'Reviewer (blind review)' : 'Reviewer'}`;
 const TABS = me.admin ? [['funded', 'Funded grants'], ['report', 'Reports']]
   : [['list', 'Applications']].concat(me.chair ? [['decide', 'Ranking and funding'], ['funded', 'Funded grants'], ['people', 'People'], ['call', 'Calls']] : [], me.chair || !BOOT.blind ? [['report', 'Reports']] : []);
+const DECISION_EMAILS = ['Funded', 'Reserve', 'Not funded'];
 const ROLE_LABELS = { reviewer: 'Reviewer', chair: 'Chair', administrator: 'Grants administrator' };
 let selected = {};
 function tabs() { document.getElementById('tabs').innerHTML = TABS.map(t => `<button type="button" data-tab="${t[0]}" class="${view === t[0] || (view === 'detail' && t[0] === 'list') ? 'on' : ''}">${t[1]}</button>`).join(''); }
@@ -218,7 +219,12 @@ async function renderDetail(id) {
       <label>Rank<input class="cell rank" name="rank" type="number" min="1" value="${a.rank == null ? '' : a.rank}"></label></div>
       <label>Notes<input class="cell wide" style="width:100%" name="notes" value="${esc(a.decisionNotes)}"></label>
       <p class="note">Leave the amount empty to award what was requested.</p>
-      <button class="btn" type="submit">Save decision</button> <span id="dsaved" class="msg"></span></form>`
+      <button class="btn" type="submit">Save decision</button> <span id="dsaved" class="msg"></span></form>
+      ${DECISION_EMAILS.indexOf(a.decision) >= 0 ? `<form id="dmail" class="decide"><b>Decision email</b>
+        <p class="note">${a.decisionEmailed ? `Sent ${esc(a.decisionEmailed)}, as ${esc(a.decisionEmailedAs)}.${a.decisionEmailedAs !== a.decision ? ' <b>The decision has changed since.</b>' : ''}` : 'Not sent yet.'} It goes to the applicant from the EEG101 account, using the template for "${esc(a.decision)}".</p>
+        <label>Personal note (optional, added to the email)<textarea name="note" style="min-height:60px"></textarea></label>
+        <button type="button" class="btn secondary" id="dmPreview">Preview</button> <button type="submit" class="btn">${a.decisionEmailed ? 'Send again' : 'Send decision email'}</button> <span id="dmsg2" class="msg"></span>
+        <pre id="dmText" class="note" style="white-space:pre-wrap;background:var(--bg-alt);padding:10px;border-radius:6px" hidden></pre></form>` : ''}`
     : me.chair ? '<p class="note decide">You declared a conflict of interest or applied yourself, so another chair must decide on this application.</p>' : '';
   const assign = me.chair ? `<form id="asg" class="decide"><b>Reviewers for this application</b>
       <p class="note">${a.assigned.length ? 'Only these reviewers (and the chairs) can see it.' : 'None assigned: only the chairs can see it.'}</p>
@@ -271,6 +277,20 @@ async function renderDetail(id) {
       setTimeout(() => show('detail', a.id), 1200);
     } catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not save.'; }
   });
+  const dm = main.querySelector('#dmail');
+  if (dm) {
+    const out = main.querySelector('#dmsg2');
+    main.querySelector('#dmPreview').addEventListener('click', async () => {
+      try { out.className = 'msg'; out.textContent = 'Loading…'; const p = await call('previewDecisionEmail', a.id, dm.note.value); const t = main.querySelector('#dmText'); t.textContent = `To: ${p.to}\nSubject: ${p.subject}\n\n${p.body}`; t.hidden = false; out.textContent = ''; }
+      catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not preview.'; }
+    });
+    dm.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (!confirm(`${a.decisionEmailed ? 'Send the decision email again' : 'Send the decision email'} to ${a.applicant || a.id}?`)) return;
+      try { out.className = 'msg'; out.textContent = 'Sending…'; data = await call('sendDecisionEmails', [{ id: a.id, note: dm.note.value }]); out.className = /^1 /.test(data.notice) ? 'msg ok' : 'msg err'; out.textContent = data.notice; setTimeout(() => show('detail', a.id), 1500); }
+      catch (err) { out.className = 'msg err'; out.textContent = (err && err.message) || 'Could not send.'; }
+    });
+  }
   const dec = main.querySelector('#dec');
   if (dec) dec.addEventListener('submit', async e => {
     e.preventDefault();
@@ -303,18 +323,21 @@ function renderDecide() {
   const sorted = list => list.slice().sort((x, y) => (x.rank || 1e9) - (y.rank || 1e9) || (y.mean || 0) - (x.mean || 0));
   const value = (a, k) => pending[a.id] && pending[a.id][k] !== undefined ? pending[a.id][k] : (k === 'decision' ? a.decision : k === 'awarded' ? (a.awarded == null ? '' : a.awarded) : k === 'rank' ? (a.rank == null ? '' : a.rank) : a.decisionNotes);
   const committed = list => list.reduce((s, a) => s + (value(a, 'decision') === 'Funded' ? Number(value(a, 'awarded') === '' ? a.requested : value(a, 'awarded')) || 0 : 0), 0);
+  // Decisions not yet emailed, or changed since they were.
+  const toEmail = data.applications.filter(a => DECISION_EMAILS.indexOf(a.decision) >= 0 && !a.conflicted && !a.own && a.decisionEmailedAs !== a.decision);
   main.innerHTML = `<div class="toolbar"><button type="button" class="btn secondary" id="autorank">Rank each scheme by mean score</button>
     <button type="button" class="btn" id="save" ${Object.keys(pending).length ? '' : 'disabled'}>Save ${Object.keys(pending).length || ''} change${Object.keys(pending).length === 1 ? '' : 's'}</button>
+    <button type="button" class="btn secondary" id="mailAll" ${toEmail.length && !Object.keys(pending).length ? '' : 'disabled'} title="${Object.keys(pending).length ? 'Save your changes first' : ''}">Email ${toEmail.length || 'no'} decision${toEmail.length === 1 ? '' : 's'}</button>
     <span class="note">Choose "Funded" to select an application; leave the amount empty to award what was requested. The money available is set on the Calls page, per call or per scheme.</span><span id="dmsg" class="msg"></span></div>
   ${Object.keys(groups).sort().map(g => { const list = sorted(groups[g]); const used = committed(list); const b = groupBudget[g]; return `<div class="panel" style="margin-bottom:16px"><h2>${esc(g)}</h2>
     <p class="note">${list.length} application${list.length === 1 ? '' : 's'} · committed ${money(used)}${b ? ` of ${money(b)} (${money(b - used)} left)` : ''}</p>
     ${b ? `<div class="bar${used > b ? ' over' : ''}"><span style="width:${Math.min(100, used / b * 100)}%"></span></div>` : ''}
-    <table style="margin-top:10px"><thead><tr><th>Rank</th><th>ID</th><th>Applicant</th><th>Title</th><th class="num">Mean</th><th class="num">Reviews</th><th class="num">Requested</th><th>Decision</th><th>Awarded (€)</th><th>Notes</th></tr></thead><tbody>
+    <table style="margin-top:10px"><thead><tr><th>Rank</th><th>ID</th><th>Applicant</th><th>Title</th><th class="num">Mean</th><th class="num">Reviews</th><th class="num">Requested</th><th>Decision</th><th>Awarded (€)</th><th>Notes</th><th>Emailed</th></tr></thead><tbody>
     ${list.map(a => { const off = a.conflicted ? ' disabled title="You declared a conflict of interest or applied yourself: another chair must decide."' : ''; return `<tr><td><input class="cell rank" data-id="${esc(a.id)}" data-k="rank" type="number" min="1" value="${esc(value(a, 'rank'))}" aria-label="Rank"${off}></td><td><a href="#" data-open="${esc(a.id)}" target="_self">${esc(a.id)}</a></td><td>${esc(a.applicant)}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}${a.conflicted ? '<span class="flag">You cannot decide on this one (conflict or own application).</span>' : ''}</td>
     <td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td><td class="num">${a.reviewCount}</td><td class="num">${money(a.requested)}</td>
     <td><select class="cell" data-id="${esc(a.id)}" data-k="decision" aria-label="Decision"${off}>${BOOT.decisions.map(d => `<option value="${esc(d)}"${value(a, 'decision') === d ? ' selected' : ''}>${d || '—'}</option>`).join('')}</select></td>
     <td><input class="cell" data-id="${esc(a.id)}" data-k="awarded" type="number" min="0" step="0.01" max="${a.requested}" placeholder="${a.requested}" value="${esc(value(a, 'awarded'))}" aria-label="Awarded"${off}></td>
-    <td><input class="cell wide" data-id="${esc(a.id)}" data-k="notes" value="${esc(value(a, 'notes'))}" aria-label="Notes"${off}></td></tr>`; }).join('')}
+    <td><input class="cell wide" data-id="${esc(a.id)}" data-k="notes" value="${esc(value(a, 'notes'))}" aria-label="Notes"${off}></td><td>${a.decisionEmailed ? `<span class="who scored" title="${esc(a.decisionEmailed)}">✓ ${esc(a.decisionEmailedAs)}</span>${a.decisionEmailedAs !== a.decision && a.decision ? '<span class="who conflict">changed since</span>' : ''}` : '<span class="note">—</span>'}</td></tr>`; }).join('')}
     </tbody></table></div>`; }).join('') || '<p class="note">No applications yet.</p>'}`;
   main.querySelectorAll('[data-k]').forEach(el => el.addEventListener('change', () => {
     const a = data.applications.filter(x => x.id === el.dataset.id)[0];
@@ -326,6 +349,13 @@ function renderDecide() {
   main.querySelector('#autorank').addEventListener('click', () => {
     Object.keys(groups).forEach(g => groups[g].slice().sort((x, y) => (y.mean || 0) - (x.mean || 0)).forEach((a, i) => { if (a.conflicted) return; pending[a.id] = pending[a.id] || {}; pending[a.id].rank = String(i + 1); }));
     renderDecide();
+  });
+  main.querySelector('#mailAll').addEventListener('click', async () => {
+    const counts = DECISION_EMAILS.map(d => [d, toEmail.filter(a => a.decision === d).length]).filter(x => x[1]).map(x => `${x[1]} ${x[0]}`).join(', ');
+    if (!confirm(`Email ${toEmail.length} applicant${toEmail.length === 1 ? '' : 's'} their decision (${counts})? Each gets the template for their decision. To add a personal note or preview an email, send it from the application's own page instead.`)) return;
+    const msg = main.querySelector('#dmsg');
+    try { msg.className = 'msg'; msg.textContent = 'Sending…'; data = await call('sendDecisionEmails', toEmail.map(a => ({ id: a.id }))); const notice = data.notice; renderDecide(); const m = main.querySelector('#dmsg'); m.className = /allowance|conflict|not /.test(notice) ? 'msg err' : 'msg ok'; m.textContent = notice; }
+    catch (err) { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not send.'; }
   });
   main.querySelector('#save').addEventListener('click', async () => {
     const changes = Object.keys(pending).map(id => { const a = data.applications.filter(x => x.id === id)[0]; return { id: id, decision: value(a, 'decision'), awarded: value(a, 'awarded'), rank: value(a, 'rank'), notes: value(a, 'notes') }; });

@@ -233,7 +233,7 @@ const APPLICATION_COLUMNS = [
   'Position', 'Country', 'ITC', 'Gender', 'Under 40 (YRI)', 'Early-career (PhD < 8 years or student)', 'Career stage',
   'EEG101 member', 'Working Groups', 'ORCID', 'Start date', 'End date', 'Days', 'Host / collaborator / conference',
   'Requested (€)', 'Eligibility notes', 'Drive folder', 'Application PDF', 'Documents',
-  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Assigned reviewers',
+  'Decision', 'Awarded (€)', 'Rank', 'Decision notes', 'Decided by', 'Decided at', 'Decision emailed', 'Decision emailed as', 'Decision emailed by', 'Assigned reviewers',
   'Grant status', 'Grant status updated', 'Grant status by', 'Last reminder', 'Reminders sent', 'Grant notes', 'Data'
 ];
 const REVIEW_COLUMNS = ['Application ID', 'Reviewer', 'Conflict of interest'].concat(CRITERIA.map(c => c.label), ['Mean score', 'Recommendation', 'Comments', 'Updated']);
@@ -766,9 +766,12 @@ function decisionTiming(a) {
     : 'This call is open on a rolling basis, so we will let you know the outcome by email within 8 weeks of your submission, and in practice usually much sooner.';
 }
 
+// To the applicant only. A free Gmail account can email about 100 recipients a
+// day, so instead of copying the team in on each one, the people in GRANTS_BCC
+// get one daily digest (sendDailyDigest), and every email sent is in the
+// account's Sent folder.
 function sendConfirmation(a, pdf) {
   const s = SCHEMES[a.scheme];
-  const bcc = String(PropertiesService.getScriptProperties().getProperty('GRANTS_BCC') || '').split(',').map(x => x.trim()).filter(x => EMAIL_PATTERN.test(x));
   const text = [
     `Dear ${a.first_name},`,
     `Thank you for applying for EEG101 funding. We have received your application.`,
@@ -780,10 +783,131 @@ function sendConfirmation(a, pdf) {
   ];
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;line-height:1.5;color:#1a1a2e">${text.map(t => `<p>${esc(t).replace(/\n/g, '<br>')}</p>`).join('')}</div>`;
   MailApp.sendEmail({
-    to: a.email, cc: GRANTS.cc, bcc: bcc.join(','), replyTo: GRANTS.replyTo, name: GRANTS.name,
+    to: a.email, replyTo: GRANTS.replyTo, name: GRANTS.name,
     subject: `EEG101 application received: ${a.id} – ${a.title}`.slice(0, 250),
     body: text.join('\n\n'), htmlBody: html, attachments: [pdf || applicationPdf(a)]
   });
+}
+
+/* ------------------------------------------------------------- daily digest */
+
+// Every morning (about 08:00 Brussels time), one email to the people in the
+// GRANTS_BCC script property listing the applications received since the last
+// digest, with their PDFs when there are up to 10. Nothing is sent on a day
+// with no new applications.
+function sendDailyDigest() {
+  const props = PropertiesService.getScriptProperties();
+  const to = String(props.getProperty('GRANTS_BCC') || '').split(',').map(x => x.trim()).filter(x => EMAIL_PATTERN.test(x));
+  const since = props.getProperty('GRANTS_LAST_DIGEST') ? new Date(props.getProperty('GRANTS_LAST_DIGEST')) : new Date(Date.now() - 24 * 3600 * 1000);
+  const now = new Date();
+  if (!to.length) return 0;
+  const calls = readCalls();
+  const fresh = rowsAsObjects(tab('Applications')).filter(r => r['Submitted'] && new Date(r['Submitted']) > since && new Date(r['Submitted']) <= now);
+  if (!fresh.length) { props.setProperty('GRANTS_LAST_DIGEST', now.toISOString()); return 0; }
+  const callName = r => (calls.filter(c => c.id === String(r['Call']))[0] || {}).name || '';
+  const byCall = {};
+  fresh.forEach(r => { const k = callName(r) || 'Other'; byCall[k] = (byCall[k] || 0) + 1; });
+  const lines = fresh.map(r => `• ${r['ID']} · ${r['Scheme']} · ${r['First name']} ${r['Last name']} (${r['Country']}) · "${r['Title']}" · €${(asNumber(r['Requested (€)']) || 0).toFixed(2)}${r['Eligibility notes'] ? `\n   ⚠ ${r['Eligibility notes']}` : ''}`);
+  const attach = fresh.length <= 10;
+  const attachments = attach ? fresh.map(r => { try { return applicationPdf(JSON.parse(String(r['Data'] || '{}'))); } catch (e) { return null; } }).filter(Boolean) : [];
+  const text = [
+    `${fresh.length} new EEG101 grant application${fresh.length === 1 ? '' : 's'} since ${formatDateTime(since)}:`,
+    lines.join('\n'),
+    Object.keys(byCall).map(k => `${k}: ${byCall[k]}`).join('\n'),
+    attach ? 'Their PDFs are attached.' : 'Read them in the grants portal.',
+    'This is the daily digest of the EEG101 grants platform, sent to the addresses in its GRANTS_BCC setting.'
+  ];
+  MailApp.sendEmail({ to: to.join(','), replyTo: GRANTS.replyTo, name: GRANTS.name, subject: `EEG101 grants: ${fresh.length} new application${fresh.length === 1 ? '' : 's'}`, body: text.join('\n\n'), attachments: attachments });
+  props.setProperty('GRANTS_LAST_DIGEST', now.toISOString());
+  return fresh.length;
+}
+
+/* -------------------------------------------------------- decision emails */
+
+const DECISION_EMAILS = ['Funded', 'Reserve', 'Not funded'];
+const ACKNOWLEDGEMENT = 'This publication is based on work supported by the European COST Action CA24148: ‘EEG101 - Fundamentals of Open & Rigorous EEG Science’.';
+
+// The email telling an applicant the chairs' decision, from the templates
+// below, with an optional note from the chair.
+function decisionEmail(r, call, note) {
+  const s = Object.keys(SCHEMES).map(id => SCHEMES[id]).filter(x => x.short === String(r['Scheme']))[0] || {};
+  const decision = String(r['Decision']);
+  const id = String(r['ID']), title = String(r['Title']), callName = call ? call.name : 'EEG101 funding';
+  const awarded = asNumber(r['Awarded (€)']) || 0;
+  const start = iso(r['Start date']), end = iso(r['End date']);
+  const due = reportDue(end, call ? call.periodEnd : GRANTS.firstCall.period_end);
+  const lines = [`Dear ${r['First name']},`];
+  let subject;
+  if (decision === 'Funded') {
+    subject = `EEG101 grant awarded: ${id} – ${title}`;
+    lines.push(
+      `I am delighted to tell you that your application ${id}, "${title}", for a ${s.title || r['Scheme']} under ${callName}, has been selected for funding by EEG101, with a grant of up to €${awarded.toFixed(2)}.`,
+      'What happens next:',
+      `1. Apply through COST's online platform, e-COST (https://e-services.cost.eu/), with the same details as your application, and make sure your CV is uploaded to your e-COST profile. Please do this as soon as you can: COST issues your grant letter once your e-COST application is approved.`,
+      `2. Carry out your activity as approved, from ${formatDate(start)} to ${formatDate(end)}. Please acknowledge EEG101 and COST in anything that comes out of it, for example: "${ACKNOWLEDGEMENT}"`,
+      `3. Submit your report in e-COST by ${formatDate(due)} (30 days after the end of your activity, or 15 days after the end of the grant period if sooner).${s.kind === 'conference' ? ' Include your certificate of attendance and the programme or book of abstracts showing your presentation.' : ''} The grant is paid once your report is approved.`
+    );
+    if (s.kind === 'stsm') lines.push('Once your grant is approved in e-COST, you can ask the Grant Holder for up to 50% of it in advance; this depends on funds being available and the Grant Holder agreeing.');
+    lines.push('Congratulations, and please tell us if your plans change.');
+  } else if (decision === 'Reserve') {
+    subject = `EEG101 grant application ${id}: reserve list`;
+    lines.push(
+      `Thank you for applying for EEG101 funding. Your application ${id}, "${title}", under ${callName}, has been placed on our reserve list. The reviewers rated it as fundable, but the budget for this call is committed for now.`,
+      'If funds become available, we will contact you. Please let us know if your plans change in the meantime, and do not apply in e-COST unless we ask you to.'
+    );
+  } else {
+    subject = `EEG101 grant application ${id}: outcome`;
+    lines.push(
+      `Thank you for applying for EEG101 funding. We are sorry to tell you that your application ${id}, "${title}", under ${callName}, has not been selected for funding on this occasion. We received many strong applications, and the funding available is limited.`,
+      'We hope you will apply again: new calls are announced on www.eeg101.eu/grants/.'
+    );
+  }
+  if (String(note || '').trim()) lines.push(`A note from the grants committee:\n${String(note).trim().slice(0, 3000)}`);
+  lines.push('With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148');
+  return { to: String(r['Email']), subject: subject.slice(0, 250), body: lines.join('\n\n') };
+}
+
+function decisionContext(key, id) {
+  const me = requireReviewer(key, true);
+  const r = rowsAsObjects(tab('Applications')).filter(x => String(x['ID']) === String(id))[0];
+  if (!r) throw new Error(`Application ${id} not found.`);
+  if (DECISION_EMAILS.indexOf(String(r['Decision'])) < 0) throw new Error(`${id} has no decision to email yet (Funded, Reserve or Not funded).`);
+  if (String(r['Email']).toLowerCase() === me.email) throw new Error(`${id} is your own application, so another chair must email the decision.`);
+  if ((reviewsByApplication()[String(id)] || []).some(x => x.reviewer === me.email && x.conflict)) throw new Error(`You declared a conflict of interest for ${id}, so another chair must email the decision.`);
+  return { me: me, r: r, call: readCalls().filter(c => c.id === String(r['Call']))[0] || null };
+}
+
+// Chair only: the email as it would be sent.
+function previewDecisionEmail(key, id, note) {
+  const { r, call } = decisionContext(key, id);
+  const mail = decisionEmail(r, call, note);
+  mail.alreadySent = r['Decision emailed'] ? `${formatDateTime(new Date(r['Decision emailed']))}, as ${r['Decision emailed as']}` : '';
+  return mail;
+}
+
+// Chair only: items = [{ id, note }]. Sends each decision email, records when
+// and by whom, and stops before the account's daily email allowance runs out.
+function sendDecisionEmails(key, items) {
+  requireReviewer(key, true);
+  const sheet = tab('Applications');
+  ensureColumns(sheet, APPLICATION_COLUMNS);
+  const { map } = headerMap(sheet);
+  let sent = 0; const problems = [];
+  (Array.isArray(items) ? items : []).forEach(item => {
+    try {
+      if (MailApp.getRemainingDailyQuota() < 2) throw new Error(`${item.id}: not sent, because the account's email allowance for today is used up. Send it again tomorrow.`);
+      const { me, r, call } = decisionContext(key, item.id);
+      const mail = decisionEmail(r, call, item.note);
+      MailApp.sendEmail({ to: mail.to, replyTo: GRANTS.replyTo, name: GRANTS.name, subject: mail.subject, body: mail.body });
+      sheet.getRange(r._row, map['Decision emailed'] + 1).setValue(new Date());
+      sheet.getRange(r._row, map['Decision emailed as'] + 1).setValue(String(r['Decision']));
+      sheet.getRange(r._row, map['Decision emailed by'] + 1).setValue(me.email);
+      sent++;
+    } catch (error) { problems.push(error.message); }
+  });
+  const out = listApplications(key);
+  out.notice = [`${sent} decision email${sent === 1 ? '' : 's'} sent.`].concat(problems).join(' ');
+  return out;
 }
 
 /* ------------------------------------------------------------------ storage */
@@ -892,8 +1016,9 @@ function setUpGrants() {
   const blank = book.getSheetByName('Sheet1');
   if (blank && book.getSheets().length > 1) book.deleteSheet(blank);
 
-  ScriptApp.getProjectTriggers().filter(t => t.getHandlerFunction() === 'cleanStaging').forEach(t => ScriptApp.deleteTrigger(t));
+  ScriptApp.getProjectTriggers().filter(t => ['cleanStaging', 'sendDailyDigest'].indexOf(t.getHandlerFunction()) >= 0).forEach(t => ScriptApp.deleteTrigger(t));
   ScriptApp.newTrigger('cleanStaging').timeBased().everyDays(1).create();
+  ScriptApp.newTrigger('sendDailyDigest').timeBased().everyDays(1).atHour(8).inTimezone(GRANTS.timezone).create();
   console.log('Spreadsheet: ' + book.getUrl());
   console.log('Folder: ' + rootFolder().getUrl());
 }
@@ -1243,11 +1368,12 @@ function sendGrantReminders(key, ids) {
       'With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148'
     ].filter(Boolean);
     MailApp.sendEmail({
-      to: String(r['Email']), cc: GRANTS.cc, replyTo: GRANTS.replyTo, name: GRANTS.name,
+      to: String(r['Email']), replyTo: GRANTS.replyTo, name: GRANTS.name,
       subject: ecost ? `EEG101 grant ${id}: please apply in e-COST` : `EEG101 grant ${id}: report due ${formatDate(due)}`,
       body: text.join('\n\n')
     });
     sheet.getRange(r._row, map['Last reminder'] + 1).setValue(new Date());
+    // (Not copied to anyone: the EEG101 account's Sent folder keeps a copy.)
     sheet.getRange(r._row, map['Reminders sent'] + 1).setValue((asNumber(r['Reminders sent']) || 0) + 1);
     sent++;
   });
@@ -1484,6 +1610,7 @@ function listApplications(key) {
       requested: asNumber(r['Requested (€)']), notes: [String(r['Eligibility notes'] || '')].concat(warnings[id] || []).filter(Boolean).join(' '),
       folder: blind ? '' : String(r['Drive folder']),
       decision: String(r['Decision'] || ''), awarded: asNumber(r['Awarded (€)']), rank: asNumber(r['Rank']), decisionNotes: String(r['Decision notes'] || ''),
+      decisionEmailed: me.chair && r['Decision emailed'] ? formatDateTime(new Date(r['Decision emailed'])) : '', decisionEmailedAs: me.chair ? String(r['Decision emailed as'] || '') : '',
       reviewCount: scored.length,
       mean: canSee && scored.length ? Math.round(scored.reduce((s, x) => s + x.mean, 0) / scored.length * 100) / 100 : null,
       blind: blind, own: own, conflicted: conflicted, assignedToMe: assignedTo(r).indexOf(me.email) >= 0,

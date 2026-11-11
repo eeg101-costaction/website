@@ -113,7 +113,7 @@ function makeGoogle(opts = {}) {
     LockService: { getScriptLock: () => ({ waitLock() {}, tryLock() { return true; }, releaseLock() {} }) },
     MailApp: { sendEmail: o => state.mail.push(o), getRemainingDailyQuota: () => 100 },
     Session: { getActiveUser: () => ({ getEmail: () => state.activeUser }), getEffectiveUser: () => ({ getEmail: () => state.effectiveUser }) },
-    ScriptApp: { getService: () => ({ getUrl: () => state.serviceUrl || '' }), getProjectTriggers: () => state.triggers, deleteTrigger() {}, newTrigger: h => ({ timeBased: () => ({ everyDays: () => ({ create: () => state.triggers.push({ getHandlerFunction: () => h }) }) }) }) },
+    ScriptApp: { getService: () => ({ getUrl: () => state.serviceUrl || '' }), getProjectTriggers: () => state.triggers, deleteTrigger(t) { state.triggers = state.triggers.filter(x => x !== t); }, newTrigger: h => { const t = { getHandlerFunction: () => h }; const b = { timeBased: () => b, everyDays: () => b, atHour: n => { t.hour = n; return b; }, inTimezone: () => b, create: () => { state.triggers.push(t); return t; } }; return b; } },
     Utilities, HtmlService,
   };
   // Fix "now" for Date() inside the script, so "today" is predictable.

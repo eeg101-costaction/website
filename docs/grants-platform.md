@@ -12,9 +12,13 @@ Annex 2 and Article 6.4:
   - a row in the **Applications** tab of the *EEG101 Grant Applications*
     spreadsheet;
   - a Drive folder with the uploaded documents and a PDF of the application;
-  - a confirmation email to the applicant, with the PDF attached, copied
-    (cc) to eeg101costaction@gmail.com and blind-copied (bcc) to the
-    addresses in the `GRANTS_BCC` script property;
+  - a confirmation email to the applicant, with the PDF attached. Nobody
+    is copied in: a free Gmail account can email only about 100 people a
+    day. Instead, the addresses in the `GRANTS_BCC` script property get a
+    **daily digest** at about 08:00 Brussels time, listing the applications
+    received since the last one, with their PDFs when there are up to 10. No
+    digest is sent on a day with none. Every email the platform sends is
+    also in the EEG101 account's Sent folder;
   - on screen, the reference and a PDF download. The PDF is headed with
     EEG101, COST Action CA24148 and the call.
 
@@ -104,8 +108,8 @@ Gmail sends the confirmation emails.
    Applications* spreadsheet and Drive folder (both in your Drive; the log
    shows their links) and a daily clean-up of abandoned uploads.
 5. **Project Settings (⚙) → Script properties → Add script property**:
-   `GRANTS_BCC` = the addresses to blind-copy on every confirmation,
-   separated by commas (Amy Bland's and yours).
+   `GRANTS_BCC` = the addresses that get the daily digest of new
+   applications, separated by commas (Amy Bland's and yours).
 6. **Deploy → New deployment → ⚙ Web app**. Description *Grants*, **Execute
    as: Me**, **Who has access: Anyone**. Click **Deploy** and copy the **Web
    app URL** (it ends in `/exec`).
@@ -219,6 +223,31 @@ application.
   month, gender, ITC, under-40, career stage and country. Also a list of
   funded grants with a CSV download, and **Print or save as PDF**.
 
+## Decision emails
+
+Once a decision is saved (Funded, Reserve or Not funded), a chair emails it
+to the applicant from the portal. It is sent from the EEG101 account, using
+the template for that decision:
+- **Funded:** the amount, then what happens next: apply in e-COST with the
+  same details (and the CV in the e-COST profile), carry out the activity
+  and acknowledge COST, and the report due date. STSMs also get the
+  50% advance option, and conference grants the attendance documents.
+- **Reserve:** fundable but the budget is committed. We will be in touch if
+  funds become available. Do not apply in e-COST yet.
+- **Not funded:** not selected this time, with an invitation to apply again.
+
+There are two ways to send them:
+- **One at a time,** from the application's page (**Decision email**): add
+  an optional personal note, **Preview**, then **Send**.
+- **All at once,** from **Ranking and funding** → **Email N decisions**. It
+  sends every decision not yet emailed, or changed since it was, using the
+  plain templates.
+
+Each email is recorded (when, by whom, and as which decision), and shows as
+✓ in the Emailed column. A chair with a conflict of interest, or who
+applied, cannot send that one. Sending stops before the account's daily
+email allowance runs out, and says which emails to send again the next day.
+
 ## Funded grants: from decision to payment
 
 As soon as a chair marks an application **Funded**, it leaves the
@@ -292,7 +321,7 @@ The first call, the main one, is made during setup.
    dates use each call's own end date. Overlapping grants are flagged
    across all calls.
 6. After the deadline, reviewers score and the chairs record decisions. Then
-   email applicants; the platform does not send decision emails. Funded
+   **email the decisions from the portal** (below). Funded
    applicants are then asked to apply through e-COST (track this, and send
    reminders, on Funded grants), where the application is approved and the
    grant letter issued. Grants are paid after the activity, once the
