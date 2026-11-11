@@ -429,7 +429,7 @@ async function renderCalls(state, message) {
   ${st.calls.map(c => `<tr><td><b>${esc(c.name)}</b>${c.host ? `<span class="note" style="display:block">Host: ${esc(c.host.institution)}</span>` : ''}${c.questions.length || c.documents.length ? `<span class="note" style="display:block">${c.questions.length} own question${c.questions.length === 1 ? '' : 's'}, ${c.documents.length} own document${c.documents.length === 1 ? '' : 's'}</span>` : ''}</td>
     <td>${c.schemes.map(id => `<span class="who" style="color:var(--text)">${esc(short(id))}</span>`).join('')}</td><td>${pill(c)}<span class="note" style="display:block">${c.blind ? 'Blind review' : 'Open review'}</span></td>
     <td>${esc(c.deadlineText || '—')}</td><td>${esc(c.periodEndText)}</td><td>${esc(c.prefix)}</td><td class="num">${c.applications}</td><td class="num">${c.funded ? `${c.funded} · ${money(c.awarded)}${c.budget ? ` of ${money(c.budget)}` : ''}` : '—'}</td>
-    <td><button type="button" class="linkbtn" data-edit="${esc(c.id)}">Edit</button>${st.formUrl ? `<button type="button" class="linkbtn" data-link="${esc(c.id)}">Copy form link</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="note">No calls yet.</td></tr>'}
+    <td><button type="button" class="linkbtn" data-edit="${esc(c.id)}">Edit</button>${st.applyPage ? `<button type="button" class="linkbtn" data-link="${esc(c.id)}">Copy form link</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="note">No calls yet.</td></tr>'}
   </tbody></table>
   <p class="note">The website's Grants page shows the schemes of every call that is accepting applications as open, with its deadline and an Apply button. "Copy form link" gives a link straight to one call's form, e.g. to send to a company's contacts.</p>
   <div class="panel" style="margin-top:18px"><h2>For all calls</h2><form id="gsettings">
@@ -440,7 +440,7 @@ async function renderCalls(state, message) {
   const fail = err => { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; };
   main.querySelector('#newCall').addEventListener('click', () => { callDraft = blankCall(); renderCalls(null, ' '); });
   main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { const c = st.calls.filter(x => x.id === b.dataset.edit)[0]; callDraft = JSON.parse(JSON.stringify({ id: c.id, name: c.name, schemes: c.schemes, open: c.open, blind: c.blind, deadline: c.deadline, periodEnd: c.periodEnd, prefix: c.prefix, description: c.description, budget: c.budget == null ? '' : c.budget, host: c.host, questions: c.questions, documents: c.documents, applications: c.applications })); renderCalls(null, ' '); }));
-  main.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => { const url = `${st.formUrl}?call=${encodeURIComponent(b.dataset.link)}`; try { navigator.clipboard.writeText(url); msg.className = 'msg ok'; msg.textContent = 'Copied: ' + url; } catch (e) { msg.className = 'msg'; msg.textContent = url; } }));
+  main.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => { const url = `${st.applyPage}?call=${encodeURIComponent(b.dataset.link)}`; try { navigator.clipboard.writeText(url); msg.className = 'msg ok'; msg.textContent = 'Copied: ' + url; } catch (e) { msg.className = 'msg'; msg.textContent = url; } }));
   main.querySelector('#gsettings').addEventListener('submit', async e => {
     e.preventDefault();
     const f = e.target, budgets = {};

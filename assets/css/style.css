@@ -3387,3 +3387,4 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
 .grant-portal__form { display: flex; flex-wrap: wrap; gap: 0.6rem; }
 .grant-portal__form input { flex: 1 1 16rem; min-width: 0; font: inherit; font-family: var(--font-ui); padding: 0.55rem 0.8rem; border: 1px solid var(--color-border); border-radius: var(--radius-sm); }
 .grant-portal__msg { font-family: var(--font-ui); margin: 0.75rem 0 0; }
+.grant-apply__captcha { display: flex; justify-content: center; margin: 0.5rem 0 1rem; }

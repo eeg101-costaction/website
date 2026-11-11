@@ -108,6 +108,8 @@ function makeGoogle(opts = {}) {
     DriveApp: { createFolder: n => new Folder(n, null), getFolderById: id => state.folders[id], getFileById: id => { const f = state.files[id]; if (!f) throw new Error('No item with the given ID could be found.'); return f; } },
     PropertiesService: { getScriptProperties: () => ({ getProperty: k => state.props[k] ?? null, setProperty: (k, v) => { state.props[k] = String(v); } }) },
     ContentService: { MimeType: { JSON: 'application/json' }, createTextOutput: t => { const o = { text: t, setMimeType(m) { o.mime = m; return o; }, getContent: () => t }; return o; } },
+    CacheService: { getScriptCache: () => ({ get: k => (state.cache || (state.cache = {}))[k] ?? null, put: (k, v) => { (state.cache || (state.cache = {}))[k] = String(v); } }) },
+    UrlFetchApp: { fetch: (url, opts) => { state.fetches = (state.fetches || []).concat([{ url, opts }]); return { getContentText: () => JSON.stringify({ success: opts.payload.response === 'good-token' }) }; } },
     LockService: { getScriptLock: () => ({ waitLock() {}, tryLock() { return true; }, releaseLock() {} }) },
     MailApp: { sendEmail: o => state.mail.push(o), getRemainingDailyQuota: () => 100 },
     Session: { getActiveUser: () => ({ getEmail: () => state.activeUser }), getEffectiveUser: () => ({ getEmail: () => state.effectiveUser }) },

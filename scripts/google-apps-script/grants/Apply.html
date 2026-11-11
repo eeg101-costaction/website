@@ -506,15 +506,33 @@ function upload(input) {
 
 /* -------------------------------------------------------------- submit */
 
-function submit() {
+// The CAPTCHA runs on www.eeg101.eu/grants/apply/, around this form: ask that
+// page for a token, and wait while the person completes it if asked to.
+function captchaToken() {
+  return new Promise((resolve, reject) => {
+    const site = new URL(CONFIG.applyPage).origin;
+    const give = setTimeout(() => { window.removeEventListener('message', on); reject(new Error(`The check that you are not a robot did not load. Please open this form from ${CONFIG.applyPage} and submit again; your answers are kept.`)); }, 180000);
+    function on(e) {
+      if (e.origin !== site || !e.data || e.data.type !== 'eeg101-grant-token') return;
+      clearTimeout(give); window.removeEventListener('message', on);
+      if (e.data.token) resolve(e.data.token); else reject(new Error('The check that you are not a robot did not work. Please submit again.'));
+    }
+    window.addEventListener('message', on);
+    try { window.top.postMessage({ type: 'eeg101-grant-token-request' }, '*'); } catch (err) { clearTimeout(give); reject(err); }
+  });
+}
+
+async function submit() {
   const button = document.getElementById('next');
-  button.disabled = true; button.textContent = 'Submitting…';
-  const payload = Object.assign({}, state, { call: currentCall().id, website: (document.querySelector('[name=website]') || {}).value || '' });
+  const failed = err => { button.disabled = false; button.textContent = 'Submit application'; render([(err && err.message) || 'Your application could not be submitted. Please try again.']); tellParent('eeg101-grant-scroll'); };
+  button.disabled = true; button.textContent = CONFIG.captcha ? 'Checking…' : 'Submitting…';
+  const payload = Object.assign({}, state, { call: currentCall().id, started: CONFIG.started, startedSig: CONFIG.startedSig, website: (document.querySelector('[name=website]') || {}).value || '' });
   payload.budget = (state.budget || []).filter(l => l.category || l.description || l.amount);
-  google.script.run
-    .withSuccessHandler(done)
-    .withFailureHandler(err => { button.disabled = false; button.textContent = 'Submit application'; render([(err && err.message) || 'Your application could not be submitted. Please try again.']); tellParent('eeg101-grant-scroll'); })
-    .submitApplication(payload);
+  if (CONFIG.captcha) {
+    try { payload.captcha = await captchaToken(); } catch (err) { failed(err); return; }
+    button.textContent = 'Submitting…';
+  }
+  google.script.run.withSuccessHandler(done).withFailureHandler(failed).submitApplication(payload);
 }
 
 function done(result) {

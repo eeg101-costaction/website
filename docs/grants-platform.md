@@ -304,6 +304,36 @@ A call with applications keeps its ID prefix and cannot be deleted, only
 closed. **For all calls**, at the bottom of the Calls page, sets the money
 available per scheme.
 
+## Spam protection
+
+Always on, with nothing to set up:
+- a hidden form field that people never see but spam robots fill in;
+- a minimum of 20 seconds between opening the form and submitting it;
+- at most 3 applications an hour from one email address, 60 an hour in
+  all, and 150 file uploads an hour (limits in `LIMITS` in `Code.gs`).
+
+**The CAPTCHA (optional, recommended once calls are public).** It uses
+Cloudflare Turnstile: free, and usually invisible. Most people see nothing; a
+few are asked to tick a box below the form when they submit. It runs on
+www.eeg101.eu/grants/apply/, so once it is on, applications must come through
+that page. The portal's **Copy form link** already points there. To switch it
+on (10 minutes):
+
+1. Create a free account at **dash.cloudflare.com**, then go to **Turnstile →
+   Add widget**. Name it *EEG101 grants*, add the hostname **www.eeg101.eu**,
+   choose **Managed**, and create it.
+2. Copy the **Site key** (public) and send it to the website admin, or put it
+   in `_data/site.yml` as `grants_turnstile_site_key`.
+3. Copy the **Secret key**. In the Apps Script project go to **Project
+   Settings → Script properties → Add script property**: `TURNSTILE_SECRET` =
+   the secret key. Never put it anywhere else.
+4. Run **setUpGrants** once and **Allow** the new permission (connect to an
+   external service: the script checks each token with Cloudflare).
+
+Do steps 2 and 3 together. With the secret but no site key, the form cannot
+get a token and every submission is refused. To switch it off, delete the
+`TURNSTILE_SECRET` property.
+
 ## If something goes wrong
 
 - **An applicant says the form will not submit:** the message above the

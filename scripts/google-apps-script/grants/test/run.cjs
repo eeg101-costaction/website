@@ -48,6 +48,15 @@ function conference(g, overrides) {
   }, overrides || {}));
 }
 
+// A form opened a minute ago, as a person would; tests submit many
+// applications from one address, so the hourly limits start afresh here
+// (their own test checks them).
+function opened(g) {
+  const started = String(Number(g.applyConfig('').started) - 60000);
+  g.state.cache = {};
+  return { started: started, startedSig: g.sign('started:' + started) };
+}
+
 function stsm(g, overrides) {
   const cv = g.uploadFile({ name: 'cv.pdf', data: PDF });
   const letter = g.uploadFile({ name: 'host letter.pdf', data: PDF });
@@ -61,7 +70,7 @@ function stsm(g, overrides) {
     justification: 'Quotes from airline and university housing.',
     documents: { cv: cv, host_letter: letter },
     confirm_accurate: true, confirm_rules: true, confirm_privacy: true, signature: 'Ada Lovelace'
-  }, overrides || {});
+  }, opened(g), overrides || {});
 }
 
 test('set-up creates the tabs, defaults and a staging clean-up trigger, closed by default', () => {
@@ -588,6 +597,34 @@ test('a rolling call (no deadline) promises a decision within 8 weeks of submiss
   const r = g.submitApplication(stsm(g));
   assert.match(r.timing, /rolling basis[\s\S]*within 8 weeks of your submission/);
   assert.match(g.state.mail[0].body, /rolling basis/);
+});
+
+test('spam protection: honeypot, minimum time, hourly limits and the optional CAPTCHA', () => {
+  const g = ready();
+  throwsLike(() => g.submitApplication(stsm(g, { website: 'http://spam.example' })), /could not be submitted/);
+  throwsLike(() => g.submitApplication(stsm(g, { started: undefined, startedSig: undefined })), /reload the page/);
+  throwsLike(() => g.submitApplication(stsm(g, { startedSig: 'forged' })), /reload the page/);
+  const now = g.applyConfig('').started;
+  throwsLike(() => g.submitApplication(stsm(g, { started: now, startedSig: g.sign('started:' + now) })), /check your answers/);
+  // Three from one address an hour, then a pause.
+  g.state.cache = {};
+  const quick = o => { const p = stsm(g, o); g.state.cache = g.state.saved || g.state.cache; return p; };
+  g.state.saved = {};
+  for (let i = 0; i < 3; i++) { const p = stsm(g); g.state.cache = g.state.saved; assert.ok(g.submitApplication(p).id); g.state.saved = g.state.cache; }
+  const p4 = stsm(g); g.state.cache = g.state.saved;
+  throwsLike(() => g.submitApplication(p4), /several applications in the last hour/);
+  assert.ok(quick({ email: 'someone.else@example.org' }) && true);
+  // No CAPTCHA until the secret is set; then a token is required and checked with Cloudflare.
+  assert.strictEqual(g.applyConfig('').captcha, false);
+  g.state.props.TURNSTILE_SECRET = 'secret';
+  assert.strictEqual(g.applyConfig('').captcha, true);
+  throwsLike(() => g.submitApplication(stsm(g, { email: 'b@example.org' })), /not a robot[\s\S]*www\.eeg101\.eu\/grants\/apply/);
+  throwsLike(() => g.submitApplication(stsm(g, { email: 'b@example.org', captcha: 'bad-token' })), /did not work/);
+  assert.ok(g.submitApplication(stsm(g, { email: 'b@example.org', captcha: 'good-token' })).id);
+  assert.strictEqual(g.state.fetches[g.state.fetches.length - 1].opts.payload.secret, 'secret');
+  // The portal's form links point at the website, where the CAPTCHA is.
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair']]);
+  assert.strictEqual(g.listCalls(keys['chair@example.org']).applyPage, 'https://www.eeg101.eu/grants/apply/');
 });
 
 test('the application page is built with its settings and can be framed', () => {

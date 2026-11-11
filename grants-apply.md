@@ -20,6 +20,8 @@ permalink: /grants/apply/
   <p class="grant-apply__loading" id="grantApplyLoading">Loading the application form…</p>
   <iframe id="grantApplyFrame" class="grant-apply__frame" title="EEG101 grant application form" src="{{ endpoint }}" allow="clipboard-write"></iframe>
 </div>
+{% assign captcha = site.data.site.grants_turnstile_site_key %}
+{% if captcha and captcha != "" %}<div id="grantCaptcha" class="grant-apply__captcha"></div>{% endif %}
 <p class="grant-apply__help">Problems with the form? Email <a href="mailto:{{ site.data.site.email }}">{{ site.data.site.email }}</a>.</p>
 <script>
 (function () {
@@ -31,11 +33,30 @@ permalink: /grants/apply/
   if (extra) frame.src = frame.src + (frame.src.indexOf('?') < 0 ? '?' : '&') + extra.slice(1);
   frame.addEventListener('load', function () { document.getElementById('grantApplyLoading').hidden = true; });
   // The form runs inside Google's own wrapper frames, so accept messages from
-  // any frame nested in ours, and only these two kinds.
+  // any frame nested in ours, and only these kinds.
   function fromFrame(source) { for (var w = source; w; w = w.parent === w ? null : w.parent) if (w === frame.contentWindow) return true; return false; }
+  // The CAPTCHA (Cloudflare Turnstile) runs on this page, not in the form: when
+  // the form asks at submission, get a token and hand it back. Usually nobody
+  // sees anything; if Cloudflare wants a click, the box shows below the form.
+  var captchaKey = '{{ site.data.site.grants_turnstile_site_key }}', widget = null, asker = null;
+  function reply(token) { if (asker) asker.postMessage({ type: 'eeg101-grant-token', token: token || '' }, '*'); }
+  function captchaFor(source) {
+    asker = source;
+    if (!captchaKey) { reply(''); return; }
+    if (!window.turnstile) { setTimeout(function () { captchaFor(source); }, 300); return; }
+    if (widget === null) {
+      widget = turnstile.render('#grantCaptcha', {
+        sitekey: captchaKey, execution: 'execute', appearance: 'interaction-only',
+        callback: reply, 'error-callback': function () { reply(''); }, 'expired-callback': function () { turnstile.reset(widget); },
+        'before-interactive-callback': function () { document.getElementById('grantCaptcha').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      });
+    } else turnstile.reset(widget);
+    turnstile.execute(widget);
+  }
   window.addEventListener('message', function (e) {
     var d = e.data || {};
     if (!fromFrame(e.source)) return;
+    if (d.type === 'eeg101-grant-token-request') { captchaFor(e.source); return; }
     if (d.type === 'eeg101-grant-height' || d.type === 'eeg101-grant-scroll') {
       if (d.height > 200) frame.style.height = Math.min(d.height + 24, 20000) + 'px';
       if (d.type === 'eeg101-grant-scroll') frame.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -43,6 +64,7 @@ permalink: /grants/apply/
   });
 })();
 </script>
+{% if captcha and captcha != "" %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>{% endif %}
 {% else %}
 <div class="grants-status-banner">
 <h3>Applications are not open yet</h3>

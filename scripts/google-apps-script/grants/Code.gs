@@ -175,6 +175,13 @@ const SCHEMES = {
   }
 };
 const ATTENDANCE = ['Face to face', 'Online'];
+
+// Against spam. Always on: a hidden field people never fill in, a minimum time
+// between opening the form and submitting it, and hourly limits. A CAPTCHA
+// (Cloudflare Turnstile, shown on www.eeg101.eu/grants/apply/) is added once the
+// TURNSTILE_SECRET script property is set; see docs/grants-platform.md.
+const LIMITS = { minSeconds: 20, perEmailPerHour: 3, perHour: 60, uploadsPerHour: 150 };
+const APPLY_PAGE = 'https://www.eeg101.eu/grants/apply/';
 const INDUSTRY_TYPES = ['Large company', 'SME (small or medium-sized company)', 'Start-up', 'Other industry organisation'];
 // The schemes a call offers when nothing else is set: all but the special
 // industry call, which runs on its own.
@@ -353,6 +360,7 @@ function schemeSummaries() {
 
 function applyConfig(preselect, preselectCall) {
   const calls = openCalls();
+  const started = String(Date.now());
   const offered = calls.reduce((all, c) => all.concat(c.schemes.filter(id => all.indexOf(id) < 0)), []);
   return {
     open: calls.length > 0,
@@ -372,6 +380,9 @@ function applyConfig(preselect, preselectCall) {
     workingGroups: WORKING_GROUPS,
     words: GRANTS.words,
     maxFileMb: GRANTS.maxFileBytes / 1024 / 1024,
+    started: started, startedSig: sign('started:' + started),
+    captcha: !!PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET'),
+    applyPage: APPLY_PAGE,
     privacyUrl: GRANTS.privacyUrl,
     contact: GRANTS.replyTo
   };
@@ -417,6 +428,7 @@ function formatDateTime(date) {
 // folder on submission, and leftovers are deleted after two days.
 function uploadFile(upload) {
   if (!openCalls().length) throw new Error('This call is closed, so files can no longer be uploaded.');
+  if (!underLimit('uploads', LIMITS.uploadsPerHour)) throw new Error('A great many files are being uploaded just now. Please try again in an hour, or email eeg101costaction@gmail.com.');
   const name = String(upload && upload.name || '').replace(/[\\/:*?"<>|\r\n]+/g, '_').slice(0, 120) || 'document.pdf';
   const data = String(upload && upload.data || '');
   if (!/\.pdf$/i.test(name)) throw new Error('Please upload a PDF file.');
@@ -595,14 +607,44 @@ function validateApplication(p, call, today) {
   return a;
 }
 
+// Counts something for the current hour; false once the limit is reached.
+function underLimit(what, limit) {
+  const cache = CacheService.getScriptCache();
+  const key = `limit:${what}:${Utilities.formatDate(new Date(), 'UTC', 'yyyyMMddHH')}`;
+  const n = Number(cache.get(key) || 0);
+  if (n >= limit) return false;
+  cache.put(key, String(n + 1), 3700);
+  return true;
+}
+
+// The CAPTCHA, when TURNSTILE_SECRET is set: the token the website's page got
+// from Cloudflare must check out.
+function verifyCaptcha(token) {
+  const secret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+  if (!secret) return;
+  if (!token) throw new Error(`Please confirm you are not a robot, then submit again. If you opened this form from a direct link, open it from ${APPLY_PAGE} instead; your answers are kept.`);
+  let ok = false;
+  try {
+    const reply = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'post', payload: { secret: secret, response: String(token) }, muteHttpExceptions: true });
+    ok = JSON.parse(reply.getContentText()).success === true;
+  } catch (error) { ok = false; }
+  if (!ok) throw new Error('The check that you are not a robot did not work. Please submit again.');
+}
+
 function submitApplication(payload) {
   const calls = openCalls();
   const asked = String(payload && payload.call || '');
   let call = calls.filter(c => c.id === asked)[0];
   if (!call && !asked) { const offering = calls.filter(c => c.schemes.indexOf(String(payload && payload.scheme)) >= 0); if (offering.length === 1) call = offering[0]; }
   if (!call) throw new Error(asked || !calls.length ? 'This call is closed, so applications can no longer be submitted.' : 'Please choose the call you are applying to.');
+  const started = Number(payload.started);
+  if (!started || payload.startedSig !== sign('started:' + payload.started)) throw new Error('Please reload the page and submit again. Your answers are kept.');
+  if (Date.now() - started < LIMITS.minSeconds * 1000) throw new Error('Please check your answers, then submit again.');
   const today = Utilities.formatDate(new Date(), GRANTS.timezone, 'yyyy-MM-dd');
   const a = validateApplication(payload, call, today);
+  verifyCaptcha(payload.captcha);
+  if (!underLimit('email:' + a.email, LIMITS.perEmailPerHour)) throw new Error('You have submitted several applications in the last hour. Please wait an hour, or email eeg101costaction@gmail.com.');
+  if (!underLimit('all', LIMITS.perHour)) throw new Error('We are receiving a great many applications just now. Please try again in an hour; your answers are kept.');
 
   const lock = LockService.getScriptLock();
   lock.waitLock(30000);
@@ -1235,7 +1277,7 @@ function listCalls(key) {
   let formUrl = '';
   try { formUrl = appUrl(); } catch (e) { formUrl = ''; }
   return {
-    calls: calls, budgets: budgets, formUrl: formUrl,
+    calls: calls, budgets: budgets, formUrl: formUrl, applyPage: APPLY_PAGE,
     schemes: Object.keys(SCHEMES).map(id => ({ id: id, title: SCHEMES[id].title, kind: SCHEMES[id].kind })),
     countries: COUNTRIES, industryTypes: INDUSTRY_TYPES
   };
