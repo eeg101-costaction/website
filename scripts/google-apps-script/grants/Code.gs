@@ -462,7 +462,7 @@ function validateApplication(p, call, today) {
     const h = call.host;
     p = Object.assign({}, p, { host_institution: h.institution }, h.country ? { host_country: h.country } : {}, h.type ? { host_type: h.type } : {}, h.name ? { host_name: h.name } : {});
   }
-  const a = { scheme: p.scheme, call_id: call.id, call_name: call.name };
+  const a = { scheme: p.scheme, call_id: call.id, call_name: call.name, call_deadline: call.deadline };
 
   ['first_name', 'last_name', 'institution', 'position'].forEach(key => { a[key] = clean(p[key], 150); if (!a[key]) fail('Please complete all the fields about you.'); });
   a.department = clean(p.department, 150);
@@ -640,7 +640,7 @@ function submitApplication(payload) {
   catch (error) { console.warn(`Confirmation email for ${id} not sent: ${error}`); }
 
   return {
-    ok: true, id: id, emailed: emailed, email: a.email, submitted: a.submitted_text,
+    ok: true, id: id, emailed: emailed, email: a.email, submitted: a.submitted_text, timing: decisionTiming(a),
     pdf: Utilities.base64Encode(pdfBlob.getBytes()),
     html: applicationHtml(a)
   };
@@ -715,6 +715,15 @@ function applicationPdf(a) {
   return Utilities.newBlob(applicationHtml(a), 'text/html', `${a.id}.html`).getAs('application/pdf').setName(`${a.id} – Application.pdf`);
 }
 
+// When the applicant will hear: within 8 weeks of the call's deadline, or of
+// their submission for a rolling call (one with no deadline). Usually sooner.
+function decisionTiming(a) {
+  const deadline = a.call_deadline ? parseDeadline(a.call_deadline) : null;
+  return deadline
+    ? `We will let you know the outcome by email within 8 weeks of the call's deadline (${formatDate(Utilities.formatDate(deadline, GRANTS.timezone, 'yyyy-MM-dd'))}), and in practice usually much sooner.`
+    : 'This call is open on a rolling basis, so we will let you know the outcome by email within 8 weeks of your submission, and in practice usually much sooner.';
+}
+
 function sendConfirmation(a, pdf) {
   const s = SCHEMES[a.scheme];
   const bcc = String(PropertiesService.getScriptProperties().getProperty('GRANTS_BCC') || '').split(',').map(x => x.trim()).filter(x => EMAIL_PATTERN.test(x));
@@ -723,7 +732,7 @@ function sendConfirmation(a, pdf) {
     `Thank you for applying for EEG101 funding. We have received your application.`,
     `Reference: ${a.id}\nScheme: ${s.title}\nTitle: ${a.title}\nDates: ${formatDate(a.start_date)} to ${formatDate(a.end_date)}\nAmount requested: €${a.total.toFixed(2)}\nSubmitted: ${a.submitted_text}`,
     'A PDF copy of your application is attached. Please quote your reference if you contact us about it.',
-    'Your application will be reviewed after the call closes, and we will let you know the outcome by email. If you need to correct anything, reply to this email.',
+    decisionTiming(a),
     'You do not need to do anything in e-COST yet. If your application is accepted, we will ask you to apply through COST\'s online platform, e-COST (e-services.cost.eu), with the same details and your CV in your e-COST profile. COST then issues your grant letter.',
     'With best wishes,\nThe EEG101 Grants team\nCOST Action CA24148'
   ];

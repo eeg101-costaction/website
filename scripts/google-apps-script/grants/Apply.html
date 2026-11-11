@@ -525,7 +525,7 @@ function done(result) {
   <p>Thank you. We received your application on ${esc(result.submitted)}. ${result.emailed ? `A confirmation with a PDF copy has been sent to <strong>${esc(result.email)}</strong>.` : `We could not send the confirmation email just now, so please download your copy below. We have your application.`}</p>
   <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a></div>
   <h3>What happens next</h3>
-  <ul><li>After the call closes, the grants committee reviews the applications, and we email you the outcome. You do not need to do anything in e-COST yet.</li>
+  <ul><li>The grants committee reviews your application. ${esc(result.timing || '')} You do not need to do anything in e-COST yet.</li>
   <li>If your application is accepted, we will ask you to apply through COST's online platform, <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a>, with the same details and your CV in your e-COST profile. You then receive a grant letter.</li>
   <li> After the activity, you report in e-COST within 30 days, and the grant is paid once the report is approved.</li></ul>
   <p class="hint">Please quote ${esc(result.id)} if you contact us. Questions: <a href="mailto:${esc(CONFIG.contact)}">${esc(CONFIG.contact)}</a>.</p></div>`;

@@ -121,6 +121,9 @@ test('a complete STSM application is stored, filed, emailed and returned as a PD
   assert.strictEqual(mail.cc, 'eeg101costaction@gmail.com');
   assert.strictEqual(mail.bcc, 'amy@example.org,faisal@example.org');
   assert.strictEqual(mail.attachments.length, 1);
+  assert.match(mail.body, /within 8 weeks of the call's deadline \(15 December 2026\), and in practice usually much sooner/);
+  assert.ok(!/correct anything/.test(mail.body));
+  assert.match(result.timing, /8 weeks/);
   assert.match(mail.subject, /EEG101-G2-001/);
   assert.match(mail.body, /do not need to do anything in e-COST yet\. If your application is accepted/);
   assert.match(result.html, /Your contribution to EEG101 to date[\s\S]*WG2 meetings/);
@@ -577,6 +580,14 @@ test('blind review is set per call, and the website can send people their portal
   assert.strictEqual(g.state.mail.length, 2);
   ask('not an email'); ask('');
   assert.strictEqual(g.state.mail.length, 2);
+});
+
+test('a rolling call (no deadline) promises a decision within 8 weeks of submission', () => {
+  const g = ready();
+  setCall(g, 'main', { 'Deadline': '' });
+  const r = g.submitApplication(stsm(g));
+  assert.match(r.timing, /rolling basis[\s\S]*within 8 weeks of your submission/);
+  assert.match(g.state.mail[0].body, /rolling basis/);
 });
 
 test('the application page is built with its settings and can be framed', () => {
