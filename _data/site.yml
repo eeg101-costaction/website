@@ -59,7 +59,7 @@ grants_application_endpoint: "https://script.google.com/macros/s/AKfycbyKwBLl5oW
 # Cloudflare Turnstile site key (public) for the CAPTCHA on /grants/apply/. Empty:
 # no CAPTCHA. Its secret key goes only in the grants Apps Script's script
 # properties as TURNSTILE_SECRET. See docs/grants-platform.md.
-grants_turnstile_site_key: ""
+grants_turnstile_site_key: "0x4AAAAAAF8qTXZRvUiwQFHE"
 
 # The internal calendar bridge, deployed from scripts/google-apps-script/internal-calendar.gs.
 # Leave empty and the Calendar page shows public events only, with no unlock control.
