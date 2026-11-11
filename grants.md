@@ -193,7 +193,7 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq11" aria-expanded="false" aria-controls="faq11">When is the grant paid?</button>
 </h3>
 <div id="faq11" class="accordion-collapse collapse" aria-labelledby="faq11-heading" data-bs-parent="#faqAccordion">
-<div class="accordion-body">As standard, at the end: after your STSM, virtual mobility or conference, you submit your report in e-COST, and the Grant Holder pays the grant once the report is approved. Please plan to cover your costs until then. The only exception is for STSMs: once your grant is approved, you can ask the Grant Holder for up to 50% in advance. This depends on funds being available and the Grant Holder agreeing, so it is not guaranteed.</div>
+<div class="accordion-body">As standard, at the end: after your STSM, virtual mobility or conference, you submit your report in e-COST, and the Grant Holder pays the grant once the report is approved. Grants are not paid in advance, so please plan to cover your costs until then.</div>
 </div>
 </div>
 </div>

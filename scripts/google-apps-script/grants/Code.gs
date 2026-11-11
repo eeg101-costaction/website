@@ -75,7 +75,7 @@ const SCHEMES = {
     rules: [
       'The host institution must be in a different country from your own institution.',
       'The academic lead at the host must be an EEG101 member.',
-      'The grant is normally paid after the visit, once your report is approved. Once it is approved, you can ask the Grant Holder for up to 50% in advance; this depends on funds being available and the Grant Holder agreeing.'
+      'The grant is paid after the visit, once your report is approved, not in advance.'
     ],
     questions: [
       { id: 'summary', label: 'Goals of the mission', hint: 'What you want to achieve, in a few sentences.' },
@@ -97,7 +97,7 @@ const SCHEMES = {
     rules: [
       'The host must be a company, SME, start-up or other industry organisation, in a different country from your own institution.',
       'The named lead at the host must be an EEG101 member.',
-      'The grant is normally paid after the visit, once your report is approved. Once it is approved, you can ask the Grant Holder for up to 50% in advance; this depends on funds being available and the Grant Holder agreeing.'
+      'The grant is paid after the visit, once your report is approved, not in advance.'
     ],
     questions: [
       { id: 'summary', label: 'Goals of the mission', hint: 'What you want to achieve, in a few sentences.' },
@@ -847,7 +847,6 @@ function decisionEmail(r, call, note) {
       `2. Carry out your activity as approved, from ${formatDate(start)} to ${formatDate(end)}. Please acknowledge EEG101 and COST in anything that comes out of it, for example: "${ACKNOWLEDGEMENT}"`,
       `3. Submit your report in e-COST by ${formatDate(due)} (30 days after the end of your activity, or 15 days after the end of the grant period if sooner).${s.kind === 'conference' ? ' Include your certificate of attendance and the programme or book of abstracts showing your presentation.' : ''} The grant is paid once your report is approved.`
     );
-    if (s.kind === 'stsm') lines.push('Once your grant is approved in e-COST, you can ask the Grant Holder for up to 50% of it in advance; this depends on funds being available and the Grant Holder agreeing.');
     lines.push('Congratulations, and please tell us if your plans change.');
   } else if (decision === 'Reserve') {
     subject = `EEG101 grant application ${id}: reserve list`;

@@ -665,12 +665,12 @@ test('decision emails: previewed and sent by chairs, recorded, with the right te
   const p = g.previewDecisionEmail(chair, a, 'Well done on a clear plan.');
   assert.strictEqual(p.to, 'ada@example.org');
   assert.match(p.subject, new RegExp(`EEG101 grant awarded: ${a}`));
-  assert.match(p.body, /up to €1500\.00[\s\S]*e-COST \(https:\/\/e-services\.cost\.eu\/\)[\s\S]*1 March 2027 to 14 March 2027[\s\S]*CA24148: ‘EEG101[\s\S]*by 13 April 2027[\s\S]*up to 50%[\s\S]*A note from the grants committee:\nWell done on a clear plan\./);
+  assert.match(p.body, /up to €1500\.00[\s\S]*e-COST \(https:\/\/e-services\.cost\.eu\/\)[\s\S]*1 March 2027 to 14 March 2027[\s\S]*CA24148: ‘EEG101[\s\S]*by 13 April 2027[\s\S]*A note from the grants committee:\nWell done on a clear plan\./);
   assert.strictEqual(p.alreadySent, '');
   assert.match(g.previewDecisionEmail(chair, b, '').body, /has not been selected for funding[\s\S]*www\.eeg101\.eu\/grants/);
   const reserve = g.previewDecisionEmail(chair, c, '').body;
   assert.match(reserve, /reserve list[\s\S]*do not apply in e-COST/);
-  assert.ok(!/50%/.test(reserve));
+  assert.ok(!/50%|in advance/.test(p.body + reserve), 'no advance payments');
   // A chair with a conflict cannot send; others go out and are recorded.
   g.saveReview(keys['chair2@example.org'], { id: b, conflict: true });
   g.state.mail = [];

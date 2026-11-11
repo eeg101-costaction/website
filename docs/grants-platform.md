@@ -230,8 +230,9 @@ to the applicant from the portal. It is sent from the EEG101 account, using
 the template for that decision:
 - **Funded:** the amount, then what happens next: apply in e-COST with the
   same details (and the CV in the e-COST profile), carry out the activity
-  and acknowledge COST, and the report due date. STSMs also get the
-  50% advance option, and conference grants the attendance documents.
+  and acknowledge COST, and the report due date (that the grant is paid
+  after the report is approved). Conference grants also get the attendance
+  documents.
 - **Reserve:** fundable but the budget is committed. We will be in touch if
   funds become available. Do not apply in e-COST yet.
 - **Not funded:** not selected this time, with an invitation to apply again.
@@ -325,9 +326,7 @@ The first call, the main one, is made during setup.
    applicants are then asked to apply through e-COST (track this, and send
    reminders, on Funded grants), where the application is approved and the
    grant letter issued. Grants are paid after the activity, once the
-   grantee's report is approved. The one exception: an STSM grantee may ask
-   the Grant Holder for up to 50% in advance once the grant is approved, if
-   funds allow and the Grant Holder agrees.
+   grantee's report is approved; there are no advance payments.
 
 A call with applications keeps its ID prefix and cannot be deleted, only
 closed. **For all calls**, at the bottom of the Calls page, sets the money
