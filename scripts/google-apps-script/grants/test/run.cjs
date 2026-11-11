@@ -54,7 +54,7 @@ function stsm(g, overrides) {
   return Object.assign({
     scheme: 'stsm', first_name: 'Ada', last_name: 'Lovelace', email: 'Ada@Example.org', position: 'Postdoc', career_stage: 'Postdoctoral researcher',
     institution: 'University of Lisbon', department: 'Psychology', country: 'Portugal', orcid: '', yri: 'Yes', eci: 'Yes', gender: 'Female', member: 'Yes',
-    working_groups: ['WG2 Curation and Harmonisation', 'Not a WG'], start_date: '2027-03-01', end_date: '2027-03-14',
+    working_groups: ['Curation and Harmonisation', 'WG2 Curation and Harmonisation'], start_date: '2027-03-01', end_date: '2027-03-14',
     host_name: 'Prof Host', host_email: 'host@leeds.ac.uk', host_institution: 'University of Leeds', host_country: 'United Kingdom', host_member: 'Yes',
     title: 'Harmonising resting-state EEG', summary: 'A short summary.', contribution: 'WG2 meetings.', workplan: 'Plan.', outcomes: 'Outcomes.', relevance: 'Relevant.', benefit: 'Benefit.',
     budget: [{ category: 'Travel', description: 'Flights', amount: '450' }, { category: 'Accommodation', description: '13 nights', amount: 1300 }],
@@ -109,7 +109,8 @@ test('a complete STSM application is stored, filed, emailed and returned as a PD
   assert.strictEqual(row['ITC'], 'Yes');
   assert.strictEqual(row['Requested (€)'], 1750);
   assert.strictEqual(row['Days'], 14);
-  assert.strictEqual(row['Working Groups'], 'WG2 Curation and Harmonisation');
+  assert.strictEqual(row['Working Groups'], 'Curation and Harmonisation');
+  assert.match(result.html, /EEG101 · Fundamentals of Open &amp; Rigorous EEG Science[\s\S]*COST Action CA24148 · Grant application · EEG101 Grant Period 2 call/);
   assert.match(row['Drive folder'], /drive\.google\.com\/drive\/folders/);
   const folder = Object.values(g.state.folders).filter(f => f.name.indexOf('EEG101-G2-001') === 0)[0];
   const inFolder = Object.values(g.state.files).filter(f => f.folder === folder).map(f => f.name).sort();
@@ -282,8 +283,10 @@ test('review: personal links, blind reviewers, open chairs, conflicts, quick dec
   same(rep.byMonth, [{ key: '2027-03', count: 2, amount: 2550 }]);
   same(rep.byItc.funded.map(x => [x.key, x.count]), [['No', 1], ['Yes', 1]]);
 
-  // With blind_review FALSE, reviewers see names and reports too.
-  g.tab('Settings').rows.forEach(r => { if (r[0] === 'blind_review') r[1] = 'FALSE'; });
+  // With blind review switched off for the call, reviewers see names, and reports too.
+  const main = g.listCalls(keys['chair@example.org']).calls[0];
+  assert.strictEqual(main.blind, true, 'blind review is on by default');
+  g.saveCall(keys['chair@example.org'], Object.assign({}, main, { blind: false }));
   assert.strictEqual(g.listApplications(r1).applications.filter(x => x.id === a)[0].applicant, 'Ada Lovelace');
   assert.ok(g.getReport(r1).totals);
 });
@@ -449,8 +452,8 @@ test('portal: chairs run calls side by side, each with its own deadline, questio
   same(g.applyConfig('').calls.map(c => c.id), []);
   // Settings for all calls.
   throwsLike(() => g.saveGrantSettings(chair, { budgets: { stsm: '-5' } }), /amount in euros/);
-  const after = g.saveGrantSettings(chair, { blindReview: false, budgets: { stsm: '20000' } });
-  assert.strictEqual(after.blindReview, false);
+  const after = g.saveGrantSettings(chair, { budgets: { stsm: '20000' } });
+  g.saveCall(chair, Object.assign({}, after.calls[0], { blind: false }));
   assert.strictEqual(after.budgets.stsm, '20000');
   assert.strictEqual(g.listApplications(keys['r1@example.org']).blind, false);
   // Reports and funded grants know the calls.
@@ -542,6 +545,38 @@ test('the status the website reads follows the calls', () => {
   status = JSON.parse(g.doGet({ parameter: { view: 'status' } }).getContent());
   assert.strictEqual(status.open, false);
   same(status.schemes, []);
+});
+
+test('blind review is set per call, and the website can send people their portal link', () => {
+  const g = ready();
+  const keys = reviewers(g, [['chair@example.org', 'Chair', 'chair'], ['r1@example.org', 'Rev One', 'reviewer']]);
+  const chair = keys['chair@example.org'], r1 = keys['r1@example.org'];
+  const open = g.saveCall(chair, { name: 'Open review call', schemes: ['stsm'], open: true, periodEnd: '2027-09-30', prefix: 'OPN', blind: false }).saved;
+  const a = g.submitApplication(stsm(g, { call: 'main' })).id;
+  const b = g.submitApplication(stsm(g, { call: open })).id;
+  g.assignReviewers(chair, { ids: [a, b], add: ['r1@example.org'] });
+  const list = g.listApplications(r1).applications;
+  assert.strictEqual(list.filter(x => x.id === a)[0].applicant, '', 'the main call is blind');
+  assert.strictEqual(list.filter(x => x.id === b)[0].applicant, 'Ada Lovelace', 'this call is not');
+  throwsLike(() => g.getDocument(r1, a, 'cv'), /blind review/);
+  assert.ok(g.getDocument(r1, b, 'cv').data);
+  // The host-confirmation template is offered with the document.
+  assert.match(g.applyConfig('stsm').schemes.stsm.documents[1].template, /eeg101-stsm-host-confirmation-template\.docx$/);
+  // Portal link requests: same reply for anyone, an email only for listed people, at most every 10 minutes.
+  g.state.mail = [];
+  const ask = email => JSON.parse(g.doPost({ postData: { contents: JSON.stringify({ email: email }) } }).getContent());
+  const r = ask('R1@example.org');
+  const s2 = ask('stranger@example.org');
+  same(r, s2);
+  assert.strictEqual(g.state.mail.length, 1);
+  assert.match(g.state.mail[0].body, new RegExp('as requested on the website[\\s\\S]*key=' + r1));
+  ask('r1@example.org');
+  assert.strictEqual(g.state.mail.length, 1, 'not again within 10 minutes');
+  g.setNow('2026-11-10T09:11:00Z');
+  ask('r1@example.org');
+  assert.strictEqual(g.state.mail.length, 2);
+  ask('not an email'); ask('');
+  assert.strictEqual(g.state.mail.length, 2);
 });
 
 test('the application page is built with its settings and can be framed', () => {

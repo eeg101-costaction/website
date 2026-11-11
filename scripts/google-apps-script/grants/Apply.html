@@ -38,6 +38,8 @@ fieldset{border:0;margin:0 0 16px;padding:0}legend{font:700 14px var(--ui);margi
 .box{background:var(--bg-alt);border-radius:8px;font:400 14px/1.55 var(--ui);padding:12px 14px;margin:0 0 16px}
 .box.warn{background:var(--gold-light);border:1px solid var(--gold-dark)}
 .box ul,.scheme ul{margin:6px 0 0;padding-left:20px}.scheme ul{font:400 13px/1.45 var(--ui);color:var(--muted);padding-left:18px}
+.scheme .link{display:block;margin-top:8px;text-align:left}
+.doc a{display:block;margin-top:4px;font-weight:700;color:var(--primary)}
 .scheme .who{display:block;font:700 13px/1.45 var(--ui);color:var(--text);margin-top:6px}
 .counter{display:block;font:400 12px var(--ui);color:var(--muted);text-align:right;margin-top:3px}.counter.over{color:var(--error);font-weight:700}
 table.budget{border-collapse:collapse;width:100%;font:400 14px var(--ui);margin-bottom:8px}
@@ -154,7 +156,53 @@ function schemeCard(call, id) {
   const s = CONFIG.schemes[id];
   const on = state.scheme === id && (state.call === call.id || (!state.call && CONFIG.calls.length === 1));
   const docs = s.documents.concat((call.documents || []).map(d => ({ label: d.label })));
-  return `<label class="scheme${on ? ' on' : ''}"><input type="radio" name="pick" value="${esc(call.id)}|${id}"${on ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">${amountText(s)}</span><span class="d">${esc(s.blurb)}</span>${call.host && s.kind === 'stsm' ? `<span class="who">Host: ${esc(call.host.institution)}${call.host.country ? ', ' + esc(call.host.country) : ''}</span>` : ''}<span class="who">For: ${esc(s.who)}</span><ul>${s.rules.map(r => `<li>${esc(r)}</li>`).join('')}<li>${s.minDays}–${s.maxDays} days. You will need: ${docs.map(d => { const l = d.label.split(' (')[0].split(',')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</li></ul></label>`;
+  return `<label class="scheme${on ? ' on' : ''}"><input type="radio" name="pick" value="${esc(call.id)}|${id}"${on ? ' checked' : ''}><strong>${esc(s.title)}</strong><span class="amount">${amountText(s)}</span><span class="d">${esc(s.blurb)}</span>${call.host && s.kind === 'stsm' ? `<span class="who">Host: ${esc(call.host.institution)}${call.host.country ? ', ' + esc(call.host.country) : ''}</span>` : ''}<span class="who">For: ${esc(s.who)}</span><ul>${s.rules.map(r => `<li>${esc(r)}</li>`).join('')}<li>${s.minDays}–${s.maxDays} days. You will need: ${docs.map(d => { const l = d.label.split(' (')[0].split(',')[0].replace(/^Your /, ''); return l === 'CV' ? l : l.charAt(0).toLowerCase() + l.slice(1); }).join(', ')}.</li></ul><button type="button" class="link" data-template="${esc(call.id)}|${id}">Download a Word template to prepare offline</button></label>`;
+}
+
+// A Word version of the whole form for one call and scheme, to draft answers
+// offline. It is HTML saved as .doc, which Word opens and edits.
+function wordTemplate(call, id) {
+  const s = CONFIG.schemes[id];
+  const e = esc;
+  const row = (label, hint) => `<tr><td class="l" width="40%" bgcolor="#f0ede8">${e(label)}${hint ? `<br><span class="h">${e(hint)}</span>` : ''}</td><td class="v">&nbsp;</td></tr>`;
+  const box = (label, words, hint) => `<h3>${e(label)}${words ? ` <span class="h">(up to ${words} words)</span>` : ''}</h3>${hint ? `<p class="h">${e(hint)}</p>` : ''}<table class="box" border="1" cellpadding="6" cellspacing="0" width="100%"><tr><td height="80">&nbsp;<br>&nbsp;<br>&nbsp;<br>&nbsp;</td></tr></table>`;
+  const max = s.maxOnline ? `€${s.max.toLocaleString('en-GB')} in person, or €${s.maxOnline.toLocaleString('en-GB')} online` : `€${s.max.toLocaleString('en-GB')}`;
+  let activity = row('Start date') + row('End date', `${s.minDays}–${s.maxDays} days, ending by ${call.periodEndText}`);
+  if (s.kind === 'stsm') {
+    const h = call.host || {};
+    activity += row(s.industry ? 'Host (named lead at the organisation)' : 'Host (academic lead)', h.name ? `Set by this call: ${h.name}` : 'Must be an EEG101 member') + row('Host email')
+      + row(s.industry ? 'Host company or organisation' : 'Host institution', h.institution ? `Set by this call: ${h.institution}` : '') + row('Host country', h.country ? `Set by this call: ${h.country}` : 'Must differ from your own institution\'s country')
+      + (s.industry ? row('Type of organisation', h.type ? `Set by this call: ${h.type}` : CONFIG.industryTypes.join(' / ')) : '') + row('Is your host an EEG101 member?', 'Yes / No');
+  } else if (s.kind === 'vmg') {
+    activity += row('Who will you collaborate with?', 'Names, roles and institutions') + row('Is a third-party organisation involved?', 'Yes / No; if yes, its named lead must be an EEG101 member')
+      + row('This work is not part of a leadership role I hold in EEG101', 'Confirm');
+  } else {
+    activity += row('Conference name') + row('Conference web address') + row('Organised entirely by others, not by EEG101 or another COST Action?', 'Must be Yes')
+      + row('Attendance', 'Face to face / Online') + row('City and country', 'If face to face') + row('Title of your presentation') + row('Type of presentation', s.presentations.join(' / ')) + row('Abstract status', 'Accepted / Submitted, awaiting decision');
+  }
+  const qs = s.questions.map(q => box(q.label, CONFIG.words[q.id], q.hint)).join('')
+    + (call.questions || []).map(q => box(q.label + (q.required ? '' : ' (optional)'), q.words || 300, q.hint)).join('');
+  const docs = s.documents.concat((call.documents || []).map(d => ({ label: d.label, required: d.required })));
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>${e(s.title)}: application template</title>
+<style>body{font-family:Arial,sans-serif;font-size:11pt;color:#1a1a2e}h1{color:#000099;font-size:17pt;margin:6pt 0}h2{color:#000099;font-size:13pt;border-bottom:2pt solid #FFCC00;margin-top:16pt}h3{font-size:11pt;margin:10pt 0 2pt}
+.band{background:#000099;color:#ffffff;padding:8pt}.h{color:#5a5a7a;font-size:9.5pt;font-weight:normal}table{border-collapse:collapse;width:100%}td{border:1pt solid #c8c3bb;padding:5pt;vertical-align:top}td.l{width:40%;background:#f0ede8}.box td{height:60pt}</style></head><body>
+<table width="100%" cellpadding="8" cellspacing="0"><tr><td bgcolor="#000099" style="color:#ffffff"><font color="#ffffff"><b>EEG101 · Fundamentals of Open &amp; Rigorous EEG Science</b><br>COST Action CA24148 · ${e(call.name)}</font></td></tr></table>
+<h1>${e(s.title)}: application template</h1>
+<p>${call.deadlineText ? `<b>Deadline:</b> ${e(call.deadlineText)}. ` : ''}<b>Activities must end by</b> ${e(call.periodEndText)}. <b>Maximum:</b> ${max}.</p>
+<p class="h">Use this to prepare your application offline. Applications are accepted only through the online form at www.eeg101.eu/grants/apply/: when your answers are ready, copy them into the form, upload your documents and submit. Keep within the word limits; the form will not accept longer answers.</p>
+<h2>1. About you</h2><table border="1" cellpadding="5" cellspacing="0" width="100%">${row('First and last name')}${row('Email')}${row('Current position')}${row('Career stage')}${row('Institution and department')}${row('Country of your institution')}${row('ORCID iD (optional)')}${row('Are you under 40? (Young Researcher and Innovator)', 'Yes / No')}${row('Are you an early-career researcher?', 'PhD student, or PhD within the last 8 years (excluding career breaks)')}${row('Gender', 'Prefer not to say is always an option')}${row('Are you a member of the EEG101 COST Action?', 'You must be, to apply')}${row('Working Groups (if a member)', CONFIG.workingGroups.join(' / '))}</table>
+<h2>2. Activity and dates</h2><table border="1" cellpadding="5" cellspacing="0" width="100%">${activity}</table>
+<h2>3. Your proposal</h2>${box('Title', 0, '')}${qs}
+<h2>4. Budget</h2><p class="h">In euros, up to ${max} in total. Categories: ${e(s.budget.join(', '))}${s.budgetOnline ? ` (online: ${e(s.budgetOnline.join(', '))})` : ''}. Grants do not cover salaries or other employment costs.</p>
+<table border="1" cellpadding="5" cellspacing="0" width="100%"><tr><td class="l"><b>Category</b></td><td class="l"><b>What it covers</b></td><td class="l"><b>Amount (€)</b></td></tr>${'<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>'.repeat(5)}<tr><td colspan="2"><b>Total</b></td><td>&nbsp;</td></tr></table>
+${box('Justification of costs', CONFIG.words.justification, 'How you estimated each cost (quotes, typical prices, daily rates), so reviewers can judge whether it is reasonable.')}
+<h2>5. Documents to upload (PDF, up to ${CONFIG.maxFileMb} MB each)</h2><ul>${docs.map(d => `<li>${e(d.label)}${d.required === false ? ' (optional)' : ''}${d.template ? ` · template: ${e(d.template)}` : ''}</li>`).join('')}</ul>
+<h2>6. Please check</h2><ul>${s.rules.map(r => `<li>${e(r)}</li>`).join('')}<li>If your application is accepted, you will then apply through COST's online platform, e-COST, with the same details.</li></ul>
+</body></html>`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff' + html], { type: 'application/msword' }));
+  a.download = `EEG101 ${s.short} application template - ${call.name}.doc`.replace(/[\\/:*?"<>|]+/g, '-');
+  document.body.appendChild(a); a.click(); a.remove();
 }
 
 function callIntro(c) {
@@ -169,6 +217,7 @@ function viewScheme() {
     : `<p class="lead">${CONFIG.calls.length} calls are open. Choose the call and the scheme you are applying to.${onlyScheme ? ` Showing the calls that offer the ${esc(CONFIG.schemes[onlyScheme].title)}. <button type="button" class="link" id="allCalls">Show all open calls</button>` : ''}</p>
       ${calls.map(c => `<h3>${esc(c.name)}</h3><p class="hint" style="margin-top:-4px">${callIntro(c)}</p><div class="schemes">${c.schemes.filter(id => !onlyScheme || id === onlyScheme).map(id => schemeCard(c, id)).join('')}</div>`).join('')}`}
   <div class="box"><strong>Before you start</strong><ul>
+    <li>Each scheme has a <strong>Word template</strong> (the link on its card above) with every question, word limit and document, so you can prepare your answers offline, then come back to submit them here.</li>
     <li>You must be a member of the EEG101 COST Action. Not a member yet? <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join through e-COST first</a>.</li>
     <li>Your institution should be in a COST Full or Cooperating Member country or a Near Neighbour Country.</li>
     <li>The activity must start after today and end by the date its call gives, within one grant period.</li>
@@ -193,7 +242,7 @@ function viewAbout() {
   <div id="genderOtherWrap"${state.gender === 'Prefer to self-describe' ? '' : ' hidden'}>${field('gender_other', 'Please describe (optional)', { required: false })}</div>
   ${radios('member', 'Are you a member of the EEG101 COST Action?', ['Yes', 'No'])}
   <div class="box warn" id="memberNote"${state.member === 'No' ? '' : ' hidden'}>Only members can apply. <a href="https://www.eeg101.eu/join/" target="_blank" rel="noopener">Join EEG101 through e-COST</a>, then come back: your answers are kept on this device.</div>
-  <fieldset><legend>Which Working Groups are you part of? (optional)</legend><div class="choices">${CONFIG.workingGroups.map(w => `<label class="choice"><input type="checkbox" name="working_groups" value="${esc(w)}"${(state.working_groups || []).indexOf(w) >= 0 ? ' checked' : ''}> ${esc(w)}</label>`).join('')}</div></fieldset>`;
+  <fieldset id="wgWrap"${state.member === 'Yes' ? '' : ' hidden'}><legend>Which Working Groups are you part of? (optional)</legend><div class="choices">${CONFIG.workingGroups.map(w => `<label class="choice"><input type="checkbox" name="working_groups" value="${esc(w)}"${(state.working_groups || []).indexOf(w) >= 0 ? ' checked' : ''}> ${esc(w)}</label>`).join('')}</div></fieldset>`;
 }
 
 function viewActivity() {
@@ -265,7 +314,7 @@ function viewBudget() {
 function viewDocuments() {
   const s = scheme();
   return `<h2>Documents</h2><p class="lead">PDF files only, up to ${CONFIG.maxFileMb} MB each. Each file uploads as soon as you choose it.</p>
-  ${allDocuments().map(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); const doc = state.documents[d.id]; return `<div class="doc"><strong>${esc(d.label)}${needed ? '' : ' (optional)'}</strong>
+  ${allDocuments().map(d => { const needed = d.required || (d.requiredIf && state[d.requiredIf] === 'Yes'); const doc = state.documents[d.id]; return `<div class="doc"><strong>${esc(d.label)}${needed ? '' : ' (optional)'}</strong>${d.template ? `<a href="${esc(d.template)}" target="_blank" rel="noopener">Download the template (Word)</a> for your host to fill in, sign and return to you.` : ''}
   <input type="file" accept="application/pdf,.pdf" data-doc="${d.id}" aria-label="${esc(d.label)}">
   <span class="status${doc ? ' ok' : ''}" id="status_${d.id}">${doc ? '✓ Uploaded: ' + esc(doc.name) : (needed ? 'Required' : 'Not uploaded')}</span></div>`; }).join('')}`;
 }
@@ -381,6 +430,7 @@ function refresh() {
   const f2f = document.getElementById('f2fWrap'); if (f2f) f2f.hidden = state.attendance !== 'Face to face';
   const g = document.getElementById('genderOtherWrap'); if (g) g.hidden = state.gender !== 'Prefer to self-describe';
   const m = document.getElementById('memberNote'); if (m) m.hidden = state.member !== 'No';
+  const wg = document.getElementById('wgWrap'); if (wg) wg.hidden = state.member !== 'Yes';
   const t = document.getElementById('thirdPartyWrap'); if (t) t.hidden = state.third_party !== 'Yes';
 }
 
@@ -389,6 +439,11 @@ function bind() {
   form.addEventListener('input', onChange);
   form.addEventListener('change', onChange);
   form.addEventListener('submit', e => { e.preventDefault(); next(); });
+  form.querySelectorAll('[data-template]').forEach(b => b.addEventListener('click', ev => {
+    ev.preventDefault(); ev.stopPropagation();
+    const [callId, id] = b.dataset.template.split('|');
+    wordTemplate(CONFIG.calls.filter(c => c.id === callId)[0], id);
+  }));
   const allCalls = document.getElementById('allCalls');
   if (allCalls) allCalls.addEventListener('click', () => { onlyScheme = ''; onlyCall = ''; render(); });
   const back = document.getElementById('back');
@@ -465,12 +520,10 @@ function submit() {
 function done(result) {
   clearDraft();
   const pdfUrl = URL.createObjectURL(new Blob([Uint8Array.from(atob(result.pdf), c => c.charCodeAt(0))], { type: 'application/pdf' }));
-  const docUrl = URL.createObjectURL(new Blob([result.html], { type: 'application/msword' }));
   app.innerHTML = `<div class="done" role="status"><h2>Application submitted</h2>
   <p class="ref">${esc(result.id)}</p>
   <p>Thank you. We received your application on ${esc(result.submitted)}. ${result.emailed ? `A confirmation with a PDF copy has been sent to <strong>${esc(result.email)}</strong>.` : `We could not send the confirmation email just now, so please download your copy below. We have your application.`}</p>
-  <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a>
-  <a class="btn secondary" href="${docUrl}" download="${esc(result.id)} application.doc">Download an editable copy (Word)</a></div>
+  <div class="downloads"><a class="btn" href="${pdfUrl}" download="${esc(result.id)} application.pdf">Download PDF</a></div>
   <h3>What happens next</h3>
   <ul><li>After the call closes, the grants committee reviews the applications, and we email you the outcome. You do not need to do anything in e-COST yet.</li>
   <li>If your application is accepted, we will ask you to apply through COST's online platform, <a href="https://e-services.cost.eu/" target="_blank" rel="noopener">e-COST</a>, with the same details and your CV in your e-COST profile. You then receive a grant letter.</li>

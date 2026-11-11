@@ -16,8 +16,8 @@
  *      sendReviewerLinks to email them their link. Reviewers score
  *      applications; chairs (who may score too) rank them, decide on funding
  *      and run reports (Review.html). Reviewers who are not chairs see
- *      applications without the applicant's identity unless the Settings tab
- *      says blind_review FALSE. Every call checks the key again.
+ *      applications without the applicant's identity, unless blind review
+ *      is switched off for that call. Every call checks the key again.
  *
  * Set-up and day-to-day use: docs/grants-platform.md in the website repository.
  * Nothing private is in this file: the spreadsheet, folder, signing secret and
@@ -39,7 +39,6 @@ const GRANTS = {
   // managed on the portal's Calls page. The first call is made from these.
   firstCall: { name: 'EEG101 Grant Period 2 call', period_end: '2027-09-30', id_prefix: 'G2' },
   defaults: {
-    blind_review: 'TRUE',
     web_app_url: '',
     budget_stsm: '',
     budget_vmg: '',
@@ -56,6 +55,9 @@ const GRANTS = {
 // questions: the proposal questions each scheme asks, using the answer fields
 // summary, workplan, outcomes, relevance and benefit (word limits in GRANTS.words).
 const CV = { id: 'cv', label: 'Your CV (max. 2 pages)', required: true };
+// A Word template for the host's confirmation, on the website. (COST's own is
+// only inside e-COST, which applicants reach only once their grant is accepted.)
+const HOST_TEMPLATE = 'https://www.eeg101.eu/assets/docs/eeg101-stsm-host-confirmation-template.docx';
 const ACCEPTANCE = { id: 'acceptance', label: 'Acceptance or invitation letter from the conference organisers (or proof of submission if you are still waiting)', required: true };
 // Asked in every scheme, and scored by reviewers (see CRITERIA).
 const CONTRIBUTION = { id: 'contribution', label: 'Your contribution to EEG101 to date', hint: 'What you have done in the Action so far: Working Group activity, meetings, training schools, shared data, tools or protocols, roles you hold. If you joined recently, say how you have started to take part and plan to. This is one of the evaluation criteria: reviewers score it.' };
@@ -84,7 +86,7 @@ const SCHEMES = {
       CONTRIBUTION
     ],
     budget: TRAVEL_BUDGET,
-    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host institution that it will receive you, with the dates (e-COST has a template)', required: true }]
+    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host institution that it will receive you, with the dates', required: true, template: HOST_TEMPLATE }]
   },
   // A special call: an STSM hosted by a company or other industry organisation.
   // The same COST rules as any STSM, plus the host's sector.
@@ -106,7 +108,7 @@ const SCHEMES = {
       CONTRIBUTION
     ],
     budget: TRAVEL_BUDGET,
-    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host organisation that it will receive you, with the dates (e-COST has a template)', required: true }]
+    documents: [CV, { id: 'host_letter', label: 'Confirmation from the host organisation that it will receive you, with the dates', required: true, template: HOST_TEMPLATE }]
   },
   vmg: {
     kind: 'vmg', title: 'Virtual Mobility Grant (VMG)', short: 'VMG', max: 1500, minDays: 1, maxDays: 90,
@@ -212,7 +214,7 @@ const DECISIONS = ['', 'Funded', 'Reserve', 'Not funded', 'Withdrawn'];
 
 const GENDER_OPTIONS = ['Male', 'Female', 'Beyond the binary (e.g. non-binary, intersex, agender, genderfluid)', 'Prefer to self-describe', 'Prefer not to say'];
 const CAREER_STAGES = ['PhD student', 'Postdoctoral researcher', 'Lecturer / Assistant Professor / Early-career PI', 'Associate Professor / Mid-career researcher', 'Professor / Senior researcher', 'Industry / practitioner', 'Other'];
-const WORKING_GROUPS = ['WG1 Reporting Standards', 'WG2 Curation and Harmonisation', 'WG3 EEG Community Framework', 'WG4 Mobile EEG Harmonisation'];
+const WORKING_GROUPS = ['Reporting Standards', 'Curation and Harmonisation', 'EEG Community Framework', 'Mobile EEG Harmonisation'];
 const YES_NO = ['Yes', 'No'];
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/;
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
@@ -246,7 +248,7 @@ const CONFLICT_GUIDANCE = [
 // industry STSMs. A call can preset the host (for a company call) and add its
 // own questions and documents to the form.
 const CALL_COLUMNS = ['Call ID', 'Name', 'Schemes', 'Open', 'Deadline', 'Period end', 'ID prefix', 'Description',
-  'Host organisation', 'Host country', 'Host type', 'Host lead', 'Questions', 'Documents', 'Budget (€)', 'Created'];
+  'Host organisation', 'Host country', 'Host type', 'Host lead', 'Questions', 'Documents', 'Budget (€)', 'Created', 'Blind review'];
 
 function callFromRow(r) {
   const text = (v, pattern) => v instanceof Date ? Utilities.formatDate(v, GRANTS.timezone, pattern || 'yyyy-MM-dd') : String(v == null ? '' : v).trim();
@@ -257,9 +259,13 @@ function callFromRow(r) {
     open: String(r['Open']).toUpperCase() === 'TRUE', deadline: text(r['Deadline'], "yyyy-MM-dd'T'HH:mm"), periodEnd: text(r['Period end']),
     prefix: text(r['ID prefix']), description: text(r['Description']),
     host: host ? { institution: host, country: text(r['Host country']), type: text(r['Host type']), name: text(r['Host lead']) } : null,
-    questions: list(r['Questions']), documents: list(r['Documents']), budget: asNumber(r['Budget (€)']), row: r._row
+    questions: list(r['Questions']), documents: list(r['Documents']), budget: asNumber(r['Budget (€)']), row: r._row,
+    // On unless switched off for the call (older calls follow the old setting).
+    blind: String(r['Blind review'] || legacyBlind()).toUpperCase() !== 'FALSE'
   };
 }
+
+function legacyBlind() { try { return readSettings().blind_review || 'TRUE'; } catch (e) { return 'TRUE'; } }
 
 function readCalls() { return rowsAsObjects(tab('Calls')).map(callFromRow).filter(c => c.id); }
 
@@ -283,6 +289,30 @@ function callForForm(c) {
 
 /* ------------------------------------------------------------------ web app */
 
+// The website's "Grants portal" page asks for a person's link by email. The
+// reply is the same whether or not the address is on the list, so it reveals
+// nothing; a listed person gets their link by email, at most once every 10
+// minutes.
+function doPost(e) {
+  let email = '';
+  try { email = String(JSON.parse(e.postData.contents).email || '').trim().toLowerCase(); } catch (error) { email = ''; }
+  const reply = ContentService.createTextOutput(JSON.stringify({ ok: true, message: 'If that address belongs to an EEG101 grant reviewer, chair or administrator, we have emailed their portal link to it. It can take a few minutes to arrive.' })).setMimeType(ContentService.MimeType.JSON);
+  if (!EMAIL_PATTERN.test(email)) return reply;
+  const lock = LockService.getScriptLock();
+  if (!lock.tryLock(20000)) return reply;
+  try {
+    const sheet = reviewersTab();
+    const r = rowsAsObjects(sheet).filter(x => String(x['Email'] || '').trim().toLowerCase() === email)[0];
+    const last = r && r['Link sent'] ? new Date(r['Link sent']).getTime() : 0;
+    if (r && !(Date.now() - last < 10 * 60 * 1000)) sendInvite(sheet, r, false, true);
+  } catch (error) {
+    console.warn('Portal link request failed: ' + error);
+  } finally {
+    lock.releaseLock();
+  }
+  return reply;
+}
+
 function doGet(e) {
   const params = (e && e.parameter) || {};
   rememberAppUrl();
@@ -295,7 +325,7 @@ function doGet(e) {
       ).setTitle('EEG101 grants portal');
     }
     const page = HtmlService.createTemplateFromFile('Review');
-    page.boot = JSON.stringify({ me: me, key: String(params.key).trim(), blind: isBlind(me, readSettings()), criteria: CRITERIA, recommendations: RECOMMENDATIONS, decisions: DECISIONS, conflictGuidance: CONFLICT_GUIDANCE, schemes: schemeSummaries() }).replace(/</g, '\\u003c');
+    page.boot = JSON.stringify({ me: me, key: String(params.key).trim(), blind: !me.chair && !me.admin && readCalls().some(c => c.blind), criteria: CRITERIA, recommendations: RECOMMENDATIONS, decisions: DECISIONS, conflictGuidance: CONFLICT_GUIDANCE, schemes: schemeSummaries() }).replace(/</g, '\\u003c');
     return page.evaluate().setTitle('EEG101 grants portal').addMetaTag('viewport', 'width=device-width, initial-scale=1');
   }
   const page = HtmlService.createTemplateFromFile('Apply');
@@ -642,7 +672,7 @@ const para = text => esc(text).split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g, '
 
 // The application as one self-contained HTML document: the PDF, the email and
 // the applicant's downloadable copy are all made from this. With blind set, as
-// reviewers see it when the Settings tab says blind_review TRUE: without the
+// reviewers see it in a call with blind review (the default): without the
 // applicant's name, contact details, institution, gender, ORCID or signature.
 function applicationHtml(a, blind) {
   const s = SCHEMES[a.scheme];
@@ -666,7 +696,9 @@ body{font-family:Arial,Helvetica,sans-serif;font-size:11pt;color:#1a1a2e;line-he
 h1{color:#000099;font-size:18pt;margin:0 0 4px}h2{color:#000099;font-size:12.5pt;border-bottom:2px solid #FFCC00;padding-bottom:3px;margin:22px 0 8px}
 .meta{color:#5a5a7a;margin:0 0 4px}table{border-collapse:collapse;width:100%}th,td{text-align:left;vertical-align:top;padding:4px 8px;border-bottom:1px solid #e0dbd4}
 th{width:34%;color:#5a5a7a;font-weight:normal}.budget th{width:auto;font-weight:bold;color:#1a1a2e}.num{text-align:right;white-space:nowrap}.total td{font-weight:bold;border-top:2px solid #1a1a2e}
-p{margin:0 0 8px}h3{font-size:11pt;margin:14px 0 4px}</style></head><body>
+p{margin:0 0 8px}h3{font-size:11pt;margin:14px 0 4px}
+.band{background:#000099;color:#fff;padding:10px 14px;margin:0 0 18px;border-bottom:4px solid #FFCC00;font-size:10pt;line-height:1.5}.band b{font-size:12pt}</style></head><body>
+<div class="band"><b>EEG101 · Fundamentals of Open &amp; Rigorous EEG Science</b><br>COST Action CA24148 · Grant application · ${esc(a.call_name)}</div>
 <h1>${esc(a.title)}</h1>
 <p class="meta"><strong>${esc(a.id)}</strong> · ${esc(s.title)} · ${esc(a.call_name)}</p>
 <p class="meta">Submitted ${esc(a.submitted_text)}${blind ? '' : ` by ${esc(a.first_name)} ${esc(a.last_name)}`}</p>
@@ -791,7 +823,7 @@ function setUpGrants() {
     appendRow(callsTab, CALL_COLUMNS, {
       'Call ID': 'main', 'Name': old.call_name || f.name, 'Schemes': old.call_schemes || DEFAULT_CALL_SCHEMES.join(', '),
       'Open': String(old.call_open).toUpperCase() === 'TRUE' ? 'TRUE' : 'FALSE', 'Deadline': old.deadline || '', 'Period end': old.period_end || f.period_end,
-      'ID prefix': old.id_prefix || f.id_prefix, 'Questions': '[]', 'Documents': '[]', 'Created': new Date()
+      'ID prefix': old.id_prefix || f.id_prefix, 'Questions': '[]', 'Documents': '[]', 'Created': new Date(), 'Blind review': 'TRUE'
     });
   }
   const settings = ensure('Settings', ['Setting', 'Value', 'What it means']);
@@ -801,7 +833,6 @@ function setUpGrants() {
     budget_itc_conference: 'Optional: money available for ITC Conference Grants (€).',
     budget_yri_conference: 'Optional: money available for YRI Conference Grants (€).',
     budget_dissemination_conference: 'Optional: money available for Dissemination Conference Grants (€).',
-    blind_review: 'TRUE: reviewers who are not chairs see applications without the applicant\'s name, contact details, institution, gender or documents. FALSE: they see everything. Chairs always see everything.',
     web_app_url: 'The address of the web app deployment (ends in /exec). Used for reviewers\' personal links.'
   };
   const existing = settings.getDataRange().getValues().map(r => String(r[0]));
@@ -887,12 +918,12 @@ function reviewLink(sheet, r, renew) {
   return `${appUrl()}?view=review&key=${key}`;
 }
 
-function sendInvite(sheet, r, renew) {
+function sendInvite(sheet, r, renew, requested) {
   const link = reviewLink(sheet, r, renew);
   const role = roleOf(String(r['Role (reviewer or chair)'] || ''));
   const text = [
     `Dear ${String(r['Name'] || '').trim() || 'colleague'},`,
-    `You have been added as ${ROLE_NAMES[role]} for EEG101 grants. This is your personal link to the grants portal:\n${link}`,
+    requested ? `Here is your personal link to the EEG101 grants portal, as requested on the website:\n${link}\n\nIf you did not ask for it, you can ignore this email.` : `You have been added as ${ROLE_NAMES[role]} for EEG101 grants. This is your personal link to the grants portal:\n${link}`,
     renew ? 'This link replaces any earlier one, which no longer works.' : '',
     'Please keep it to yourself: anyone with the link can act as you. If it is shared by mistake, tell us and we will replace it.',
     role === 'administrator' ? 'The Funded grants page shows each funded grant, its dates and report deadline, and lets you update its status and send reminders.' : 'Before you score an application, check whether you have a conflict of interest with the applicant (the portal lists the situations). If you do, declare it and do not score.',
@@ -1186,7 +1217,7 @@ function listCalls(key) {
     const mine = apps.filter(r => String(r['Call']) === c.id);
     const funded = mine.filter(r => String(r['Decision']) === 'Funded');
     return Object.assign(callForForm(c), {
-      open: c.open, accepting: callIsOpen(c), deadline: c.deadline, prefix: c.prefix, budget: c.budget,
+      open: c.open, accepting: callIsOpen(c), deadline: c.deadline, prefix: c.prefix, budget: c.budget, blind: c.blind,
       applications: mine.length, funded: funded.length, awarded: Math.round(funded.reduce((t, r) => t + (asNumber(r['Awarded (€)']) || 0), 0) * 100) / 100
     });
   });
@@ -1195,7 +1226,7 @@ function listCalls(key) {
   let formUrl = '';
   try { formUrl = appUrl(); } catch (e) { formUrl = ''; }
   return {
-    calls: calls, blindReview: String(settings.blind_review).toUpperCase() !== 'FALSE', budgets: budgets, formUrl: formUrl,
+    calls: calls, budgets: budgets, formUrl: formUrl,
     schemes: Object.keys(SCHEMES).map(id => ({ id: id, title: SCHEMES[id].title, kind: SCHEMES[id].kind })),
     countries: COUNTRIES, industryTypes: INDUSTRY_TYPES
   };
@@ -1252,7 +1283,8 @@ function saveCall(key, input) {
       'Call ID': id, 'Name': name, 'Schemes': schemes.join(', '), 'Open': input.open ? 'TRUE' : 'FALSE', 'Deadline': deadline, 'Period end': periodEnd,
       'ID prefix': prefix, 'Description': clean(input.description, 1000),
       'Host organisation': host ? clean(host.institution, 150) : '', 'Host country': host ? clean(host.country, 100) : '', 'Host type': host ? clean(host.type, 60) : '', 'Host lead': host ? clean(host.name, 150) : '',
-      'Questions': JSON.stringify(questions), 'Documents': JSON.stringify(documents), 'Budget (€)': budget
+      'Questions': JSON.stringify(questions), 'Documents': JSON.stringify(documents), 'Budget (€)': budget,
+      'Blind review': input.blind === false ? 'FALSE' : 'TRUE'
     };
     if (existing) {
       const { map } = headerMap(sheet);
@@ -1283,7 +1315,6 @@ function deleteCall(key, id) {
 function saveGrantSettings(key, input) {
   requireReviewer(key, true);
   input = input || {};
-  if (input.blindReview !== undefined) setSetting('blind_review', input.blindReview ? 'TRUE' : 'FALSE');
   Object.keys(input.budgets || {}).forEach(id => {
     if (!SCHEMES[id]) return;
     const v = clean(input.budgets[id], 20);
@@ -1327,8 +1358,11 @@ function requireReviewer(key, chairOnly, allowAdmin) {
 }
 
 // Reviewers who are not chairs see applications without the applicant's
-// identity, unless the Settings tab says blind_review FALSE. Chairs see everything.
-const isBlind = (me, settings) => !me.chair && !me.admin && String(settings.blind_review).toUpperCase() !== 'FALSE';
+// identity, unless blind review is switched off for the call.
+// Blind review is set per call (on by default). Chairs and the grants
+// administrator are never blinded.
+const isBlind = (me, call) => !me.chair && !me.admin && (!call || call.blind !== false);
+const callOf = (calls, r) => calls.filter(c => c.id === String(r['Call'] || ''))[0] || null;
 
 const asNumber = v => (v === '' || v == null || isNaN(Number(v))) ? null : Number(v);
 const iso = v => v instanceof Date ? Utilities.formatDate(v, GRANTS.timezone, 'yyyy-MM-dd') : String(v || '');
@@ -1375,7 +1409,6 @@ function overlapWarnings(rows) {
 function listApplications(key) {
   const me = requireReviewer(key, false);
   const settings = readSettings();
-  const blind = isBlind(me, settings);
   const reviews = reviewsByApplication();
   const rows = rowsAsObjects(tab('Applications'));
   const warnings = overlapWarnings(rows);
@@ -1385,6 +1418,7 @@ function listApplications(key) {
   const callNameOf = id => (calls.filter(c => c.id === id)[0] || {}).name || '';
   const apps = rows.filter(r => canAccess(me, r)).map(r => {
     const id = String(r['ID']);
+    const blind = isBlind(me, callOf(calls, r));
     const all = reviews[id] || [];
     const mine = all.filter(x => x.reviewer === me.email)[0] || null;
     const own = String(r['Email']).toLowerCase() === me.email;
@@ -1401,12 +1435,12 @@ function listApplications(key) {
       decision: String(r['Decision'] || ''), awarded: asNumber(r['Awarded (€)']), rank: asNumber(r['Rank']), decisionNotes: String(r['Decision notes'] || ''),
       reviewCount: scored.length,
       mean: canSee && scored.length ? Math.round(scored.reduce((s, x) => s + x.mean, 0) / scored.length * 100) / 100 : null,
-      own: own, conflicted: conflicted, assignedToMe: assignedTo(r).indexOf(me.email) >= 0,
+      blind: blind, own: own, conflicted: conflicted, assignedToMe: assignedTo(r).indexOf(me.email) >= 0,
       assigned: me.chair ? assignedTo(r).map(e => { const x = all.filter(y => y.reviewer === e)[0]; return { email: e, name: nameOf(e), status: !x ? 'todo' : x.conflict ? 'conflict' : 'scored' }; }) : [],
       mine: mine, others: canSee ? all.filter(x => x.reviewer !== me.email) : []
     };
   });
-  return { me: me, blind: blind, applications: apps, settings: settings, calls: calls.map(c => ({ id: c.id, name: c.name, budget: c.budget })), reviewers: me.chair ? people.filter(p => !p.admin).map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
+  return { me: me, blind: apps.some(a => a.blind), applications: apps, settings: settings, calls: calls.map(c => ({ id: c.id, name: c.name, budget: c.budget })), reviewers: me.chair ? people.filter(p => !p.admin).map(p => ({ email: p.email, name: p.name, chair: p.chair })) : [] };
 }
 
 function applicationRecord(id) {
@@ -1419,9 +1453,9 @@ function applicationRecord(id) {
 
 function getApplication(key, id) {
   const me = requireReviewer(key, false, true);
-  const blind = isBlind(me, readSettings());
   const { row, data } = applicationRecord(id);
   requireAccess(me, row);
+  const blind = isBlind(me, callOf(readCalls(), row));
   const documents = {};
   if (!blind) Object.keys(data.documents || {}).forEach(k => { documents[k] = { label: data.documents[k].label, name: data.documents[k].name }; });
   return { id: String(id), blind: blind, html: applicationHtml(data, blind), folder: blind ? '' : String(row['Drive folder']), documents: documents };
@@ -1431,9 +1465,9 @@ function getApplication(key, id) {
 // documents, for people allowed to see the applicant's identity.
 function getDocument(key, id, doc) {
   const me = requireReviewer(key, false, true);
-  if (isBlind(me, readSettings())) throw new Error('Documents are not shown in blind review.');
   const { row, data } = applicationRecord(id);
   requireAccess(me, row);
+  if (isBlind(me, callOf(readCalls(), row))) throw new Error('Documents are not shown in blind review.');
   let blob;
   if (doc === 'application') blob = applicationPdf(data);
   else if (data.documents && data.documents[doc]) blob = DriveApp.getFileById(data.documents[doc].id).getBlob();
@@ -1533,7 +1567,7 @@ function saveDecisions(key, changes) {
 function getReport(key) {
   const me = requireReviewer(key, false, true);
   const settings = readSettings();
-  if (isBlind(me, settings)) throw new Error('Reports are for chairs while review is blind.');
+  if (isBlind(me, null) && readCalls().some(c => c.blind)) throw new Error('Reports are for chairs while review is blind.');
   const apps = rowsAsObjects(tab('Applications'));
   const funded = apps.filter(r => String(r['Decision']) === 'Funded');
   const names = {}; readCalls().forEach(c => { names[c.id] = c.name; });

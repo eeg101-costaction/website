@@ -201,6 +201,8 @@ EEG101 offers several COST grant schemes to support research collaboration, trai
 
 For further guidance, consult the [COST funding pages](https://www.cost.eu/funding/funding-opportunities/).
 
+Grant reviewers, chairs and administrators: [sign in to the grants portal]({{ '/grants/portal/' | relative_url }}).
+
 {%- assign endpoint = site.data.site.grants_application_endpoint -%}
 {% if endpoint and endpoint != "" %}
 {::nomarkdown}

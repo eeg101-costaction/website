@@ -15,8 +15,17 @@ Annex 2 and Article 6.4:
   - a confirmation email to the applicant, with the PDF attached, copied
     (cc) to eeg101costaction@gmail.com and blind-copied (bcc) to the
     addresses in the `GRANTS_BCC` script property;
-  - on screen, the reference and two downloads: the PDF and an editable Word
-    copy.
+  - on screen, the reference and a PDF download. The PDF is headed with
+    EEG101, COST Action CA24148 and the call.
+
+  Before applying, people can download a **Word template** for each scheme
+  in each call (the link on its card in the form). It has every question,
+  word limit, budget rule and document, including the call's own questions,
+  so they can prepare offline and then paste their answers into the form.
+  STSM applicants also get a Word template for their host's confirmation
+  letter (`assets/docs/eeg101-stsm-host-confirmation-template.docx`, made by
+  `scripts/make_host_confirmation_template.py`). COST's own template is only
+  in e-COST, which applicants reach once accepted.
 - **The review dashboard**, which each reviewer opens with a personal link.
   Reviewers score applications; chairs can score too, and rank them, decide
   on funding and run reports. Reviewers can be blinded to who applied; chairs
@@ -136,7 +145,10 @@ a chair scores an application and records the decision on the same page.
 **Adding people (People tab).** Enter a name and email, choose
 *Reviewer*, *Chair* or *Grants administrator*, and click **Add**. With "Email them their link now"
 ticked, they get their **personal link** straight away. No password or
-Google account is needed. The table shows who has been invited and, for
+Google account is needed. Anyone who loses their link can get it again from
+**www.eeg101.eu/grants/portal/** (linked at the foot of the Grants page): it
+emails the link to listed people only, at most once every 10 minutes, and
+says the same thing whatever address is entered. The table shows who has been invited and, for
 each person, how many assigned applications they have done, how many they
 have scored, and how many conflicts they have declared. From the table you
 can:
@@ -167,11 +179,12 @@ From the Apps Script editor, **showReviewerLinks** logs everyone's link,
 including your own. **shareWithChairs** gives the chairs the spreadsheet and
 Drive folder too, if they want them.
 
-**Blind review.** With **Blind review** ticked on the Calls page (the default), reviewers
+**Blind review** is set for each call, in its settings on the Calls page,
+and is on by default for a new call. With it on, reviewers
 who are not chairs do not see who applied. They see the proposal, budget,
 dates, country, ITC, under-40 and career stage, but not the applicant's name,
 email, institution, ORCID, gender, signature or uploaded documents (CVs and
-letters name people). They do not get the Reports tab either. Untick it to
+letters name people). While any call is blind, they do not get the Reports tab. Untick it to
 show reviewers everything. **Chairs always see
 everything**, including every score as soon as it is given, so they can
 decide without waiting.
@@ -288,8 +301,8 @@ The first call, the main one, is made during setup.
    funds allow and the Grant Holder agrees.
 
 A call with applications keeps its ID prefix and cannot be deleted, only
-closed. **For all calls**, at the bottom of the Calls page, sets blind review
-and the money available per scheme.
+closed. **For all calls**, at the bottom of the Calls page, sets the money
+available per scheme.
 
 ## If something goes wrong
 

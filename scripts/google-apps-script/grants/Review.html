@@ -140,10 +140,10 @@ function renderList() {
   ${notice ? `<p class="msg ok">${esc(notice)}</p>` : ''}
   ${me.chair ? assignBar() : ''}
   ${apps.length ? `<table><thead><tr>${me.chair ? `<th><input type="checkbox" id="all" aria-label="Select all"${apps.every(a => selected[a.id]) ? ' checked' : ''}></th>` : ''}<th>ID</th><th>Applicant</th><th>Scheme</th><th>Title</th><th>Dates</th><th class="num">Requested</th><th>You</th><th class="num">Reviews</th><th class="num">Mean</th>${me.chair ? '<th>Reviewers</th>' : ''}<th>Decision</th></tr></thead><tbody>
-  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${data.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}${(data.calls || []).length > 1 && a.callName ? `<span class="note" style="display:block">${esc(a.callName)}</span>` : ''}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
+  ${apps.map(a => `<tr class="click" data-id="${esc(a.id)}">${me.chair ? `<td><input type="checkbox" data-sel="${esc(a.id)}" aria-label="Select ${esc(a.id)}"${selected[a.id] ? ' checked' : ''}></td>` : ''}<td>${esc(a.id)}${a.assignedToMe ? '<span class="who todo">Assigned to you</span>' : ''}</td><td>${a.blind ? `<span class="note">Hidden (blind review)</span>` : esc(a.applicant)}<span class="note" style="display:block">${[a.institution, a.country].filter(Boolean).map(esc).join(', ')}</span></td><td>${esc(a.scheme)}${(data.calls || []).length > 1 && a.callName ? `<span class="note" style="display:block">${esc(a.callName)}</span>` : ''}</td><td>${esc(a.title)}${a.notes ? `<span class="flag">⚠ ${esc(a.notes)}</span>` : ''}</td><td>${fmt(a.start)} – ${fmt(a.end)}</td><td class="num">${money(a.requested)}</td><td>${statusPill(a)}</td><td class="num">${a.reviewCount}</td><td class="num">${a.mean == null ? '—' : a.mean.toFixed(2)}</td>${me.chair ? `<td>${assignedList(a)}</td>` : ''}<td>${decisionPill(a.decision)}</td></tr>`).join('')}
   </tbody></table>` : '<p class="note">No applications match.</p>'}
   ${me.chair ? '<p class="note">Reviewers see only the applications assigned to them. Applications with no reviewers assigned are seen by the chairs alone. Tick applications to assign them in bulk, or assign from an application\'s own page.</p>' : ''}
-  <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Review is blind: applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
+  <p class="note">${me.chair ? 'As a chair you see every score straight away, and can score and decide on applications yourself.' : 'Mean scores of other reviewers appear once you have scored an application yourself.'} Nobody sees scores for an application they declared a conflict on, or their own.${data.blind ? ' Where review is blind, applicants\' names, contact details, institutions, gender and documents are hidden from you.' : ''}</p>`;
   main.querySelector('#q').addEventListener('input', e => { filter.q = e.target.value; renderListKeepFocus(); });
   main.querySelector('#fs').addEventListener('change', e => { filter.scheme = e.target.value; renderList(); });
   const fc = main.querySelector('#fc'); if (fc) fc.addEventListener('change', e => { filter.call = e.target.value; renderList(); });
@@ -346,7 +346,7 @@ async function renderPeople(list, message) {
       <label>Role<select name="role"><option value="reviewer">Reviewer</option><option value="chair">Chair</option><option value="administrator">Grants administrator</option></select></label>
       <label style="align-self:end"><input type="checkbox" name="invite" checked> Email them their link now</label>
       <div style="align-self:end"><button class="btn" type="submit">Add</button></div>
-    </form><p class="note">Reviewers see and score only the applications you assign to them${BOOT.blind ? ', without seeing who applied (blind review)' : ''}. Chairs see everything, score, assign reviewers, decide on funding and manage this list. The grants administrator sees only Funded grants and Reports, to track grants to payment. Everyone gets a personal link by email; no password or Google account is needed.</p></div>
+    </form><p class="note">Reviewers see and score only the applications you assign to them, without seeing who applied in calls with blind review. Chairs see everything, score, assign reviewers, decide on funding and manage this list. The grants administrator sees only Funded grants and Reports, to track grants to payment. Everyone gets a personal link by email; no password or Google account is needed.</p></div>
   ${message ? `<p class="msg ok">${esc(message)}</p>` : ''}<span id="pmsg" class="msg"></span>
   <table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Invited</th><th class="num">Assigned</th><th class="num">Scored</th><th class="num">Conflicts</th><th></th></tr></thead><tbody>
   ${list.map(p => `<tr><td>${esc(p.name)}${p.self ? ' <span class="note">(you)</span>' : ''}</td><td>${esc(p.email)}</td>
@@ -413,7 +413,7 @@ async function renderFunded(state, message) {
 /* ---------------------------------------------------------- calls (chair) */
 
 let callsState = null, callDraft = null;
-const blankCall = () => ({ id: '', name: '', schemes: [], open: false, deadline: '', periodEnd: '2027-09-30', prefix: '', description: '', budget: '', host: null, questions: [], documents: [] });
+const blankCall = () => ({ id: '', name: '', schemes: [], open: false, blind: true, deadline: '', periodEnd: '2027-09-30', prefix: '', description: '', budget: '', host: null, questions: [], documents: [] });
 
 async function renderCalls(state, message) {
   if (state) callsState = state;
@@ -427,26 +427,25 @@ async function renderCalls(state, message) {
   ${callDraft ? callEditor(st) : ''}
   <table><thead><tr><th>Call</th><th>Schemes</th><th>Status</th><th>Deadline</th><th>Activities end by</th><th>ID prefix</th><th class="num">Applications</th><th class="num">Funded</th><th></th></tr></thead><tbody>
   ${st.calls.map(c => `<tr><td><b>${esc(c.name)}</b>${c.host ? `<span class="note" style="display:block">Host: ${esc(c.host.institution)}</span>` : ''}${c.questions.length || c.documents.length ? `<span class="note" style="display:block">${c.questions.length} own question${c.questions.length === 1 ? '' : 's'}, ${c.documents.length} own document${c.documents.length === 1 ? '' : 's'}</span>` : ''}</td>
-    <td>${c.schemes.map(id => `<span class="who" style="color:var(--text)">${esc(short(id))}</span>`).join('')}</td><td>${pill(c)}</td>
+    <td>${c.schemes.map(id => `<span class="who" style="color:var(--text)">${esc(short(id))}</span>`).join('')}</td><td>${pill(c)}<span class="note" style="display:block">${c.blind ? 'Blind review' : 'Open review'}</span></td>
     <td>${esc(c.deadlineText || '—')}</td><td>${esc(c.periodEndText)}</td><td>${esc(c.prefix)}</td><td class="num">${c.applications}</td><td class="num">${c.funded ? `${c.funded} · ${money(c.awarded)}${c.budget ? ` of ${money(c.budget)}` : ''}` : '—'}</td>
     <td><button type="button" class="linkbtn" data-edit="${esc(c.id)}">Edit</button>${st.formUrl ? `<button type="button" class="linkbtn" data-link="${esc(c.id)}">Copy form link</button>` : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="note">No calls yet.</td></tr>'}
   </tbody></table>
   <p class="note">The website's Grants page shows the schemes of every call that is accepting applications as open, with its deadline and an Apply button. "Copy form link" gives a link straight to one call's form, e.g. to send to a company's contacts.</p>
   <div class="panel" style="margin-top:18px"><h2>For all calls</h2><form id="gsettings">
-    <label style="display:block;margin:8px 0 12px"><input type="checkbox" name="blind"${st.blindReview ? ' checked' : ''}> <b>Blind review</b> <span class="note">Reviewers who are not chairs do not see who applied or their documents.</span></label>
     <b style="font-size:14px">Money available per scheme (€), for the budget tracker</b>
     <div class="form-grid" style="margin-top:6px">${st.schemes.map(x => `<label>${esc(x.title)}<input name="b_${x.id}" type="number" min="0" step="1" value="${esc(st.budgets[x.id])}"></label>`).join('')}</div>
     <p style="margin-top:12px"><button class="btn secondary" type="submit">Save</button></p></form></div>`;
   const msg = main.querySelector('#cmsg');
   const fail = err => { msg.className = 'msg err'; msg.textContent = (err && err.message) || 'Could not save.'; };
   main.querySelector('#newCall').addEventListener('click', () => { callDraft = blankCall(); renderCalls(null, ' '); });
-  main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { const c = st.calls.filter(x => x.id === b.dataset.edit)[0]; callDraft = JSON.parse(JSON.stringify({ id: c.id, name: c.name, schemes: c.schemes, open: c.open, deadline: c.deadline, periodEnd: c.periodEnd, prefix: c.prefix, description: c.description, budget: c.budget == null ? '' : c.budget, host: c.host, questions: c.questions, documents: c.documents, applications: c.applications })); renderCalls(null, ' '); }));
+  main.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => { const c = st.calls.filter(x => x.id === b.dataset.edit)[0]; callDraft = JSON.parse(JSON.stringify({ id: c.id, name: c.name, schemes: c.schemes, open: c.open, blind: c.blind, deadline: c.deadline, periodEnd: c.periodEnd, prefix: c.prefix, description: c.description, budget: c.budget == null ? '' : c.budget, host: c.host, questions: c.questions, documents: c.documents, applications: c.applications })); renderCalls(null, ' '); }));
   main.querySelectorAll('[data-link]').forEach(b => b.addEventListener('click', () => { const url = `${st.formUrl}?call=${encodeURIComponent(b.dataset.link)}`; try { navigator.clipboard.writeText(url); msg.className = 'msg ok'; msg.textContent = 'Copied: ' + url; } catch (e) { msg.className = 'msg'; msg.textContent = url; } }));
   main.querySelector('#gsettings').addEventListener('submit', async e => {
     e.preventDefault();
     const f = e.target, budgets = {};
     st.schemes.forEach(x => { budgets[x.id] = f.elements['b_' + x.id].value; });
-    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const out = await call('saveGrantSettings', { blindReview: f.blind.checked, budgets: budgets }); data = null; renderCalls(out, 'Saved.'); } catch (err) { fail(err); }
+    try { msg.className = 'msg'; msg.textContent = 'Saving…'; const out = await call('saveGrantSettings', { budgets: budgets }); data = null; renderCalls(out, 'Saved.'); } catch (err) { fail(err); }
   });
   if (callDraft) bindCallEditor(st, fail);
 }
@@ -463,6 +462,7 @@ function callEditor(st) {
     <label>Activities must end by<input name="periodEnd" type="date" value="${esc(c.periodEnd)}"><span class="note">The end of the grant period for this call.</span></label>
     <label>Budget for this call (€)<input name="budget" type="number" min="0" step="1" value="${esc(c.budget)}"><span class="note">Optional.</span></label>
     <label style="align-self:center"><input type="checkbox" name="open"${c.open ? ' checked' : ''}> Accepting applications</label>
+    <label style="align-self:center"><input type="checkbox" name="blind"${c.blind !== false ? ' checked' : ''}> Blind review<span class="note">Reviewers who are not chairs do not see who applied or their documents. Chairs always see everything.</span></label>
   </div>
   <div style="margin-top:12px"><b style="font-size:14px">Schemes in this call</b><div class="pick">${st.schemes.map(x => `<label><input type="checkbox" name="schemes" value="${esc(x.id)}"${c.schemes.indexOf(x.id) >= 0 ? ' checked' : ''}> ${esc(x.title)}</label>`).join('')}</div></div>
   <label style="display:block;font-weight:700;font-size:14px">Description <span class="note" style="display:inline">(optional, shown above the call's schemes on the form)</span><textarea name="description" style="min-height:60px">${esc(c.description)}</textarea></label>
@@ -487,6 +487,7 @@ function bindCallEditor(st, fail) {
     const c = callDraft;
     ['name', 'prefix', 'deadline', 'periodEnd', 'budget', 'description'].forEach(k => { c[k] = f.elements[k].value; });
     c.open = f.elements.open.checked;
+    c.blind = f.elements.blind.checked;
     c.schemes = Array.from(f.querySelectorAll('[name=schemes]:checked')).map(x => x.value);
     if (f.elements.h_institution) c.host = { institution: f.elements.h_institution.value, country: f.elements.h_country.value, type: f.elements.h_type.value, name: f.elements.h_name.value };
     f.querySelectorAll('[data-q]').forEach(el => { c.questions[+el.dataset.q][el.dataset.k] = el.type === 'checkbox' ? el.checked : el.value; });
