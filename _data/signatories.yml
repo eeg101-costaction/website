@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-12"
+generated: "2026-11-13"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 190
-public_count: 151
+total: 193
+public_count: 153
 
 people:
   - name: "Enes Abanoz"
@@ -86,6 +86,8 @@ people:
     affiliation: "Beni-Suef university"
   - name: "Kübra Eren"
     affiliation: "Boğaziçi University"
+  - name: "Pablo Rodríguez-San Esteban"
+    affiliation: "Universidad Internacional de La Rioja"
   - name: "Irene Faiman"
     affiliation: "King's College London"
   - name: "Diego Pinal Fernandez"
@@ -240,6 +242,8 @@ people:
     affiliation: "Tarsus University, Türkiye"
   - name: "Mehdi Senoussi"
     affiliation: "Laboratoire CLLE, Université Toulouse Jean Jaurès, CNRS"
+  - name: "Diganta Sharma"
+    affiliation: "Neurophysiology Technologist"
   - name: "Hemang Shrivastava"
     affiliation: "SAGE University"
   - name: "René Skukies"
