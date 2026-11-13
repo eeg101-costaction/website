@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-12T13:47:43+00:00",
+  "generated_at": "2026-11-13T13:08:02+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 12,
+  "pending_count": 13,
   "members": [
     {
       "name": "Quynh Trinh Nguyen",
@@ -148,6 +148,18 @@
       "email": "sara.zago [at] hsancamillo [dot] it",
       "homepage": "",
       "orcid": "0000-0002-7831-3387"
+    },
+    {
+      "name": "Ingrida Zelionkaitė",
+      "affiliation": "Vilnius University, Life Sciences Center",
+      "country": "Lithuania",
+      "working_groups": [
+        "WG1",
+        "WG2"
+      ],
+      "email": "ingrida.zelionkaite [at] gmc [dot] vu [dot] lt",
+      "homepage": "",
+      "orcid": "0009-0000-8715-9011"
     }
   ]
 }
