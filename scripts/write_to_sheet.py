@@ -37,6 +37,34 @@ def load_xlsx_rows(path: Path) -> list[list[str]]:
     return rows
 
 
+def load_csv_rows(path: Path) -> list[list[str]]:
+    """Return all rows of a CSV export (comma, semicolon or tab) as lists of strings."""
+    import csv
+    import io
+    data = path.read_bytes()
+    try:
+        text = data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = data.decode("cp1252", errors="replace")
+    try:
+        dialect = csv.Sniffer().sniff(text[:4096], delimiters=";,\t")
+    except csv.Error:
+        class dialect(csv.excel):  # noqa: N801 - a csv dialect class
+            delimiter = ";"
+    return [row for row in csv.reader(io.StringIO(text, newline=""), dialect=dialect)]
+
+
+def load_rows(path: Path) -> list[list[str]]:
+    """The export's rows, whatever its file name says: eCOST sometimes sends CSV
+    from its "Export (.xlsx)" button (it did on 14 November 2026)."""
+    import zipfile
+    if zipfile.is_zipfile(path):
+        return load_xlsx_rows(path)
+    if path.read_bytes()[:200].lstrip()[:1] == b"<":
+        raise RuntimeError("the export is an HTML page (probably an eCOST error or login page), not the member list")
+    return load_csv_rows(path)
+
+
 def write_rows_to_sheet(rows: list[list[str]], sheet_id: str, credentials_json: str) -> None:
     """Clear the 'Raw eCOST export' tab and write fresh rows."""
     try:
@@ -122,7 +150,7 @@ def main() -> int:
         return 0  # Non-fatal.
 
     try:
-        rows = load_xlsx_rows(args.input)
+        rows = load_rows(args.input)
         if len(rows) < 2:
             print("XLSX has no data rows — skipping sheet update.", file=sys.stderr)
             return 0

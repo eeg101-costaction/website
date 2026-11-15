@@ -189,19 +189,27 @@ def progressive_simplifications(name: str) -> list[str]:
 # CSV / XLSX loading
 # ---------------------------------------------------------------------------
 
+def read_text(path: Path) -> str:
+    """The export's text: UTF-8 (with or without a byte-order mark), else Windows-1252."""
+    data = path.read_bytes()
+    try:
+        return data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        return data.decode("cp1252", errors="replace")
+
+
 def coerce_rows_from_csv(path: Path) -> list[dict[str, str]]:
-    with path.open("r", encoding="utf-8-sig", newline="") as handle:
-        preview = handle.read(4096)
-        handle.seek(0)
-        try:
-            dialect = csv.Sniffer().sniff(preview, delimiters=";,\t")
-        except csv.Error:
-            dialect = csv.excel
-            dialect.delimiter = ";"
-        return [
-            {field_key(key): clean(value) for key, value in row.items() if key is not None}
-            for row in csv.DictReader(handle, dialect=dialect)
-        ]
+    import io
+    text = read_text(path)
+    try:
+        dialect = csv.Sniffer().sniff(text[:4096], delimiters=";,\t")
+    except csv.Error:
+        class dialect(csv.excel):  # noqa: N801 - a csv dialect class
+            delimiter = ";"
+    return [
+        {field_key(key): clean(value) for key, value in row.items() if key is not None}
+        for row in csv.DictReader(io.StringIO(text, newline=""), dialect=dialect)
+    ]
 
 
 def coerce_rows_from_xlsx(path: Path) -> list[dict[str, str]]:
@@ -221,11 +229,15 @@ def coerce_rows_from_xlsx(path: Path) -> list[dict[str, str]]:
 
 
 def load_rows(path: Path) -> list[dict[str, str]]:
-    if path.suffix.lower() == ".csv":
-        return coerce_rows_from_csv(path)
-    if path.suffix.lower() == ".xlsx":
+    """Rows of the export, whatever its file name says: eCOST sometimes sends
+    CSV from its "Export (.xlsx)" button (it did on 14 November 2026)."""
+    import zipfile
+    if zipfile.is_zipfile(path):
         return coerce_rows_from_xlsx(path)
-    raise RuntimeError("eCOST export must be a .csv or .xlsx file.")
+    head = path.read_bytes()[:200].lstrip()
+    if head[:1] == b"<":
+        raise RuntimeError("The eCOST export is an HTML page (probably an error or login page), not the member list.")
+    return coerce_rows_from_csv(path)
 
 
 # ---------------------------------------------------------------------------

@@ -89,6 +89,41 @@ def load_xlsx(path: Path) -> tuple[list[str], list[dict[str, str]]]:
     return raw_headers, rows
 
 
+def load_csv(path: Path) -> tuple[list[str], list[dict[str, str]]]:
+    """Return (headers, rows) from a CSV export (comma, semicolon or tab)."""
+    import csv
+    import io
+    data = path.read_bytes()
+    try:
+        text = data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = data.decode("cp1252", errors="replace")
+    try:
+        dialect = csv.Sniffer().sniff(text[:4096], delimiters=";,\t")
+    except csv.Error:
+        class dialect(csv.excel):  # noqa: N801 - a csv dialect class
+            delimiter = ";"
+    reader = csv.reader(io.StringIO(text, newline=""), dialect=dialect)
+    raw_headers = [field_key(v) for v in next(reader)]
+    rows = [
+        {raw_headers[i]: v.strip() for i, v in enumerate(row) if i < len(raw_headers)}
+        for row in reader
+        if any(v.strip() for v in row)
+    ]
+    return raw_headers, rows
+
+
+def load_table(path: Path) -> tuple[list[str], list[dict[str, str]]]:
+    """The export, whatever its file name says: eCOST sometimes sends CSV from
+    its "Export (.xlsx)" button (it did on 14 November 2026)."""
+    import zipfile
+    if zipfile.is_zipfile(path):
+        return load_xlsx(path)
+    if path.read_bytes()[:200].lstrip()[:1] == b"<":
+        raise RuntimeError("the export is an HTML page (probably an eCOST error or login page), not the member list")
+    return load_csv(path)
+
+
 def find_column(headers: list[str], candidates: list[str]) -> str | None:
     """Return the first candidate that appears in the header list, or None."""
     header_set = set(headers)
@@ -151,7 +186,7 @@ def count_boolean(rows: list[dict[str, str]], col: str, yes_label: str, no_label
 # ---------------------------------------------------------------------------
 
 def generate_stats(input_path: Path, output_path: Path) -> None:
-    headers, rows = load_xlsx(input_path)
+    headers, rows = load_table(input_path)
     member_count = len(rows)
     print(f"Loaded {member_count} member rows from {input_path.name}.", flush=True)
     print(f"Available columns: {', '.join(headers)}", flush=True)
