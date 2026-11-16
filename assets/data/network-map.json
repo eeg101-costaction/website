@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 574,
+  "member_count": 575,
   "site_count": 328,
   "country_count": 57,
   "countries": [
@@ -97,7 +97,7 @@
     {
       "name": "Germany",
       "site_count": 32,
-      "member_count": 49
+      "member_count": 50
     },
     {
       "name": "Greece",
@@ -1687,6 +1687,17 @@
           "orcid": "0009-0007-0504-5258"
         },
         {
+          "name": "Sarah Blum",
+          "affiliation": "Carl Von Ossietzky Universitaet Oldenburg",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "sarah.blum [at] uol [dot] de",
+          "homepage": "https://www.researchgate.net/profile/Sarah-Blum?ev=hdr_xprf",
+          "orcid": "0000-0002-7129-8962"
+        },
+        {
           "name": "Till Habersetzer",
           "affiliation": "Carl Von Ossietzky Universitaet Oldenburg",
           "working_groups": [
@@ -1698,7 +1709,7 @@
           "orcid": ""
         }
       ],
-      "member_count": 4,
+      "member_count": 5,
       "working_groups": [
         "WG1",
         "WG2",
