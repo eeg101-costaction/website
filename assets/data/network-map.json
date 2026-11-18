@@ -1,7 +1,7 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 575,
-  "site_count": 328,
+  "member_count": 576,
+  "site_count": 329,
   "country_count": 57,
   "countries": [
     {
@@ -96,8 +96,8 @@
     },
     {
       "name": "Germany",
-      "site_count": 32,
-      "member_count": 50
+      "site_count": 33,
+      "member_count": 51
     },
     {
       "name": "Greece",
@@ -11090,6 +11090,31 @@
     },
     {
       "id": "site-307",
+      "institution": "Universität Osnabrück",
+      "city": "",
+      "country": "Germany",
+      "latitude": 52.2717429,
+      "longitude": 8.0441952,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Aitana Grasso-Cladera",
+          "affiliation": "Universität Osnabrück",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "agrassocladera [at] gmail [dot] com",
+          "homepage": "https://www.researchgate.net/profile/Aitana-Grasso-Cladera",
+          "orcid": "0000-0003-3435-3608"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG2"
+      ]
+    },
+    {
+      "id": "site-308",
       "institution": "Universität zu Lübeck",
       "city": "Lübeck",
       "country": "Germany",
@@ -11114,7 +11139,7 @@
       ]
     },
     {
-      "id": "site-308",
+      "id": "site-309",
       "institution": "Universitätsklinikum Hamburg-Eppendorf",
       "city": "Hamburg",
       "country": "Germany",
@@ -11139,7 +11164,7 @@
       ]
     },
     {
-      "id": "site-309",
+      "id": "site-310",
       "institution": "Universitätsklinikum Münster",
       "city": "",
       "country": "Germany",
@@ -11164,7 +11189,7 @@
       ]
     },
     {
-      "id": "site-310",
+      "id": "site-311",
       "institution": "Université Claude Bernard Lyon 1",
       "city": "Lyon",
       "country": "France",
@@ -11189,7 +11214,7 @@
       ]
     },
     {
-      "id": "site-311",
+      "id": "site-312",
       "institution": "Université de Lorraine",
       "city": "Nancy",
       "country": "France",
@@ -11214,7 +11239,7 @@
       ]
     },
     {
-      "id": "site-312",
+      "id": "site-313",
       "institution": "Université Laval",
       "city": "Quebec City",
       "country": "Canada",
@@ -11239,7 +11264,7 @@
       ]
     },
     {
-      "id": "site-313",
+      "id": "site-314",
       "institution": "Université Paris-Saclay",
       "city": "",
       "country": "France",
@@ -11277,7 +11302,7 @@
       ]
     },
     {
-      "id": "site-314",
+      "id": "site-315",
       "institution": "Université Toulouse III - Paul Sabatier",
       "city": "Toulouse",
       "country": "France",
@@ -11304,7 +11329,7 @@
       ]
     },
     {
-      "id": "site-315",
+      "id": "site-316",
       "institution": "Utrecht University",
       "city": "Utrecht",
       "country": "Netherlands",
@@ -11344,7 +11369,7 @@
       ]
     },
     {
-      "id": "site-316",
+      "id": "site-317",
       "institution": "Vilnius University",
       "city": "Vilnius",
       "country": "Lithuania",
@@ -11395,7 +11420,7 @@
       ]
     },
     {
-      "id": "site-317",
+      "id": "site-318",
       "institution": "Vrije Universiteit Amsterdam",
       "city": "Amsterdam",
       "country": "Netherlands",
@@ -11424,7 +11449,7 @@
       ]
     },
     {
-      "id": "site-318",
+      "id": "site-319",
       "institution": "Vrije Universiteit Brussel",
       "city": "Brussels",
       "country": "Belgium",
@@ -11474,7 +11499,7 @@
       ]
     },
     {
-      "id": "site-319",
+      "id": "site-320",
       "institution": "Washington University in St. Louis School Of Medicine",
       "city": "",
       "country": "United States",
@@ -11513,7 +11538,7 @@
       ]
     },
     {
-      "id": "site-320",
+      "id": "site-321",
       "institution": "Waterford Institute of Technology",
       "city": "Waterford",
       "country": "Ireland",
@@ -11538,7 +11563,7 @@
       ]
     },
     {
-      "id": "site-321",
+      "id": "site-322",
       "institution": "Xiberlinc Inc.",
       "city": "Tokyo",
       "country": "Japan",
@@ -11579,7 +11604,7 @@
       ]
     },
     {
-      "id": "site-322",
+      "id": "site-323",
       "institution": "Yenepoya (deemed to be University) Mangalore",
       "city": "",
       "country": "India",
@@ -11606,7 +11631,7 @@
       ]
     },
     {
-      "id": "site-323",
+      "id": "site-324",
       "institution": "Yozgat Bozok University",
       "city": "",
       "country": "Türkiye",
@@ -11633,7 +11658,7 @@
       ]
     },
     {
-      "id": "site-324",
+      "id": "site-325",
       "institution": "Yıldız Technical University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -11696,7 +11721,7 @@
       ]
     },
     {
-      "id": "site-325",
+      "id": "site-326",
       "institution": "Zurich University of Applied Sciences",
       "city": "Winterthur",
       "country": "Switzerland",
@@ -11723,7 +11748,7 @@
       ]
     },
     {
-      "id": "site-326",
+      "id": "site-327",
       "institution": "Çanakkale Onsekiz Mart University",
       "city": "Çanakkale",
       "country": "Türkiye",
@@ -11762,7 +11787,7 @@
       ]
     },
     {
-      "id": "site-327",
+      "id": "site-328",
       "institution": "École Polytechnique Fédérale de Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -11789,7 +11814,7 @@
       ]
     },
     {
-      "id": "site-328",
+      "id": "site-329",
       "institution": "Üsküdar University",
       "city": "Istanbul",
       "country": "Türkiye",
