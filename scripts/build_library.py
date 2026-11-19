@@ -30,6 +30,13 @@ vocabulary could never be reconciled with them (485 distinct Zotero tags across
 123 items, 411 appearing exactly once), so filtering uses the structured facets
 above instead of guessing tags for 311 records.
 
+Order
+-----
+Items are written newest-first by `modified`: Zotero's own dateModified for
+Framework items, and `added` (or `modified`) from library.yml for curated ones,
+which are not in Zotero. That is the default of the Library page's "Sort by"
+menu; the page re-orders in the browser for the other options.
+
 Usage
 -----
     python3 scripts/build_library.py
@@ -74,6 +81,28 @@ DEFAULT_PLACEHOLDER = "document"
 def placeholder_for(type_label: str) -> str:
     slug = PLACEHOLDER_BY_TYPE.get(type_label, DEFAULT_PLACEHOLDER)
     return f"/assets/images/library/{slug}.svg"
+
+
+def to_timestamp(value: object) -> str:
+    """Normalise a date to a UTC ISO timestamp, "YYYY-MM-DDTHH:MM:SSZ".
+
+    The Library sorts by `modified` / `added` as plain strings, so curated
+    entries (a bare YYYY-MM-DD in library.yml, which YAML may hand back as a
+    date object) must take the same shape as Zotero's own timestamps. A blank
+    or unrecognisable value becomes "" and sorts last.
+    """
+    if isinstance(value, dt.datetime):
+        if value.tzinfo is not None:
+            value = value.astimezone(dt.timezone.utc)
+        return value.strftime("%Y-%m-%dT%H:%M:%SZ")
+    if isinstance(value, dt.date):
+        return value.strftime("%Y-%m-%dT00:00:00Z")
+    text = str(value or "").strip()
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return f"{text}T00:00:00Z"
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z", text):
+        return text
+    return ""
 
 
 JUNK_TAG_PATTERNS = [
@@ -137,6 +166,16 @@ def main() -> int:
     items: list[dict] = []
 
     for paper in curated:
+        # Curated papers are not in Zotero, so they carry their own dates:
+        # `added` is required; `modified` is optional and defaults to it.
+        added = to_timestamp(paper.get("added"))
+        modified = to_timestamp(paper.get("modified")) or added
+        if not added:
+            print(
+                f"warning: curated entry {paper['id']} has no usable `added:` date "
+                "in library.yml (YYYY-MM-DD); it will sort last by date",
+                file=sys.stderr,
+            )
         items.append(
             {
                 "id": paper["id"],
@@ -146,6 +185,8 @@ def main() -> int:
                 "title": paper.get("title", ""),
                 "authors": paper.get("authors", ""),
                 "year": str(paper.get("year", "") or ""),
+                "added": added,
+                "modified": modified,
                 "venue": paper.get("journal", ""),
                 "type_label": "Journal Article",
                 "language": "English",
@@ -182,6 +223,8 @@ def main() -> int:
                 "title": entry.get("title", ""),
                 "authors": entry.get("creators", ""),
                 "year": str(entry.get("year", "") or ""),
+                "added": to_timestamp(entry.get("added")),
+                "modified": to_timestamp(entry.get("modified")),
                 "venue": entry.get("publication", ""),
                 "type_label": entry.get("type_label", "Document"),
                 "language": "Not specified" if language == "Unknown" else language,
@@ -208,13 +251,13 @@ def main() -> int:
         else:
             item["placeholder"] = ""
 
-    items.sort(
-        key=lambda i: (
-            0 if i["featured"] else 1,
-            -(int(i["year"]) if i["year"].isdigit() else 0),
-            i["title"].lower(),
-        )
-    )
+    # Default order: last modified, newest first, matching the Library page's
+    # "Sort by" default so the server-rendered list needs no re-ordering. Python's
+    # sort is stable (also with reverse=True), so sorting by title first leaves
+    # ties -- and the curated papers, which share a few `added` dates -- in
+    # alphabetical order. Items with no date sort last.
+    items.sort(key=lambda i: i["title"].lower())
+    items.sort(key=lambda i: i["modified"], reverse=True)
 
     def tally(key):
         out: dict[str, int] = {}
@@ -285,7 +328,7 @@ def main() -> int:
         lines.append(f"  - id: {yaml_scalar(item['id'])}")
         for field in (
             "collection", "collection_label", "title", "authors", "year", "venue",
-            "type_label", "language", "image", "placeholder", "url", "doi",
+            "added", "modified", "type_label", "language", "image", "placeholder", "url", "doi",
             "abstract", "oa_url", "oa_label", "source_url", "source_label",
             "access_version", "pdf", "theme",
         ):

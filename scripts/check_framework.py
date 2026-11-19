@@ -208,6 +208,16 @@ def check_data_files() -> dict:
         orphans = sum(1 for i in items if not i.get("url"))
         if orphans:
             fail(f"{orphans} library items have no link to follow")
+        # The Library page's default sort is "last modified". An item with no
+        # date would silently sink to the bottom of it.
+        undated = [i.get("id") for i in items if not i.get("modified")]
+        if undated:
+            fail(
+                f"{len(undated)} library items have no `modified` date "
+                f"({', '.join(str(u) for u in undated[:5])}) -- curated papers need "
+                "`added: YYYY-MM-DD` in library.yml; then re-run "
+                "scripts/build_library.py"
+            )
         # Every facet value an item carries must be offered as a checkbox,
         # or that item becomes unreachable by filtering.
         offered = {

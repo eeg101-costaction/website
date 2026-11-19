@@ -1,11 +1,15 @@
 # EEG101 Hub — verified sources and openly accessible full texts
 # Each record provides a canonical journal or repository source and a separately verified open-access full-text link.
+# `added` (YYYY-MM-DD, required) is when the paper joined the Library; the Library page's default
+# "Last modified" sort uses it. An optional `modified` (YYYY-MM-DD) overrides it after a later revision.
+# After editing, run: python3 scripts/build_library.py
 
 - id: mushtaq-2024-nhb
   title: "One hundred years of EEG for brain and behaviour research"
   authors: "Mushtaq F, Welke D, Gallagher A, et al."
   journal: "Nature Human Behaviour"
   year: 2024
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1038/s41562-024-01941-5"
   source_label: "Journal source"
   open_access_url: "https://eprints.whiterose.ac.uk/id/eprint/216490/1/Mushtaq_et_al_EEG100_Author_Accepted_Manuscript.pdf"
@@ -21,6 +25,7 @@
   authors: "Šoškić A, Ković V, Algermissen J, Fischer NL, Ganis G, Gau R, Mushtaq F, Niso G, Oostenveld R, Pajić D, Pavlov YG, Stekić K, Yang Y-F, Styles SJ"
   journal: "Psychophysiology"
   year: 2025
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1111/psyp.70187"
   source_label: "Journal source"
   open_access_url: "https://onlinelibrary.wiley.com/doi/full/10.1111/psyp.70187"
@@ -36,6 +41,7 @@
   authors: "Babiloni C, Arakaki X, Baez S, Barry RJ, Benussi A, et al."
   journal: "Clinical Neurophysiology"
   year: 2025
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1016/j.clinph.2025.02.256"
   source_label: "Journal source"
   open_access_url: "https://www.sciencedirect.com/science/article/pii/S1388245725002913"
@@ -51,6 +57,7 @@
   authors: "Mushtaq F, Ibáñez A"
   journal: "European Journal of Neuroscience"
   year: 2025
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1111/ejn.70078"
   source_label: "Journal source"
   open_access_url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11920675/"
@@ -66,6 +73,7 @@
   authors: "Pavlov YG, Adamian N, Appelhoff S, Arvaneh M, Benwell CSY, et al."
   journal: "Cortex"
   year: 2021
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1016/j.cortex.2021.03.013"
   source_label: "Journal source"
   open_access_url: "https://www.sciencedirect.com/science/article/pii/S0010945221001106"
@@ -81,6 +89,7 @@
   authors: "Corneyllie A, Walters T, Dubarry A-S, He X, Hinault T, et al."
   journal: "PLOS Sustainability and Transformation"
   year: 2025
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1371/journal.pstr.0000177"
   source_label: "Journal source"
   open_access_url: "https://journals.plos.org/sustainabilitytransformation/article?id=10.1371/journal.pstr.0000177"
@@ -96,6 +105,7 @@
   authors: "Chaumon M, Corneyllie A"
   journal: "HAL Open Science"
   year: 2024
+  added: "2026-08-12"
   source_url: "https://hal.science/hal-04613978"
   source_label: "Repository record"
   open_access_url: "https://hal.science/hal-04613978v1/document"
@@ -111,6 +121,7 @@
   authors: "Pernet CR, Appelhoff S, Gorgolewski KJ, Flandin G, Phillips C, Delorme A, Oostenveld R"
   journal: "Scientific Data"
   year: 2019
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1038/s41597-019-0104-8"
   source_label: "Journal source"
   open_access_url: "https://www.nature.com/articles/s41597-019-0104-8"
@@ -126,6 +137,7 @@
   authors: "Pernet C, Garrido MI, Gramfort A, Maurits N, Michel CM, Pang E, Salmelin R, Schoffelen JM, Valdes-Sosa PA, Puce A"
   journal: "Nature Neuroscience"
   year: 2020
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1038/s41593-020-00709-0"
   source_label: "Journal source"
   open_access_url: "https://repository.ubn.ru.nl/bitstream/handle/2066/224765/224765.pdf?sequence=1&isAllowed=y"
@@ -141,6 +153,7 @@
   authors: "Oostenveld R, Fries P, Maris E, Schoffelen J-M"
   journal: "Computational Intelligence and Neuroscience"
   year: 2011
+  added: "2026-08-12"
   source_url: "https://doi.org/10.1155/2011/156869"
   source_label: "Journal source"
   open_access_url: "https://onlinelibrary.wiley.com/doi/full/10.1155/2011/156869"
@@ -156,6 +169,7 @@
   authors: "Kljajic J, O'Toole JM, Hogan R, Skoric T"
   journal: "Medical Engineering & Physics"
   year: 2026
+  added: "2026-09-28"
   source_url: "https://doi.org/10.1088/1873-4030/aea852"
   source_label: "Journal source"
   open_access_url: "https://arxiv.org/abs/2508.04899"
@@ -174,6 +188,7 @@
   authors: "Skoric T, Djermanovic M, O'Toole JM, De Vos M, Spasojevic S"
   journal: "Computer Methods and Programs in Biomedicine"
   year: 2026
+  added: "2026-09-28"
   source_url: "https://doi.org/10.1016/j.cmpb.2026.109552"
   source_label: "Journal source"
   open_access_url: "https://doi.org/10.2139/ssrn.5734906"
