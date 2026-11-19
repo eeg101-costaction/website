@@ -178,6 +178,25 @@ headings, arXiv categories and BISAC codes; those could never be reconciled with
 the curated vocabulary, so filtering uses the structured facets instead of
 guessing tags for 311 records.
 
+### How the Library sorts
+
+A **Sort by** menu sits above the results. The default is **Last modified**,
+newest first; the others are **Recently added**, **Year (newest first)** and
+**Title (A-Z)**. Items with no value for the chosen key (many Zotero records have no year) go last.
+
+The dates come from the data, not the page:
+
+| Item | `added` / `modified` come from |
+| --- | --- |
+| Zotero (Framework) items | the item's own `dateAdded` / `dateModified` in the Zotero group, read by `build_catalogue.py`. Zotero collections carry no timestamp of their own, only a version counter, so the sort is per item |
+| Curated EEG101 papers | `added:` (required) and optional `modified:` in `library.yml`; `modified` defaults to `added` |
+
+`build_library.py` writes the index already sorted by `modified`, newest first,
+so the page loads in the default order and only re-orders when another option is
+chosen. `check_framework.py` fails the build if any item has no `modified` date.
+Because every Zotero edit changes `modified`, the nightly sync will commit
+`cf_catalogue.yml` and `library_index.yml` more often than it used to.
+
 ### Cover art
 
 Most catalogue entries have no cover of their own. `scripts/make_library_placeholders.py`
