@@ -3048,11 +3048,52 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
   cursor: pointer;
 }
 
+/* Result count on the left, "Sort by" on the right; wraps on a narrow screen. */
+.lib__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin: 0.9rem 0 0;
+}
 .lib__count {
   font-family: var(--font-ui);
   font-size: 0.85rem;
   color: var(--color-text-muted);
-  margin: 0.9rem 0 0;
+  margin: 0;
+}
+.lib__sort { display: flex; align-items: center; gap: 0.5rem; margin-left: auto; }
+.lib__sort-label {
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  white-space: nowrap;
+}
+/* A native <select>: keyboard, screen-reader and phone pickers come for free,
+   and it has no popup of ours to be trapped under a card's stacking context. */
+.lib__sort-select {
+  appearance: none;
+  -webkit-appearance: none;
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.5rem 2.1rem 0.5rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23000099' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.9rem center;
+  color: var(--color-primary);
+  cursor: pointer;
+}
+.lib__sort-select:hover { border-color: var(--color-primary); }
+.lib__sort-select:focus-visible {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
 }
 .lib__chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
 .lib__chips:empty { margin-top: 0; }

@@ -269,6 +269,10 @@ def main() -> int:
                 "family_label": FAMILIES[family],
                 "creators": format_creators(data.get("creators")),
                 "year": extract_year(data.get("date")),
+                # Zotero's own timestamps (UTC, e.g. 2026-11-04T10:02:01Z); the
+                # Library page sorts on these.
+                "added": data.get("dateAdded") or "",
+                "modified": data.get("dateModified") or "",
                 "language": normalise_language(data.get("language")),
                 "publication": (
                     data.get("publicationTitle")
@@ -369,6 +373,8 @@ def main() -> int:
             "family_label",
             "creators",
             "year",
+            "added",
+            "modified",
             "language",
             "publication",
             "url",

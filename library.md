@@ -87,7 +87,18 @@ wide: true
       <button type="button" class="lib__filters-toggle" id="lib-filters-toggle" aria-expanded="false">Filters</button>
     </div>
 
-    <p class="lib__count" id="lib-count">Showing {{ lib.total }} items</p>
+    <div class="lib__bar">
+      <p class="lib__count" id="lib-count">Showing {{ lib.total }} items</p>
+      <div class="lib__sort">
+        <label for="lib-sort" class="lib__sort-label">Sort by</label>
+        <select id="lib-sort" class="lib__sort-select" autocomplete="off">
+          <option value="modified" selected>Last modified</option>
+          <option value="added">Recently added</option>
+          <option value="year">Year (newest first)</option>
+          <option value="title">Title (A–Z)</option>
+        </select>
+      </div>
+    </div>
     <div class="lib__chips" id="lib-chips"></div>
 
     <div class="lib__grid" id="lib-grid">
@@ -97,6 +108,10 @@ wide: true
                data-section="{{ item.section_titles | join: '|' | downcase }}"
                data-type="{{ item.type_label | downcase }}"
                data-language="{{ item.language | downcase }}"
+               data-modified="{{ item.modified }}"
+               data-added="{{ item.added }}"
+               data-year="{{ item.year }}"
+               data-title="{{ item.title | downcase | escape }}"
                data-text="{{ item.title | append: ' ' | append: item.authors | append: ' ' | append: item.venue | append: ' ' | append: item.tags | join: ' ' | downcase | escape }}">
         <a class="lib-card__media" href="{{ item.url }}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
           {% if item.image and item.image != "" %}
@@ -168,6 +183,7 @@ wide: true
   var backdrop = document.getElementById('lib-backdrop');
   var closeEl  = document.getElementById('lib-filters-close');
   var doneEl   = document.getElementById('lib-filters-done');
+  var sortEl   = document.getElementById('lib-sort');
 
   /* data-section holds every section an item belongs to, pipe separated. */
   function has(card, facet, values) {
@@ -228,6 +244,44 @@ wide: true
     update();
     search.focus();
   });
+
+  /* Sort by. The page is rendered in the default order (last modified, newest
+     first), so this only has work to do once another option is chosen.
+     data-modified and data-added are UTC ISO timestamps, which order correctly
+     as plain strings. A card with no value for the chosen key goes last in
+     either direction; ties fall back to title, then to the order the page was
+     rendered in. Hidden (filtered-out) cards are reordered too, so changing a
+     filter later never shows them in a stale position. */
+  cards.forEach(function (card, i) { card.dataset.i = i; });
+  var collator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true });
+  function newestFirst(x, y) { return x < y ? 1 : (x > y ? -1 : 0); }
+  function blankLast(key, compare) {
+    return function (a, b) {
+      var x = a.dataset[key] || '', y = b.dataset[key] || '';
+      if (x === '' && y === '') return 0;
+      if (x === '') return 1;
+      if (y === '') return -1;
+      return compare(x, y);
+    };
+  }
+  var SORTS = {
+    modified: blankLast('modified', newestFirst),
+    added:    blankLast('added', newestFirst),
+    year:     blankLast('year', function (x, y) { return Number(y) - Number(x); }),
+    title:    blankLast('title', function (x, y) { return collator.compare(x, y); })
+  };
+  function sortCards() {
+    var primary = SORTS[sortEl.value] || SORTS.modified;
+    var ordered = cards.slice().sort(function (a, b) {
+      return primary(a, b) ||
+             collator.compare(a.dataset.title, b.dataset.title) ||
+             a.dataset.i - b.dataset.i;
+    });
+    var frag = document.createDocumentFragment();
+    ordered.forEach(function (card) { frag.appendChild(card); });
+    grid.appendChild(frag);
+  }
+  sortEl.addEventListener('change', sortCards);
 
   var drawer = window.matchMedia('(max-width: 991.98px)');
   var lockedScrollY = 0;
@@ -305,6 +359,9 @@ wide: true
     });
     update();
   }
+  /* A browser may restore the menu's value on reload or back-navigation while
+     the cards come back in the rendered order, so sync the two up front. */
+  sortCards();
   update();
   applyHash();
   window.addEventListener('hashchange', applyHash);

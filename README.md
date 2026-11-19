@@ -267,6 +267,7 @@ Papers appear on the [Library](https://www.eeg101.eu/library/) page. Add a new e
   authors: "Author A, Author B, Author C, et al."
   journal: "Journal Name"
   year: 2026
+  added: "2026-11-19"                                # the date you add it (YYYY-MM-DD)
   source_url: "https://doi.org/10.xxxx/xxxxx"
   source_label: "Journal source"
   open_access_url: "https://example.com/open-access-version.pdf"
@@ -286,6 +287,8 @@ Papers appear on the [Library](https://www.eeg101.eu/library/) page. Add a new e
 | `authors` | Author list. Use `et al.` for long lists | Yes |
 | `journal` | Journal name | Yes |
 | `year` | Publication year (integer) | Yes |
+| `added` | The date the paper joins the Library, `YYYY-MM-DD` in quotes. The Library's default **Last modified** sort (and **Recently added**) place the paper by it, since curated papers are not in Zotero. `check_framework.py` fails the build if it is missing | Yes |
+| `modified` | `YYYY-MM-DD` in quotes. Only if you later revise the entry and want it to move up the **Last modified** order; defaults to `added` | No |
 | `source_url` | DOI or publisher URL | Yes |
 | `source_label` | Label for the source link, e.g. `"Journal source"` | Yes |
 | `open_access_url` | URL to a freely accessible version (preprint, author copy, or open-access publisher page) | Yes |
@@ -431,7 +434,7 @@ Each page on the site corresponds to a Markdown (`.md`) or HTML (`.html`) file i
 | Calendar | `calendar.md` | Pulls from `_events/` and `_dates/` (other calendar dates); multi-day events fill their whole span. Core group and MC members can also add an internal Google Calendar behind a passphrase — see `docs/internal-calendar.md` |
 | Spotlight | `spotlight.html` | Pulls from `_spotlights/`; each page is laid out by `_layouts/spotlight.html` |
 | Resources | `resources.md` | Plain Markdown with resource cards |
-| Library | `library.md` | Pulls from `_data/library.yml` |
+| Library | `library.md` | Renders `_data/library_index.yml`, generated from `_data/library.yml` and the Zotero catalogue by `scripts/build_library.py` |
 | Video Hub | `video-hub.md` | Pulls from `_data/video_hub.yml` |
 | Partners | `partners.md` | Pulls from `_data/partners.yml` |
 | Join | `join.md` | Plain Markdown |
