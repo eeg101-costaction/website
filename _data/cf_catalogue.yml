@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-11-18"
+generated: "2026-11-19"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 346
+item_count: 347
 
 sections:
   - slug: "educational"
@@ -33,7 +33,7 @@ sections:
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 121
+    count: 122
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 203
+    count: 204
   - name: "Webpage"
     count: 82
   - name: "Preprint"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 225
+    count: 226
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 243
+    count: 244
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -6187,6 +6187,26 @@ items:
       - "Single-trial"
       - "Software"
       - "Spectral decomposition"
+  - id: "8TC2A2XT"
+    title: "Six domains of research ethics: A heuristic framework for the responsible conduct of research"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Kenneth D. Pimple"
+    year: "2002"
+    language: "English"
+    publication: "Science and Engineering Ethics"
+    url: "http://link.springer.com/10.1007/s11948-002-0018-1"
+    extra_url: ""
+    doi: "10.1007/s11948-002-0018-1"
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/8TC2A2XT"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags: []
   - id: "C3CDX6QW"
     title: "The imperative of responsibility : in search of an ethics for the technological age"
     type: "book"
