@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 577,
+  "member_count": 579,
   "site_count": 330,
   "country_count": 57,
   "countries": [
@@ -52,7 +52,7 @@
     {
       "name": "Chile",
       "site_count": 2,
-      "member_count": 4
+      "member_count": 5
     },
     {
       "name": "Croatia",
@@ -7483,6 +7483,16 @@
           "orcid": "0000-0002-1594-7382"
         },
         {
+          "name": "Cristian Cortés-Rivera",
+          "affiliation": "Universidad Católica Del Maule",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "cacorte1 [at] gmail [dot] com",
+          "homepage": "https://www.researchgate.net/profile/Cristian-Cortes-Rivera?ev=hdr_xprf",
+          "orcid": "0000-0002-5875-4564"
+        },
+        {
           "name": "Francia Tamara Valentina Arriagada Mödinger",
           "affiliation": "Universidad Católica Del Maule",
           "working_groups": [
@@ -7493,7 +7503,7 @@
           "orcid": "0000-0003-4182-8149"
         }
       ],
-      "member_count": 3,
+      "member_count": 4,
       "working_groups": [
         "WG1",
         "WG2",
