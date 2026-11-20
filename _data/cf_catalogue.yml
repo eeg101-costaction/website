@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-11-19"
+generated: "2026-11-20"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 347
+item_count: 351
 
 sections:
   - slug: "educational"
@@ -28,7 +28,7 @@ sections:
     title: "Democratization"
     anchor: "cf-democratization"
     part: 2
-    count: 91
+    count: 95
   - slug: "responsibility"
     title: "Responsibility"
     anchor: "cf-responsibility"
@@ -42,11 +42,11 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 204
+    count: 207
   - name: "Webpage"
     count: 82
   - name: "Preprint"
-    count: 20
+    count: 21
   - name: "Blog Post"
     count: 11
   - name: "Book"
@@ -70,7 +70,7 @@ types:
 
 languages:
   - name: "English"
-    count: 226
+    count: 230
   - name: "French"
     count: 6
   - name: "Not specified"
@@ -79,7 +79,7 @@ languages:
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 244
+    count: 248
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -107,6 +107,53 @@ items:
     abstract: "Our mission is to diversify the neurosciences by building a community that celebrates and empowers Black scholars and professionals in neuroscience-related fields."
     video_id: ""
     zotero_url: "https://www.zotero.org/groups/5794905/items/RSIXFCMH"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags: []
+  - id: "DMWFWGXQ"
+    title: "Boosting Representation and Validity in Pediatric Electroencephalography Research: The Conceptualization, Development, and Implementation of the Curly Hair Specialist Initiative"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "María Isabella Natale Castillo, Monique Marsh, Charles Alexander Nelson III, Graham Scott Holt, Patricia Ellen Grant, Michelle Bosquet Enlow, Carmen Monthé-Drèze"
+    year: "2026"
+    language: "English"
+    publication: "Developmental Psychobiology"
+    url: "https://onlinelibrary.wiley.com/doi/abs/10.1002/dev.70120"
+    extra_url: ""
+    doi: "10.1002/dev.70120"
+    abstract: "Electroencephalography (EEG) recordings often use caps or nets placed on the scalp. However, most are not designed to accommodate curly and coiled hair types, prevalent among individuals of African descent. This limitation results in the collection of suboptimal data that may be excluded from scientific research, raising questions about the generalizability of findings and the applicability of resultant knowledge to these populations. In response, researchers have proposed more inclusive EEG methodology, including using caps with tall pedestals and braiding techniques to improve data quality. Despite this advancement, tall pedestal nets fall short in addressing the need for clear scalp exposure, which is particularly important when capping children with voluminous hair. Similarly, braiding techniques have shown promise in small-scale studies involving adults, but their broader application remains unexplored in younger populations. To bridge these gaps, we introduce a novel approach for advancing representation and validity through the integration of curly hair specialists (CHSs) in pediatric EEG research. We examine the multifaceted role of CHSs and outline the processes involved in conceptualizing, developing, and implementing the CHS Initiative. We also offer a modified design for implementing this model in less resourced contexts and discuss community-based participatory research methods that informed our approach."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/DMWFWGXQ"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags:
+      - "community-based participatory research"
+      - "cultural competency"
+      - "curly hair specialist"
+      - "electroencephalography"
+      - "generalizability"
+      - "hair-bias"
+      - "pediatric research"
+  - id: "SWZP8ZXN"
+    title: "Design and Test Novel EEG Electrode Attachments for Type 4 Afro-textured Hairstyles"
+    type: "preprint"
+    type_label: "Preprint"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Mishti Broor, Kenneth Ogunniyi, Lucinda Williamson, Chang Liu"
+    year: "2026"
+    language: "English"
+    publication: "bioRxiv"
+    url: "https://www.biorxiv.org/content/10.64898/2026.10.01.755885v2"
+    extra_url: ""
+    doi: "10.64898/2026.10.01.755885"
+    abstract: "Black participants remain underrepresented in electroencephalography (EEG) research, partly because current EEG devices work poorly with dense, coily Type 4 Afro-textured hair. Research-grade EEG typically wires electrodes on a cap, and therefore the electrodes often fail to reach the scalp through dense, Afro-textured hair. Protocols that ask Black participants to unbraid or restyle protective hairstyles add burdens that discourage enrollment in research studies. To address this, we designed and tested 3D-printed attachments that fit onto an EEG electrode and anchored it directly in the hair, using the hairstyle itself as the mounting structure. We fabricated three design configurations for natural Afro-textured hair, cornrows/braids, and twists/microlocs. Seventeen healthy adults with Type 4a-4c hair used electrode attachments that matched their hairstyle. During a single visit, EEG was recorded with 16 conventional cap electrodes defined by the international 10–20 system and with 16 electrodes using novel electrode attachments anchored directly to their hair. Participants completed resting and walking trials with each system. Electrode-to-scalp distance and gel volume were measured during setup. Electrode disconnection, impedance, signal quality (i.e. peak alpha power and aperiodic (1/f) component), and comfort level were measured throughout the data collection. Compared with the conventional cap, the novel attachments reduced electrode-to-scalp distance, gel use, and impedance. Twenty percent of the conventional cap electrodes failed to connect to the scalp compared with 0.1% of novel electrodes. Impedance rose across trials for the conventional cap, whereas the novel attachments showed a smaller increase and maintained lower impedance throughout. Signal quality was significantly better using the novel attachments, while comfort level did not differ between systems. In conclusion, hair-anchored electrode attachment may present a feasible alternative to conventional cap-based EEG for people with Type 4 hair, yielding more usable channels and better signal quality, and supporting more inclusive EEG acquisition."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/SWZP8ZXN"
     sections: ["democratization"]
     section_titles: ["Democratization"]
     parts: [2]
@@ -617,6 +664,31 @@ items:
       - "DEI"
       - "diversity"
       - "diversity science"
+  - id: "VBHAMBYP"
+    title: "The Universal Electroencephalography Clip reduces hair-texture bias in electroencephalography"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Wendy A. Torrens, Skylor Olshefsky, Rasia B. Yankaway, Michelle Ruiz, Kensal G. Coudriet, Mia K. Price, Stephanie Otto, Sarah M. Haigh"
+    year: "2026"
+    language: "English"
+    publication: "Neuroscience"
+    url: "https://www.ibroneuroscience.org/article/S0306-4522(26)00363-5/abstract"
+    extra_url: ""
+    doi: "10.1016/j.neuroscience.2026.05.041"
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/VBHAMBYP"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags:
+      - "Auditory"
+      - "Electroencephalography"
+      - "Hair"
+      - "Signal-to-noise ratio"
+      - "Visual"
   - id: "HKQBRA9P"
     title: "Thinking—Fast, Slow, and Artificial: How AI is Reshaping Human Reasoning and the Rise of Cognitive Surrender"
     type: "preprint"
@@ -1775,6 +1847,28 @@ items:
     parts: [3]
     tags:
       - "cf-paper"
+  - id: "E38836SP"
+    title: "Fostering inclusion in EEG measures of pediatric brain activity"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Eryn J. Adams, Molly E. Scott, Melina Amarante, Chanel A. Ramírez, Stephanie J. Rowley, Kimberly G. Noble, Sonya V. Troller-Renfree"
+    year: "2024"
+    language: "English"
+    publication: "npj Science of Learning"
+    url: "https://www.nature.com/articles/s41539-024-00240-y"
+    extra_url: ""
+    doi: "10.1038/s41539-024-00240-y"
+    abstract: "The past two decades have seen a rapid increase in neuroscientific evidence being used to characterize how contextual, structural, and societal factors shape cognition and school readiness. Measures of functional brain activity are increasingly viewed as markers of child development and biomarkers that could be employed to track the impact of interventions. While electroencephalography (EEG) provides a promising tool to understand educational inequities, traditional EEG data acquisition is commonly limited in some racial and ethnic groups due to hair types and styles. This ultimately constitutes unintentional systemic racism by disproportionately excluding participants from certain racial and ethnic groups from participation and representation in neuroscience research. Here, we provide a comprehensive review of how cultural considerations surrounding hair density, texture, and styling consistently skew samples to be less representative by disproportionately excluding Black and Latinx participants. We also provide recommendations and materials to promote best practices."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/E38836SP"
+    sections: ["democratization"]
+    section_titles: ["Democratization"]
+    parts: [2]
+    tags:
+      - "Education"
+      - "Human behaviour"
   - id: "WFAYFKYW"
     title: "Guidance on the responsible use of quantitative indicators in research assessment"
     type: "report"
