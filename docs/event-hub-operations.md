@@ -69,6 +69,17 @@ The diversity seminar's programme is `diversity-eeg-populations-2026-11` and
 comes from `EEG101_Diversity_Seminar_Programme_for_261120_final.pdf`. If that PDF
 is revised, edit the array to match.
 
+## Reminders
+
+There are no reminder emails: the booking account's free Gmail allowance (about
+100 recipients a day) is needed for confirmations and joining links. Instead,
+every calendar file carries its own alert (a `VALARM`): **1 hour before** a
+timed event, or **at 09:00 the day before** an all-day one. It pops up in the
+person's calendar app and costs no email. Apple Calendar and Outlook keep the
+alert; Google Calendar applies the person's own default notifications instead.
+People who registered before the alert was added get it with their next
+calendar file (for online events, when the joining link is emailed).
+
 ## Add an event with booking
 
 Add the event once, in the website editor or as a file in `_events/`, and include the booking fields below. The event's id is its filename: it must be unique and should remain stable because it links the Events card, calendar popover, registration, calendar invitation, and Sheet records.
