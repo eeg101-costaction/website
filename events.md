@@ -158,6 +158,14 @@ permalink: /events/
 
 {% include event-booking-modal.html %}
 
+<style>
+  /* Keep a card with its Share menu open above the cards around it. The hover
+     lift (transform) on this card, or the opacity on a past card in the next
+     row, each form a stacking context, so without this the menu slips under the
+     next row and the pointer flips between the two cards, making it flicker. */
+  .event-card--share-open { position: relative; z-index: 20; }
+</style>
+
 <script>
 (function(){
   var statusBtns = document.querySelectorAll('#statusFilters .news-filter__btn');
@@ -257,12 +265,22 @@ permalink: /events/
   // this hands off straight to the native share sheet, which already lists
   // installed social apps. Elsewhere it opens a small menu of direct links to
   // X, LinkedIn, Facebook, WhatsApp and email, plus a copy-link option.
+  // Opening or closing a menu also flags its card. The card lifts on hover
+  // (transform), which traps the menu's z-index inside that card, so the cards
+  // on the next row would paint over the menu and steal the hover. The flag
+  // lets the CSS keep the card with an open menu above its neighbours.
+  function setShareMenuOpen(menu, open) {
+    menu.hidden = !open;
+    var btn = menu.previousElementSibling;
+    if (btn) btn.setAttribute('aria-expanded', String(open));
+    var card = menu.closest('.event-card');
+    if (card) card.classList.toggle('event-card--share-open', open);
+  }
+
   function closeAllShareMenus(except) {
     document.querySelectorAll('.event-share__menu').forEach(function (menu) {
       if (menu === except) return;
-      menu.hidden = true;
-      var btn = menu.previousElementSibling;
-      if (btn) btn.setAttribute('aria-expanded', 'false');
+      setShareMenuOpen(menu, false);
     });
   }
 
@@ -295,8 +313,7 @@ permalink: /events/
       var menu = button.nextElementSibling;
       var opening = menu.hidden;
       closeAllShareMenus();
-      menu.hidden = !opening;
-      button.setAttribute('aria-expanded', String(opening));
+      setShareMenuOpen(menu, opening);
       return;
     }
 
