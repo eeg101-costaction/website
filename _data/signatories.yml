@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-22"
+generated: "2026-11-23"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 197
-public_count: 156
+total: 199
+public_count: 158
 
 people:
   - name: "Enes Abanoz"
@@ -198,6 +198,8 @@ people:
     affiliation: "Student"
   - name: "Denise Monkau"
     affiliation: "Neuroscience Academy Denmark"
+  - name: "David Moreau"
+    affiliation: "University of Auckland"
   - name: "Quentin Moreau"
     affiliation: "Institut des Sciences Cognitives Marc Jeannerod"
   - name: "Daniel Morillo-Cuadrado"
@@ -234,6 +236,8 @@ people:
     affiliation: "CAPLAB - Ghent University"
   - name: "Valter Prpic"
     affiliation: "eCampus University"
+  - name: "Ginu Rajan"
+    affiliation: "Cardiff Metropolitan University"
   - name: "Rodrigo Cáceres Robles"
     affiliation: "Universidad Nacional Mayor de San Marcos"
   - name: "Mary Anne Ryan"
