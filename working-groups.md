@@ -50,6 +50,17 @@ EEG101's scientific programme is organised into four Working Groups, each addres
 </div>
 {% endif %}
 {% endfor %}
+{% for lead_entry in wg.lead_coordinators %}
+{% if lead_entry.name %}{% assign lead_coordinator = lead_entry %}{% else %}{% assign lead_coordinator = all_people | where: "id", lead_entry | first %}{% endif %}
+{% if lead_coordinator %}
+<div class="wg-leader">
+<strong>{{ lead_coordinator.name }}</strong>
+{% if lead_coordinator.institution and lead_coordinator.institution != "" %}<span class="wg-leader__inst">{{ lead_coordinator.institution }}{% if lead_coordinator.country and lead_coordinator.country != "" %}, {{ lead_coordinator.country }}{% endif %}</span>{% endif %}
+{% if lead_coordinator.website and lead_coordinator.website != "" %}<a href="{{ lead_coordinator.website }}" class="wg-leader__email" target="_blank" rel="noopener">Website</a>{% endif %}
+<span class="wg-leader__badge wg-leader__badge--lead">Lead Coordinator</span>
+</div>
+{% endif %}
+{% endfor %}
 </div>
 
 <div class="row g-3 mb-4">

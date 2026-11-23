@@ -1031,6 +1031,8 @@ strong { font-weight: 600; }
   padding: 0.15rem 0.6rem;
 }
 .wg-leader__badge--co { background: var(--color-text-muted); }
+/* Outlined, so a lead coordinator reads as distinct from a leader or co-leader at the same size */
+.wg-leader__badge--lead { background: transparent; color: var(--color-primary); box-shadow: inset 0 0 0 1px var(--color-primary); }
 
 .wg-detail-card {
   background: var(--color-bg-alt);

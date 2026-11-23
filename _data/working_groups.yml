@@ -88,6 +88,26 @@ working_groups:
       - maximilien
     co_leaders:
       - alexandra
+    # Shown after the co-leaders, in this order. Each entry is either a person ID
+    # from people.yml, or an inline record (name, institution, country, optional
+    # website) for someone who should appear on this page only.
+    lead_coordinators:
+      - name: "Dominik Welke"
+        institution: "University of Leeds"
+        country: "UK"
+      - name: "José Luis Ulloa Fulgeri"
+        institution: "Universidad de Talca"
+        country: "Chile"
+      - mikkel
+      - name: "Franz Wurm"
+        institution: "Leiden University"
+        country: "Netherlands"
+      - name: "Birgit Mathes"
+        institution: "University of Bremen"
+        country: "Germany"
+      - name: "Manuela Ruzzoli"
+        institution: "Basque Center on Cognition, Brain and Language (BCBL)"
+        country: "Spain"
     icon: "🌐"
     image: "/assets/images/working-groups/wg3.png"
 

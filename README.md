@@ -355,7 +355,7 @@ Each grant scheme (STSM, VMG, Conference Grant) has an entry. To update a fundin
 
 **File to edit:** `_data/working_groups.yml`
 
-Each Working Group has a block under `working_groups:`. You can edit the `aim`, `activities`, `outputs`, and `mou_objectives` fields. The `leaders` and `co_leaders` fields reference person IDs from `_data/people.yml`.
+Each Working Group has a block under `working_groups:`. You can edit the `aim`, `activities`, `outputs`, and `mou_objectives` fields. The `leaders` and `co_leaders` fields reference person IDs from `_data/people.yml`. The optional `lead_coordinators` field (used by WG3) takes the same IDs, or an inline record (`name`, `institution`, `country`, optional `website`) for people who should be named on the Working Groups page without getting a card on the Coordination page.
 
 ---
 
