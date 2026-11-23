@@ -3,10 +3,10 @@
 # The EEG101 Community Framework resource catalogue, read from the public
 # Zotero group 5794905 at authoring time. Re-run the script to refresh.
 
-generated: "2026-11-22"
+generated: "2026-11-23"
 zotero_group: "5794905"
 zotero_url: "https://www.zotero.org/groups/5794905/library"
-item_count: 351
+item_count: 354
 
 sections:
   - slug: "educational"
@@ -33,7 +33,7 @@ sections:
     title: "Responsibility"
     anchor: "cf-responsibility"
     part: 3
-    count: 122
+    count: 125
   - slug: "societal"
     title: "Societal and technological responsibility"
     anchor: "cf-responsibility"
@@ -42,7 +42,7 @@ sections:
 
 types:
   - name: "Journal Article"
-    count: 207
+    count: 210
   - name: "Webpage"
     count: 82
   - name: "Preprint"
@@ -70,16 +70,16 @@ types:
 
 languages:
   - name: "English"
-    count: 230
+    count: 232
   - name: "French"
     count: 6
   - name: "Not specified"
-    count: 115
+    count: 116
 
 families:
   - slug: "bibliographic"
     label: "Bibliographic"
-    count: 248
+    count: 251
   - slug: "multimedia"
     label: "Multimedia"
     count: 4
@@ -601,6 +601,28 @@ items:
     parts: [3]
     tags:
       - "cf-paper"
+  - id: "U52T3KSD"
+    title: "Potential and pitfalls of artificial intelligence to address disparities in epilepsy"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Willem M. Otte, Kette D. Valente, Frank I. van der Maas, Kees P. J. Braun, Gagandeep Singh"
+    year: "2026"
+    language: "English"
+    publication: "Nature Reviews Neurology"
+    url: "https://www.nature.com/articles/s41582-026-01287-8"
+    extra_url: ""
+    doi: "10.1038/s41582-026-01287-8"
+    abstract: "The convergence of artificial intelligence (AI) and health care offers unprecedented opportunities to address global disparities in access to specialized epilepsy diagnosis and treatment, particularly in resource-limited settings. Advances in AI models, combined with increasing internet connectivity and smartphone usage in low-income and middle-income countries, offer promising solutions for epilepsy diagnosis and monitoring through AI-based analysis of electroencephalography recordings captured with affordable open-source systems, smartphone data and electronic health records. However, this technological revolution raises important questions about the preservation and expansion of clinical expertise, AI algorithm transparency and health-care equity. In this Review, we examine how AI can help to address disparities and improve global epilepsy care while maintaining high clinical standards and addressing systemic challenges."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/U52T3KSD"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags:
+      - "Epilepsy"
+      - "Health services"
   - id: "5S2KASVF"
     title: "Ten Simple Rules for Running a ReproducibiliTea Journal Club"
     type: "preprint"
@@ -7627,6 +7649,46 @@ items:
     abstract: ""
     video_id: ""
     zotero_url: "https://www.zotero.org/groups/5794905/items/2TIV2C8T"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags: []
+  - id: "6JXD8XLV"
+    title: "Rethinking laboratory sustainability"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Katherine Kelly"
+    year: ""
+    language: "Unknown"
+    publication: "eLife"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC13784770/"
+    extra_url: ""
+    doi: "10.7554/eLife.113403"
+    abstract: "Green lab initiatives like My Green Lab and LEAF (Laboratory Efficiency Assessment Framework), are paving the way towards sustainable research by promoting resource efficiency, energy conservation, and waste reduction through behavioral changes. However, these initiatives focus almost exclusively on material consumption, overlooking deeper facets of scientific waste that stem from questionable research practices: the environmental cost of unnecessary or poorly designed experiments, discarded null results, unreproducible research, and distorted reporting. I argue that a more meaningful discussion of scientific sustainability must look beyond physical resource management to examine the scientific process itself; to rethink the questions we ask, the experiments we do, and how we communicate our findings. To build a truly sustainable scientific ecosystem, Green Lab initiatives must join forces with Open Science and research integrity movements to update not only the hardware, but also the software of science."
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/6JXD8XLV"
+    sections: ["responsibility"]
+    section_titles: ["Responsibility"]
+    parts: [3]
+    tags: []
+  - id: "5BKHMLIP"
+    title: "Risk-calibrated sharing of human brain data"
+    type: "journalArticle"
+    type_label: "Journal Article"
+    family: "bibliographic"
+    family_label: "Bibliographic"
+    creators: "Saskia Hendriks"
+    year: ""
+    language: "English"
+    publication: ""
+    url: ""
+    extra_url: ""
+    doi: ""
+    abstract: ""
+    video_id: ""
+    zotero_url: "https://www.zotero.org/groups/5794905/items/5BKHMLIP"
     sections: ["responsibility"]
     section_titles: ["Responsibility"]
     parts: [3]
