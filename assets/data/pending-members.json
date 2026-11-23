@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-18T13:59:39+00:00",
+  "generated_at": "2026-11-22T13:22:36+00:00",
   "note": "These members are registered EEG101 members whose institution location could not be automatically resolved. They are shown in the member directory but do not appear on the map.",
-  "pending_count": 13,
+  "pending_count": 14,
   "members": [
     {
       "name": "Quynh Trinh Nguyen",
@@ -160,6 +160,18 @@
       "email": "sara.zago [at] hsancamillo [dot] it",
       "homepage": "",
       "orcid": "0000-0002-7831-3387"
+    },
+    {
+      "name": "Vahid Asayesh",
+      "affiliation": "Vilnius University, Life Sciences Center",
+      "country": "Lithuania",
+      "working_groups": [
+        "WG1",
+        "WG2"
+      ],
+      "email": "vahid.asayesh [at] gmail [dot] com",
+      "homepage": "https://www.researchgate.net/profile/Vahid-Asayesh",
+      "orcid": "0000-0003-2367-1811"
     }
   ]
 }

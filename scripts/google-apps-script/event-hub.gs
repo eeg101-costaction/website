@@ -787,8 +787,12 @@ function makeCalendar(event) {
     `UID:${icsText(event.id)}@eeg101.eu`, 'DTSTAMP:' + utc(new Date()), 'SEQUENCE:' + ((event.joining_link ? 1 : 0) + (programmeFor(event.id) ? 1 : 0)), start, end,
     icsFold('SUMMARY:' + icsText(event.title)), icsFold('LOCATION:' + icsText(event.joining_link || event.location || 'EEG101'))]
     .concat(event.joining_link ? [icsFold('URL:' + event.joining_link)] : [])
-    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + (programmeFor(event.id) ? programmeFor(event.id) + '\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/events/')),
-    'END:VEVENT', 'END:VCALENDAR']).join('\r\n');
+    .concat([icsFold('DESCRIPTION:' + icsText((event.joining_link ? 'Join online: ' + event.joining_link + '\n\n' : isOnline(event) ? 'The joining link will be emailed to you nearer the time.\n\n' : '') + (programmeFor(event.id) ? programmeFor(event.id) + '\n\n' : '') + 'EEG101 COST Action CA24148. Event details: https://www.eeg101.eu/events/'))])
+    // A reminder that pops up in the person's own calendar: 1 hour before a
+    // timed event, or at 09:00 the day before an all-day one. It costs no email.
+    .concat(['BEGIN:VALARM', 'ACTION:DISPLAY', isTime(event.time) ? 'TRIGGER:-PT1H' : 'TRIGGER:-PT15H',
+      icsFold('DESCRIPTION:' + icsText((isTime(event.time) ? 'In 1 hour: ' : 'Tomorrow: ') + event.title)), 'END:VALARM'])
+    .concat(['END:VEVENT', 'END:VCALENDAR']).join('\r\n');
 }
 
 function jsonResponse(payload) { return ContentService.createTextOutput(JSON.stringify(payload)).setMimeType(ContentService.MimeType.JSON); }

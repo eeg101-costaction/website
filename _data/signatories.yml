@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-18"
+generated: "2026-11-22"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 193
-public_count: 153
+total: 197
+public_count: 156
 
 people:
   - name: "Enes Abanoz"
@@ -52,6 +52,8 @@ people:
     affiliation: "GHU Paris Psychiatrie et Neurosciences"
   - name: "Sandra Carvalho"
     affiliation: "Department of Basic Psychology, School of Psychology, University of Minho"
+  - name: "Chiara Catalano"
+    affiliation: "University School for Advanced Studies IUSS Pavia"
   - name: "Maximilien Chaumon"
     affiliation: "CNRS"
   - name: "Lucía Lemes Coitinho"
@@ -210,6 +212,8 @@ people:
     affiliation: "Instituto Cajal, CSIC"
   - name: "Sebastian Ocklenburg"
     affiliation: "MSH Medical School Hamburg"
+  - name: "Sebastian Olbrich"
+    affiliation: "PUK Zurich"
   - name: "Busra Ozkellekci"
     affiliation: "Karadeniz Technical University"
   - name: "Tiago Paiva"
@@ -248,6 +252,8 @@ people:
     affiliation: "SAGE University"
   - name: "René Skukies"
     affiliation: "SimTech - University of Stuttgart"
+  - name: "Piotr Sobaniec"
+    affiliation: "Medical University of Bialystok"
   - name: "Ronen Sosnik"
     affiliation: "Holon Institute of Technology (H.I.T.), Holon"
   - name: "Teresa Sousa"
