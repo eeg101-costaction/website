@@ -251,7 +251,11 @@ wide: true
      as plain strings. A card with no value for the chosen key goes last in
      either direction; ties fall back to title, then to the order the page was
      rendered in. Hidden (filtered-out) cards are reordered too, so changing a
-     filter later never shows them in a stale position. */
+     filter later never shows them in a stale position.
+
+     The default, Last modified, keeps the curated EEG101 papers (the cards with
+     the gold border) pinned first, as build_library.py writes them; the other
+     options order every card together. Keep the two in step. */
   cards.forEach(function (card, i) { card.dataset.i = i; });
   var collator = new Intl.Collator(undefined, { sensitivity: 'base', numeric: true });
   function newestFirst(x, y) { return x < y ? 1 : (x > y ? -1 : 0); }
@@ -264,8 +268,14 @@ wide: true
       return compare(x, y);
     };
   }
+  var byModified = blankLast('modified', newestFirst);
+  function featuredFirst(a, b) {
+    var x = a.classList.contains('lib-card--featured');
+    var y = b.classList.contains('lib-card--featured');
+    return x === y ? 0 : (x ? -1 : 1);
+  }
   var SORTS = {
-    modified: blankLast('modified', newestFirst),
+    modified: function (a, b) { return featuredFirst(a, b) || byModified(a, b); },
     added:    blankLast('added', newestFirst),
     year:     blankLast('year', function (x, y) { return Number(y) - Number(x); }),
     title:    blankLast('title', function (x, y) { return collator.compare(x, y); })

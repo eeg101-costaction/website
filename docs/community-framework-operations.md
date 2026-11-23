@@ -184,6 +184,11 @@ A **Sort by** menu sits above the results. The default is **Last modified**,
 newest first; the others are **Recently added**, **Year (newest first)** and
 **Title (A-Z)**. Items with no value for the chosen key (many Zotero records have no year) go last.
 
+Under the default, the curated EEG101 papers stay **pinned at the top**, newest
+first among themselves, with the Framework items after them. The other three
+options order every item together, with no pinning, so the curated papers
+interleave with the Zotero ones by that key.
+
 The dates come from the data, not the page:
 
 | Item | `added` / `modified` come from |
@@ -191,9 +196,11 @@ The dates come from the data, not the page:
 | Zotero (Framework) items | the item's own `dateAdded` / `dateModified` in the Zotero group, read by `build_catalogue.py`. Zotero collections carry no timestamp of their own, only a version counter, so the sort is per item |
 | Curated EEG101 papers | `added:` (required) and optional `modified:` in `library.yml`; `modified` defaults to `added` |
 
-`build_library.py` writes the index already sorted by `modified`, newest first,
-so the page loads in the default order and only re-orders when another option is
-chosen. `check_framework.py` fails the build if any item has no `modified` date.
+`build_library.py` writes the index already in the default order (curated
+papers first, then `modified` newest first), so the page loads in that order and
+only re-orders when another option is chosen. The same rule lives in
+`SORTS.modified` in `library.md`, so picking **Last modified** again restores
+it; change both together. `check_framework.py` fails the build if any item has no `modified` date.
 Because every Zotero edit changes `modified`, the nightly sync will commit
 `cf_catalogue.yml` and `library_index.yml` more often than it used to.
 

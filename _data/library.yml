@@ -1,7 +1,8 @@
 # EEG101 Hub — verified sources and openly accessible full texts
 # Each record provides a canonical journal or repository source and a separately verified open-access full-text link.
-# `added` (YYYY-MM-DD, required) is when the paper joined the Library; the Library page's default
-# "Last modified" sort uses it. An optional `modified` (YYYY-MM-DD) overrides it after a later revision.
+# `added` (YYYY-MM-DD, required) is when the paper joined the Library. These papers stay pinned above the
+# Zotero items under the default "Last modified" sort, ordered among themselves by `modified`, which defaults
+# to `added`; set an optional `modified` (YYYY-MM-DD) after a later revision to move one up.
 # After editing, run: python3 scripts/build_library.py
 
 - id: mushtaq-2024-nhb

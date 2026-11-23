@@ -32,10 +32,12 @@ above instead of guessing tags for 311 records.
 
 Order
 -----
-Items are written newest-first by `modified`: Zotero's own dateModified for
-Framework items, and `added` (or `modified`) from library.yml for curated ones,
-which are not in Zotero. That is the default of the Library page's "Sort by"
-menu; the page re-orders in the browser for the other options.
+The curated EEG101 papers come first, newest-first by `modified` among
+themselves (`added`, or `modified` if set, from library.yml: they are not in
+Zotero). The Framework items follow, newest-first by Zotero's own dateModified.
+That is the default of the Library page's "Sort by" menu ("Last modified");
+the page re-orders in the browser for the other options, which order every
+item together with no pinning.
 
 Usage
 -----
@@ -251,13 +253,16 @@ def main() -> int:
         else:
             item["placeholder"] = ""
 
-    # Default order: last modified, newest first, matching the Library page's
-    # "Sort by" default so the server-rendered list needs no re-ordering. Python's
-    # sort is stable (also with reverse=True), so sorting by title first leaves
-    # ties -- and the curated papers, which share a few `added` dates -- in
-    # alphabetical order. Items with no date sort last.
+    # Default order: the curated EEG101 papers pinned first, then last modified,
+    # newest first -- matching the Library page's "Sort by" default so the
+    # server-rendered list needs no re-ordering. Python's sort is stable (also
+    # with reverse=True), so sorting by title first leaves ties -- and the
+    # curated papers, which share a few `added` dates -- in alphabetical order.
+    # Items with no date sort last within their group. Keep this in step with
+    # SORTS.modified in library.md.
     items.sort(key=lambda i: i["title"].lower())
     items.sort(key=lambda i: i["modified"], reverse=True)
+    items.sort(key=lambda i: not i["featured"])
 
     def tally(key):
         out: dict[str, int] = {}
