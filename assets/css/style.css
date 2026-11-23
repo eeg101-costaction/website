@@ -3183,7 +3183,9 @@ textarea.cf-input { resize: vertical; min-height: 4.5rem; }
 .lib__footer { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-border); }
 
 @media (max-width: 991.98px) {
-  .lib { grid-template-columns: 1fr; }
+  /* minmax(0, …), not plain 1fr: a 1fr track will not shrink below its
+     content, which pushed the page wider than a phone screen. */
+  .lib { grid-template-columns: minmax(0, 1fr); }
   /* The panel becomes a drawer. In the page's own flow it landed after the
      results, which on a phone is tens of thousands of pixels down, so opening
      it looked like nothing had happened. visibility (not display) keeps it out
