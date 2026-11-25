@@ -1,7 +1,7 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 584,
-  "site_count": 333,
+  "member_count": 585,
+  "site_count": 334,
   "country_count": 57,
   "countries": [
     {
@@ -211,8 +211,8 @@
     },
     {
       "name": "Poland",
-      "site_count": 6,
-      "member_count": 12
+      "site_count": 7,
+      "member_count": 13
     },
     {
       "name": "Portugal",
@@ -8818,7 +8818,7 @@
             "WG2"
           ],
           "email": "mariano.mastinu [at] unica [dot] it",
-          "homepage": "www.researchgate.net/profile/Mariano-Mastinu; https://www.linkedin.com/in/marianomastinu/",
+          "homepage": "https://www.researchgate.net/profile/Mariano-Mastinu; https://www.linkedin.com/in/marianomastinu/",
           "orcid": "0000-0003-3833-9707"
         }
       ],
@@ -10543,6 +10543,35 @@
     },
     {
       "id": "site-291",
+      "institution": "University of Silesia in Katowice",
+      "city": "",
+      "country": "Poland",
+      "latitude": 50.2606627,
+      "longitude": 19.0292035,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Karina Maciejewska",
+          "affiliation": "University of Silesia in Katowice",
+          "working_groups": [
+            "WG1",
+            "WG2",
+            "WG3"
+          ],
+          "email": "karina.maciejewska [at] us [dot] edu [dot] pl",
+          "homepage": "https://www.researchgate.net/profile/Karina-Maciejewska?ev=hdr_xprf",
+          "orcid": "0000-0002-1986-9617"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1",
+        "WG2",
+        "WG3"
+      ]
+    },
+    {
+      "id": "site-292",
       "institution": "University of Southern California",
       "city": "Los Angeles",
       "country": "United States",
@@ -10571,7 +10600,7 @@
       ]
     },
     {
-      "id": "site-292",
+      "id": "site-293",
       "institution": "University of Ss. Cyril and Methodius in Trnava",
       "city": "Trnava",
       "country": "Slovakia",
@@ -10600,7 +10629,7 @@
       ]
     },
     {
-      "id": "site-293",
+      "id": "site-294",
       "institution": "University Of Stuttgart",
       "city": "",
       "country": "Germany",
@@ -10625,7 +10654,7 @@
       ]
     },
     {
-      "id": "site-294",
+      "id": "site-295",
       "institution": "University of Tartu",
       "city": "Tartu",
       "country": "Estonia",
@@ -10699,7 +10728,7 @@
       ]
     },
     {
-      "id": "site-295",
+      "id": "site-296",
       "institution": "University of Tehran",
       "city": "Tehran",
       "country": "Iran",
@@ -10740,7 +10769,7 @@
       ]
     },
     {
-      "id": "site-296",
+      "id": "site-297",
       "institution": "University of Tirana",
       "city": "Tirana",
       "country": "Albania",
@@ -10776,7 +10805,7 @@
       ]
     },
     {
-      "id": "site-297",
+      "id": "site-298",
       "institution": "University of Trento",
       "city": "Trento",
       "country": "Italy",
@@ -10848,7 +10877,7 @@
       ]
     },
     {
-      "id": "site-298",
+      "id": "site-299",
       "institution": "University of Twente",
       "city": "",
       "country": "Netherlands",
@@ -10877,7 +10906,7 @@
       ]
     },
     {
-      "id": "site-299",
+      "id": "site-300",
       "institution": "University of Tübingen",
       "city": "Tübingen",
       "country": "Germany",
@@ -10906,7 +10935,7 @@
       ]
     },
     {
-      "id": "site-300",
+      "id": "site-301",
       "institution": "University of Warsaw",
       "city": "Warsaw",
       "country": "Poland",
@@ -10935,7 +10964,7 @@
       ]
     },
     {
-      "id": "site-301",
+      "id": "site-302",
       "institution": "University Of Warwick",
       "city": "",
       "country": "United Kingdom",
@@ -10960,7 +10989,7 @@
       ]
     },
     {
-      "id": "site-302",
+      "id": "site-303",
       "institution": "University Of Washington",
       "city": "",
       "country": "United States",
@@ -10985,7 +11014,7 @@
       ]
     },
     {
-      "id": "site-303",
+      "id": "site-304",
       "institution": "University of Wrocław",
       "city": "Wrocław",
       "country": "Poland",
@@ -11026,7 +11055,7 @@
       ]
     },
     {
-      "id": "site-304",
+      "id": "site-305",
       "institution": "University of Wuppertal",
       "city": "Wuppertal",
       "country": "Germany",
@@ -11055,7 +11084,7 @@
       ]
     },
     {
-      "id": "site-305",
+      "id": "site-306",
       "institution": "University of Zagreb, Faculty of Humanities and Social Sciences",
       "city": "Zagreb",
       "country": "Croatia",
@@ -11084,7 +11113,7 @@
       ]
     },
     {
-      "id": "site-306",
+      "id": "site-307",
       "institution": "University of Zurich",
       "city": "",
       "country": "Switzerland",
@@ -11111,7 +11140,7 @@
       ]
     },
     {
-      "id": "site-307",
+      "id": "site-308",
       "institution": "Università degli Studi della Campania \"Luigi Vanvitelli\"",
       "city": "",
       "country": "Italy",
@@ -11136,7 +11165,7 @@
       ]
     },
     {
-      "id": "site-308",
+      "id": "site-309",
       "institution": "Università degli Studi di Milano-Bicocca",
       "city": "",
       "country": "Italy",
@@ -11165,7 +11194,7 @@
       ]
     },
     {
-      "id": "site-309",
+      "id": "site-310",
       "institution": "Università degli Studi Gabriele D'Annunzio di Chieti-Pescara",
       "city": "Chieti",
       "country": "Italy",
@@ -11192,7 +11221,7 @@
       ]
     },
     {
-      "id": "site-310",
+      "id": "site-311",
       "institution": "Università Telematica eCampus",
       "city": "Novedrate",
       "country": "Italy",
@@ -11219,7 +11248,7 @@
       ]
     },
     {
-      "id": "site-311",
+      "id": "site-312",
       "institution": "Universität Osnabrück",
       "city": "",
       "country": "Germany",
@@ -11244,7 +11273,7 @@
       ]
     },
     {
-      "id": "site-312",
+      "id": "site-313",
       "institution": "Universität zu Lübeck",
       "city": "Lübeck",
       "country": "Germany",
@@ -11269,7 +11298,7 @@
       ]
     },
     {
-      "id": "site-313",
+      "id": "site-314",
       "institution": "Universitätsklinikum Hamburg-Eppendorf",
       "city": "Hamburg",
       "country": "Germany",
@@ -11294,7 +11323,7 @@
       ]
     },
     {
-      "id": "site-314",
+      "id": "site-315",
       "institution": "Universitätsklinikum Münster",
       "city": "",
       "country": "Germany",
@@ -11319,7 +11348,7 @@
       ]
     },
     {
-      "id": "site-315",
+      "id": "site-316",
       "institution": "Université Claude Bernard Lyon 1",
       "city": "Lyon",
       "country": "France",
@@ -11344,7 +11373,7 @@
       ]
     },
     {
-      "id": "site-316",
+      "id": "site-317",
       "institution": "Université de Lorraine",
       "city": "Nancy",
       "country": "France",
@@ -11369,7 +11398,7 @@
       ]
     },
     {
-      "id": "site-317",
+      "id": "site-318",
       "institution": "Université Laval",
       "city": "Quebec City",
       "country": "Canada",
@@ -11394,7 +11423,7 @@
       ]
     },
     {
-      "id": "site-318",
+      "id": "site-319",
       "institution": "Université Paris-Saclay",
       "city": "",
       "country": "France",
@@ -11432,7 +11461,7 @@
       ]
     },
     {
-      "id": "site-319",
+      "id": "site-320",
       "institution": "Université Toulouse III - Paul Sabatier",
       "city": "Toulouse",
       "country": "France",
@@ -11459,7 +11488,7 @@
       ]
     },
     {
-      "id": "site-320",
+      "id": "site-321",
       "institution": "Utrecht University",
       "city": "Utrecht",
       "country": "Netherlands",
@@ -11499,7 +11528,7 @@
       ]
     },
     {
-      "id": "site-321",
+      "id": "site-322",
       "institution": "Vilnius University",
       "city": "Vilnius",
       "country": "Lithuania",
@@ -11550,7 +11579,7 @@
       ]
     },
     {
-      "id": "site-322",
+      "id": "site-323",
       "institution": "Vrije Universiteit Amsterdam",
       "city": "Amsterdam",
       "country": "Netherlands",
@@ -11579,7 +11608,7 @@
       ]
     },
     {
-      "id": "site-323",
+      "id": "site-324",
       "institution": "Vrije Universiteit Brussel",
       "city": "Brussels",
       "country": "Belgium",
@@ -11629,7 +11658,7 @@
       ]
     },
     {
-      "id": "site-324",
+      "id": "site-325",
       "institution": "Washington University in St. Louis School Of Medicine",
       "city": "",
       "country": "United States",
@@ -11668,7 +11697,7 @@
       ]
     },
     {
-      "id": "site-325",
+      "id": "site-326",
       "institution": "Waterford Institute of Technology",
       "city": "Waterford",
       "country": "Ireland",
@@ -11693,7 +11722,7 @@
       ]
     },
     {
-      "id": "site-326",
+      "id": "site-327",
       "institution": "Xiberlinc Inc.",
       "city": "Tokyo",
       "country": "Japan",
@@ -11734,7 +11763,7 @@
       ]
     },
     {
-      "id": "site-327",
+      "id": "site-328",
       "institution": "Yenepoya (deemed to be University) Mangalore",
       "city": "",
       "country": "India",
@@ -11761,7 +11790,7 @@
       ]
     },
     {
-      "id": "site-328",
+      "id": "site-329",
       "institution": "Yozgat Bozok University",
       "city": "",
       "country": "Türkiye",
@@ -11801,7 +11830,7 @@
       ]
     },
     {
-      "id": "site-329",
+      "id": "site-330",
       "institution": "Yıldız Technical University",
       "city": "Istanbul",
       "country": "Türkiye",
@@ -11864,7 +11893,7 @@
       ]
     },
     {
-      "id": "site-330",
+      "id": "site-331",
       "institution": "Zurich University of Applied Sciences",
       "city": "Winterthur",
       "country": "Switzerland",
@@ -11891,7 +11920,7 @@
       ]
     },
     {
-      "id": "site-331",
+      "id": "site-332",
       "institution": "Çanakkale Onsekiz Mart University",
       "city": "Çanakkale",
       "country": "Türkiye",
@@ -11930,7 +11959,7 @@
       ]
     },
     {
-      "id": "site-332",
+      "id": "site-333",
       "institution": "École Polytechnique Fédérale de Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -11957,7 +11986,7 @@
       ]
     },
     {
-      "id": "site-333",
+      "id": "site-334",
       "institution": "Üsküdar University",
       "city": "Istanbul",
       "country": "Türkiye",
