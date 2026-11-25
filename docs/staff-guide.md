@@ -87,8 +87,9 @@ calls, holidays. They appear on the **Calendar** only. Give it a **Title**, a
 **Kind** and a **Date**, and optionally a time and a link (for example to
 `/grants/`).
 
-**Everything here is public.** Internal meetings go in the internal Google
-Calendar, not here.
+**Everything here is public.** So is the EEG101 Google Calendar, which the
+Calendar page also shows (titles, times and locations; never descriptions). See
+`docs/internal-calendar.md`.
 
 ## Adding a Spotlight
 

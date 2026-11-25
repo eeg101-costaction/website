@@ -25,21 +25,10 @@ permalink: /calendar/
   <span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--hybrid"></span>Hybrid</span>
   {% if site.dates.size > 0 %}<span class="cal-legend__item"><span class="cal-legend__swatch cal-legend__swatch--date"></span>Key date</span>{% endif %}
   {% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
-  <span class="cal-legend__item cal-legend__item--internal" id="cal-legend-internal" hidden><span class="cal-legend__swatch cal-legend__swatch--internal"></span>Internal</span>
+  <span class="cal-legend__item cal-legend__item--internal" id="cal-legend-internal" hidden><span class="cal-legend__swatch cal-legend__swatch--internal"></span>EEG101 calendar</span>
   {% endif %}
 </div>
 
-{% if site.data.site.internal_calendar_endpoint and site.data.site.internal_calendar_endpoint != "" %}
-<div class="cal-internal" id="cal-internal">
-  <div class="cal-internal__bar">
-    <p class="cal-internal__text" id="cal-internal-text">Core group and Management Committee members can add the internal calendar to this view.</p>
-    <button type="button" class="btn btn-outline-primary btn-sm" id="cal-internal-toggle">Show internal calendar</button>
-  </div>
-  <div class="cal-internal__panel" id="cal-internal-panel" hidden>
-    <iframe class="cal-internal__frame" id="cal-internal-frame" title="Internal calendar passphrase" loading="lazy"></iframe>
-  </div>
-</div>
-{% endif %}
 
 <div class="cal-grid-wrap">
   <div class="cal-grid" id="cal-grid">
@@ -323,7 +312,7 @@ permalink: /calendar/
     if (ev.internal === true) {
       popover.innerHTML =
         "<button class=\"cal-popover__close\" type=\"button\" aria-label=\"Close\">&times;</button>" +
-        "<span class=\"cal-popover__badge\">Internal</span>" +
+        "<span class=\"cal-popover__badge\">EEG101 calendar</span>" +
         "<h3 class=\"cal-popover__title\">" + esc(ev.title) + "</h3>" +
         "<p class=\"cal-popover__meta\">" + dateLine + (ev.all_day ? "<br>All day" : "") + "</p>" +
         (ev.summary ? "<p class=\"cal-popover__summary\">" + esc(ev.summary) + "</p>" : "");
@@ -445,64 +434,30 @@ permalink: /calendar/
     render();
   });
 
-  // Internal events are never built into this site: they stay in Google Calendar
-  // and are fetched, on demand, by a Google-hosted page in the iframe below. The
-  // passphrase is typed into that iframe, so it is sent to Google and never
-  // passes through eeg101.eu, and the events are held in memory only — a reload
-  // asks again.
-  (function internalCalendar() {
-    var wrap = document.getElementById("cal-internal");
-    if (!wrap) return;
-
+  // Events from the EEG101 Google Calendar, fetched live from a small Google
+  // Apps Script feed each time the page loads (scripts/google-apps-script/
+  // internal-calendar.gs), so edits in Google Calendar show without a rebuild.
+  // The feed sends title, dates, times and location only. If it is slow or
+  // down, the page simply shows the website's own events.
+  (function googleCalendar() {
     var endpoint = {{ site.data.site.internal_calendar_endpoint | default: "" | jsonify }};
-    var toggle   = document.getElementById("cal-internal-toggle");
-    var panel    = document.getElementById("cal-internal-panel");
-    var frame    = document.getElementById("cal-internal-frame");
-    var text     = document.getElementById("cal-internal-text");
-    var legend   = document.getElementById("cal-legend-internal");
-    var prompt   = text.textContent;
-
-    function lock() {
-      INTERNAL = [];
-      panel.hidden = true;
-      frame.removeAttribute("src");
-      if (legend) legend.hidden = true;
-      text.textContent = prompt;
-      text.className = "cal-internal__text";
-      toggle.textContent = "Show internal calendar";
-      render();
-    }
-
-    function unlock(events) {
-      INTERNAL = events || [];
-      panel.hidden = true;
-      frame.removeAttribute("src");
-      if (legend) legend.hidden = false;
-      text.textContent = INTERNAL.length === 1
-        ? "1 internal event is showing. It is visible to you only, and goes when you reload."
-        : INTERNAL.length + " internal events are showing. They are visible to you only, and go when you reload.";
-      text.className = "cal-internal__text cal-internal__text--on";
-      toggle.textContent = "Hide internal events";
-      render();
-    }
-
-    toggle.addEventListener("click", function () {
-      if (INTERNAL.length) { lock(); return; }
-      if (!panel.hidden) { panel.hidden = true; return; }
-      if (!frame.getAttribute("src")) {
-        frame.src = endpoint + (endpoint.indexOf("?") >= 0 ? "&" : "?") +
-                    "origin=" + encodeURIComponent(window.location.origin);
-      }
-      panel.hidden = false;
-    });
-
-    window.addEventListener("message", function (e) {
-      // Only the iframe we opened may speak for the internal calendar.
-      if (!frame.contentWindow || e.source !== frame.contentWindow) return;
-      var data = e.data || {};
-      if (data.type !== "eeg101-internal-calendar") return;
-      if (data.ok === true && Array.isArray(data.events)) unlock(data.events);
-    });
+    if (!endpoint || !window.fetch) return;
+    var legend = document.getElementById("cal-legend-internal");
+    function key(title, date) { return String(title || "").trim().toLowerCase() + "|" + date; }
+    // An event that is also on the website already is shown once, the website's way.
+    var known = {};
+    EVENTS.concat(DATES).forEach(function (ev) { known[key(ev.title, ev.start_date)] = true; });
+    fetch(endpoint, { credentials: "omit" })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (!data || data.ok !== true || !Array.isArray(data.events)) return;
+        INTERNAL = data.events.filter(function (ev) {
+          return ev && ev.start_date && !known[key(ev.title, ev.start_date)];
+        }).map(function (ev) { ev.internal = true; return ev; });
+        if (legend) legend.hidden = INTERNAL.length === 0;
+        if (INTERNAL.length) render();
+      })
+      .catch(function () {});
   }());
 
   /* The picker. "Your time zone" is whatever the browser reports, which comes

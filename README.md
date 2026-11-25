@@ -431,7 +431,7 @@ Each page on the site corresponds to a Markdown (`.md`) or HTML (`.html`) file i
 | Working Groups | `working-groups.md` | Pulls from `_data/working_groups.yml` |
 | Grants | `grants.md` | Pulls from `_data/grants.yml` |
 | Events | `events.md` | Merges `_events/` (one file per event) and `_data/news.yml` |
-| Calendar | `calendar.md` | Pulls from `_events/` and `_dates/` (other calendar dates); multi-day events fill their whole span. Core group and MC members can also add an internal Google Calendar behind a passphrase — see `docs/internal-calendar.md` |
+| Calendar | `calendar.md` | Pulls from `_events/` and `_dates/` (other calendar dates); multi-day events fill their whole span. Also shows the EEG101 Google Calendar, read live from Google; see `docs/internal-calendar.md` |
 | Spotlight | `spotlight.html` | Pulls from `_spotlights/`; each page is laid out by `_layouts/spotlight.html` |
 | Resources | `resources.md` | Plain Markdown with resource cards |
 | Library | `library.md` | Renders `_data/library_index.yml`, generated from `_data/library.yml` and the Zotero catalogue by `scripts/build_library.py` |

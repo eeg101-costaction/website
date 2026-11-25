@@ -137,8 +137,7 @@ to the EEG101 site and editor, so a leaked secret cannot be misused for spam.
 - **Removing access.** To cut Pages CMS off completely, uninstall its GitHub App
   (GitHub → Settings → Applications → Installed GitHub Apps).
 - **Everything saved is public**, including in the repository history, even if
-  later deleted. That is why internal calendar items stay in the internal Google
-  Calendar.
+  later deleted. Keep anything private (meeting links, passcodes) out of it.
 - **Picture uploads** are committed to the repository as uploaded, and only
   then cleaned up. The original, including any location data in it, stays in
   the public history; the staff guide asks people to remove location before

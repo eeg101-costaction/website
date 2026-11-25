@@ -61,10 +61,10 @@ grants_application_endpoint: "https://script.google.com/macros/s/AKfycbyKwBLl5oW
 # properties as TURNSTILE_SECRET. See docs/grants-platform.md.
 grants_turnstile_site_key: "0x4AAAAAAF8qTXZRvUiwQFHE"
 
-# The internal calendar bridge, deployed from scripts/google-apps-script/internal-calendar.gs.
-# Leave empty and the Calendar page shows public events only, with no unlock control.
-# This URL is public; the passphrase and the calendar ID live in that script's
-# properties and are never published here. See docs/internal-calendar.md.
+# The EEG101 Google Calendar feed, deployed from scripts/google-apps-script/internal-calendar.gs.
+# Its events (title, dates, times, location) show publicly on the Calendar page.
+# Leave empty to show the website's own events only. The calendar ID lives in
+# that script's properties, not here. See docs/internal-calendar.md.
 internal_calendar_endpoint: "https://script.google.com/macros/s/AKfycbzDcG4CwIuB62avwdFcNgUDbI1BBSkn-pRe8jA2jXM27lsCsSBWIgLKEQOnfmTZ24NaBw/exec"
 
 footer_text: >
