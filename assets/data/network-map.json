@@ -1,6 +1,6 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 585,
+  "member_count": 586,
   "site_count": 334,
   "country_count": 57,
   "countries": [
@@ -97,7 +97,7 @@
     {
       "name": "Germany",
       "site_count": 33,
-      "member_count": 51
+      "member_count": 52
     },
     {
       "name": "Greece",
@@ -1480,6 +1480,17 @@
           "orcid": ""
         },
         {
+          "name": "R Martinez Cancino",
+          "affiliation": "Brain Products Gmbh Soft- Und Hardware Fur Neurophysiologische Forschungsanwendungen",
+          "working_groups": [
+            "WG1",
+            "WG2"
+          ],
+          "email": "ramon.martinez [at] brainproducts [dot] com",
+          "homepage": "https://www.linkedin.com/in/ramon-m-79b4175b/",
+          "orcid": "0000-0003-4781-3028"
+        },
+        {
           "name": "Shivakumar Viswanathan",
           "affiliation": "Brain Products Gmbh Soft- Und Hardware Fur Neurophysiologische Forschungsanwendungen",
           "working_groups": [
@@ -1504,7 +1515,7 @@
           "orcid": "0000-0001-8619-9409"
         }
       ],
-      "member_count": 3,
+      "member_count": 4,
       "working_groups": [
         "WG1",
         "WG2",
