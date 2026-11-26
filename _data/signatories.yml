@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-24"
+generated: "2026-11-26"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 199
-public_count: 158
+total: 201
+public_count: 160
 
 people:
   - name: "Enes Abanoz"
@@ -176,6 +176,8 @@ people:
     affiliation: "Politecnico di Bari"
   - name: "aHMAD LOTFI"
     affiliation: "PhD student"
+  - name: "Karina Maciejewska"
+    affiliation: "University of Silesia in Katowice"
   - name: "Mohammad Kaif Mansoori"
     affiliation: "Aligarh Muslim University"
   - name: "Gabriela Mariana Marcu"
@@ -256,6 +258,8 @@ people:
     affiliation: "SAGE University"
   - name: "René Skukies"
     affiliation: "SimTech - University of Stuttgart"
+  - name: "Cameron Smith"
+    affiliation: "University of Leeds"
   - name: "Piotr Sobaniec"
     affiliation: "Medical University of Bialystok"
   - name: "Ronen Sosnik"
