@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-26"
+generated: "2026-11-27"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 201
-public_count: 160
+total: 203
+public_count: 162
 
 people:
   - name: "Enes Abanoz"
@@ -72,6 +72,8 @@ people:
     affiliation: "KUTAHYA HEALTH SCIENCE UNIVERSITY"
   - name: "Anya Dietrich"
     affiliation: "MEG lab, CoBIC, Goethe University"
+  - name: "Hanneke van Dijk"
+    affiliation: "Synaeda Research; Brain Stimulation & Cognition, Department of Cognitive Neuroscience, Faculty of Psychology and Neuroscience, Maastricht University"
   - name: "FATMA NUR DOLU"
     affiliation: "BILKENT UNIVERSITY | KONYA FOOD AND AGRICULTURE UNIVERSITY"
   - name: "Sarshar Dorosti"
@@ -242,6 +244,8 @@ people:
     affiliation: "Cardiff Metropolitan University"
   - name: "Rodrigo Cáceres Robles"
     affiliation: "Universidad Nacional Mayor de San Marcos"
+  - name: "Bart Roussard"
+    affiliation: "Psychiatrist/hospital/outpatient"
   - name: "Mary Anne Ryan"
     affiliation: "INFANT research centre ucc"
   - name: "Chiara Saracini"
