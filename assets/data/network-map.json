@@ -1,8 +1,8 @@
 {
   "generated_from": "CA24148-WG-members.xlsx",
-  "member_count": 586,
-  "site_count": 334,
-  "country_count": 57,
+  "member_count": 588,
+  "site_count": 335,
+  "country_count": 58,
   "countries": [
     {
       "name": "Albania",
@@ -55,6 +55,11 @@
       "member_count": 5
     },
     {
+      "name": "China",
+      "site_count": 1,
+      "member_count": 1
+    },
+    {
       "name": "Croatia",
       "site_count": 2,
       "member_count": 2
@@ -97,7 +102,7 @@
     {
       "name": "Germany",
       "site_count": 33,
-      "member_count": 52
+      "member_count": 53
     },
     {
       "name": "Greece",
@@ -7153,6 +7158,16 @@
       "location_confidence": "high",
       "members": [
         {
+          "name": "Anna Wunderlich",
+          "affiliation": "Technische Universitat Berlin",
+          "working_groups": [
+            "WG2"
+          ],
+          "email": "anna.wunderlich [at] tu-berlin [dot] de",
+          "homepage": "https://www.researchgate.net/profile/Anna-Wunderlich; https://www.tu.berlin/bpn/ueber-uns/team/anna-wunderlich",
+          "orcid": "0000-0003-2378-1164"
+        },
+        {
           "name": "Klaus Gramann",
           "affiliation": "Technische Universität Berlin",
           "working_groups": [
@@ -7164,9 +7179,10 @@
           "orcid": "0000-0003-2673-1832"
         }
       ],
-      "member_count": 1,
+      "member_count": 2,
       "working_groups": [
         "WG1",
+        "WG2",
         "WG3"
       ]
     },
@@ -11905,6 +11921,31 @@
     },
     {
       "id": "site-331",
+      "institution": "Zhejiang University",
+      "city": "",
+      "country": "China",
+      "latitude": 30.521595,
+      "longitude": 120.7195312,
+      "location_confidence": "geocoded",
+      "members": [
+        {
+          "name": "Liyu Cao",
+          "affiliation": "Zhejiang University",
+          "working_groups": [
+            "WG1"
+          ],
+          "email": "l.cao.1 [at] hotmail [dot] com",
+          "homepage": "https://person.zju.edu.cn/en/liyucao",
+          "orcid": "0000-0002-1124-9579"
+        }
+      ],
+      "member_count": 1,
+      "working_groups": [
+        "WG1"
+      ]
+    },
+    {
+      "id": "site-332",
       "institution": "Zurich University of Applied Sciences",
       "city": "Winterthur",
       "country": "Switzerland",
@@ -11931,7 +11972,7 @@
       ]
     },
     {
-      "id": "site-332",
+      "id": "site-333",
       "institution": "Çanakkale Onsekiz Mart University",
       "city": "Çanakkale",
       "country": "Türkiye",
@@ -11970,7 +12011,7 @@
       ]
     },
     {
-      "id": "site-333",
+      "id": "site-334",
       "institution": "École Polytechnique Fédérale de Lausanne",
       "city": "Lausanne",
       "country": "Switzerland",
@@ -11997,7 +12038,7 @@
       ]
     },
     {
-      "id": "site-334",
+      "id": "site-335",
       "institution": "Üsküdar University",
       "city": "Istanbul",
       "country": "Türkiye",
