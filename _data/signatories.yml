@@ -4,10 +4,10 @@
 # ticked 'I'm happy for my name to be displayed publicly' appear here, and
 # only their name and affiliation are ever written to this file.
 
-generated: "2026-11-27"
+generated: "2026-11-28"
 source: "https://sign-cf.eeg101.eu/signatories/"
-total: 203
-public_count: 162
+total: 205
+public_count: 164
 
 people:
   - name: "Enes Abanoz"
@@ -50,6 +50,8 @@ people:
     affiliation: "Center for Mind/Brain Sciences (CIMeC), University of Trento, Italy"
   - name: "Anne Buot"
     affiliation: "GHU Paris Psychiatrie et Neurosciences"
+  - name: "Liyu Cao"
+    affiliation: "Zhejiang University"
   - name: "Sandra Carvalho"
     affiliation: "Department of Basic Psychology, School of Psychology, University of Minho"
   - name: "Chiara Catalano"
@@ -306,6 +308,8 @@ people:
     affiliation: "University of Copenhagen"
   - name: "Vaishali Vinod"
     affiliation: "Kiel University"
+  - name: "Vaishali Vinod"
+    affiliation: "Christian-Albrechts University of Kiel"
   - name: "Andrea Vranic"
     affiliation: "Department of Psychology, University of Zagreb"
   - name: "Ingmar Engbert Jacob de Vries"
